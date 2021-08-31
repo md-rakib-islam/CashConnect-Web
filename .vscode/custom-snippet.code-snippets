@@ -1,0 +1,50 @@
+{
+  "React Map": {
+    "scope": "javascript,typescript,javascriptreact,typescriptreact",
+    "prefix": "rm",
+    "body": ["{$1.map((item,ind)=>($2))}"],
+    "description": "React Map"
+  },
+  "Material Styles": {
+    "scope": "javascript,typescript,javascriptreact,typescriptreact",
+    "prefix": "usestyles",
+    "body": [
+      "import { makeStyles } from '@material-ui/core/styles';",
+      "",
+      "const useStyles = makeStyles(({ palette, ...theme }) => ({",
+      "   $1",
+      "}));"
+    ],
+    "description": "Material Styles"
+  },
+  "Classes": {
+    "scope": "javascript,typescript,javascriptreact,typescriptreact",
+    "prefix": "cls",
+    "body": ["const classes = useStyles();"],
+    "description": "Classes"
+  },
+  "Dispatch": {
+    "scope": "javascript,typescript,javascriptreact,typescriptreact",
+    "prefix": "dp",
+    "body": ["const dispatch = useDispatch();"],
+    "description": "Dispatch"
+  },
+  "Fat Arrow Function": {
+    "scope": "javascript,typescript,javascriptreact,typescriptreact",
+    "prefix": "faf",
+    "body": ["const $1 = async ($2) => {", "   $3", "}"],
+    "description": "Async Fat Arrow Function"
+  },
+  "Export Fat Arrow Function": {
+    "scope": "javascript,typescript,javascriptreact,typescriptreact",
+    "prefix": "efaf",
+    "body": ["export const $1 = async ($2) => {", "   $3", "}"],
+    "description": "Export Async Fat Arrow Function"
+  },
+  "User Translation": {
+    "scope": "javascript,typescript,javascriptreact,typescriptreact",
+    "prefix": "trans",
+    "body": ["  const {t} = useTranslation();"],
+    "description": "User Translation"
+  }
+}
