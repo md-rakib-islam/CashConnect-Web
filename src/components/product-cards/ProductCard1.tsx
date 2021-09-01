@@ -1,20 +1,20 @@
-import LazyImage from '@component/LazyImage';
-import { useAppContext } from '@context/app/AppContext';
-import { CartItem } from '@reducer/cartReducer';
-import Link from 'next/link';
-import React, { Fragment, useCallback, useState } from 'react';
-import { CSSProperties } from 'styled-components';
-import Box from '../Box';
-import Button from '../buttons/Button';
-import Card, { CardProps } from '../Card';
-import { Chip } from '../Chip';
-import FlexBox from '../FlexBox';
-import Icon from '../icon/Icon';
-import Modal from '../modal/Modal';
-import ProductIntro from '../products/ProductIntro';
-import Rating from '../rating/Rating';
-import { H3, SemiSpan } from '../Typography';
-import { StyledProductCard1 } from './ProductCardStyle';
+import LazyImage from "@component/LazyImage";
+import { useAppContext } from "@context/app/AppContext";
+import { CartItem } from "@reducer/cartReducer";
+import Link from "next/link";
+import React, { Fragment, useCallback, useState } from "react";
+import { CSSProperties } from "styled-components";
+import Box from "../Box";
+import Button from "../buttons/Button";
+import Card, { CardProps } from "../Card";
+import { Chip } from "../Chip";
+import FlexBox from "../FlexBox";
+import Icon from "../icon/Icon";
+import Modal from "../modal/Modal";
+import ProductIntro from "../products/ProductIntro";
+import Rating from "../rating/Rating";
+import { H3, SemiSpan } from "../Typography";
+import { StyledProductCard1 } from "./ProductCardStyle";
 
 export interface ProductCard1Props extends CardProps {
   className?: string;
@@ -25,6 +25,7 @@ export interface ProductCard1Props extends CardProps {
   off?: number;
   rating?: number;
   id?: string | number;
+  brand?: string | number;
   // className?: string;
   // style?: CSSProperties;
   // imgUrl: string;
@@ -43,6 +44,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
   imgUrl,
   title,
   price,
+  brand,
   off,
   rating,
   ...props
@@ -59,7 +61,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
   const handleCartAmountChange = useCallback(
     (amount) => () => {
       dispatch({
-        type: 'CHANGE_CART_AMOUNT',
+        type: "CHANGE_CART_AMOUNT",
         payload: {
           name: title,
           qty: amount,
@@ -115,6 +117,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
               width="100%"
               height="auto"
               layout="responsive"
+              loader={() => imgUrl}
               alt={title}
             />
           </a>
@@ -156,7 +159,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
           <FlexBox
             flexDirection="column-reverse"
             alignItems="center"
-            justifyContent={!!cartItem?.qty ? 'space-between' : 'flex-start'}
+            justifyContent={!!cartItem?.qty ? "space-between" : "flex-start"}
             width="30px"
           >
             {/* <div className="add-cart"> */}
@@ -194,7 +197,13 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 
       <Modal open={open} onClose={toggleDialog}>
         <Card p="1rem" position="relative">
-          <ProductIntro imgUrl={[imgUrl]} title={title} price={price} id={id} />
+          <ProductIntro
+            imgUrl={[imgUrl]}
+            title={title}
+            price={price}
+            id={id}
+            brand={brand}
+          />
           <Box
             position="absolute"
             top="0.75rem"
@@ -217,12 +226,13 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 };
 
 ProductCard1.defaultProps = {
-  id: '324321',
-  title: 'KSUS ROG Strix G15',
-  imgUrl: '/assets/images/products/macbook.png',
+  id: "324321",
+  title: "KSUS ROG Strix G15",
+  imgUrl: "/assets/images/products/macbook.png",
   off: 50,
   price: 450,
   rating: 0,
+  brand: "Unknown",
 };
 
 export default ProductCard1;

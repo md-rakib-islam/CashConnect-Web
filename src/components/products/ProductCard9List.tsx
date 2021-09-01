@@ -1,16 +1,38 @@
-import productDatabase from "@data/product-database";
-import React from "react";
+import { BASE_URL, ProductByCategoryId } from "@data/constants";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 import FlexBox from "../FlexBox";
 import Pagination from "../pagination/Pagination";
 import ProductCard9 from "../product-cards/ProductCard9";
 import { SemiSpan } from "../Typography";
+import useFormattedProductData from "./useFormattedProductData";
 
 export interface ProductCard9ListProps {}
 
 const ProductCard9List: React.FC<ProductCard9ListProps> = () => {
+  const router = useRouter();
+  const { id } = router.query;
+
+  const [productData, setProductData] = useState([]);
+  const [formattedProductData] =
+    productData != [] ? useFormattedProductData(productData) : [];
+
+  useEffect(() => {
+    if (id) {
+      fetch(`${BASE_URL}${ProductByCategoryId}${id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setProductData(data);
+        });
+    }
+  }, [id]);
+
+  console.log("pramid", id);
+  console.log("productData", productData);
+  console.log("FormettedProductData", formattedProductData);
   return (
     <div>
-      {productDatabase.slice(95, 104).map((item, ind) => (
+      {formattedProductData.map((item, ind) => (
         <ProductCard9 mb="1.25rem" key={ind} {...item} />
       ))}
 

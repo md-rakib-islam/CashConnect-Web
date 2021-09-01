@@ -1,11 +1,11 @@
 
 function useFormattedNavigationData(navigationData) {
-  //  const [formattedNavigationData, setNavigation] = useState([]);
+
   const formattedNavigationData = navigationData.map(data => {
     return {
       icon: "dress",
       title: data.name,
-      href: `/product/search/${data.name}`,
+      href: `/product/search/${data.id}`,
       menuComponent: "MegaMenu1",
     }
   }

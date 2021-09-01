@@ -1,10 +1,12 @@
+import { BASE_URL, Category_All } from "@data/constants";
+//import navigations from "@data/navigations";
 import React, { useEffect, useState } from "react";
 import CategoryMenuItem from "./category-menu-item/CategoryMenuItem";
 import { StyledCategoryDropdown } from "./CategoryDropdownStyle";
 import MegaMenu1 from "./mega-menu/MegaMenu1";
 import MegaMenu2 from "./mega-menu/MegaMenu2";
+import useFormattedCategoryData from "./useFormattedCategoryData";
 import useFormattedNavigationData from "./useFormattedNavigationData.jsx";
-// import _ from lodash;
 
 export interface CategoryDropdownProps {
   open: boolean;
@@ -21,12 +23,12 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
   };
 
   const [navigationData, setNavigationData] = useState([]);
-  const [formattedNavigationData] = useFormattedNavigationData(navigationData);
-
+  const [formattedNavigationData] =
+    navigationData != [] ? useFormattedNavigationData(navigationData) : [];
+  const [formattedCategoryData] =
+    navigationData != [] ? useFormattedCategoryData(navigationData) : [];
   useEffect(() => {
-    fetch(
-      "https://cashconnectbackend.herokuapp.com/category/api/v1/category/all/"
-    )
+    fetch(`${BASE_URL}${Category_All}`)
       .then((res) => res.json())
       .then((data) => {
         setNavigationData(data.categories);
@@ -34,7 +36,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
   }, []);
 
   console.log("navigationData", navigationData);
-  console.log("FormettedData", formattedNavigationData);
+  console.log("FormattedNavigationData", formattedNavigationData);
 
   return (
     <StyledCategoryDropdown open={open} position={position}>

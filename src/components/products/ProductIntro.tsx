@@ -1,9 +1,10 @@
 import LazyImage from "@component/LazyImage";
 import { useAppContext } from "@context/app/AppContext";
+import { BASE_URL, Brand_By_Id } from "@data/constants";
 import { CartItem } from "@reducer/cartReducer";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Avatar from "../avatar/Avatar";
 import Box from "../Box";
 import Button from "../buttons/Button";
@@ -18,6 +19,7 @@ export interface ProductIntroProps {
   title: string;
   price: number;
   id?: string | number;
+  brand?: string | number;
 }
 
 const ProductIntro: React.FC<ProductIntroProps> = ({
@@ -25,7 +27,9 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   title,
   price = 200,
   id,
+  brand,
 }) => {
+  const [brandName, setbrandName] = useState(brand);
   const [selectedImage, setSelectedImage] = useState(0);
   const { state, dispatch } = useAppContext();
   const cartList: CartItem[] = state.cart.cartList;
@@ -35,9 +39,25 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
     (item) => item.id === id || item.id === routerId
   );
 
+  useEffect(() => {
+    if (brand) {
+      fetch(`${BASE_URL}${Brand_By_Id}${brand}`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("brandss", data);
+          setbrandName(data.name);
+        })
+        .catch(() => {
+          setbrandName("Not Found");
+        });
+    }
+  }, [brand]);
+
   const handleImageClick = (ind) => () => {
     setSelectedImage(ind);
   };
+
+  console.log("brand", brand);
 
   const handleCartAmountChange = useCallback(
     (amount) => () => {
@@ -63,6 +83,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
             <FlexBox justifyContent="center" mb="50px">
               <LazyImage
                 src={imgUrl[selectedImage]}
+                loader={() => imgUrl[selectedImage]}
                 alt={title}
                 height="300px"
                 width="auto"
@@ -102,7 +123,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
           <FlexBox alignItems="center" mb="1rem">
             <SemiSpan>Brand:</SemiSpan>
-            <H6 ml="8px">Ziaomi</H6>
+            <H6 ml="8px">{brandName ? brandName : "Unknown"}</H6>
           </FlexBox>
 
           <FlexBox alignItems="center" mb="1rem">
@@ -115,7 +136,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
           <Box mb="24px">
             <H2 color="primary.main" mb="4px" lineHeight="1">
-              ${price.toFixed(2)}
+              ${Number(price).toFixed(2)}
             </H2>
             <SemiSpan color="inherit">Stock Available</SemiSpan>
           </Box>
