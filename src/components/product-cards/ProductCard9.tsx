@@ -23,6 +23,7 @@ export interface ProductCard9Props {
   imgUrl?: string;
   title?: string;
   price?: number;
+  brand?: string | number;
   off?: number;
   rating?: number;
   subcategories?: Array<{
@@ -50,6 +51,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
   off,
   subcategories,
   rating,
+  brand,
   ...props
 }) => {
   const [cartAmount, setCartAmount] = useState(0);
@@ -249,7 +251,12 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
 
       <Modal open={open} onClose={toggleDialog}>
         <Card p="1rem" position="relative">
-          <ProductIntro imgUrl={[imgUrl]} title={title} price={price} />
+          <ProductIntro
+            imgUrl={[imgUrl]}
+            title={title}
+            price={price}
+            brand={brand}
+          />
           <Box
             position="absolute"
             top="0.75rem"
@@ -272,26 +279,13 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
 };
 
 ProductCard9.defaultProps = {
-  title:
-    "Apple iPhone 5 Unlocked 16GB 8MP Used Cell-Phone-16gbIOS Used Refurbished 100%Factory Used",
-  imgUrl: "/assets/images/products/macbook.png",
+  id: "324321",
+  title: "KSUS ROG Strix G15",
+  imgUrl: "/assets/images/products/loadingProduct.png",
   off: 50,
   price: 450,
   rating: 0,
-  subcategories: [
-    {
-      title: "Bike",
-      url: "/#",
-    },
-    {
-      title: "Ducati",
-      url: "/#",
-    },
-    {
-      title: "Motors",
-      url: "/#",
-    },
-  ],
+  brand: "Unknown",
 };
 
 export default ProductCard9;

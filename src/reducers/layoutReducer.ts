@@ -17,6 +17,9 @@ export const layoutReducer: React.Reducer<layoutStateType, layoutActionType> = (
       };
 
     default: {
+      return {
+        ...state,
+      };
     }
   }
 };

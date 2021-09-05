@@ -12,13 +12,22 @@ import ProductFilterCard from "@component/products/ProductFilterCard";
 import Select from "@component/Select";
 import Sidenav from "@component/sidenav/Sidenav";
 import { H5, Paragraph } from "@component/Typography";
-import React, { useCallback, useState } from "react";
+import { useAppContext } from "@context/app/AppContext";
+import { BASE_URL, Category_By_Id, ProductByCategoryId } from "@data/constants";
+import { useRouter } from "next/router";
+import React, { useCallback, useEffect, useState } from "react";
 import useWindowSize from "../../../hooks/useWindowSize";
 
 const ProductSearchResult = () => {
   const [view, setView] = useState("grid");
   const width = useWindowSize();
   const isTablet = width < 1025;
+  const [categoryName, setcategoryName] = useState("Unknown");
+  const [totalProduct, setTotalProduct] = useState(0);
+
+  const router = useRouter();
+  const { id } = router.query;
+  const { state, dispatch } = useAppContext();
 
   const toggleView = useCallback(
     (v) => () => {
@@ -27,7 +36,34 @@ const ProductSearchResult = () => {
     []
   );
 
+  useEffect(() => {
+    if (id) {
+      fetch(`${BASE_URL}${ProductByCategoryId}${id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setTotalProduct(data.length);
+
+          dispatch({
+            type: "CHANGE_PRODUCT_LIST",
+            payload: data,
+          });
+        });
+      fetch(`${BASE_URL}${Category_By_Id}${id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("categoryName", data.name);
+          setcategoryName(data.name);
+        })
+        .catch(() => {
+          setcategoryName("Not Found");
+        });
+    }
+  }, [id]);
+
+  console.log("productListContext", state.product.productList);
+
   return (
+    // <AppContext.Provider value="sakib">
     <Box pt="20px">
       <FlexBox
         p="1.25rem"
@@ -39,8 +75,8 @@ const ProductSearchResult = () => {
         as={Card}
       >
         <div>
-          <H5>Searching for “ mobile phone ”</H5>
-          <Paragraph color="text.muted">48 results found</Paragraph>
+          <H5>Searching for “ {categoryName} ”</H5>
+          <Paragraph color="text.muted">{totalProduct} results found</Paragraph>
         </div>
         <FlexBox alignItems="center" flexWrap="wrap">
           <Paragraph color="text.muted" mr="1rem">
@@ -102,6 +138,7 @@ const ProductSearchResult = () => {
         </Grid>
       </Grid>
     </Box>
+    // </AppContext.Provider>
   );
 };
 

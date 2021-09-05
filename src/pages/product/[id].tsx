@@ -8,6 +8,7 @@ import ProductIntro from "@component/products/ProductIntro";
 import ProductReview from "@component/products/ProductReview";
 import RelatedProducts from "@component/products/RelatedProducts";
 import { H5 } from "@component/Typography";
+import { useAppContext } from "@context/app/AppContext";
 import { BASE_URL, Product_by_id } from "@data/constants";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -15,11 +16,14 @@ import React, { useEffect, useState } from "react";
 const ProductDetails = () => {
   const router = useRouter();
   const { id } = router.query;
+  const { state, dispatch } = useAppContext();
 
   const [title, settitle] = useState("");
   const [price, setprice] = useState(0);
-  const [imgUrl, setimgUrl] = useState("/assets/images/products/headphone.png");
-  const [brand, setbrand] = useState("");
+  const [imgUrl, setimgUrl] = useState(
+    "/assets/images/products/loadingProduct.png"
+  );
+  const [brand, setbrand] = useState(0);
 
   useEffect(() => {
     if (id) {
@@ -31,6 +35,11 @@ const ProductDetails = () => {
           setprice(data.unit_price);
           setimgUrl(`${BASE_URL}${data.thumbnail}`);
           setbrand(data.brand);
+
+          dispatch({
+            type: "CHANGE_PRODUCT_DETAILS",
+            payload: data,
+          });
         });
     }
   }, [id]);
@@ -41,6 +50,7 @@ const ProductDetails = () => {
     setSelectedOption(opt);
   };
 
+  console.log("productDetailsContext", state.product.productDetails);
   return (
     <div>
       <ProductIntro

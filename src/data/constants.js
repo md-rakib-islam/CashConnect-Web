@@ -12,3 +12,6 @@ export const Product_by_id = "/product/api/v1/product/";
 
 //brand by id
 export const Brand_By_Id = "/brand/api/v1/brand/";
+
+//category by id
+export const Category_By_Id = "/category/api/v1/category/";

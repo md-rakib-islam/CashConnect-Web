@@ -1,5 +1,4 @@
-import { BASE_URL, ProductByCategoryId } from "@data/constants";
-import { useRouter } from "next/router";
+import { useAppContext } from "@context/app/AppContext";
 import React, { useEffect, useState } from "react";
 import FlexBox from "../FlexBox";
 import Grid from "../grid/Grid";
@@ -11,26 +10,16 @@ import useFormattedProductData from "./useFormattedProductData";
 export interface ProductCard1ListProps {}
 
 const ProductCard1List: React.FC<ProductCard1ListProps> = () => {
-  const router = useRouter();
-  const { id } = router.query;
+  const { state } = useAppContext();
 
-  const [productData, setProductData] = useState([]);
+  const [productData, setProductData] = useState([{}]);
   const [formattedProductData] =
     productData != [] ? useFormattedProductData(productData) : [];
 
   useEffect(() => {
-    if (id) {
-      fetch(`${BASE_URL}${ProductByCategoryId}${id}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setProductData(data);
-        });
-    }
-  }, [id]);
+    setProductData(state.product.productList);
+  }, [state.product.productList]);
 
-  console.log("pramid", id);
-  console.log("productData", productData);
-  console.log("FormettedProductData", formattedProductData);
   return (
     <div>
       <Grid container spacing={6}>
@@ -47,7 +36,9 @@ const ProductCard1List: React.FC<ProductCard1ListProps> = () => {
         alignItems="center"
         mt="32px"
       >
-        <SemiSpan>Showing 1-9 of 1.3k Products</SemiSpan>
+        <SemiSpan>
+          Showing 1-10 of {state.product.productList.length} Products
+        </SemiSpan>
         <Pagination pageCount={10} />
       </FlexBox>
     </div>

@@ -39,12 +39,19 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
     (item) => item.id === id || item.id === routerId
   );
 
+  // const imgUrls = [
+  //   "/assets/images/products/headphone.png",
+  //   "/assets/images/products/hiclipart.com (16).png",
+  //   "/assets/images/products/hiclipart.com (18).png",
+  // ];
+
+  const notFound = "/assets/images/products/notFound.png";
+
   useEffect(() => {
     if (brand) {
       fetch(`${BASE_URL}${Brand_By_Id}${brand}`)
         .then((res) => res.json())
         .then((data) => {
-          console.log("brandss", data);
           setbrandName(data.name);
         })
         .catch(() => {
@@ -56,8 +63,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   const handleImageClick = (ind) => () => {
     setSelectedImage(ind);
   };
-
-  console.log("brand", brand);
 
   const handleCartAmountChange = useCallback(
     (amount) => () => {
@@ -82,8 +87,16 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
           <Box>
             <FlexBox justifyContent="center" mb="50px">
               <LazyImage
-                src={imgUrl[selectedImage]}
-                loader={() => imgUrl[selectedImage]}
+                src={
+                  imgUrl[selectedImage] != `${BASE_URL}null`
+                    ? imgUrl[selectedImage]
+                    : notFound
+                }
+                loader={() =>
+                  imgUrl[selectedImage] != `${BASE_URL}null`
+                    ? imgUrl[selectedImage]
+                    : notFound
+                }
                 alt={title}
                 height="300px"
                 width="auto"
@@ -195,7 +208,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
 ProductIntro.defaultProps = {
   imgUrl: [
-    "/assets/images/products/headphone.png",
+    "/assets/images/products/loadingProduct.png",
     "/assets/images/products/hiclipart.com (16).png",
     "/assets/images/products/hiclipart.com (18).png",
   ],

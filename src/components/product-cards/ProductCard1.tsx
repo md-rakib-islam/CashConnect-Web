@@ -1,5 +1,6 @@
 import LazyImage from "@component/LazyImage";
 import { useAppContext } from "@context/app/AppContext";
+import { BASE_URL } from "@data/constants";
 import { CartItem } from "@reducer/cartReducer";
 import Link from "next/link";
 import React, { Fragment, useCallback, useState } from "react";
@@ -74,6 +75,8 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
     []
   );
 
+  const notFound = "/assets/images/products/notFound.png";
+
   return (
     <StyledProductCard1 {...props}>
       <div className="image-holder">
@@ -113,11 +116,13 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
         <Link href={`/product/${id}`}>
           <a>
             <LazyImage
-              src={imgUrl}
+              src={imgUrl != `${BASE_URL}${null}` ? imgUrl : notFound}
               width="100%"
               height="auto"
               layout="responsive"
-              loader={() => imgUrl}
+              loader={() =>
+                imgUrl != `${BASE_URL}${null}` ? imgUrl : notFound
+              }
               alt={title}
             />
           </a>
@@ -228,7 +233,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 ProductCard1.defaultProps = {
   id: "324321",
   title: "KSUS ROG Strix G15",
-  imgUrl: "/assets/images/products/macbook.png",
+  imgUrl: "/assets/images/products/loadingProduct.png",
   off: 50,
   price: 450,
   rating: 0,

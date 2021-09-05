@@ -71,6 +71,9 @@ export const cartReducer: React.Reducer<cartStateType, cartActionType> = (
         };
 
     default: {
+      return {
+        cartList: [...state.cartList],
+      };
     }
   }
 };
