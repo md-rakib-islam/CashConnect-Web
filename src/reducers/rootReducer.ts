@@ -1,3 +1,10 @@
+import {
+  authInitialState,
+  authReducer,
+  loginActionType,
+  registerActionType,
+  userActionType,
+} from "./authReducer";
 import { cartActionType, cartInitialState, cartReducer } from "./cartReducer";
 import combineReducers from "./combineReducers";
 import {
@@ -16,16 +23,21 @@ export type rootActionType =
   | layoutActionType
   | productDetailsActionType
   | productListActionType
-  | cartActionType;
+  | cartActionType
+  | userActionType
+  | loginActionType
+  | registerActionType;
 
 export const initialState = {
   layout: layoutInitialState,
   product: productDetailsInitialState,
   cart: cartInitialState,
+  auth: authInitialState,
 };
 
 export const rootReducer = combineReducers({
   layout: layoutReducer,
   product: productDetailsReducer,
   cart: cartReducer,
+  auth: authReducer,
 });

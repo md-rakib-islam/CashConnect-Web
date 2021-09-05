@@ -1,4 +1,8 @@
+//base url
 export const BASE_URL = "http://192.168.0.17:8001";
+
+//login
+export const LOGIN_URL = `${BASE_URL}/users/api/v1/users/login/`;
 
 //ProductByCategoryId
 export const ProductByCategoryId = "/product/api/v1/product_using_category/";

@@ -1,8 +1,10 @@
+import { useAppContext } from "@context/app/AppContext";
 import { useFormik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useCallback, useState } from "react";
 import * as yup from "yup";
+import jwtService from "../../services/jwtService";
 import Box from "../Box";
 import Button from "../buttons/Button";
 import IconButton from "../buttons/IconButton";
@@ -16,28 +18,56 @@ import { StyledSessionCard } from "./SessionStyle";
 const Login: React.FC = () => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const router = useRouter();
+  const { state, dispatch } = useAppContext();
 
   const togglePasswordVisibility = useCallback(() => {
     setPasswordVisibility((visible) => !visible);
   }, []);
 
   const handleFormSubmit = async (values) => {
-    router.push("/profile");
     console.log(values);
+
+    const { email, password } = values;
+
+    return jwtService
+      .signInWithEmailAndPassword(email, password)
+      .then((user) => {
+        console.log("user", user);
+        dispatch({
+          type: "CHANGE_USER_DETAILS",
+          payload: user,
+        });
+        dispatch({
+          type: "CHANGE_LOGIN_DETAILS",
+          payload: {
+            success: true,
+            error: [],
+          },
+        });
+        localStorage.setItem("UserId", user.id);
+        router.push("/profile");
+      })
+      .catch((errors) => {
+        console.log("login failed");
+        dispatch({
+          type: "CHANGE_LOGIN_DETAILS",
+          payload: {
+            success: false,
+            error: errors,
+          },
+        });
+        router.push("/login");
+      });
   };
 
-  const {
-    values,
-    errors,
-    touched,
-    handleBlur,
-    handleChange,
-    handleSubmit,
-  } = useFormik({
-    onSubmit: handleFormSubmit,
-    initialValues,
-    validationSchema: formSchema,
-  });
+  console.log("auth", state.auth);
+
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+    useFormik({
+      onSubmit: handleFormSubmit,
+      initialValues,
+      validationSchema: formSchema,
+    });
 
   return (
     <StyledSessionCard mx="auto" my="2rem" boxShadow="large">
