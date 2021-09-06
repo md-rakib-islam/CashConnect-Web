@@ -3,6 +3,7 @@ export const authInitialState = {
     displayName: "John Doe",
     photoURL: "",
     email: "johndoe@withinpixels.com",
+    id: 0,
   },
   login: {
     success: false,
@@ -18,6 +19,7 @@ export type UserItem = {
   displayName: string;
   photoURL: string;
   email: string;
+  id?: number | string;
 };
 
 export type LoginItem = {

@@ -28,13 +28,15 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
     fetch(`${BASE_URL}${Category_All}`)
       .then((res) => res.json())
       .then((data) => {
+        console.log("category", data.categories);
         setNavigationData(data.categories);
       });
   }, []);
 
+  console.log("formatedCategory", formattedNavigationData);
   return (
     <StyledCategoryDropdown open={open} position={position}>
-      {formattedNavigationData.map((item) => {
+      {formattedNavigationData?.map((item) => {
         let MegaMenu = megaMenu[item.menuComponent];
 
         return (

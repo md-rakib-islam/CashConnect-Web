@@ -10,24 +10,140 @@ import DashboardLayout from "@component/layout/CustomerDashboardLayout";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import Select from "@component/Select";
 import TextField from "@component/text-field/TextField";
+import { useAppContext } from "@context/app/AppContext";
+import {
+  BASE_URL,
+  Branch_All,
+  City_All,
+  Country_All,
+  Customer_By_Id,
+  Customer_type_All,
+  Customer_Update,
+  Role_All,
+  Thana_All,
+} from "@data/constants";
+import axios from "axios";
 import { Formik } from "formik";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as yup from "yup";
 
 const ProfileEditor = () => {
   const [previewImage, setPreviewImage] = useState();
 
+  const { state, dispatch } = useAppContext();
+  const { data } = state;
+
   const handleFormSubmit = async (values) => {
-    console.log(values);
     console.log("Submitted");
+    console.log("id", state.auth.user.id);
+
+    const user_id = state.auth.user?.id;
+    const data = {
+      ...values,
+      gender: values?.gender?.value,
+      role: values?.role?.id,
+      thana: values?.thana?.id,
+      city: values?.city?.id,
+      country: values?.country?.id,
+      branch: values?.branch?.id,
+      cusotmer_type: values?.cusotmer_type?.id,
+    };
+
+    console.log("dataUpdate", data);
+
+    const authTOKEN = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: localStorage.getItem("jwt_access_token"),
+      },
+    };
+    axios
+      .put(`${BASE_URL}${Customer_Update}${user_id}`, data, authTOKEN)
+      .then((data) => {
+        console.log("updatedRes", data);
+      });
+    // console.log(data);
   };
 
-  const genderList = [
+  const genders = [
     { label: "Male", value: "male" },
     { label: "Female", value: "female" },
     { label: "Others", value: "others" },
   ];
+
+  useEffect(() => {
+    fetch(`${BASE_URL}${Role_All}`)
+      .then((res) => res.json())
+      .then((data) => {
+        dispatch({
+          type: "SET_ROLES",
+          payload: data.roles,
+        });
+      });
+
+    fetch(`${BASE_URL}${City_All}`)
+      .then((res) => res.json())
+      .then((data) => {
+        dispatch({
+          type: "SET_CITIES",
+          payload: data.cities,
+        });
+      });
+
+    fetch(`${BASE_URL}${Thana_All}`)
+      .then((res) => res.json())
+      .then((data) => {
+        dispatch({
+          type: "SET_THANAS",
+          payload: data.thanas,
+        });
+      });
+
+    fetch(`${BASE_URL}${Country_All}`)
+      .then((res) => res.json())
+      .then((data) => {
+        dispatch({
+          type: "SET_COUNTRY",
+          payload: data.countries,
+        });
+      });
+
+    fetch(`${BASE_URL}${Branch_All}`)
+      .then((res) => res.json())
+      .then((data) => {
+        dispatch({
+          type: "SET_BRANCH",
+          payload: data.branches,
+        });
+      });
+
+    fetch(`${BASE_URL}${Customer_type_All}`)
+      .then((res) => res.json())
+      .then((data) => {
+        dispatch({
+          type: "SET_CUSTOMER_TYPE",
+          payload: data.customer_types,
+        });
+      });
+  }, []);
+
+  useEffect(() => {
+    const authTOKEN = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: localStorage.getItem("jwt_access_token"),
+      },
+    };
+
+    axios
+      .get(`${BASE_URL}${Customer_By_Id}${state.auth.user?.id}`, authTOKEN)
+      .then((data) => {
+        console.log("EditDetails", data);
+      });
+  }, [state.auth.user?.id]);
+
+  console.log("render edit profile");
 
   return (
     <div>
@@ -184,7 +300,9 @@ const ProfileEditor = () => {
                       mb="1rem"
                       label="Gender"
                       placeholder="Select Gender"
-                      options={genderList}
+                      options={genders}
+                      getOptionLabelBy="label"
+                      getOptionValueBy="value"
                       value={values.gender || ""}
                       onChange={(gender) => {
                         setFieldValue("gender", gender);
@@ -243,20 +361,6 @@ const ProfileEditor = () => {
                   </Grid>
 
                   <Grid item md={6} xs={12}>
-                    <Select
-                      mb="1rem"
-                      label="Role"
-                      placeholder="Select Role"
-                      options={genderList}
-                      value={values.role || ""}
-                      onChange={(role) => {
-                        setFieldValue("role", role);
-                      }}
-                      errorText={touched.role && errors.role}
-                    />
-                  </Grid>
-
-                  <Grid item md={6} xs={12}>
                     <TextField
                       name="street_address_one"
                       label="Street Address One"
@@ -287,9 +391,23 @@ const ProfileEditor = () => {
                   <Grid item md={6} xs={12}>
                     <Select
                       mb="1rem"
+                      label="Role"
+                      placeholder="Select Role"
+                      options={data?.roles}
+                      value={values.role || ""}
+                      onChange={(role) => {
+                        setFieldValue("role", role);
+                      }}
+                      errorText={touched.role && errors.role}
+                    />
+                  </Grid>
+
+                  <Grid item md={6} xs={12}>
+                    <Select
+                      mb="1rem"
                       label="Thana"
                       placeholder="Select Thana"
-                      options={genderList}
+                      options={data.thanas}
                       value={values.thana || ""}
                       onChange={(thana) => {
                         setFieldValue("thana", thana);
@@ -303,7 +421,7 @@ const ProfileEditor = () => {
                       mb="1rem"
                       label="city"
                       placeholder="Select city"
-                      options={genderList}
+                      options={data.cities}
                       value={values.city || ""}
                       onChange={(city) => {
                         setFieldValue("city", city);
@@ -317,7 +435,7 @@ const ProfileEditor = () => {
                       mb="1rem"
                       label="country"
                       placeholder="Select country"
-                      options={genderList}
+                      options={data.country}
                       value={values.country || ""}
                       onChange={(country) => {
                         setFieldValue("country", country);
@@ -355,7 +473,7 @@ const ProfileEditor = () => {
                       mb="1rem"
                       label="Branch"
                       placeholder="Select Branch"
-                      options={genderList}
+                      options={data.branch}
                       value={values.branch || ""}
                       onChange={(branch) => {
                         setFieldValue("branch", branch);
@@ -369,12 +487,12 @@ const ProfileEditor = () => {
                       mb="1rem"
                       label="Cusotmer_type"
                       placeholder="Select Cusotmer_type"
-                      options={genderList}
-                      value={values.busotmer_type || ""}
-                      onChange={(busotmer_type) => {
-                        setFieldValue("busotmer_type", busotmer_type);
+                      options={data.customer_type}
+                      value={values.cusotmer_type || ""}
+                      onChange={(cusotmer_type) => {
+                        setFieldValue("cusotmer_type", cusotmer_type);
                       }}
-                      errorText={touched.busotmer_type && errors.busotmer_type}
+                      errorText={touched.cusotmer_type && errors.cusotmer_type}
                     />
                   </Grid>
 
@@ -411,7 +529,6 @@ const initialValues = {
   first_name: "",
   last_name: "",
   email: "",
-  contact: "",
   birth_date: "",
 };
 
@@ -419,7 +536,6 @@ const checkoutSchema = yup.object().shape({
   first_name: yup.string().required("required"),
   last_name: yup.string().required("required"),
   email: yup.string().email("invalid email").required("required"),
-  contact: yup.string().required("required"),
   birth_date: yup.date().required("invalid date"),
 });
 

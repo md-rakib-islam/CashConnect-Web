@@ -8,6 +8,16 @@ import {
 import { cartActionType, cartInitialState, cartReducer } from "./cartReducer";
 import combineReducers from "./combineReducers";
 import {
+  branchActionType,
+  citiesActionType,
+  countryActionType,
+  customer_typeActionType,
+  dataInitialState,
+  dataReducer,
+  rolesActionType,
+  thanasActionType,
+} from "./dataReducer";
+import {
   layoutActionType,
   layoutInitialState,
   layoutReducer,
@@ -26,13 +36,20 @@ export type rootActionType =
   | cartActionType
   | userActionType
   | loginActionType
-  | registerActionType;
+  | registerActionType
+  | rolesActionType
+  | thanasActionType
+  | citiesActionType
+  | countryActionType
+  | branchActionType
+  | customer_typeActionType;
 
 export const initialState = {
   layout: layoutInitialState,
   product: productDetailsInitialState,
   cart: cartInitialState,
   auth: authInitialState,
+  data: dataInitialState,
 };
 
 export const rootReducer = combineReducers({
@@ -40,4 +57,5 @@ export const rootReducer = combineReducers({
   product: productDetailsReducer,
   cart: cartReducer,
   auth: authReducer,
+  data: dataReducer,
 });

@@ -8,11 +8,13 @@ import DashboardLayout from "@component/layout/CustomerDashboardLayout";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import TableRow from "@component/TableRow";
 import Typography, { H3, H5, Small } from "@component/Typography";
+import { useAppContext } from "@context/app/AppContext";
 import { format } from "date-fns";
 import Link from "next/link";
 import React from "react";
 
 const Profile = () => {
+  const { state, dispatch } = useAppContext();
   return (
     <div>
       <DashboardPageHeader
@@ -39,7 +41,7 @@ const Profile = () => {
                   alignItems="center"
                 >
                   <div>
-                    <H5 my="0px">Ralph Edwards</H5>
+                    <H5 my="0px">{state.auth.user.displayName}</H5>
                     <FlexBox alignItems="center">
                       <Typography fontSize="14px" color="text.hint">
                         Balance:

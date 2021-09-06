@@ -18,6 +18,8 @@ interface SelectProps
   defaultValue?: any;
   label?: string;
   errorText?: any;
+  getOptionLabelBy?: string;
+  getOptionValueBy?: string;
 }
 
 const Select: React.FC<SelectProps> = ({
@@ -25,6 +27,8 @@ const Select: React.FC<SelectProps> = ({
   id,
   label,
   errorText,
+  getOptionLabelBy,
+  getOptionValueBy,
   ...props
 }) => {
   // extract spacing props
@@ -53,6 +57,16 @@ const Select: React.FC<SelectProps> = ({
         // menuIsOpen={true}
         // name="color"
         options={options}
+        getOptionLabel={
+          getOptionLabelBy
+            ? (option) => option[getOptionLabelBy]
+            : (option) => option.name
+        }
+        getOptionValue={
+          getOptionValueBy
+            ? (option) => option[getOptionValueBy]
+            : (option) => option.id
+        }
         styles={customStyles}
         theme={(theme) => ({
           ...theme,

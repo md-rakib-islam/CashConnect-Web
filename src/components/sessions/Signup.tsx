@@ -1,3 +1,5 @@
+import { BASE_URL, Customer_Create } from "@data/constants";
+import axios from "axios";
 import { useFormik } from "formik";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -21,21 +23,31 @@ const Signup: React.FC = () => {
   };
 
   const handleFormSubmit = async (values) => {
-    console.log(values);
+    const data = {
+      ...values,
+      user_type: 3,
+    };
+
+    const authTOKEN = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: localStorage.getItem("jwt_access_token"),
+      },
+    };
+    axios
+      .post(`${BASE_URL}${Customer_Create}`, data, authTOKEN)
+      .then((data) => {
+        console.log("createdRes", data);
+      });
+    console.log("saveData", data);
   };
 
-  const {
-    values,
-    errors,
-    touched,
-    handleBlur,
-    handleChange,
-    handleSubmit,
-  } = useFormik({
-    onSubmit: handleFormSubmit,
-    initialValues,
-    validationSchema: formSchema,
-  });
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+    useFormik({
+      onSubmit: handleFormSubmit,
+      initialValues,
+      validationSchema: formSchema,
+    });
 
   return (
     <StyledSessionCard mx="auto" my="2rem" boxShadow="large">
@@ -55,20 +67,33 @@ const Signup: React.FC = () => {
 
         <TextField
           mb="0.75rem"
-          name="name"
-          label="Full Name"
+          name="first_name"
+          label="First Name"
           placeholder="Ralph Adwards"
           fullwidth
           onBlur={handleBlur}
           onChange={handleChange}
-          value={values.name || ""}
-          errorText={touched.name && errors.name}
+          value={values.first_name || ""}
+          errorText={touched.first_name && errors.first_name}
         />
+
+        <TextField
+          mb="0.75rem"
+          name="last_name"
+          label="Last Name"
+          placeholder="Ralph Adwards"
+          fullwidth
+          onBlur={handleBlur}
+          onChange={handleChange}
+          value={values.last_name || ""}
+          errorText={touched.last_name && errors.last_name}
+        />
+
         <TextField
           mb="0.75rem"
           name="email"
           placeholder="exmple@mail.com"
-          label="Email or Phone Number"
+          label="Email"
           type="email"
           fullwidth
           onBlur={handleBlur}
@@ -76,6 +101,19 @@ const Signup: React.FC = () => {
           value={values.email || ""}
           errorText={touched.email && errors.email}
         />
+
+        <TextField
+          mb="0.75rem"
+          name="number"
+          placeholder="Obtional"
+          label="Phone Number"
+          fullwidth
+          onBlur={handleBlur}
+          onChange={handleChange}
+          value={values.number || ""}
+          errorText={touched.number && errors.number}
+        />
+
         <TextField
           mb="0.75rem"
           name="password"
@@ -213,7 +251,8 @@ const Signup: React.FC = () => {
 };
 
 const initialValues = {
-  name: "",
+  first_name: "",
+  last_name: "",
   email: "",
   password: "",
   re_password: "",
@@ -221,7 +260,8 @@ const initialValues = {
 };
 
 const formSchema = yup.object().shape({
-  name: yup.string().required("${path} is required"),
+  first_name: yup.string().required("${path} is required"),
+  last_name: yup.string().required("${path} is required"),
   email: yup.string().email("invalid email").required("${path} is required"),
   password: yup.string().required("${path} is required"),
   re_password: yup
