@@ -8,13 +8,42 @@ import DashboardLayout from "@component/layout/CustomerDashboardLayout";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import TableRow from "@component/TableRow";
 import Typography, { H3, H5, Small } from "@component/Typography";
-import { useAppContext } from "@context/app/AppContext";
+import { BASE_URL, Customer_By_Id, loadingImg } from "@data/constants";
+import axios from "axios";
 import { format } from "date-fns";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const Profile = () => {
-  const { state, dispatch } = useAppContext();
+  const [preViewImg, setpreViewImg] = useState("");
+  const [first_name, setfirst_name] = useState("");
+  const [last_name, setlast_name] = useState("");
+  const [email, setemail] = useState("");
+  const [phone, setphone] = useState("");
+  const [birth_day, setbirth_day] = useState("");
+
+  const UserId = localStorage?.getItem("UserId") || null;
+
+  useEffect(() => {
+    const authTOKEN = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: localStorage?.getItem("jwt_access_token"),
+      },
+    };
+
+    axios
+      .get(`${BASE_URL}${Customer_By_Id}${UserId}`, authTOKEN)
+      .then((user) => {
+        const { data } = user;
+        setpreViewImg(`${BASE_URL}${data.image}`);
+        setfirst_name(data.first_name);
+        setlast_name(data.last_name);
+        setemail(data.email);
+        setphone(data.primary_phone);
+        setbirth_day(data.date_of_birth);
+      });
+  }, []);
   return (
     <div>
       <DashboardPageHeader
@@ -33,7 +62,7 @@ const Profile = () => {
         <Grid container spacing={6}>
           <Grid item lg={6} md={6} sm={12} xs={12}>
             <FlexBox as={Card} p="14px 32px" height="100%" alignItems="center">
-              <Avatar src="/assets/images/faces/ralph.png" size={64} />
+              <Avatar src={preViewImg || loadingImg} size={64} />
               <Box ml="12px" flex="1 1 0">
                 <FlexBox
                   flexWrap="wrap"
@@ -41,7 +70,7 @@ const Profile = () => {
                   alignItems="center"
                 >
                   <div>
-                    <H5 my="0px">{state.auth.user.displayName}</H5>
+                    <H5 my="0px">{`${first_name} ${last_name}`}</H5>
                     <FlexBox alignItems="center">
                       <Typography fontSize="14px" color="text.hint">
                         Balance:
@@ -94,23 +123,23 @@ const Profile = () => {
           <Small color="text.muted" mb="4px" textAlign="left">
             First Name
           </Small>
-          <span>Ralph</span>
+          <span>{first_name}</span>
         </FlexBox>
         <FlexBox flexDirection="column" p="0.5rem">
           <Small color="text.muted" mb="4px" textAlign="left">
             Last Name
           </Small>
-          <span>Edwards</span>
+          <span>{last_name}</span>
         </FlexBox>
         <FlexBox flexDirection="column" p="0.5rem">
           <Small color="text.muted" mb="4px" textAlign="left">
             Email
           </Small>
-          <span>ralfedwards@email.com</span>
+          <span>{email}</span>
         </FlexBox>
         <FlexBox flexDirection="column" p="0.5rem">
           <Small color="text.muted" mb="4px" textAlign="left">
-            Phone
+            {phone}
           </Small>
           <span>+1983649392983</span>
         </FlexBox>

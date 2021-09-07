@@ -1,6 +1,11 @@
+//http://cashconnectbackend.herokuapp.com
 //base url
 export const BASE_URL = "http://192.168.0.17:8001";
 
+//not found image
+export const notFound = "/assets/images/products/notFound.png";
+
+export const loadingImg = "/assets/images/products/loadingProduct.png";
 //login
 export const LOGIN_URL = `${BASE_URL}/users/api/v1/users/login/`;
 

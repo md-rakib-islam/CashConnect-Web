@@ -8,6 +8,7 @@ import Typography from "./Typography";
 type SelectOption = {
   label: any;
   value: any;
+  name?: any;
 };
 
 interface SelectProps
@@ -29,6 +30,7 @@ const Select: React.FC<SelectProps> = ({
   errorText,
   getOptionLabelBy,
   getOptionValueBy,
+  value,
   ...props
 }) => {
   // extract spacing props
@@ -66,6 +68,14 @@ const Select: React.FC<SelectProps> = ({
           getOptionValueBy
             ? (option) => option[getOptionValueBy]
             : (option) => option.id
+        }
+        value={
+          typeof value != "object"
+            ? {
+                id: value,
+                name: options.find((option: any) => option?.id == value)?.name,
+              }
+            : value
         }
         styles={customStyles}
         theme={(theme) => ({

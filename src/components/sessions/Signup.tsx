@@ -34,11 +34,9 @@ const Signup: React.FC = () => {
         Authorization: localStorage.getItem("jwt_access_token"),
       },
     };
-    axios
-      .post(`${BASE_URL}${Customer_Create}`, data, authTOKEN)
-      .then((data) => {
-        console.log("createdRes", data);
-      });
+    axios.post(`${BASE_URL}${Customer_Create}`, data).then((data) => {
+      console.log("createdRes", data);
+    });
     console.log("saveData", data);
   };
 
@@ -64,6 +62,26 @@ const Signup: React.FC = () => {
         >
           Please fill all forms to continued
         </H5>
+
+        <Button
+          mb="1.65rem"
+          size="large"
+          variant="contained"
+          color="secondary"
+          fullwidth
+        >
+          Customer
+        </Button>
+
+        <Button
+          mb="1.65rem"
+          size="large"
+          variant="contained"
+          color="primary"
+          fullwidth
+        >
+          Vendor
+        </Button>
 
         <TextField
           mb="0.75rem"

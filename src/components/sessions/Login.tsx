@@ -44,7 +44,7 @@ const Login: React.FC = () => {
             error: [],
           },
         });
-        localStorage.setItem("UserId", user.id);
+        // localStorage.setItem("UserId", user.id);
         router.push("/profile");
       })
       .catch((errors) => {

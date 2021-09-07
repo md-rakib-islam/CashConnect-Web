@@ -69,6 +69,8 @@ class JwtService {
         .post(`${LOGIN_URL}`, { email: email, password: password })
         .then((response) => {
           if (response) {
+            localStorage.removeItem("UserId");
+            localStorage.setItem("UserId", response.data.id);
             localStorage.removeItem("userPassword");
             localStorage.setItem("userPassword", password);
             this.setSession(`Bearer ${response.data.access}`);
@@ -120,7 +122,8 @@ class JwtService {
   setSession = (access_token) => {
     if (access_token) {
       localStorage.setItem("jwt_access_token", access_token);
-      axios.defaults.headers.common.Authorization = `Bearer ${access_token}`;
+      // delete axios.defaults.headers.common.Authorization;
+      // axios.defaults.headers.common.Authorization = `Bearer ${access_token}`;
     } else {
       localStorage.removeItem("jwt_access_token");
       localStorage.removeItem("UserId");
