@@ -1,4 +1,4 @@
-import { BASE_URL, Customer_Create } from "@data/constants";
+import { Customer_Create, Vendor_Create } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
 import Link from "next/link";
@@ -17,26 +17,42 @@ import { StyledSessionCard } from "./SessionStyle";
 
 const Signup: React.FC = () => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
+  const [customerVariant, setCustomerVariant] = useState("contained");
+  const [vendorVariant, setvendorVariant] = useState("outlined");
+  const [user_type, setUser_type] = useState(3);
 
   const togglePasswordVisibility = () => {
     setPasswordVisibility((visible) => !visible);
   };
 
+  const singUpAsCustomer = () => {
+    setUser_type(3);
+    setCustomerVariant("contained");
+    setvendorVariant("outlined");
+  };
+
+  const singUpAsVendor = () => {
+    setvendorVariant("contained");
+    setCustomerVariant("outlined");
+    setUser_type(2);
+  };
+
   const handleFormSubmit = async (values) => {
     const data = {
       ...values,
-      user_type: 3,
+      user_type,
     };
 
-    const authTOKEN = {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: localStorage.getItem("jwt_access_token"),
-      },
-    };
-    axios.post(`${BASE_URL}${Customer_Create}`, data).then((data) => {
-      console.log("createdRes", data);
-    });
+    if (user_type == 3) {
+      axios.post(`${Customer_Create}`, data).then((data) => {});
+    }
+
+    if (user_type == 2) {
+      axios.post(`${Vendor_Create}`, data).then((data) => {
+        console.log("createdVendorRes", data);
+      });
+    }
+
     console.log("saveData", data);
   };
 
@@ -49,26 +65,34 @@ const Signup: React.FC = () => {
 
   return (
     <StyledSessionCard mx="auto" my="2rem" boxShadow="large">
-      <form className="content" onSubmit={handleSubmit}>
-        <H3 textAlign="center" mb="0.5rem">
-          Create Your Account
-        </H3>
-        <H5
-          fontWeight="600"
-          fontSize="12px"
-          color="gray.800"
-          textAlign="center"
-          mb="2.25rem"
-        >
-          Please fill all forms to continued
-        </H5>
+      <H3 textAlign="center" mb="0.5rem">
+        Create Your Account
+      </H3>
+      <H5
+        fontWeight="600"
+        fontSize="12px"
+        color="gray.800"
+        textAlign="center"
+        mb="2.25rem"
+      >
+        Please fill all forms to continued
+      </H5>
 
+      <div
+        className="content"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          paddingTop: "0px",
+        }}
+      >
         <Button
           mb="1.65rem"
           size="large"
-          variant="contained"
+          variant={customerVariant}
           color="secondary"
-          fullwidth
+          width="50%"
+          onClick={singUpAsCustomer}
         >
           Customer
         </Button>
@@ -76,13 +100,20 @@ const Signup: React.FC = () => {
         <Button
           mb="1.65rem"
           size="large"
-          variant="contained"
-          color="primary"
-          fullwidth
+          variant={vendorVariant}
+          color="secondary"
+          width="50%"
+          onClick={singUpAsVendor}
         >
           Vendor
         </Button>
+      </div>
 
+      <form
+        className="content"
+        style={{ paddingTop: "0px" }}
+        onSubmit={handleSubmit}
+      >
         <TextField
           mb="0.75rem"
           name="first_name"

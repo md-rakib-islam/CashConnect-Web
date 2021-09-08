@@ -1,6 +1,6 @@
 import LazyImage from "@component/LazyImage";
 import { useAppContext } from "@context/app/AppContext";
-import { BASE_URL, loadingImg, notFound } from "@data/constants";
+import { BASE_URL, loadingImg, notFoundImg } from "@data/constants";
 import { CartItem } from "@reducer/cartReducer";
 import Link from "next/link";
 import React, { Fragment, useCallback, useState } from "react";
@@ -75,7 +75,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
     []
   );
 
-  // const notFound = "/assets/images/products/notFound.png";
+  // const notFoundImg = "/assets/images/products/notFoundImg.png";
 
   return (
     <StyledProductCard1 {...props}>
@@ -116,12 +116,12 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
         <Link href={`/product/${id}`}>
           <a>
             <LazyImage
-              src={imgUrl != `${BASE_URL}${null}` ? imgUrl : notFound}
+              src={imgUrl != `${BASE_URL}${null}` ? imgUrl : notFoundImg}
               width="100%"
               height="auto"
               layout="responsive"
               loader={() =>
-                imgUrl != `${BASE_URL}${null}` ? imgUrl : notFound
+                imgUrl != `${BASE_URL}${null}` ? imgUrl : notFoundImg
               }
               alt={title}
             />

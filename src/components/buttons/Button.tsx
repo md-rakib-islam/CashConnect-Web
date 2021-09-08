@@ -13,14 +13,15 @@ import {
   shadow,
   space,
   SpaceProps,
-  variant,
+  variant
 } from "styled-system";
 
 interface ButtonProps {
   size?: "small" | "medium" | "large" | "none";
   color?: colorOptions;
-  variant?: "text" | "outlined" | "contained";
+  variant?: "text" | "outlined" | "contained" | string;
   fullwidth?: boolean;
+  width?: string;
 }
 
 const Button = styled.button<
@@ -31,10 +32,10 @@ const Button = styled.button<
     ButtonProps &
     LayoutProps
 >(
-  ({ color, fullwidth }) =>
+  ({ color, fullwidth, width }) =>
     systemCss({
       display: "flex",
-      width: fullwidth ? "100%" : "unset",
+      width: fullwidth ? "100%" : width || "unset",
       justifyContent: "center",
       alignItems: "center",
       outline: "none",

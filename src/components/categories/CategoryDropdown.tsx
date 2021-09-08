@@ -1,11 +1,11 @@
 import { BASE_URL, Category_All } from "@data/constants";
 //import navigations from "@data/navigations";
 import React, { useEffect, useState } from "react";
+import useFormattedNavigationData from "../../customHook/useFormattedCategoryData";
 import CategoryMenuItem from "./category-menu-item/CategoryMenuItem";
 import { StyledCategoryDropdown } from "./CategoryDropdownStyle";
 import MegaMenu1 from "./mega-menu/MegaMenu1";
 import MegaMenu2 from "./mega-menu/MegaMenu2";
-import useFormattedNavigationData from "./useFormattedCategoryData";
 
 export interface CategoryDropdownProps {
   open: boolean;
@@ -22,8 +22,9 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
   };
 
   const [navigationData, setNavigationData] = useState([]);
-  const [formattedNavigationData] =
-    navigationData != [] ? useFormattedNavigationData(navigationData) : [];
+  const { formattedNavigationData } =
+    useFormattedNavigationData(navigationData);
+
   useEffect(() => {
     fetch(`${BASE_URL}${Category_All}`)
       .then((res) => res.json())

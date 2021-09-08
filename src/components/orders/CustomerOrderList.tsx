@@ -1,4 +1,6 @@
-import React from "react";
+import { orders_By_Customer_Id } from "@data/constants";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import FlexBox from "../FlexBox";
 import Hidden from "../hidden/Hidden";
 import DashboardPageHeader from "../layout/DashboardPageHeader";
@@ -10,6 +12,46 @@ import OrderRow from "./OrderRow";
 export interface CustomerOrderListProps {}
 
 const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
+  const [ordersList, setorderList] = useState([]);
+
+  try {
+    var UserId: any = localStorage?.getItem("UserId");
+  } catch (err) {
+    UserId = 0;
+  }
+
+  try {
+    var authTOKEN = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: localStorage.getItem("jwt_access_token"),
+      },
+    };
+  } catch (err) {
+    authTOKEN = null;
+  }
+
+  useEffect(() => {
+    axios
+      .get(`${orders_By_Customer_Id}${UserId}`, authTOKEN)
+      .then((orders: any) => {
+        console.log("orderRes", orders);
+        let Orders = [];
+        orders?.data?.map((order) => {
+          let Order: any = {};
+          Order.order_no = order.order_no;
+          Order.order_status = order.order_status;
+          Order.paid_at = order.paid_at;
+          Order.net_amount = order.net_amount;
+          Order.href = `/orders/${order.id}`;
+
+          Orders.push(Order);
+        });
+        setorderList(Orders);
+        console.log("Orders", Orders);
+      });
+  }, [UserId]);
+
   return (
     <div>
       <DashboardPageHeader title="My Orders" iconName="bag_filled" />
@@ -37,7 +79,7 @@ const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
         </TableRow>
       </Hidden>
 
-      {orderList.map((item, ind) => (
+      {ordersList.map((item, ind) => (
         <OrderRow item={item} key={ind} />
       ))}
 
@@ -52,43 +94,5 @@ const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
     </div>
   );
 };
-
-const orderList = [
-  {
-    orderNo: "1050017AS",
-    status: "Pending",
-    purchaseDate: new Date(),
-    price: 350,
-    href: "/orders/5452423",
-  },
-  {
-    orderNo: "1050017AS",
-    status: "Processing",
-    purchaseDate: new Date(),
-    price: 500,
-    href: "/orders/5452423",
-  },
-  {
-    orderNo: "1050017AS",
-    status: "Delivered",
-    purchaseDate: "2020/12/23",
-    price: 700,
-    href: "/orders/5452423",
-  },
-  {
-    orderNo: "1050017AS",
-    status: "Delivered",
-    purchaseDate: "2020/12/23",
-    price: 700,
-    href: "/orders/5452423",
-  },
-  {
-    orderNo: "1050017AS",
-    status: "Cancelled",
-    purchaseDate: "2020/12/15",
-    price: 300,
-    href: "/orders/5452423",
-  },
-];
 
 export default CustomerOrderList;

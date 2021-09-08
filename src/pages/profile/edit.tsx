@@ -33,7 +33,7 @@ type TIMG = any;
 
 const ProfileEditor = () => {
   const [previewImage, setPreviewImage] = useState<Iimage>();
-  const [image, setEmage] = useState<TIMG>("");
+  const [image, setImage] = useState<TIMG>("");
   const [roles, setRoles] = useState([]);
   const [thanas, setThanas] = useState([]);
   const [cities, setCities] = useState([]);
@@ -43,29 +43,51 @@ const ProfileEditor = () => {
 
   // const { state, dispatch } = useAppContext();
 
-  const UserId = localStorage?.getItem("UserId") || null;
-
   const genders = [
     { label: "Male", value: "male" },
     { label: "Female", value: "female" },
     { label: "Others", value: "others" },
   ];
 
-  const handleFormSubmit = (values) => {
-    console.log("Submitted");
-    console.log("id", UserId);
+  try {
+    var UserId: any = localStorage?.getItem("UserId");
+  } catch (err) {
+    UserId = 0;
+  }
 
-    // const user_id = state.auth.user?.id;
+  try {
+    var authTOKEN = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: localStorage.getItem("jwt_access_token"),
+      },
+    };
+  } catch (err) {
+    authTOKEN = null;
+  }
+
+  const handleFormSubmit = (values) => {
     const data = {
       ...values,
       image: image,
-      gender: values?.gender?.value,
-      role: values?.role?.id,
-      thana: values?.thana?.id,
-      city: values?.city?.id,
-      country: values?.country?.id,
-      branch: values?.branch?.id,
-      cusotmer_type: values?.cusotmer_type?.id,
+      gender:
+        typeof values.gender != "object"
+          ? values?.gender
+          : values?.gender?.value,
+      role: typeof values.role != "object" ? values?.role : values?.role?.id,
+      thana:
+        typeof values.thana != "object" ? values?.thana : values?.thana?.id,
+      city: typeof values.city != "object" ? values?.city : values?.city?.id,
+      country:
+        typeof values.country != "object"
+          ? values?.country
+          : values?.country?.id,
+      branch:
+        typeof values.branch != "object" ? values?.branch : values?.branch?.id,
+      cusotmer_type:
+        typeof values.cusotmer_type != "object"
+          ? values?.cusotmer_type
+          : values?.cusotmer_type?.id,
     };
 
     function buildFormData(formData, data, parentKey?: any) {
@@ -99,24 +121,15 @@ const ProfileEditor = () => {
 
     const getFormDateFJ = jsonToFormData(data);
 
-    console.log("dataUpdate", getFormDateFJ);
-
-    const authTOKEN = {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: localStorage?.getItem("jwt_access_token"),
-      },
-    };
     axios
-      .put(`${BASE_URL}${Customer_Update}${UserId}`, getFormDateFJ, authTOKEN)
+      .put(`${Customer_Update}${UserId}`, getFormDateFJ, authTOKEN)
       .then((data) => {
         console.log("updatedRes", data);
       });
-    // console.log(data);
   };
 
   useEffect(() => {
-    fetch(`${BASE_URL}${Role_All}`)
+    fetch(`${Role_All}`)
       .then((res) => res.json())
       .then((data) => {
         // dispatch({
@@ -126,7 +139,7 @@ const ProfileEditor = () => {
         setRoles(data.roles);
       });
 
-    fetch(`${BASE_URL}${City_All}`)
+    fetch(`${City_All}`)
       .then((res) => res.json())
       .then((data) => {
         // dispatch({
@@ -136,7 +149,7 @@ const ProfileEditor = () => {
         setCities(data.cities);
       });
 
-    fetch(`${BASE_URL}${Thana_All}`)
+    fetch(`${Thana_All}`)
       .then((res) => res.json())
       .then((data) => {
         // dispatch({
@@ -146,7 +159,7 @@ const ProfileEditor = () => {
         setThanas(data.thanas);
       });
 
-    fetch(`${BASE_URL}${Country_All}`)
+    fetch(`${Country_All}`)
       .then((res) => res.json())
       .then((data) => {
         // dispatch({
@@ -156,7 +169,7 @@ const ProfileEditor = () => {
         setCountries(data.countries);
       });
 
-    fetch(`${BASE_URL}${Branch_All}`)
+    fetch(`${Branch_All}`)
       .then((res) => res.json())
       .then((data) => {
         // dispatch({
@@ -166,7 +179,7 @@ const ProfileEditor = () => {
         setBranches(data.branches);
       });
 
-    fetch(`${BASE_URL}${Customer_type_All}`)
+    fetch(`${Customer_type_All}`)
       .then((res) => res.json())
       .then((data) => {
         // dispatch({
@@ -178,47 +191,22 @@ const ProfileEditor = () => {
   }, []);
 
   useEffect(() => {
-    const authTOKEN = {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: localStorage?.getItem("jwt_access_token"),
-      },
-    };
+    axios.get(`${Customer_By_Id}${UserId}`, authTOKEN).then((datas) => {
+      console.log("EditDetails", datas.data);
+      const { data } = datas;
 
-    axios
-      .get(`${BASE_URL}${Customer_By_Id}${UserId}`, authTOKEN)
-      .then((datas) => {
-        console.log("EditDetails", datas.data);
-        const { data } = datas;
-        setPreviewImage(`${BASE_URL}${data.image}`);
-        setFieldValue("first_name", data.first_name);
-        setFieldValue("last_name", data.last_name);
-        setFieldValue("username", data.username);
-        setFieldValue("email", data.email);
-        setFieldValue("gender", {
-          value: data.gender,
-          label: genders.find((gender: any) => gender?.value == data.gender)
-            ?.label,
-        });
-        setFieldValue("date_of_birth", data.date_of_birth);
-        setFieldValue("primary_phone", data.primary_phone);
-        setFieldValue("secondary_phone", data.secondary_phone);
-        setFieldValue("street_address_one", data.street_address_one);
-        setFieldValue("street_address_two", data.street_address_two);
-        setFieldValue("role", data.role);
-        setFieldValue("thana", data.thana);
-        setFieldValue("city", data.city);
-        setFieldValue("country", data.country);
-        setFieldValue("postal_code", data.postal_code);
-        setFieldValue("nid", data.nid);
-        setFieldValue("branch", data.branch);
-        setFieldValue("cusotmer_type", data.cusotmer_type);
-        setFieldValue("customer_credit_limit", data.customer_credit_limit);
+      setPreviewImage(`${BASE_URL}${data.image}`);
+
+      for (let key in data) {
+        setFieldValue(`${key}`, data[key]);
+      }
+      setFieldValue("gender", {
+        value: data.gender,
+        label: genders.find((gender: any) => gender?.value == data.gender)
+          ?.label,
       });
-  }, []);
-
-  // console.log("render edit profile");
-  // console.log("image", image);
+    });
+  }, [UserId]);
 
   const {
     values,
@@ -286,7 +274,7 @@ const ProfileEditor = () => {
                 reader.readAsDataURL(e.target.files[0]);
 
                 const file = e.target.files[0];
-                setEmage(file);
+                setImage(file);
                 // onChange(file);
               }}
               id="profile-image"
@@ -376,16 +364,6 @@ const ProfileEditor = () => {
                   }}
                   errorText={touched.gender && errors.gender}
                 />
-
-                {/* <TextField
-                      name="gender"
-                      label="Gender"
-                      fullwidth
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      value={values.shipping_country || ""}
-                      errorText={touched.gender && errors.gender}
-                    /> */}
               </Grid>
 
               <Grid item md={6} xs={12}>

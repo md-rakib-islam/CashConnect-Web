@@ -29,9 +29,8 @@ const Login: React.FC = () => {
 
     const { email, password } = values;
 
-    return jwtService
-      .signInWithEmailAndPassword(email, password)
-      .then((user) => {
+    return jwtService.signInWithEmailAndPassword(email, password).then(
+      (user) => {
         console.log("user", user);
         dispatch({
           type: "CHANGE_USER_DETAILS",
@@ -44,10 +43,17 @@ const Login: React.FC = () => {
             error: [],
           },
         });
+
+        if (user.user_type == 3) {
+          router.push("/profile");
+        } else if (user.user_type == 2) {
+          router.push("/vendor/account-settings");
+        } else {
+          router.push("/login");
+        }
         // localStorage.setItem("UserId", user.id);
-        router.push("/profile");
-      })
-      .catch((errors) => {
+      },
+      (errors) => {
         console.log("login failed");
         dispatch({
           type: "CHANGE_LOGIN_DETAILS",
@@ -57,7 +63,8 @@ const Login: React.FC = () => {
           },
         });
         router.push("/login");
-      });
+      }
+    );
   };
 
   console.log("auth", state.auth);

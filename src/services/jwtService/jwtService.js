@@ -68,9 +68,12 @@ class JwtService {
       axios
         .post(`${LOGIN_URL}`, { email: email, password: password })
         .then((response) => {
+          console.log("loginRes", response);
           if (response) {
             localStorage.removeItem("UserId");
             localStorage.setItem("UserId", response.data.id);
+            localStorage.removeItem("userType");
+            localStorage.setItem("userType", response.data.user_type);
             localStorage.removeItem("userPassword");
             localStorage.setItem("userPassword", password);
             this.setSession(`Bearer ${response.data.access}`);
@@ -80,11 +83,13 @@ class JwtService {
               photoURL: response.data.image,
               role: response.data.role,
               id: response.data.id,
+              user_type: response.data.user_type,
             };
             resolve(user);
-          } else {
-            reject(response.data.error);
           }
+        })
+        .catch((rer) => {
+          reject(rer);
         });
     });
   };

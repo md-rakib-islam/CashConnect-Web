@@ -1,6 +1,11 @@
 import LazyImage from "@component/LazyImage";
 import { useAppContext } from "@context/app/AppContext";
-import { BASE_URL, Brand_By_Id, loadingImg, notFound } from "@data/constants";
+import {
+  BASE_URL,
+  Brand_By_Id,
+  loadingImg,
+  notFoundImg,
+} from "@data/constants";
 import { CartItem } from "@reducer/cartReducer";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -45,7 +50,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   //   "/assets/images/products/hiclipart.com (18).png",
   // ];
 
-  // const notFound = "/assets/images/products/notFound.png";
+  // const notFoundImg = "/assets/images/products/notFoundImg.png";
 
   useEffect(() => {
     if (brand) {
@@ -90,12 +95,12 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                 src={
                   imgUrl[selectedImage] != `${BASE_URL}null`
                     ? imgUrl[selectedImage]
-                    : notFound
+                    : notFoundImg
                 }
                 loader={() =>
                   imgUrl[selectedImage] != `${BASE_URL}null`
                     ? imgUrl[selectedImage]
-                    : notFound
+                    : notFoundImg
                 }
                 alt={title}
                 height="300px"

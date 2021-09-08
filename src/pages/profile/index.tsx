@@ -10,7 +10,6 @@ import TableRow from "@component/TableRow";
 import Typography, { H3, H5, Small } from "@component/Typography";
 import { BASE_URL, Customer_By_Id, loadingImg } from "@data/constants";
 import axios from "axios";
-import { format } from "date-fns";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
@@ -22,28 +21,34 @@ const Profile = () => {
   const [phone, setphone] = useState("");
   const [birth_day, setbirth_day] = useState("");
 
-  const UserId = localStorage?.getItem("UserId") || null;
+  try {
+    var UserId: any = localStorage?.getItem("UserId");
+  } catch (err) {
+    UserId = 0;
+  }
 
-  useEffect(() => {
-    const authTOKEN = {
+  try {
+    var authTOKEN = {
       headers: {
         "Content-type": "application/json",
-        Authorization: localStorage?.getItem("jwt_access_token"),
+        Authorization: localStorage.getItem("jwt_access_token"),
       },
     };
+  } catch (err) {
+    authTOKEN = null;
+  }
 
-    axios
-      .get(`${BASE_URL}${Customer_By_Id}${UserId}`, authTOKEN)
-      .then((user) => {
-        const { data } = user;
-        setpreViewImg(`${BASE_URL}${data.image}`);
-        setfirst_name(data.first_name);
-        setlast_name(data.last_name);
-        setemail(data.email);
-        setphone(data.primary_phone);
-        setbirth_day(data.date_of_birth);
-      });
-  }, []);
+  useEffect(() => {
+    axios.get(`${Customer_By_Id}${UserId}`, authTOKEN).then((user) => {
+      const { data } = user;
+      setpreViewImg(`${BASE_URL}${data.image}`);
+      setfirst_name(data.first_name);
+      setlast_name(data.last_name);
+      setemail(data.email);
+      setphone(data.primary_phone);
+      setbirth_day(data.date_of_birth);
+    });
+  }, [UserId]);
   return (
     <div>
       <DashboardPageHeader
@@ -148,7 +153,8 @@ const Profile = () => {
             Birth date
           </Small>
           <span className="pre">
-            {format(new Date(1996 / 11 / 16), "dd MMM, yyyy")}
+            {/* {format(new Date(1996 / 11 / 16), "dd MMM, yyyy")} */}
+            {birth_day}
           </span>
         </FlexBox>
       </TableRow>

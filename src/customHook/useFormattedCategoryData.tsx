@@ -34,7 +34,9 @@ function useFormattedNavigationData(navigationData) {
     return category;
   });
 
-  return [formattedNavigationData];
+  var formattedNavigationDatas = { formattedNavigationData };
+
+  return formattedNavigationDatas;
 }
 
 export default useFormattedNavigationData;
