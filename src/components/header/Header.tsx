@@ -12,7 +12,7 @@ import MiniCart from "../mini-cart/MiniCart";
 import SearchBox from "../search-box/SearchBox";
 import Login from "../sessions/Login";
 import Sidenav from "../sidenav/Sidenav";
-import { Tiny } from "../Typography";
+import { Tiny2 } from "../Typography";
 import StyledHeader from "./HeaderStyle";
 import UserLoginDialog from "./UserLoginDialog";
 
@@ -33,7 +33,7 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
         <Icon size="20px">bag</Icon>
       </IconButton>
 
-      {!!cartList.length && (
+      {
         <FlexBox
           borderRadius="300px"
           bg="error.main"
@@ -44,11 +44,12 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
           ml="-1rem"
           mt="-9px"
         >
-          <Tiny color="white" fontWeight="600">
+          {/* this Tiny2 component is a customized version of Tiny */}
+          <Tiny2 color="white" fontWeight="600">
             {cartList.length}
-          </Tiny>
+          </Tiny2>
         </FlexBox>
-      )}
+      }
     </FlexBox>
   );
 

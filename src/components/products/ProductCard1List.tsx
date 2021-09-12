@@ -1,3 +1,4 @@
+import useFormattedProductData from "@component/products/useFormattedProductData";
 import { useAppContext } from "@context/app/AppContext";
 import React, { useEffect, useState } from "react";
 import FlexBox from "../FlexBox";
@@ -5,7 +6,6 @@ import Grid from "../grid/Grid";
 import Pagination from "../pagination/Pagination";
 import ProductCard1 from "../product-cards/ProductCard1";
 import { SemiSpan } from "../Typography";
-import useFormattedProductData from "./useFormattedProductData";
 
 export interface ProductCard1ListProps {}
 

@@ -1,8 +1,16 @@
 import Box from "@component/Box";
 import Image from "@component/Image";
 import { useAppContext } from "@context/app/AppContext";
+import {
+  BASE_URL,
+  Customer_decrease_Quantity,
+  Customer_Increase_Quantity,
+  Customer_Order_Remove_Item,
+  notFoundImg,
+} from "@data/constants";
+import axios from "axios";
 import Link from "next/link";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { SpaceProps } from "styled-system";
 import Button from "../buttons/Button";
 import IconButton from "../buttons/IconButton";
@@ -13,33 +21,72 @@ import { StyledProductCard7 } from "./ProductCardStyle";
 
 export interface ProductCard7Props {
   id: string | number;
-  name: string;
-  qty: number;
+  quantity: any;
   price: number;
-  imgUrl?: string;
+  product: any;
 }
 
 const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
   id,
-  name,
-  qty,
+  quantity,
   price,
-  imgUrl,
+  product,
   ...props
 }) => {
   const { dispatch } = useAppContext();
+  const [reloadCart, setReloadCart] = useState(0);
+
   const handleCartAmountChange = useCallback(
-    (amount) => () => {
+    (amount, action) => () => {
       dispatch({
         type: "CHANGE_CART_AMOUNT",
         payload: {
-          qty: amount,
-          name,
+          name: product.name,
           price,
-          imgUrl,
+          imgUrl: `${BASE_URL}${product.thumbnail}`,
           id,
         },
       });
+
+      // try {
+      var UserId: any = localStorage?.getItem("UserId");
+      // } catch (err) {
+      //   var UserId: any = 0;
+      // }
+      const order_Id = localStorage.getItem("OrderId");
+      const item_id = id;
+      const orderData = {
+        product_id: product.product.id,
+        quantity: 1,
+        price: product.price,
+        // order_date: currentDate,
+        branch_id: 1,
+        user_id: UserId,
+      };
+
+      if (action == "remove") {
+        axios
+          .delete(`${Customer_Order_Remove_Item}${order_Id}/${item_id}`)
+          .then((res) => {
+            console.log("CproductDeleteRes", res);
+            setReloadCart(Math.random());
+          });
+      } else if (action == "increase") {
+        console.log("increaseData", orderData);
+        axios
+          .put(`${Customer_Increase_Quantity}${order_Id}/${item_id}`, orderData)
+          .then((res) => {
+            console.log("itemIncreaseRes", res);
+            setReloadCart(Math.random());
+          });
+      } else if (action == "decrease") {
+        axios
+          .put(`${Customer_decrease_Quantity}${order_Id}/${item_id}`, orderData)
+          .then((res) => {
+            console.log("itemDecreaseRes", res);
+            setReloadCart(Math.random());
+          });
+      }
     },
     []
   );
@@ -47,10 +94,12 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
   return (
     <StyledProductCard7 {...props}>
       <Image
-        src={imgUrl || "/assets/images/products/iphone-xi.png"}
+        src={
+          product.thumbnail ? `${BASE_URL}${product.thumbnail}` : notFoundImg
+        }
         size={140}
         display="block"
-        alt={name}
+        alt={product.name}
       />
       <FlexBox
         className="product-details"
@@ -67,7 +116,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
               fontSize="18px"
               mb="0.5rem"
             >
-              {name}
+              {product.name}
             </Typography>
           </a>
         </Link>
@@ -76,7 +125,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
             padding="4px"
             ml="12px"
             size="small"
-            onClick={handleCartAmountChange(0)}
+            onClick={handleCartAmountChange(0, "remove")}
           >
             <Icon size="1.25rem">close</Icon>
           </IconButton>
@@ -89,10 +138,10 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
         >
           <FlexBox flexWrap="wrap" alignItems="center">
             <Typography color="gray.600" mr="0.5rem">
-              ${price.toFixed(2)} x {qty}
+              ${Number(price).toFixed(2)} x {quantity}
             </Typography>
             <Typography fontWeight={600} color="primary.main" mr="1rem">
-              ${(price * qty).toFixed(2)}
+              ${(price * quantity).toFixed(2)}
             </Typography>
           </FlexBox>
 
@@ -103,13 +152,13 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
               padding="5px"
               size="none"
               borderColor="primary.light"
-              onClick={handleCartAmountChange(qty - 1)}
-              disabled={qty === 1}
+              onClick={handleCartAmountChange(quantity - 1, "decrease")}
+              disabled={quantity === 1}
             >
               <Icon variant="small">minus</Icon>
             </Button>
             <Typography mx="0.5rem" fontWeight="600" fontSize="15px">
-              {qty}
+              {quantity}
             </Typography>
             <Button
               variant="outlined"
@@ -117,7 +166,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
               padding="5px"
               size="none"
               borderColor="primary.light"
-              onClick={handleCartAmountChange(qty + 1)}
+              onClick={handleCartAmountChange(quantity + 1, "increase")}
             >
               <Icon variant="small">plus</Icon>
             </Button>

@@ -3,10 +3,13 @@ import { useAppContext } from "@context/app/AppContext";
 import {
   BASE_URL,
   Brand_By_Id,
+  Customer_decrease_Quantity,
+  Customer_Order_Create,
   loadingImg,
   notFoundImg,
 } from "@data/constants";
 import { CartItem } from "@reducer/cartReducer";
+import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
@@ -30,7 +33,7 @@ export interface ProductIntroProps {
 const ProductIntro: React.FC<ProductIntroProps> = ({
   imgUrl,
   title,
-  price = 200,
+  price,
   id,
   brand,
 }) => {
@@ -43,6 +46,8 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   const cartItem = cartList.find(
     (item) => item.id === id || item.id === routerId
   );
+
+  const [cartQuantity, setCartQuantity] = useState(0);
 
   // const imgUrls = [
   //   "/assets/images/products/headphone.png",
@@ -70,20 +75,75 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   };
 
   const handleCartAmountChange = useCallback(
-    (amount) => () => {
+    (amount, action) => () => {
       dispatch({
         type: "CHANGE_CART_AMOUNT",
         payload: {
-          qty: amount,
-          name: title,
-          price,
-          imgUrl: imgUrl[0],
           id: id || routerId,
+          qty: Math.random(),
         },
       });
+
+      setCartQuantity(amount);
+
+      try {
+        var UserId: any = localStorage?.getItem("UserId");
+      } catch (err) {
+        var UserId: any = 0;
+      }
+
+      const dateObj: any = new Date();
+      const currentDate =
+        dateObj.getFullYear() +
+        "-" +
+        (dateObj.getMonth() + 1).toString().padStart(2, 0) +
+        "-" +
+        dateObj.getDate().toString().padStart(2, 0);
+
+      if (action == "order") {
+        const orderData = {
+          product_id: id || routerId,
+          quantity: 1,
+          price: price,
+          order_date: currentDate,
+          branch_id: 1,
+          user_id: UserId,
+        };
+
+        console.log("orderData", orderData);
+        axios.post(`${Customer_Order_Create}`, orderData).then((res) => {
+          console.log("orderCreateResData", res.data);
+          localStorage.setItem("OrderId", res.data.order_details.id);
+          localStorage.setItem("OrderItemId", res.data.order_details.item.id);
+        });
+      }
+
+      if (action == "decrease") {
+        const orderData = {
+          product_id: id || routerId,
+          quantity: 1,
+          price: price,
+          order_date: currentDate,
+          branch_id: 1,
+          user_id: UserId,
+        };
+
+        const order_Id = localStorage.getItem("OrderId");
+        const item_id = localStorage.getItem("OrderItemId");
+        axios
+          .post(
+            `${Customer_decrease_Quantity}${order_Id}/${item_id}`,
+            orderData
+          )
+          .then((res) => {
+            console.log("CorderDecreaseRes", res);
+          });
+      }
     },
     []
   );
+
+  console.log("productId", id);
 
   return (
     <Box overflow="hidden">
@@ -159,13 +219,13 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
             <SemiSpan color="inherit">Stock Available</SemiSpan>
           </Box>
 
-          {!cartItem?.qty ? (
+          {!cartQuantity ? (
             <Button
               variant="contained"
               size="small"
               color="primary"
               mb="36px"
-              onClick={handleCartAmountChange(1)}
+              onClick={handleCartAmountChange(1, "order")}
             >
               Add to Cart
             </Button>
@@ -176,19 +236,19 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                 variant="outlined"
                 size="small"
                 color="primary"
-                onClick={handleCartAmountChange(cartItem?.qty - 1)}
+                onClick={handleCartAmountChange(cartQuantity - 1, "decrease")}
               >
                 <Icon variant="small">minus</Icon>
               </Button>
               <H3 fontWeight="600" mx="20px">
-                {cartItem?.qty.toString().padStart(2, "0")}
+                {cartQuantity.toString().padStart(2, "0")}
               </H3>
               <Button
                 p="9px"
                 variant="outlined"
                 size="small"
                 color="primary"
-                onClick={handleCartAmountChange(cartItem?.qty + 1)}
+                onClick={handleCartAmountChange(cartQuantity + 1, "increase")}
               >
                 <Icon variant="small">plus</Icon>
               </Button>

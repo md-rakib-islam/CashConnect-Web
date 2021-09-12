@@ -27,7 +27,7 @@ const ProductSearchResult = () => {
 
   const router = useRouter();
   const { id } = router.query;
-  const { state, dispatch } = useAppContext();
+  const { dispatch } = useAppContext();
 
   const toggleView = useCallback(
     (v) => () => {
@@ -59,8 +59,6 @@ const ProductSearchResult = () => {
         });
     }
   }, [id]);
-
-  console.log("productListContext", state.product.productList);
 
   return (
     // <AppContext.Provider value="sakib">

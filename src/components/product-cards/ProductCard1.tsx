@@ -65,7 +65,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
         type: "CHANGE_CART_AMOUNT",
         payload: {
           name: title,
-          qty: amount,
+          qty: Math.random(),
           price,
           imgUrl,
           id,

@@ -1,7 +1,7 @@
-import { useAppContext } from "@context/app/AppContext";
-import { CartItem } from "@reducer/cartReducer";
+import { Customer_Order_Details } from "@data/constants";
+import axios from "axios";
 import Link from "next/link";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import Box from "../components/Box";
 import Button from "../components/buttons/Button";
 import { Card1 } from "../components/Card1";
@@ -16,24 +16,39 @@ import TextArea from "../components/textarea/TextArea";
 import Typography from "../components/Typography";
 import countryList from "../data/countryList";
 
+type CartItem = {
+  id: any;
+  quantity: any;
+  price: any;
+  product: any;
+};
+
 const Cart = () => {
-  const { state } = useAppContext();
-  const cartList: CartItem[] = state.cart.cartList;
+  const [cartProductList, setCartProductList] = useState<CartItem[]>([]);
 
   const getTotalPrice = () => {
     return (
-      cartList.reduce(
-        (accumulator, item) => accumulator + item.price * item.qty,
+      cartProductList.reduce(
+        (accumulator, item) => accumulator + item.price * item.quantity,
         0
       ) || 0
     );
   };
 
+  useEffect(() => {
+    const order_Id = localStorage.getItem("OrderId");
+
+    axios.get(`${Customer_Order_Details}${order_Id}`).then((res) => {
+      console.log("CorderDetailsRes", res);
+      setCartProductList(res.data);
+    });
+  }, []);
+
   return (
     <Fragment>
       <Grid container spacing={6}>
         <Grid item lg={8} md={8} xs={12}>
-          {cartList.map((item) => (
+          {cartProductList.map((item) => (
             <ProductCard7 key={item.id} mb="1.5rem" {...item} />
           ))}
         </Grid>

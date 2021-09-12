@@ -8,32 +8,31 @@ export const notFoundImg = "/assets/images/products/notFoundImg.png";
 //loding image
 export const loadingImg = "/assets/images/products/loadingProduct.png";
 
-//jwt authTOKEN
-// try {
-//   var jwtToken = {
-//     headers: {
-//       "Content-type": "application/json",
-//       Authorization: localStorage.getItem("jwt_access_token"),
-//     },
-//   };
-// } catch (err) {
-//   jwtToken = {
-//     headers: {
-//       "Content-type": "application/json",
-//     },
-//   };
-// }
+try {
+  var jwtToken = {
+    headers: {
+      "Content-type": "application/json",
+      Authorization: localStorage.getItem("jwt_access_token"),
+    },
+  };
+} catch (err) {
+  jwtToken = {
+    headers: {
+      "Content-type": "application/json",
+    },
+  };
+}
 
-// export const authTOKEN = jwtToken;
+export const authTOKEN = jwtToken;
 
-// try {
-//   var user_id = localStorage?.getItem("UserId");
-// } catch (err) {
-//   user_id = 0;
-// }
+try {
+  var user_id = localStorage?.getItem("UserId");
+} catch (err) {
+  user_id = 0;
+}
 
-// //user id
-// export var UserId = user_id;
+//user id
+export var UserId = user_id;
 
 //login
 export const LOGIN_URL = `${BASE_URL}/users/api/v1/users/login/`;
@@ -88,3 +87,14 @@ export const Vendor_By_Id = `${BASE_URL}/vendor/api/v1/vendor/`;
 export const orders_By_Customer_Id = `${BASE_URL}/customerorder/api/v1/customerorder/get_all_orders_of_a_customer/`;
 
 export const order_Status_All = `${BASE_URL}/orderstatus/api/v1/orderstatus/all/`;
+
+//customer order apis
+export const Customer_Order_Create = `${BASE_URL}/customerorder/api/v1/customerorder/create/`;
+
+export const Customer_Order_Remove_Item = `${BASE_URL}/customerorder/api/v1/customerorder_delete_item/`;
+
+export const Customer_Increase_Quantity = `${BASE_URL}/customerorder/api/v1/customerorder_increase_quantity/`;
+
+export const Customer_decrease_Quantity = `${BASE_URL}/customerorder/api/v1/customerorder_decrease_quantity/`;
+
+export const Customer_Order_Details = `${BASE_URL}/customerorder/api/v1/customerorder/get_a_customer_order_detail/`;

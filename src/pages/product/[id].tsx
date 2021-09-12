@@ -15,8 +15,8 @@ import React, { useEffect, useState } from "react";
 
 const ProductDetails = () => {
   const router = useRouter();
-  const { id } = router.query;
-  const { state, dispatch } = useAppContext();
+  const id = router.query.id as string;
+  const { dispatch } = useAppContext();
 
   const [title, settitle] = useState("");
   const [price, setprice] = useState(0);
@@ -50,13 +50,13 @@ const ProductDetails = () => {
     setSelectedOption(opt);
   };
 
-  console.log("productDetailsContext", state.product.productDetails);
   return (
     <div>
       <ProductIntro
         title={title}
         price={price}
         imgUrl={[imgUrl]}
+        id={id}
         brand={brand}
       />
 

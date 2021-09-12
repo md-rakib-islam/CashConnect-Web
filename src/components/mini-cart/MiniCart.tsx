@@ -2,9 +2,18 @@ import Avatar from "@component/avatar/Avatar";
 import FlexBox from "@component/FlexBox";
 import LazyImage from "@component/LazyImage";
 import { useAppContext } from "@context/app/AppContext";
-import { CartItem } from "@reducer/cartReducer";
+import {
+  BASE_URL,
+  Customer_decrease_Quantity,
+  Customer_Increase_Quantity,
+  Customer_Order_Details,
+  Customer_Order_Remove_Item,
+  notFoundImg
+} from "@data/constants";
+// import { CartItem } from "@reducer/cartReducer";
+import axios from "axios";
 import Link from "next/link";
-import React, { Fragment, useCallback } from "react";
+import React, { Fragment, useCallback, useEffect, useState } from "react";
 import Button from "../buttons/Button";
 import Divider from "../Divider";
 import Icon from "../icon/Icon";
@@ -15,12 +24,20 @@ type MiniCartProps = {
   toggleSidenav?: () => void;
 };
 
+type CartItem = {
+  id: any;
+  quantity: any;
+  price: any;
+  product: any;
+};
+
 const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
-  const { state, dispatch } = useAppContext();
-  const { cartList } = state.cart;
+  const { dispatch } = useAppContext();
+  const [cartProductList, setCartProductList] = useState([]);
+  const [reloadCart, setReloadCart] = useState(0);
 
   const handleCartAmountChange = useCallback(
-    (amount, product) => () => {
+    (amount, product, action) => () => {
       dispatch({
         type: "CHANGE_CART_AMOUNT",
         payload: {
@@ -28,18 +45,71 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
           qty: amount,
         },
       });
+
+      // try {
+        var UserId: any = localStorage?.getItem("UserId");
+      // } catch (err) {
+      //   var UserId: any = 0;
+      // }
+      const order_Id = localStorage.getItem("OrderId");
+
+      const item_id = product.id;
+      const orderData = {
+        product_id: product.product.id,
+        quantity: 1,
+        price: product.price,
+        // order_date: currentDate,
+        branch_id: 1,
+        user_id: UserId,
+      };
+
+      if (action == "remove") {
+        axios
+          .delete(`${Customer_Order_Remove_Item}${order_Id}/${item_id}`)
+          .then((res) => {
+            console.log("CproductDeleteRes", res);
+            setReloadCart(Math.random());
+          });
+      } else if (action == "increase") {
+        console.log("increaseData", orderData);
+        axios
+          .put(`${Customer_Increase_Quantity}${order_Id}/${item_id}`, orderData)
+          .then((res) => {
+            console.log("itemIncreaseRes", res);
+            setReloadCart(Math.random());
+          });
+      } else if (action == "decrease") {
+        axios
+          .put(`${Customer_decrease_Quantity}${order_Id}/${item_id}`, orderData)
+          .then((res) => {
+            console.log("itemDecreaseRes", res);
+            setReloadCart(Math.random());
+          });
+      }
     },
     []
   );
 
   const getTotalPrice = () => {
     return (
-      cartList.reduce(
-        (accumulator, item) => accumulator + item.price * item.qty,
+      cartProductList.reduce(
+        (accumulator, item) =>
+          accumulator + item.product.unit_price * item.quantity,
         0
       ) || 0
     );
   };
+
+  useEffect(() => {
+    const order_Id = localStorage.getItem("OrderId");
+
+    axios.get(`${Customer_Order_Details}${order_Id}`).then((res) => {
+      console.log("CorderDetailsRes", res);
+      setCartProductList(res.data);
+    });
+  }, [reloadCart]);
+
+  console.log("cartProductList", cartProductList);
 
   return (
     <StyledMiniCart>
@@ -47,13 +117,13 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
         <FlexBox alignItems="center" m="0px 20px" height="74px">
           <Icon size="1.75rem">bag</Icon>
           <Typography fontWeight={600} fontSize="16px" ml="0.5rem">
-            {cartList.length} item
+            {cartProductList.length} item
           </Typography>
         </FlexBox>
 
         <Divider />
 
-        {!!!cartList.length && (
+        {!!!cartProductList.length && (
           <FlexBox
             flexDirection="column"
             alignItems="center"
@@ -75,7 +145,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
             </Paragraph>
           </FlexBox>
         )}
-        {cartList.map((item: CartItem) => (
+        {cartProductList.map((item: CartItem) => (
           <Fragment key={item.id}>
             <div className="cart-item">
               <FlexBox alignItems="center" flexDirection="column">
@@ -86,12 +156,16 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                   size="none"
                   borderColor="primary.light"
                   borderRadius="300px"
-                  onClick={handleCartAmountChange(item.qty + 1, item)}
+                  onClick={handleCartAmountChange(
+                    item.quantity + 1,
+                    item,
+                    "increase"
+                  )}
                 >
                   <Icon variant="small">plus</Icon>
                 </Button>
                 <Typography fontWeight={600} fontSize="15px" my="3px">
-                  {item.qty}
+                  {item.quantity}
                 </Typography>
                 <Button
                   variant="outlined"
@@ -100,8 +174,12 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                   size="none"
                   borderColor="primary.light"
                   borderRadius="300px"
-                  onClick={handleCartAmountChange(item.qty - 1, item)}
-                  disabled={item.qty === 1}
+                  onClick={handleCartAmountChange(
+                    item.quantity - 1,
+                    item,
+                    "decrease"
+                  )}
+                  disabled={item.quantity === 1}
                 >
                   <Icon variant="small">minus</Icon>
                 </Button>
@@ -110,9 +188,13 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
               <Link href={`/product/${item.id}`}>
                 <a>
                   <Avatar
-                    src={item.imgUrl || "/assets/images/products/iphone-x.png"}
+                    src={
+                      item.product.thumbnail
+                        ? `${BASE_URL}${item.product.thumbnail}`
+                        : notFoundImg
+                    }
                     mx="1rem"
-                    alt={item.name}
+                    alt={item.product.name}
                     size={76}
                   />
                 </a>
@@ -122,12 +204,13 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                 <Link href={`/product/${item.id}`}>
                   <a>
                     <H5 className="title" fontSize="14px">
-                      {item.name}
+                      {item.product.name}
                     </H5>
                   </a>
                 </Link>
                 <Tiny color="text.muted">
-                  ${item.price.toFixed(2)} x {item.qty}
+                  ${Number(item.product.unit_price).toFixed(2)} x{" "}
+                  {item.quantity}
                 </Tiny>
                 <Typography
                   fontWeight={600}
@@ -135,7 +218,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                   color="primary.main"
                   mt="4px"
                 >
-                  ${(item.qty * item.price).toFixed(2)}
+                  ${(item.quantity * item.product.unit_price).toFixed(2)}
                 </Typography>
               </div>
 
@@ -143,7 +226,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                 className="clear-icon"
                 size="1rem"
                 ml="1.25rem"
-                onClick={handleCartAmountChange(0, item)}
+                onClick={handleCartAmountChange(0, item, "remove")}
               >
                 close
               </Icon>
@@ -153,7 +236,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
         ))}
       </div>
 
-      {!!cartList.length && (
+      {!!cartProductList.length && (
         <Fragment>
           <Link href="/checkout">
             <Button

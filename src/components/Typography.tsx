@@ -1,4 +1,6 @@
-import React from "react";
+import { useAppContext } from "@context/app/AppContext";
+import { Customer_Order_Details } from "@data/constants";
+import React, { useEffect, useState } from "react";
 import styled, { CSSProperties } from "styled-components";
 import {
   border,
@@ -103,9 +105,31 @@ export const SemiSpan: React.FC<CustomProps> = (props) => (
 export const Small: React.FC<CustomProps> = (props) => (
   <Typography as="span" fontSize="12px" {...props} />
 );
+
 export const Tiny: React.FC<CustomProps> = (props) => (
   <Typography as="span" fontSize="10px" {...props} />
 );
+export const Tiny2: React.FC<CustomProps> = (props) => {
+  const [productQuantity, setProductQuantity] = useState(0);
+  const { state } = useAppContext();
+  const cartCange = state.cart.cartList;
+  useEffect(() => {
+    const order_Id = localStorage.getItem("OrderId");
+
+    fetch(`${Customer_Order_Details}${order_Id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("tinyProductQuantity", data.length);
+        setProductQuantity(data.length);
+      });
+  }, [cartCange]);
+
+  return (
+    <Typography as="span" fontSize="10px" {...props}>
+      {productQuantity}
+    </Typography>
+  );
+};
 
 // const H1 =
 export default Typography;

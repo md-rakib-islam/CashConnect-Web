@@ -1,6 +1,6 @@
 import IconButton from "@component/buttons/IconButton";
 import GrocerySearchBox from "@component/search-box/GrocerySearchBox";
-import { Tiny } from "@component/Typography";
+import { Tiny2 } from "@component/Typography";
 import { useAppContext } from "@context/app/AppContext";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -32,7 +32,7 @@ const GroceryHeader: React.FC<HeaderProps> = ({ className }) => {
         <Icon size="20px">bag</Icon>
       </IconButton>
 
-      {!!cartList.length && (
+      {
         <FlexBox
           borderRadius="300px"
           bg="error.main"
@@ -43,11 +43,12 @@ const GroceryHeader: React.FC<HeaderProps> = ({ className }) => {
           ml="-1rem"
           mt="-9px"
         >
-          <Tiny color="white" fontWeight="600">
+          {/* this Tiny2 component is a customized version of Tiny */}
+          <Tiny2 color="white" fontWeight="600">
             {cartList.length}
-          </Tiny>
+          </Tiny2>
         </FlexBox>
-      )}
+      }
     </FlexBox>
   );
 
