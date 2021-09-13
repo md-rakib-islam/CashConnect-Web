@@ -108,24 +108,32 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       quantity: 1,
       price: price,
       order_date: currentDate,
-      branch_id: 1,
+      branch_id: 2,
       user_id: UserId,
     };
 
     const order_Id = localStorage.getItem("OrderId");
 
     if (action == "order") {
-      console.log("orderData", orderData);
-      axios.post(`${Customer_Order_Create}`, orderData).then((res) => {
-        console.log("orderRes", res);
+      if (UserId) {
+        console.log("orderData", orderData);
+        axios.post(`${Customer_Order_Create}`, orderData).then((res) => {
+          console.log("orderRes", res);
 
-        localStorage.setItem("OrderId", res.data.order_details.id);
-        setGetItemId(Math.random());
-        dispatch({
-          type: "CHANGE_CART_QUANTITY",
-          payload: Math.random(),
+          localStorage.setItem("OrderId", res.data.order_details.id);
+          setGetItemId(Math.random());
+          dispatch({
+            type: "CHANGE_CART_QUANTITY",
+            payload: Math.random(),
+          });
         });
-      });
+      } else {
+        console.log("routerUrt", `product/${id}`);
+        localStorage.setItem("backAfterLogin", `product/${id}`);
+        router.push({
+          pathname: "/login",
+        });
+      }
     } else if (action == "increase") {
       axios
         .put(`${Customer_Increase_Quantity}${order_Id}/${itemId}`, orderData)

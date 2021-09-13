@@ -45,9 +45,21 @@ const Login: React.FC = () => {
         });
 
         if (user.user_type == 3) {
-          router.push("/profile");
+          const backUrl = localStorage.getItem("backAfterLogin");
+          if (backUrl) {
+            localStorage.removeItem("backAfterLogin");
+            router.push(`${backUrl}`);
+          } else {
+            router.push("/profile");
+          }
         } else if (user.user_type == 2) {
-          router.push("/vendor/account-settings");
+          const backUrl = localStorage.getItem("backAfterLogin");
+          if (backUrl) {
+            localStorage.removeItem("backAfterLogin");
+            router.push(`${backUrl}`);
+          } else {
+            router.push("/vendor/account-settings");
+          }
         } else {
           router.push("/login");
         }

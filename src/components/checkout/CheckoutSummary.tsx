@@ -6,17 +6,29 @@ import FlexBox from "../FlexBox";
 import TextField from "../text-field/TextField";
 import Typography from "../Typography";
 
-const CheckoutSummary: React.FC = () => {
+export interface CheckoutSummaryProps {
+  Subtotal: string | number;
+  Shipping: string | number;
+  Tax: string | number;
+  Discount: string | number;
+}
+
+const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
+  Subtotal,
+  Shipping,
+  Tax,
+  Discount,
+}) => {
   return (
     <Card1>
       <FlexBox justifyContent="space-between" alignItems="center" mb="0.5rem">
         <Typography color="text.hint">Subtotal:</Typography>
         <FlexBox alignItems="flex-end">
           <Typography fontSize="18px" fontWeight="600" lineHeight="1">
-            $2610.
+            {Subtotal ? `$${Subtotal}` : `_`}
           </Typography>
           <Typography fontWeight="600" fontSize="14px" lineHeight="1">
-            00
+            {/* 00 */}
           </Typography>
         </FlexBox>
       </FlexBox>
@@ -24,7 +36,7 @@ const CheckoutSummary: React.FC = () => {
         <Typography color="text.hint">Shipping:</Typography>
         <FlexBox alignItems="flex-end">
           <Typography fontSize="18px" fontWeight="600" lineHeight="1">
-            -
+            {Shipping ? `$${Shipping}` : `_`}
           </Typography>
         </FlexBox>
       </FlexBox>
@@ -32,10 +44,10 @@ const CheckoutSummary: React.FC = () => {
         <Typography color="text.hint">Tax:</Typography>
         <FlexBox alignItems="flex-end">
           <Typography fontSize="18px" fontWeight="600" lineHeight="1">
-            $40.
+            {Tax ? `$${Tax}` : `_`}
           </Typography>
           <Typography fontWeight="600" fontSize="14px" lineHeight="1">
-            00
+            {/* 00 */}
           </Typography>
         </FlexBox>
       </FlexBox>
@@ -43,7 +55,7 @@ const CheckoutSummary: React.FC = () => {
         <Typography color="text.hint">Discount:</Typography>
         <FlexBox alignItems="flex-end">
           <Typography fontSize="18px" fontWeight="600" lineHeight="1">
-            -
+            {Discount ? `$${Discount}` : `_`}
           </Typography>
         </FlexBox>
       </FlexBox>
@@ -57,7 +69,7 @@ const CheckoutSummary: React.FC = () => {
         textAlign="right"
         mb="1.5rem"
       >
-        $2610.00
+        {Subtotal ? `$${Subtotal}` : `_`}
       </Typography>
 
       <TextField placeholder="Voucher" fullwidth />

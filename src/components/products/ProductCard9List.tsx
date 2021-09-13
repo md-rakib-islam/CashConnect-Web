@@ -1,4 +1,3 @@
-import { useAppContext } from "@context/app/AppContext";
 import React, { useEffect, useState } from "react";
 import useFormattedProductData from "../../customHook/useFormattedProductData";
 import FlexBox from "../FlexBox";
@@ -6,18 +5,18 @@ import Pagination from "../pagination/Pagination";
 import ProductCard9 from "../product-cards/ProductCard9";
 import { SemiSpan } from "../Typography";
 
-export interface ProductCard9ListProps {}
+export interface ProductCard9ListProps {
+  productList?: any;
+}
 
-const ProductCard9List: React.FC<ProductCard9ListProps> = () => {
-  const { state } = useAppContext();
-
+const ProductCard9List: React.FC<ProductCard9ListProps> = ({ productList }) => {
   const [productData, setProductData] = useState([]);
   const [formattedProductData] =
     productData != [] ? useFormattedProductData(productData) : [];
 
   useEffect(() => {
-    setProductData(state.product.productList);
-  }, [state.product.productList]);
+    setProductData(productList);
+  }, [productList]);
 
   return (
     <div>
@@ -31,9 +30,7 @@ const ProductCard9List: React.FC<ProductCard9ListProps> = () => {
         alignItems="center"
         mt="32px"
       >
-        <SemiSpan>
-          Showing 1-10 of {state.product.productList.length} Products
-        </SemiSpan>
+        <SemiSpan>Showing 1-10 of {productList.length} Products</SemiSpan>
         <Pagination pageCount={10} />
       </FlexBox>
     </div>

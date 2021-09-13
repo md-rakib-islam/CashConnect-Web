@@ -1,6 +1,6 @@
 //http://cashconnectbackend.herokuapp.com
 //base url
-export const BASE_URL = "http://192.168.0.17:8001";
+export const BASE_URL = "http://192.168.0.151:8001";
 
 //not found image
 export const notFoundImg = "/assets/images/products/notFoundImg.png";
@@ -84,11 +84,13 @@ export const Vendor_Update = `${BASE_URL}/vendor/api/v1/vendor/update/`;
 export const Vendor_By_Id = `${BASE_URL}/vendor/api/v1/vendor/`;
 
 //order apis
-export const orders_By_Customer_Id = `${BASE_URL}/customerorder/api/v1/customerorder/get_all_orders_of_a_customer/`;
-
 export const order_Status_All = `${BASE_URL}/orderstatus/api/v1/orderstatus/all/`;
 
+export const Order_Details_By_Id = `${BASE_URL}/order/api/v1/order/`;
+
 //customer order apis
+export const orders_By_Customer_Id = `${BASE_URL}/customerorder/api/v1/customerorder/get_all_orders_of_a_customer/`;
+
 export const Customer_Order_Create = `${BASE_URL}/customerorder/api/v1/customerorder/create/`;
 
 export const Customer_Order_Remove_Item = `${BASE_URL}/customerorder/api/v1/customerorder_delete_item/`;
@@ -100,3 +102,7 @@ export const Customer_decrease_Quantity = `${BASE_URL}/customerorder/api/v1/cust
 export const Customer_Order_Details = `${BASE_URL}/customerorder/api/v1/customerorder/get_a_customer_order_detail/`;
 
 export const Customer_Order_Item_By_Product_Id = `${BASE_URL}/customerorder/api/v1/customerorder/get_order_item_by_order_id_and_product_id/`;
+
+export const Customer_Order_Comment = `${BASE_URL}/customerorder/api/v1/customerorder/add_comment/`;
+
+export const Customer_Order_Shipping_Address = `${BASE_URL}/customerorder/api/v1/customerorder/add_shipping_address/`;

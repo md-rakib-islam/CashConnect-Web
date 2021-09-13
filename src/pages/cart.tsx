@@ -1,6 +1,11 @@
 import TextArea from "@component/textarea/TextArea";
-import { Customer_Order_Details } from "@data/constants";
+import {
+  Customer_Order_Comment,
+  Customer_Order_Details,
+  Order_Details_By_Id,
+} from "@data/constants";
 import axios from "axios";
+import { useFormik } from "formik";
 import Link from "next/link";
 import React, { Fragment, useEffect, useState } from "react";
 import Box from "../components/Box";
@@ -24,6 +29,14 @@ const Cart = () => {
   const [cartProductList, setCartProductList] = useState<CartItem[]>([]);
   const [reloadCart, setReloadCart] = useState(0);
 
+  const order_Id = localStorage.getItem("OrderId");
+  const authTOKEN = {
+    headers: {
+      "Content-type": "application/json",
+      Authorization: localStorage.getItem("jwt_access_token"),
+    },
+  };
+
   const getTotalPrice = () => {
     return (
       cartProductList.reduce(
@@ -33,18 +46,55 @@ const Cart = () => {
     );
   };
 
-  useEffect(() => {
-    const order_Id = localStorage.getItem("OrderId");
+  const addComment = () => {
+    console.log("add comment called");
+    console.log("comment", values.comment);
 
+    const comment = {
+      comment: values.comment,
+    };
+    console.log("commentData", comment);
+    axios
+      .post(`${Customer_Order_Comment}${order_Id}`, comment, authTOKEN)
+      .then((res) => {
+        console.log("comentRes", res);
+      });
+  };
+
+  useEffect(() => {
     axios.get(`${Customer_Order_Details}${order_Id}`).then((res) => {
       console.log("CorderDetailsRes", res);
       setCartProductList(res.data);
+    });
+
+    axios.get(`${Order_Details_By_Id}${order_Id}`).then((res) => {
+      setFieldValue("comment", res.data?.comment);
     });
   }, [reloadCart]);
 
   const runReloadCart = () => {
     setReloadCart(Math.random());
   };
+
+  const initialValues = {
+    comment: "",
+  };
+  const checkoutSchema = null;
+  const handleFormSubmit = () => {};
+
+  const {
+    values,
+    errors,
+    touched,
+    handleChange,
+    handleBlur,
+    // handleSubmit,
+    setFieldValue,
+  } = useFormik({
+    initialValues: initialValues,
+    validationSchema: checkoutSchema,
+    onSubmit: handleFormSubmit,
+  });
 
   return (
     <Fragment>
@@ -90,7 +140,16 @@ const Cart = () => {
               </Box>
             </FlexBox>
 
-            <TextArea rows={6} fullwidth mb="1rem" />
+            <TextArea
+              rows={6}
+              name="comment"
+              onBlur={handleBlur}
+              onChange={handleChange}
+              value={values.comment || ""}
+              errorText={touched.comment && errors.comment}
+              fullwidth
+              mb="1rem"
+            />
 
             <Divider mb="1rem" />
 
@@ -140,7 +199,12 @@ const Cart = () => {
               Calculate Shipping
             </Button> */}
             <Link href="/checkout">
-              <Button variant="contained" color="primary" fullwidth>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={addComment}
+                fullwidth
+              >
                 Checkout Now
               </Button>
             </Link>

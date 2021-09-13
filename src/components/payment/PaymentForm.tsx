@@ -1,18 +1,18 @@
-import React, { Fragment, useState } from "react";
 import { Formik } from "formik";
-import * as yup from "yup";
-import Typography from "../Typography";
-import Grid from "../grid/Grid";
-import TextField from "../text-field/TextField";
-import Button from "../buttons/Button";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Card1 } from "../Card1";
-import Radio from "../radio/Radio";
-import FlexBox from "../FlexBox";
-import Divider from "../Divider";
-import Box from "../Box";
+import React, { Fragment, useState } from "react";
+import * as yup from "yup";
 import useWindowSize from "../../hooks/useWindowSize";
+import Box from "../Box";
+import Button from "../buttons/Button";
+import { Card1 } from "../Card1";
+import Divider from "../Divider";
+import FlexBox from "../FlexBox";
+import Grid from "../grid/Grid";
+import Radio from "../radio/Radio";
+import TextField from "../text-field/TextField";
+import Typography from "../Typography";
 
 const PaymentForm = () => {
   const [paymentMethod, setPaymentMethod] = useState("credit-card");
@@ -101,13 +101,13 @@ const PaymentForm = () => {
                     </Grid>
                     <Grid item sm={6} xs={12}>
                       <TextField
-                        name="name"
-                        label="Name on Card"
+                        name="cvc_code"
+                        label="CVC code"
                         fullwidth
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values.name || ""}
-                        errorText={touched.name && errors.name}
+                        value={values.cvc_code || ""}
+                        errorText={touched.cvc_code && errors.cvc_code}
                       />
                     </Grid>
                   </Grid>
@@ -157,6 +157,102 @@ const PaymentForm = () => {
         )}
 
         <Radio
+          name="bkash"
+          mb="1.5rem"
+          color="secondary"
+          checked={paymentMethod === "bkash"}
+          label={
+            <Typography ml="6px" fontWeight="600" fontSize="18px">
+              Pay with Bkash
+            </Typography>
+          }
+          onChange={handlePaymentMethodChange}
+        />
+        <Divider mb="1.5rem" mx="-2rem" />
+
+        {paymentMethod === "bkash" && (
+          <Fragment>
+            <FlexBox alignItems="flex-end" mb="30px">
+              <TextField
+                name="email"
+                label="Bkash Number"
+                mr={isMobile ? "1rem" : "30px"}
+                fullwidth
+              />
+              <Button variant="outlined" color="primary" type="button">
+                Submit
+              </Button>
+            </FlexBox>
+
+            <Divider mb="1.5rem" mx="-2rem" />
+          </Fragment>
+        )}
+
+        <Radio
+          name="rocket"
+          mb="1.5rem"
+          color="secondary"
+          checked={paymentMethod === "rocket"}
+          label={
+            <Typography ml="6px" fontWeight="600" fontSize="18px">
+              Pay with Rocket
+            </Typography>
+          }
+          onChange={handlePaymentMethodChange}
+        />
+        <Divider mb="1.5rem" mx="-2rem" />
+
+        {paymentMethod === "rocket" && (
+          <Fragment>
+            <FlexBox alignItems="flex-end" mb="30px">
+              <TextField
+                name="email"
+                label="Rocket Number"
+                mr={isMobile ? "1rem" : "30px"}
+                fullwidth
+              />
+              <Button variant="outlined" color="primary" type="button">
+                Submit
+              </Button>
+            </FlexBox>
+
+            <Divider mb="1.5rem" mx="-2rem" />
+          </Fragment>
+        )}
+
+        <Radio
+          name="nagad"
+          mb="1.5rem"
+          color="secondary"
+          checked={paymentMethod === "nagad"}
+          label={
+            <Typography ml="6px" fontWeight="600" fontSize="18px">
+              Pay with Nagad
+            </Typography>
+          }
+          onChange={handlePaymentMethodChange}
+        />
+        <Divider mb="1.5rem" mx="-2rem" />
+
+        {paymentMethod === "nagad" && (
+          <Fragment>
+            <FlexBox alignItems="flex-end" mb="30px">
+              <TextField
+                name="email"
+                label="Nagad Number"
+                mr={isMobile ? "1rem" : "30px"}
+                fullwidth
+              />
+              <Button variant="outlined" color="primary" type="button">
+                Submit
+              </Button>
+            </FlexBox>
+
+            <Divider mb="1.5rem" mx="-2rem" />
+          </Fragment>
+        )}
+
+        <Radio
           name="cod"
           color="secondary"
           checked={paymentMethod === "cod"}
@@ -180,7 +276,7 @@ const PaymentForm = () => {
         <Grid item sm={6} xs={12}>
           <Link href="/orders">
             <Button variant="contained" color="primary" type="submit" fullwidth>
-              Review
+              Confirm
             </Button>
           </Link>
         </Grid>
@@ -193,7 +289,7 @@ const initialValues = {
   card_no: "",
   name: "",
   exp_date: "",
-  cvc: "",
+  cvc_code: "",
   shipping_zip: "",
   shipping_country: "",
   shipping_address1: "",
@@ -213,7 +309,7 @@ const checkoutSchema = yup.object().shape({
   card_no: yup.string().required("required"),
   name: yup.string().required("required"),
   exp_date: yup.string().required("required"),
-  cvc: yup.string().required("required"),
+  cvc_code: yup.string().required("required"),
   // shipping_zip: yup.string().required("required"),
   // shipping_country: yup.object().required("required"),
   // shipping_address1: yup.string().required("required"),

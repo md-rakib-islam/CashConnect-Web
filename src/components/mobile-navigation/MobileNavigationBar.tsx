@@ -10,7 +10,8 @@ const MobileNavigationBar: React.FC = () => {
   const width = useWindowSize();
   const { state } = useAppContext();
   // const { cartList } = state.cart;
-  const cartList = [];
+  const cartQuantity = state.cart.chartQuantity;
+  // const cartList = [];
 
   return (
     width <= 900 && (
@@ -22,7 +23,7 @@ const MobileNavigationBar: React.FC = () => {
             </Icon>
             {item.title}
 
-            {item.title === "Cart" && !!cartList.length && (
+            {item.title === "Cart" && !!cartQuantity && (
               <Chip
                 bg="primary.main"
                 position="absolute"
@@ -32,7 +33,7 @@ const MobileNavigationBar: React.FC = () => {
                 top="4px"
                 left="calc(50% + 8px)"
               >
-                {cartList.length}
+                {cartQuantity}
               </Chip>
             )}
           </NavLink>

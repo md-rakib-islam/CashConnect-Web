@@ -1,9 +1,15 @@
+import {
+  City_All,
+  Country_All,
+  Customer_Order_Shipping_Address,
+  Thana_All,
+} from "@data/constants";
+import axios from "axios";
 import { Formik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as yup from "yup";
-import countryList from "../../data/countryList";
 import Button from "../buttons/Button";
 import { Card1 } from "../Card1";
 import CheckBox from "../CheckBox";
@@ -13,21 +19,75 @@ import TextField from "../text-field/TextField";
 import Typography from "../Typography";
 
 const CheckoutForm = () => {
-  const [sameAsShipping, setSameAsShipping] = useState(false);
+  const [sameAsProfile, setSameAsProfile] = useState(false);
   const router = useRouter();
+
+  const [thanas, setThanas] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [countries, setCountries] = useState([]);
+
+  const order_Id = localStorage.getItem("OrderId");
+  const user_id = localStorage?.getItem("UserId");
+  const authTOKEN = {
+    headers: {
+      "Content-type": "application/json",
+      Authorization: localStorage.getItem("jwt_access_token"),
+    },
+  };
 
   const handleFormSubmit = async (values) => {
     console.log(values);
-    router.push("/payment");
+    const shippingData = {
+      ...values,
+      user_id,
+      thana:
+        typeof values.thana != "object" ? values?.thana : values?.thana?.id,
+      city: typeof values.city != "object" ? values?.city : values?.city?.id,
+      country:
+        typeof values.country != "object"
+          ? values?.country
+          : values?.country?.id,
+    };
+    console.log("shippingData", shippingData);
+    axios
+      .post(
+        `${Customer_Order_Shipping_Address}${order_Id}`,
+        shippingData,
+        authTOKEN
+      )
+      .then((res) => {
+        console.log("shipingRes", res);
+        router.push("/payment");
+      });
   };
 
   const handleCheckboxChange =
     (values: typeof initialValues, setFieldValue) =>
     ({ target: { checked } }) => {
-      setSameAsShipping(checked);
-      setFieldValue("same_as_shipping", checked);
-      setFieldValue("billing_name", checked ? values.first_name : "");
+      setSameAsProfile(checked);
+      setFieldValue("same_as_profile_address", checked);
+      setFieldValue("name", checked ? values.name : "");
     };
+
+  useEffect(() => {
+    fetch(`${City_All}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setCities(data.cities);
+      });
+
+    fetch(`${Thana_All}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setThanas(data.thanas);
+      });
+
+    fetch(`${Country_All}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setCountries(data.countries);
+      });
+  }, []);
 
   return (
     <Formik
@@ -45,7 +105,7 @@ const CheckoutForm = () => {
         setFieldValue,
       }) => (
         <form onSubmit={handleSubmit}>
-          <Card1 mb="2rem">
+          {/* <Card1 mb="2rem">
             <Typography fontWeight="600" mb="1rem">
               Shipping Address
             </Typography>
@@ -53,25 +113,14 @@ const CheckoutForm = () => {
             <Grid container spacing={7}>
               <Grid item sm={6} xs={12}>
                 <TextField
-                  name="first_Name"
-                  label="First Name"
+                  name="shipping_name"
+                  label="Full Name"
                   fullwidth
                   mb="1rem"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.first_Name || ""}
-                  errorText={touched.first_Name && errors.first_Name}
-                />
-
-                <TextField
-                  name="last_name"
-                  label="Last Name"
-                  fullwidth
-                  mb="1rem"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.last_name || ""}
-                  errorText={touched.last_name && errors.last_name}
+                  value={values.shipping_name || ""}
+                  errorText={touched.shipping_name && errors.shipping_name}
                 />
                 <TextField
                   name="shipping_contact"
@@ -157,124 +206,115 @@ const CheckoutForm = () => {
                 />
               </Grid>
             </Grid>
-          </Card1>
+          </Card1> */}
 
           <Card1 mb="2rem">
             <Typography fontWeight="600" mb="1rem">
-              Billing Address
+              Shipping Address
             </Typography>
 
             <CheckBox
-              label="Same as shipping address"
+              label="Same as profile address"
               color="secondary"
-              mb={sameAsShipping ? "" : "1rem"}
+              mb={sameAsProfile ? "" : "1rem"}
               onChange={handleCheckboxChange(values, setFieldValue)}
             />
 
-            {!sameAsShipping && (
+            {!sameAsProfile && (
               <Grid container spacing={7}>
                 <Grid item sm={6} xs={12}>
                   <TextField
-                    name="billing_first_name"
-                    label="First Name"
+                    name="name"
+                    label="Full Name"
                     fullwidth
                     mb="1rem"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    value={values.billing_first_name || ""}
-                    errorText={
-                      touched.billing_first_name && errors.billing_first_name
-                    }
+                    value={values.name || ""}
+                    errorText={touched.name && errors.name}
                   />
                   <TextField
-                    name="billing_last_name"
-                    label="First Name"
-                    fullwidth
-                    mb="1rem"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.billing_last_name || ""}
-                    errorText={
-                      touched.billing_last_name && errors.billing_last_name
-                    }
-                  />
-                  <TextField
-                    name="billing_contact"
+                    name="phone"
                     label="Phone Number"
                     fullwidth
                     mb="1rem"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    value={values.billing_contact || ""}
-                    errorText={
-                      touched.billing_contact && errors.billing_contact
-                    }
+                    value={values.phone || ""}
+                    errorText={touched.phone && errors.phone}
+                  />
+                  <Select
+                    mb="1rem"
+                    label="Country"
+                    options={countries}
+                    value={values.country || ""}
+                    onChange={(country) => {
+                      setFieldValue("country", country);
+                    }}
+                    errorText={touched.country && errors.country}
                   />
                   <TextField
-                    name="billing_zip"
+                    name="zip_code"
                     label="Zip Code"
                     type="number"
                     fullwidth
                     mb="1rem"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    value={values.billing_zip || ""}
-                    errorText={touched.billing_zip && errors.billing_zip}
+                    value={values.zip_code || ""}
+                    errorText={touched.zip_code && errors.zip_code}
                   />
                   <TextField
-                    name="billing_address1"
-                    label="Address 1"
+                    name="street_address"
+                    label="Address"
                     fullwidth
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    value={values.billing_address1 || ""}
-                    errorText={
-                      touched.billing_address1 && errors.billing_address1
-                    }
+                    value={values.street_address || ""}
+                    errorText={touched.street_address && errors.street_address}
                   />
                 </Grid>
                 <Grid item sm={6} xs={12}>
                   <TextField
-                    name="billing_email"
+                    name="email"
                     label="Email Address"
                     type="email"
                     fullwidth
                     mb="1rem"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    value={values.billing_email || ""}
-                    errorText={touched.billing_email && errors.billing_email}
+                    value={values.email || ""}
+                    errorText={touched.email && errors.email}
                   />
                   <TextField
-                    name="billing_company"
+                    name="company"
                     label="Company"
                     fullwidth
                     mb="1rem"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    value={values.billing_company || ""}
-                    errorText={
-                      touched.billing_company && errors.billing_company
-                    }
+                    value={values.company || ""}
+                    errorText={touched.company && errors.company}
                   />
                   <Select
                     mb="1rem"
-                    label="Country"
-                    options={countryList}
-                    errorText={
-                      touched.billing_country && errors.billing_country
-                    }
+                    label="City"
+                    options={cities}
+                    value={values.city || ""}
+                    onChange={(city) => {
+                      setFieldValue("city", city);
+                    }}
+                    errorText={touched.city && errors.city}
                   />
-                  <TextField
-                    name="billing_address2"
-                    label="Address 2"
-                    fullwidth
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.billing_address2 || ""}
-                    errorText={
-                      touched.billing_address2 && errors.billing_address2
-                    }
+                  <Select
+                    mb="1rem"
+                    label="Thana"
+                    options={thanas}
+                    value={values.thana || ""}
+                    onChange={(thana) => {
+                      setFieldValue("thana", thana);
+                    }}
+                    errorText={touched.thana && errors.thana}
                   />
                 </Grid>
               </Grid>
@@ -312,40 +352,37 @@ const CheckoutForm = () => {
 };
 
 const initialValues = {
-  first_name: "",
-  last_name: "",
-  shipping_email: "",
-  shipping_contact: "",
-  shipping_company: "",
-  shipping_zip: "",
-  shipping_country: "",
-  shipping_address1: "",
-  shipping_address2: "",
+  // shipping_name: "",
+  // shipping_email: "",
+  // shipping_contact: "",
+  // shipping_company: "",
+  // shipping_zip: "",
+  // shipping_country: "",
+  // shipping_address1: "",
+  // shipping_address2: "",
 
-  billing_name: "",
-  billing_email: "",
-  billing_contact: "",
-  billing_company: "",
-  billing_zip: "",
-  billing_country: "",
-  billing_address1: "",
-  billing_address2: "",
+  name: "",
+  email: "",
+  phone: "",
+  company: "",
+  zip_code: "",
+  country: "",
+  street_address: "",
 };
 
 const checkoutSchema = yup.object().shape({
-  // first_name: yup.string().required("required"),
-  // last_name: yup.string().required("required"),
+  // shipping_name: yup.string().required("required"),
   // shipping_email: yup.string().email("invalid email").required("required"),
   // shipping_contact: yup.string().required("required"),
   // shipping_zip: yup.string().required("required"),
   // shipping_country: yup.object().required("required"),
   // shipping_address1: yup.string().required("required"),
-  // billing_name: yup.string().required("required"),
-  // billing_email: yup.string().required("required"),
-  // billing_contact: yup.string().required("required"),
-  // billing_zip: yup.string().required("required"),
-  // billing_country: yup.string().required("required"),
-  // billing_address1: yup.string().required("required"),
+  // name: yup.string().required("required"),
+  // email: yup.string().required("required"),
+  // phone: yup.string().required("required"),
+  // zip_code: yup.string().required("required"),
+  // country: yup.string().required("required"),
+  // address: yup.string().required("required"),
 });
 
 export default CheckoutForm;

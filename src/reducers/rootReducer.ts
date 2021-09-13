@@ -22,17 +22,17 @@ import {
   layoutInitialState,
   layoutReducer,
 } from "./layoutReducer";
-import {
-  productDetailsActionType,
-  productDetailsInitialState,
-  productDetailsReducer,
-  productListActionType,
-} from "./productReducer";
+// import {
+//   productDetailsActionType,
+//   productDetailsInitialState,
+//   productDetailsReducer,
+//   productListActionType,
+// } from "./productReducer";
 
 export type rootActionType =
   | layoutActionType
-  | productDetailsActionType
-  | productListActionType
+  // | productDetailsActionType
+  // | productListActionType
   | cartActionType
   | userActionType
   | loginActionType
@@ -46,7 +46,7 @@ export type rootActionType =
 
 export const initialState = {
   layout: layoutInitialState,
-  product: productDetailsInitialState,
+  // product: productDetailsInitialState,
   cart: cartInitialState,
   auth: authInitialState,
   data: dataInitialState,
@@ -54,7 +54,7 @@ export const initialState = {
 
 export const rootReducer = combineReducers({
   layout: layoutReducer,
-  product: productDetailsReducer,
+  // product: productDetailsReducer,
   cart: cartReducer,
   auth: authReducer,
   data: dataReducer,

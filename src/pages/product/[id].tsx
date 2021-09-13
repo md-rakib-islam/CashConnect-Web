@@ -8,7 +8,6 @@ import ProductIntro from "@component/products/ProductIntro";
 import ProductReview from "@component/products/ProductReview";
 import RelatedProducts from "@component/products/RelatedProducts";
 import { H5 } from "@component/Typography";
-import { useAppContext } from "@context/app/AppContext";
 import { BASE_URL, Product_by_id } from "@data/constants";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -16,8 +15,9 @@ import React, { useEffect, useState } from "react";
 const ProductDetails = () => {
   const router = useRouter();
   const id = router.query.id as string;
-  const { dispatch } = useAppContext();
+  // const { dispatch } = useAppContext();
 
+  const [fullDes, setfullDes] = useState("")
   const [title, settitle] = useState("");
   const [price, setprice] = useState(0);
   const [imgUrl, setimgUrl] = useState(
@@ -31,15 +31,16 @@ const ProductDetails = () => {
         .then((res) => res.json())
         .then((data) => {
           console.log("productById", data);
-          settitle(data.name);
-          setprice(data.unit_price);
-          setimgUrl(`${BASE_URL}${data.thumbnail}`);
-          setbrand(data.brand);
+          settitle(data?.name);
+          setprice(data?.unit_price);
+          setimgUrl(`${BASE_URL}${data?.thumbnail}`);
+          setbrand(data?.brand);
+          setfullDes(data?.full_desc)
 
-          dispatch({
-            type: "CHANGE_PRODUCT_DETAILS",
-            payload: data,
-          });
+          // dispatch({
+          //   type: "CHANGE_PRODUCT_DETAILS",
+          //   payload: data,
+          // });
         });
     }
   }, [id]);
@@ -92,7 +93,7 @@ const ProductDetails = () => {
       </FlexBox>
 
       <Box mb="50px">
-        {selectedOption === "description" && <ProductDescription />}
+        {selectedOption === "description" && <ProductDescription fullDes={fullDes}/>}
         {selectedOption === "review" && <ProductReview />}
       </Box>
 
