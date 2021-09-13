@@ -98,3 +98,5 @@ export const Customer_Increase_Quantity = `${BASE_URL}/customerorder/api/v1/cust
 export const Customer_decrease_Quantity = `${BASE_URL}/customerorder/api/v1/customerorder_decrease_quantity/`;
 
 export const Customer_Order_Details = `${BASE_URL}/customerorder/api/v1/customerorder/get_a_customer_order_detail/`;
+
+export const Customer_Order_Item_By_Product_Id = `${BASE_URL}/customerorder/api/v1/customerorder/get_order_item_by_order_id_and_product_id/`;

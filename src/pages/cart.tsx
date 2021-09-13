@@ -1,3 +1,4 @@
+import TextArea from "@component/textarea/TextArea";
 import { Customer_Order_Details } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
@@ -10,11 +11,7 @@ import FlexBox from "../components/FlexBox";
 import Grid from "../components/grid/Grid";
 import CheckoutNavLayout from "../components/layout/CheckoutNavLayout";
 import ProductCard7 from "../components/product-cards/ProductCard7";
-import Select from "../components/Select";
-import TextField from "../components/text-field/TextField";
-import TextArea from "../components/textarea/TextArea";
 import Typography from "../components/Typography";
-import countryList from "../data/countryList";
 
 type CartItem = {
   id: any;
@@ -25,6 +22,7 @@ type CartItem = {
 
 const Cart = () => {
   const [cartProductList, setCartProductList] = useState<CartItem[]>([]);
+  const [reloadCart, setReloadCart] = useState(0);
 
   const getTotalPrice = () => {
     return (
@@ -42,14 +40,23 @@ const Cart = () => {
       console.log("CorderDetailsRes", res);
       setCartProductList(res.data);
     });
-  }, []);
+  }, [reloadCart]);
+
+  const runReloadCart = () => {
+    setReloadCart(Math.random());
+  };
 
   return (
     <Fragment>
       <Grid container spacing={6}>
         <Grid item lg={8} md={8} xs={12}>
           {cartProductList.map((item) => (
-            <ProductCard7 key={item.id} mb="1.5rem" {...item} />
+            <ProductCard7
+              key={item.id}
+              mb="1.5rem"
+              runReloadCart={runReloadCart}
+              {...item}
+            />
           ))}
         </Grid>
         <Grid item lg={4} md={4} xs={12}>
@@ -87,6 +94,7 @@ const Cart = () => {
 
             <Divider mb="1rem" />
 
+            {/* 
             <TextField placeholder="Voucher" fullwidth />
 
             <Button
@@ -130,7 +138,7 @@ const Cart = () => {
 
             <Button variant="outlined" color="primary" my="1rem" fullwidth>
               Calculate Shipping
-            </Button>
+            </Button> */}
             <Link href="/checkout">
               <Button variant="contained" color="primary" fullwidth>
                 Checkout Now
@@ -142,17 +150,6 @@ const Cart = () => {
     </Fragment>
   );
 };
-
-const stateList = [
-  {
-    value: "New York",
-    label: "New York",
-  },
-  {
-    value: "Chicago",
-    label: "Chicago",
-  },
-];
 
 Cart.layout = CheckoutNavLayout;
 

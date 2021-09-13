@@ -10,7 +10,7 @@ import {
 } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { SpaceProps } from "styled-system";
 import Button from "../buttons/Button";
 import IconButton from "../buttons/IconButton";
@@ -24,6 +24,7 @@ export interface ProductCard7Props {
   quantity: any;
   price: number;
   product: any;
+  runReloadCart: () => void;
 }
 
 const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
@@ -31,45 +32,37 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
   quantity,
   price,
   product,
+  runReloadCart,
   ...props
 }) => {
   const { dispatch } = useAppContext();
-  const [reloadCart, setReloadCart] = useState(0);
 
   const handleCartAmountChange = useCallback(
-    (amount, action) => () => {
-      dispatch({
-        type: "CHANGE_CART_AMOUNT",
-        payload: {
-          name: product.name,
-          price,
-          imgUrl: `${BASE_URL}${product.thumbnail}`,
-          id,
-        },
-      });
-
-      // try {
+    (action) => () => {
       var UserId: any = localStorage?.getItem("UserId");
-      // } catch (err) {
-      //   var UserId: any = 0;
-      // }
+
       const order_Id = localStorage.getItem("OrderId");
       const item_id = id;
       const orderData = {
-        product_id: product.product.id,
+        product_id: product?.id,
         quantity: 1,
-        price: product.price,
-        // order_date: currentDate,
+        price: price,
         branch_id: 1,
         user_id: UserId,
       };
+
+      console.log("orderData", orderData);
 
       if (action == "remove") {
         axios
           .delete(`${Customer_Order_Remove_Item}${order_Id}/${item_id}`)
           .then((res) => {
             console.log("CproductDeleteRes", res);
-            setReloadCart(Math.random());
+            runReloadCart();
+            dispatch({
+              type: "CHANGE_CART_QUANTITY",
+              payload: Math.random(),
+            });
           });
       } else if (action == "increase") {
         console.log("increaseData", orderData);
@@ -77,14 +70,14 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
           .put(`${Customer_Increase_Quantity}${order_Id}/${item_id}`, orderData)
           .then((res) => {
             console.log("itemIncreaseRes", res);
-            setReloadCart(Math.random());
+            runReloadCart();
           });
       } else if (action == "decrease") {
         axios
           .put(`${Customer_decrease_Quantity}${order_Id}/${item_id}`, orderData)
           .then((res) => {
             console.log("itemDecreaseRes", res);
-            setReloadCart(Math.random());
+            runReloadCart();
           });
       }
     },
@@ -125,7 +118,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
             padding="4px"
             ml="12px"
             size="small"
-            onClick={handleCartAmountChange(0, "remove")}
+            onClick={handleCartAmountChange("remove")}
           >
             <Icon size="1.25rem">close</Icon>
           </IconButton>
@@ -152,7 +145,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
               padding="5px"
               size="none"
               borderColor="primary.light"
-              onClick={handleCartAmountChange(quantity - 1, "decrease")}
+              onClick={handleCartAmountChange("decrease")}
               disabled={quantity === 1}
             >
               <Icon variant="small">minus</Icon>
@@ -166,7 +159,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
               padding="5px"
               size="none"
               borderColor="primary.light"
-              onClick={handleCartAmountChange(quantity + 1, "increase")}
+              onClick={handleCartAmountChange("increase")}
             >
               <Icon variant="small">plus</Icon>
             </Button>

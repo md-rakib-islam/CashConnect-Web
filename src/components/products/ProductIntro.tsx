@@ -4,15 +4,17 @@ import {
   BASE_URL,
   Brand_By_Id,
   Customer_decrease_Quantity,
+  Customer_Increase_Quantity,
   Customer_Order_Create,
+  Customer_Order_Item_By_Product_Id,
+  Customer_Order_Remove_Item,
   loadingImg,
   notFoundImg,
 } from "@data/constants";
-import { CartItem } from "@reducer/cartReducer";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "../avatar/Avatar";
 import Box from "../Box";
 import Button from "../buttons/Button";
@@ -39,15 +41,13 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 }) => {
   const [brandName, setbrandName] = useState(brand);
   const [selectedImage, setSelectedImage] = useState(0);
-  const { state, dispatch } = useAppContext();
-  const cartList: CartItem[] = state.cart.cartList;
+  const { dispatch } = useAppContext();
   const router = useRouter();
   const routerId = router.query.id as string;
-  const cartItem = cartList.find(
-    (item) => item.id === id || item.id === routerId
-  );
 
   const [cartQuantity, setCartQuantity] = useState(0);
+  const [itemId, setItemId] = useState(0);
+  const [getItemId, setGetItemId] = useState(0);
 
   // const imgUrls = [
   //   "/assets/images/products/headphone.png",
@@ -70,78 +70,89 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
     }
   }, [brand]);
 
+  useEffect(() => {
+    // localStorage.setItem("OrderId", "23");
+    const order_Id = localStorage.getItem("OrderId");
+
+    if (id) {
+      axios
+        .get(`${Customer_Order_Item_By_Product_Id}${order_Id}/${id}`)
+        .then((item) => {
+          console.log("item", item.data.order_item);
+          setItemId(item.data.order_item.id);
+          setCartQuantity(item.data.order_item.quantity);
+        })
+        .catch(() => setCartQuantity(0));
+    } else {
+      setGetItemId(Math.random());
+    }
+  }, [getItemId]);
+
   const handleImageClick = (ind) => () => {
     setSelectedImage(ind);
   };
 
-  const handleCartAmountChange = useCallback(
-    (amount, action) => () => {
-      dispatch({
-        type: "CHANGE_CART_AMOUNT",
-        payload: {
-          id: id || routerId,
-          qty: Math.random(),
-        },
-      });
+  const handleCartAmountChange = (amount, action) => {
+    var UserId: any = localStorage?.getItem("UserId");
 
-      setCartQuantity(amount);
+    const dateObj: any = new Date();
+    const currentDate =
+      dateObj.getFullYear() +
+      "-" +
+      (dateObj.getMonth() + 1).toString().padStart(2, 0) +
+      "-" +
+      dateObj.getDate().toString().padStart(2, 0);
 
-      try {
-        var UserId: any = localStorage?.getItem("UserId");
-      } catch (err) {
-        var UserId: any = 0;
-      }
+    const orderData = {
+      product_id: id || routerId,
+      quantity: 1,
+      price: price,
+      order_date: currentDate,
+      branch_id: 1,
+      user_id: UserId,
+    };
 
-      const dateObj: any = new Date();
-      const currentDate =
-        dateObj.getFullYear() +
-        "-" +
-        (dateObj.getMonth() + 1).toString().padStart(2, 0) +
-        "-" +
-        dateObj.getDate().toString().padStart(2, 0);
+    const order_Id = localStorage.getItem("OrderId");
 
-      if (action == "order") {
-        const orderData = {
-          product_id: id || routerId,
-          quantity: 1,
-          price: price,
-          order_date: currentDate,
-          branch_id: 1,
-          user_id: UserId,
-        };
+    if (action == "order") {
+      console.log("orderData", orderData);
+      axios.post(`${Customer_Order_Create}`, orderData).then((res) => {
+        console.log("orderRes", res);
 
-        console.log("orderData", orderData);
-        axios.post(`${Customer_Order_Create}`, orderData).then((res) => {
-          console.log("orderCreateResData", res.data);
-          localStorage.setItem("OrderId", res.data.order_details.id);
-          localStorage.setItem("OrderItemId", res.data.order_details.item.id);
+        localStorage.setItem("OrderId", res.data.order_details.id);
+        setGetItemId(Math.random());
+        dispatch({
+          type: "CHANGE_CART_QUANTITY",
+          payload: Math.random(),
         });
-      }
-
-      if (action == "decrease") {
-        const orderData = {
-          product_id: id || routerId,
-          quantity: 1,
-          price: price,
-          order_date: currentDate,
-          branch_id: 1,
-          user_id: UserId,
-        };
-
-        const order_Id = localStorage.getItem("OrderId");
-        const item_id = localStorage.getItem("OrderItemId");
-        axios
-          .post(
-            `${Customer_decrease_Quantity}${order_Id}/${item_id}`,
-            orderData
-          )
-          .then((res) => {
-            console.log("CorderDecreaseRes", res);
+      });
+    } else if (action == "increase") {
+      axios
+        .put(`${Customer_Increase_Quantity}${order_Id}/${itemId}`, orderData)
+        .then((res) => {
+          console.log("increaseRes", res);
+          setGetItemId(Math.random());
+        });
+    } else if (amount == 0 && action == "decrease") {
+      axios
+        .delete(`${Customer_Order_Remove_Item}${order_Id}/${itemId}`)
+        .then((res) => {
+          console.log("removeRes", res);
+          setCartQuantity(0);
+          dispatch({
+            type: "CHANGE_CART_QUANTITY",
+            payload: Math.random(),
           });
-      }
-    },
-    []
-  );
+        });
+    } else if (action == "decrease") {
+      axios
+        .put(`${Customer_decrease_Quantity}${order_Id}/${itemId}`, orderData)
+        .then((res) => {
+          console.log("decreaseRes", res);
+          setGetItemId(Math.random());
+        });
+    }
+  };
 
   console.log("productId", id);
 
@@ -225,7 +236,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               size="small"
               color="primary"
               mb="36px"
-              onClick={handleCartAmountChange(1, "order")}
+              onClick={() => handleCartAmountChange(1, "order")}
             >
               Add to Cart
             </Button>
@@ -236,7 +247,9 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                 variant="outlined"
                 size="small"
                 color="primary"
-                onClick={handleCartAmountChange(cartQuantity - 1, "decrease")}
+                onClick={() =>
+                  handleCartAmountChange(cartQuantity - 1, "decrease")
+                }
               >
                 <Icon variant="small">minus</Icon>
               </Button>
@@ -248,7 +261,9 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                 variant="outlined"
                 size="small"
                 color="primary"
-                onClick={handleCartAmountChange(cartQuantity + 1, "increase")}
+                onClick={() =>
+                  handleCartAmountChange(cartQuantity + 1, "increase")
+                }
               >
                 <Icon variant="small">plus</Icon>
               </Button>

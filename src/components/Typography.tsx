@@ -112,7 +112,7 @@ export const Tiny: React.FC<CustomProps> = (props) => (
 export const Tiny2: React.FC<CustomProps> = (props) => {
   const [productQuantity, setProductQuantity] = useState(0);
   const { state } = useAppContext();
-  const cartCange = state.cart.cartList;
+  const cartCanged = state.cart.chartQuantity;
   useEffect(() => {
     const order_Id = localStorage.getItem("OrderId");
 
@@ -122,8 +122,9 @@ export const Tiny2: React.FC<CustomProps> = (props) => {
         console.log("tinyProductQuantity", data.length);
         setProductQuantity(data.length);
       });
-  }, [cartCange]);
+  }, [cartCanged]);
 
+  console.log("tiny2ReRendered");
   return (
     <Typography as="span" fontSize="10px" {...props}>
       {productQuantity}

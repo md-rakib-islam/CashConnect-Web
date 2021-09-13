@@ -129,11 +129,11 @@ const OrderDetails = () => {
               key={item.id}
             >
               <FlexBox flex="2 2 260px" m="6px" alignItems="center">
-                <Avatar src={item.imgUrl} size={64} />
+                <Avatar src={item?.imgUrl} size={64} />
                 <Box ml="20px">
-                  <H6 my="0px">{item.title}</H6>
+                  <H6 my="0px">{item?.title}</H6>
                   <Typography fontSize="14px" color="text.muted">
-                    ${item.price} x 1
+                    ${item?.price} x 1
                   </Typography>
                 </Box>
               </FlexBox>

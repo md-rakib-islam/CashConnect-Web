@@ -10,7 +10,6 @@ function useFormattedNavigationData(navigationData) {
       menuData: {
         categories: [],
       },
-      // parent.children.map()
     };
 
     parent?.children?.map((child1) => {

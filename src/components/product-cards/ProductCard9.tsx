@@ -26,6 +26,7 @@ export interface ProductCard9Props {
   brand?: string | number;
   off?: number;
   rating?: number;
+  id?: string | number;
   subcategories?: Array<{
     title: string;
     url: string;
@@ -52,6 +53,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
   subcategories,
   rating,
   brand,
+  id,
   ...props
 }) => {
   const [cartAmount, setCartAmount] = useState(0);
@@ -256,6 +258,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
             title={title}
             price={price}
             brand={brand}
+            id={id}
           />
           <Box
             position="absolute"

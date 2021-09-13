@@ -1,6 +1,5 @@
 import IconButton from "@component/buttons/IconButton";
 import Image from "@component/Image";
-import { useAppContext } from "@context/app/AppContext";
 import Link from "next/link";
 import React, { useState } from "react";
 import Box from "../Box";
@@ -24,8 +23,6 @@ type HeaderProps = {
 const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
   const [open, setOpen] = useState(false);
   const toggleSidenav = () => setOpen(!open);
-  const { state } = useAppContext();
-  const { cartList } = state.cart;
 
   const cartHandle = (
     <FlexBox ml="20px" alignItems="flex-start">
@@ -45,9 +42,7 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
           mt="-9px"
         >
           {/* this Tiny2 component is a customized version of Tiny */}
-          <Tiny2 color="white" fontWeight="600">
-            {cartList.length}
-          </Tiny2>
+          <Tiny2 color="white" fontWeight="600"></Tiny2>
         </FlexBox>
       }
     </FlexBox>

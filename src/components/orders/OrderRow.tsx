@@ -84,7 +84,7 @@ const OrderRow: React.FC<OrderRowProps> = ({ item }) => {
           </Chip>
         </Box>
         <Typography className="flex-grow pre" m="6px" textAlign="left">
-          {item.paid_at.slice(0, 10)}
+          {item?.paid_at?.slice(0, 10)}
         </Typography>
         <Typography m="6px" textAlign="left">
           ${Number(item.net_amount).toFixed(2)}

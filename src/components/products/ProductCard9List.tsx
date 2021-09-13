@@ -1,10 +1,10 @@
 import { useAppContext } from "@context/app/AppContext";
 import React, { useEffect, useState } from "react";
+import useFormattedProductData from "../../customHook/useFormattedProductData";
 import FlexBox from "../FlexBox";
 import Pagination from "../pagination/Pagination";
 import ProductCard9 from "../product-cards/ProductCard9";
 import { SemiSpan } from "../Typography";
-import useFormattedProductData from "./useFormattedProductData";
 
 export interface ProductCard9ListProps {}
 

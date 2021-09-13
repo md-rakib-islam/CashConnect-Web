@@ -14,22 +14,22 @@ export interface CustomerOrderListProps {}
 const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
   const [ordersList, setorderList] = useState([]);
 
-  try {
-    var UserId: any = localStorage?.getItem("UserId");
-  } catch (err) {
-    UserId = 0;
-  }
+  // try {
+  var UserId: any = localStorage?.getItem("UserId");
+  // } catch (err) {
+  //   UserId = 0;
+  // }
 
-  try {
-    var authTOKEN = {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: localStorage.getItem("jwt_access_token"),
-      },
-    };
-  } catch (err) {
-    authTOKEN = null;
-  }
+  // try {
+  var authTOKEN = {
+    headers: {
+      "Content-type": "application/json",
+      Authorization: localStorage.getItem("jwt_access_token"),
+    },
+  };
+  // } catch (err) {
+  //   authTOKEN = null;
+  // }
 
   useEffect(() => {
     axios
@@ -52,6 +52,7 @@ const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
       });
   }, [UserId]);
 
+  console.log("ordersList", ordersList);
   return (
     <div>
       <DashboardPageHeader title="My Orders" iconName="bag_filled" />

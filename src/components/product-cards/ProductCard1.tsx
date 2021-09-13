@@ -1,9 +1,14 @@
 import LazyImage from "@component/LazyImage";
 import { useAppContext } from "@context/app/AppContext";
-import { BASE_URL, loadingImg, notFoundImg } from "@data/constants";
-import { CartItem } from "@reducer/cartReducer";
+import {
+  BASE_URL,
+  Customer_Order_Details,
+  loadingImg,
+  notFoundImg,
+} from "@data/constants";
+import axios from "axios";
 import Link from "next/link";
-import React, { Fragment, useCallback, useState } from "react";
+import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { CSSProperties } from "styled-components";
 import Box from "../Box";
 import Button from "../buttons/Button";
@@ -52,28 +57,31 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 }) => {
   const [open, setOpen] = useState(false);
 
-  const { state, dispatch } = useAppContext();
-  const cartItem: CartItem = state.cart.cartList.find((item) => item.id === id);
+  const { dispatch } = useAppContext();
+  const [cartProductLists, setCartProductLists] = useState([]);
+  const cartProductList = cartProductLists.find((item) => item.id === id);
 
   const toggleDialog = useCallback(() => {
     setOpen((open) => !open);
   }, []);
 
   const handleCartAmountChange = useCallback(
-    (amount) => () => {
+    () => () => {
       dispatch({
-        type: "CHANGE_CART_AMOUNT",
-        payload: {
-          name: title,
-          qty: Math.random(),
-          price,
-          imgUrl,
-          id,
-        },
+        type: "CHANGE_CART_QUANTITY",
+        payload: Math.random(),
       });
     },
     []
   );
+
+  useEffect(() => {
+    const order_Id = localStorage.getItem("OrderId");
+
+    axios.get(`${Customer_Order_Details}${order_Id}`).then((res) => {
+      setCartProductLists(res.data);
+    });
+  }, []);
 
   // const notFoundImg = "/assets/images/products/notFoundImg.png";
 
@@ -164,7 +172,9 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
           <FlexBox
             flexDirection="column-reverse"
             alignItems="center"
-            justifyContent={!!cartItem?.qty ? "space-between" : "flex-start"}
+            justifyContent={
+              !!cartProductList?.quantity ? "space-between" : "flex-start"
+            }
             width="30px"
           >
             {/* <div className="add-cart"> */}
@@ -174,15 +184,15 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
               padding="3px"
               size="none"
               borderColor="primary.light"
-              onClick={handleCartAmountChange((cartItem?.qty || 0) + 1)}
+              onClick={handleCartAmountChange()}
             >
               <Icon variant="small">plus</Icon>
             </Button>
 
-            {!!cartItem?.qty && (
+            {!!cartProductList?.quantity && (
               <Fragment>
                 <SemiSpan color="text.primary" fontWeight="600">
-                  {cartItem?.qty}
+                  {cartProductList?.quantity}
                 </SemiSpan>
                 <Button
                   variant="outlined"
@@ -190,7 +200,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
                   padding="3px"
                   size="none"
                   borderColor="primary.light"
-                  onClick={handleCartAmountChange(cartItem?.qty - 1)}
+                  onClick={handleCartAmountChange()}
                 >
                   <Icon variant="small">minus</Icon>
                 </Button>

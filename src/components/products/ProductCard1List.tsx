@@ -1,5 +1,5 @@
-import useFormattedProductData from "@component/products/useFormattedProductData";
 import { useAppContext } from "@context/app/AppContext";
+import useFormattedProductData from "@customHook/useFormattedProductData";
 import React, { useEffect, useState } from "react";
 import FlexBox from "../FlexBox";
 import Grid from "../grid/Grid";

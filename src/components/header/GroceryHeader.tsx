@@ -1,7 +1,6 @@
 import IconButton from "@component/buttons/IconButton";
 import GrocerySearchBox from "@component/search-box/GrocerySearchBox";
 import { Tiny2 } from "@component/Typography";
-import { useAppContext } from "@context/app/AppContext";
 import Link from "next/link";
 import React, { useState } from "react";
 import Box from "../Box";
@@ -23,9 +22,6 @@ const GroceryHeader: React.FC<HeaderProps> = ({ className }) => {
   const [open, setOpen] = useState(false);
   const toggleSidenav = () => setOpen(!open);
 
-  const { state } = useAppContext();
-  const { cartList } = state.cart;
-
   const cartHandle = (
     <FlexBox ml="20px" alignItems="flex-start">
       <IconButton bg="gray.200" p="12px">
@@ -44,9 +40,7 @@ const GroceryHeader: React.FC<HeaderProps> = ({ className }) => {
           mt="-9px"
         >
           {/* this Tiny2 component is a customized version of Tiny */}
-          <Tiny2 color="white" fontWeight="600">
-            {cartList.length}
-          </Tiny2>
+          <Tiny2 color="white" fontWeight="600"></Tiny2>
         </FlexBox>
       }
     </FlexBox>

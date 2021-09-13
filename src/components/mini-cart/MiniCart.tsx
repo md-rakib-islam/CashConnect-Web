@@ -8,7 +8,7 @@ import {
   Customer_Increase_Quantity,
   Customer_Order_Details,
   Customer_Order_Remove_Item,
-  notFoundImg
+  notFoundImg,
 } from "@data/constants";
 // import { CartItem } from "@reducer/cartReducer";
 import axios from "axios";
@@ -37,28 +37,15 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
   const [reloadCart, setReloadCart] = useState(0);
 
   const handleCartAmountChange = useCallback(
-    (amount, product, action) => () => {
-      dispatch({
-        type: "CHANGE_CART_AMOUNT",
-        payload: {
-          ...product,
-          qty: amount,
-        },
-      });
-
-      // try {
-        var UserId: any = localStorage?.getItem("UserId");
-      // } catch (err) {
-      //   var UserId: any = 0;
-      // }
+    (product, action) => () => {
+      var UserId: any = localStorage?.getItem("UserId");
       const order_Id = localStorage.getItem("OrderId");
 
-      const item_id = product.id;
+      const item_id = product?.id;
       const orderData = {
-        product_id: product.product.id,
+        product_id: product?.product?.id,
         quantity: 1,
-        price: product.price,
-        // order_date: currentDate,
+        price: product?.price,
         branch_id: 1,
         user_id: UserId,
       };
@@ -66,23 +53,23 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
       if (action == "remove") {
         axios
           .delete(`${Customer_Order_Remove_Item}${order_Id}/${item_id}`)
-          .then((res) => {
-            console.log("CproductDeleteRes", res);
+          .then(() => {
             setReloadCart(Math.random());
+            dispatch({
+              type: "CHANGE_CART_QUANTITY",
+              payload: Math.random(),
+            });
           });
       } else if (action == "increase") {
-        console.log("increaseData", orderData);
         axios
           .put(`${Customer_Increase_Quantity}${order_Id}/${item_id}`, orderData)
-          .then((res) => {
-            console.log("itemIncreaseRes", res);
+          .then(() => {
             setReloadCart(Math.random());
           });
       } else if (action == "decrease") {
         axios
           .put(`${Customer_decrease_Quantity}${order_Id}/${item_id}`, orderData)
-          .then((res) => {
-            console.log("itemDecreaseRes", res);
+          .then(() => {
             setReloadCart(Math.random());
           });
       }
@@ -94,7 +81,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
     return (
       cartProductList.reduce(
         (accumulator, item) =>
-          accumulator + item.product.unit_price * item.quantity,
+          accumulator + item.product?.unit_price * item.quantity,
         0
       ) || 0
     );
@@ -104,12 +91,10 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
     const order_Id = localStorage.getItem("OrderId");
 
     axios.get(`${Customer_Order_Details}${order_Id}`).then((res) => {
-      console.log("CorderDetailsRes", res);
       setCartProductList(res.data);
+      console.log("miniCartLisdt", res.data);
     });
   }, [reloadCart]);
-
-  console.log("cartProductList", cartProductList);
 
   return (
     <StyledMiniCart>
@@ -156,11 +141,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                   size="none"
                   borderColor="primary.light"
                   borderRadius="300px"
-                  onClick={handleCartAmountChange(
-                    item.quantity + 1,
-                    item,
-                    "increase"
-                  )}
+                  onClick={handleCartAmountChange(item, "increase")}
                 >
                   <Icon variant="small">plus</Icon>
                 </Button>
@@ -174,11 +155,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                   size="none"
                   borderColor="primary.light"
                   borderRadius="300px"
-                  onClick={handleCartAmountChange(
-                    item.quantity - 1,
-                    item,
-                    "decrease"
-                  )}
+                  onClick={handleCartAmountChange(item, "decrease")}
                   disabled={item.quantity === 1}
                 >
                   <Icon variant="small">minus</Icon>
@@ -189,12 +166,12 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                 <a>
                   <Avatar
                     src={
-                      item.product.thumbnail
-                        ? `${BASE_URL}${item.product.thumbnail}`
+                      item?.product?.thumbnail
+                        ? `${BASE_URL}${item?.product?.thumbnail}`
                         : notFoundImg
                     }
                     mx="1rem"
-                    alt={item.product.name}
+                    alt={item.product?.name}
                     size={76}
                   />
                 </a>
@@ -204,12 +181,12 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                 <Link href={`/product/${item.id}`}>
                   <a>
                     <H5 className="title" fontSize="14px">
-                      {item.product.name}
+                      {item.product?.name}
                     </H5>
                   </a>
                 </Link>
-                <Tiny color="text.muted">
-                  ${Number(item.product.unit_price).toFixed(2)} x{" "}
+                <Tiny color="text.muted" key={item.id}>
+                  ${Number(item.product?.unit_price).toFixed(2)} x{" "}
                   {item.quantity}
                 </Tiny>
                 <Typography
@@ -218,7 +195,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                   color="primary.main"
                   mt="4px"
                 >
-                  ${(item.quantity * item.product.unit_price).toFixed(2)}
+                  ${(item.quantity * item.product?.unit_price).toFixed(2)}
                 </Typography>
               </div>
 
@@ -226,7 +203,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                 className="clear-icon"
                 size="1rem"
                 ml="1.25rem"
-                onClick={handleCartAmountChange(0, item, "remove")}
+                onClick={handleCartAmountChange(item, "remove")}
               >
                 close
               </Icon>

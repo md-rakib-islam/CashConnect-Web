@@ -21,14 +21,13 @@ const CheckoutForm = () => {
     router.push("/payment");
   };
 
-  const handleCheckboxChange = (
-    values: typeof initialValues,
-    setFieldValue
-  ) => ({ target: { checked } }) => {
-    setSameAsShipping(checked);
-    setFieldValue("same_as_shipping", checked);
-    setFieldValue("billing_name", checked ? values.shipping_name : "");
-  };
+  const handleCheckboxChange =
+    (values: typeof initialValues, setFieldValue) =>
+    ({ target: { checked } }) => {
+      setSameAsShipping(checked);
+      setFieldValue("same_as_shipping", checked);
+      setFieldValue("billing_name", checked ? values.first_name : "");
+    };
 
   return (
     <Formik
@@ -54,14 +53,25 @@ const CheckoutForm = () => {
             <Grid container spacing={7}>
               <Grid item sm={6} xs={12}>
                 <TextField
-                  name="shipping_name"
-                  label="Full Name"
+                  name="first_Name"
+                  label="First Name"
                   fullwidth
                   mb="1rem"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.shipping_name || ""}
-                  errorText={touched.shipping_name && errors.shipping_name}
+                  value={values.first_Name || ""}
+                  errorText={touched.first_Name && errors.first_Name}
+                />
+
+                <TextField
+                  name="last_name"
+                  label="Last Name"
+                  fullwidth
+                  mb="1rem"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.last_name || ""}
+                  errorText={touched.last_name && errors.last_name}
                 />
                 <TextField
                   name="shipping_contact"
@@ -165,14 +175,28 @@ const CheckoutForm = () => {
               <Grid container spacing={7}>
                 <Grid item sm={6} xs={12}>
                   <TextField
-                    name="billing_name"
-                    label="Full Name"
+                    name="billing_first_name"
+                    label="First Name"
                     fullwidth
                     mb="1rem"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    value={values.billing_name || ""}
-                    errorText={touched.billing_name && errors.billing_name}
+                    value={values.billing_first_name || ""}
+                    errorText={
+                      touched.billing_first_name && errors.billing_first_name
+                    }
+                  />
+                  <TextField
+                    name="billing_last_name"
+                    label="First Name"
+                    fullwidth
+                    mb="1rem"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.billing_last_name || ""}
+                    errorText={
+                      touched.billing_last_name && errors.billing_last_name
+                    }
                   />
                   <TextField
                     name="billing_contact"
@@ -288,7 +312,8 @@ const CheckoutForm = () => {
 };
 
 const initialValues = {
-  shipping_name: "",
+  first_name: "",
+  last_name: "",
   shipping_email: "",
   shipping_contact: "",
   shipping_company: "",
@@ -308,7 +333,8 @@ const initialValues = {
 };
 
 const checkoutSchema = yup.object().shape({
-  // shipping_name: yup.string().required("required"),
+  // first_name: yup.string().required("required"),
+  // last_name: yup.string().required("required"),
   // shipping_email: yup.string().email("invalid email").required("required"),
   // shipping_contact: yup.string().required("required"),
   // shipping_zip: yup.string().required("required"),
