@@ -29,13 +29,23 @@ const Cart = () => {
   const [cartProductList, setCartProductList] = useState<CartItem[]>([]);
   const [reloadCart, setReloadCart] = useState(0);
 
-  const order_Id = localStorage.getItem("OrderId");
-  const authTOKEN = {
-    headers: {
-      "Content-type": "application/json",
-      Authorization: localStorage.getItem("jwt_access_token"),
-    },
-  };
+  try {
+    var order_Id: any = localStorage.getItem("OrderId");
+    var authTOKEN: any = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: localStorage.getItem("jwt_access_token"),
+      },
+    };
+  } catch (err) {
+    var order_Id = null;
+    var authTOKEN: any = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: null,
+      },
+    };
+  }
 
   const getTotalPrice = () => {
     return (

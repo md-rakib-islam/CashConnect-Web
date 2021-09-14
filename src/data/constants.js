@@ -1,6 +1,6 @@
 //http://cashconnectbackend.herokuapp.com
 //base url
-export const BASE_URL = "http://192.168.0.151:8001";
+export const BASE_URL = "http://192.168.0.153:8001";
 
 //not found image
 export const notFoundImg = "/assets/images/products/notFoundImg.png";
@@ -106,3 +106,12 @@ export const Customer_Order_Item_By_Product_Id = `${BASE_URL}/customerorder/api/
 export const Customer_Order_Comment = `${BASE_URL}/customerorder/api/v1/customerorder/add_comment/`;
 
 export const Customer_Order_Shipping_Address = `${BASE_URL}/customerorder/api/v1/customerorder/add_shipping_address/`;
+
+export const Customer_Order_Payment = `${BASE_URL}/customerorder/api/v1/customerorder/add_payment_method_and_payment_method_detail/`;
+
+export const Customer_Order_Confirm = `${BASE_URL}/customerorder/api/v1/customerorder/confirm_from_frontend/`;
+
+//shipping address
+export const Shipping_Adress_By_Order_Id = `${BASE_URL}/shippingaddress/api/v1/shippingaddress/`;
+
+export const Shipping_Address_Delete = `${BASE_URL}/shippingaddress/api/v1/shippingaddress/delete/`;

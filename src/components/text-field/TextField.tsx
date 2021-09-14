@@ -11,6 +11,7 @@ export interface TextFieldProps {
   id?: any;
   fullwidth?: boolean;
   endAdornment?: any;
+  onChange?: any;
 }
 
 const TextField: React.FC<
