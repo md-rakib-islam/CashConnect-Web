@@ -111,6 +111,8 @@ export const Customer_Order_Payment = `${BASE_URL}/customerorder/api/v1/customer
 
 export const Customer_Order_Confirm = `${BASE_URL}/customerorder/api/v1/customerorder/confirm_from_frontend/`;
 
+export const Customer_Order_Pending_Details = `${BASE_URL}/customerorder/api/v1/customerorder/get_a_customer_order_pending_detail/`;
+
 //shipping address
 export const Shipping_Adress_By_Order_Id = `${BASE_URL}/shippingaddress/api/v1/shippingaddress/`;
 

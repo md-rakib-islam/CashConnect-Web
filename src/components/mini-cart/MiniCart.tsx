@@ -6,7 +6,7 @@ import {
   BASE_URL,
   Customer_decrease_Quantity,
   Customer_Increase_Quantity,
-  Customer_Order_Details,
+  Customer_Order_Pending_Details,
   Customer_Order_Remove_Item,
   notFoundImg,
 } from "@data/constants";
@@ -90,9 +90,9 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
   useEffect(() => {
     const order_Id = localStorage.getItem("OrderId");
 
-    axios.get(`${Customer_Order_Details}${order_Id}`).then((res) => {
-      setCartProductList(res.data);
-      console.log("miniCartLisdt", res.data);
+    axios.get(`${Customer_Order_Pending_Details}${order_Id}`).then((res) => {
+      setCartProductList(res.data.order.order_items);
+      console.log("miniCartLisdt", res.data.order.order_items);
     });
   }, [reloadCart]);
 

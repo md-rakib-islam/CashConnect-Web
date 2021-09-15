@@ -49,14 +49,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   const [itemId, setItemId] = useState(0);
   const [getItemId, setGetItemId] = useState(0);
 
-  // const imgUrls = [
-  //   "/assets/images/products/headphone.png",
-  //   "/assets/images/products/hiclipart.com (16).png",
-  //   "/assets/images/products/hiclipart.com (18).png",
-  // ];
-
-  // const notFoundImg = "/assets/images/products/notFoundImg.png";
-
   useEffect(() => {
     if (brand) {
       fetch(`${BASE_URL}${Brand_By_Id}${brand}`)
@@ -71,7 +63,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   }, [brand]);
 
   useEffect(() => {
-    // localStorage.setItem("OrderId", "23");
     const order_Id = localStorage.getItem("OrderId");
 
     if (id) {
@@ -128,7 +119,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
           });
         });
       } else {
-        console.log("routerUrt", `product/${id}`);
         localStorage.setItem("backAfterLogin", `product/${id}`);
         router.push({
           pathname: "/login",

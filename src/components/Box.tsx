@@ -23,6 +23,7 @@ type BoxProps = {
   shadow?: number;
   cursor?: string;
   transition?: string;
+  boxShadow?: string;
 };
 
 const Box = styled.div<
@@ -36,8 +37,8 @@ const Box = styled.div<
     FlexboxProps &
     TypographyProps
 >(
-  ({ shadow, cursor, transition, theme }) => ({
-    boxShadow: theme.shadows[shadow],
+  ({ shadow, cursor, transition, theme, boxShadow }) => ({
+    boxShadow: boxShadow || theme.shadows[shadow],
     cursor,
     transition,
   }),

@@ -61,7 +61,7 @@ const Login: React.FC = () => {
             router.push("/vendor/account-settings");
           }
         } else {
-          router.push("/login");
+          router.push("/signup");
         }
         // localStorage.setItem("UserId", user.id);
       },

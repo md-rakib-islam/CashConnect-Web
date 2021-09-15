@@ -2,6 +2,7 @@ import { Customer_Create, Vendor_Create } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import * as yup from "yup";
 import Box from "../Box";
@@ -20,6 +21,8 @@ const Signup: React.FC = () => {
   const [customerVariant, setCustomerVariant] = useState("contained");
   const [vendorVariant, setvendorVariant] = useState("outlined");
   const [user_type, setUser_type] = useState(3);
+
+  const router = useRouter();
 
   const togglePasswordVisibility = () => {
     setPasswordVisibility((visible) => !visible);
@@ -44,12 +47,16 @@ const Signup: React.FC = () => {
     };
 
     if (user_type == 3) {
-      axios.post(`${Customer_Create}`, data).then((data) => {});
+      axios.post(`${Customer_Create}`, data).then((data) => {
+        console.log("createdCustomerRes", data);
+        router.push("/login");
+      });
     }
 
     if (user_type == 2) {
       axios.post(`${Vendor_Create}`, data).then((data) => {
         console.log("createdVendorRes", data);
+        router.push("/login");
       });
     }
 

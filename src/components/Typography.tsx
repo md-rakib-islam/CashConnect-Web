@@ -1,5 +1,5 @@
 import { useAppContext } from "@context/app/AppContext";
-import { Customer_Order_Details } from "@data/constants";
+import { Customer_Order_Pending_Details } from "@data/constants";
 import React, { useEffect, useState } from "react";
 import styled, { CSSProperties } from "styled-components";
 import {
@@ -116,11 +116,11 @@ export const Tiny2: React.FC<CustomProps> = (props) => {
   useEffect(() => {
     const order_Id = localStorage.getItem("OrderId");
 
-    fetch(`${Customer_Order_Details}${order_Id}`)
+    fetch(`${Customer_Order_Pending_Details}${order_Id}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("tinyProductQuantity", data.length);
-        setProductQuantity(data.length);
+        console.log("tinyProductQuantity", data.order.order_items.length);
+        setProductQuantity(data.order.order_items.length);
       });
   }, [cartCanged]);
 

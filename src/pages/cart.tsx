@@ -1,8 +1,7 @@
 import TextArea from "@component/textarea/TextArea";
 import {
   Customer_Order_Comment,
-  Customer_Order_Details,
-  Order_Details_By_Id,
+  Customer_Order_Pending_Details,
 } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
@@ -72,13 +71,10 @@ const Cart = () => {
   };
 
   useEffect(() => {
-    axios.get(`${Customer_Order_Details}${order_Id}`).then((res) => {
+    axios.get(`${Customer_Order_Pending_Details}${order_Id}`).then((res) => {
       console.log("CorderDetailsRes", res);
-      setCartProductList(res.data);
-    });
-
-    axios.get(`${Order_Details_By_Id}${order_Id}`).then((res) => {
-      setFieldValue("comment", res.data?.comment);
+      setCartProductList(res.data.order?.order_items);
+      setFieldValue("comment", res.data.order?.comment);
     });
   }, [reloadCart]);
 

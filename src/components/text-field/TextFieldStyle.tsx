@@ -20,6 +20,7 @@ export const SyledTextField = styled.input<
       width: props.fullwidth ? "100%" : "inherit",
       outline: "none",
       fontFamily: "inherit",
+      boxShadow: props.boxShadow && "0px 0px 10px #ababab",
 
       "&:hover": {
         borderColor: "gray.500",

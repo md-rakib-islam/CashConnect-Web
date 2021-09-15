@@ -1,4 +1,4 @@
-import { Order_Details_By_Id } from "@data/constants";
+import { Customer_Order_Pending_Details } from "@data/constants";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import CheckoutForm from "../components/checkout/CheckoutForm";
@@ -15,13 +15,13 @@ const Checkout = () => {
   useEffect(() => {
     const order_Id = localStorage.getItem("OrderId");
 
-    axios.get(`${Order_Details_By_Id}${order_Id}`).then((res) => {
+    axios.get(`${Customer_Order_Pending_Details}${order_Id}`).then((res) => {
       console.log("orderDetailsRes", res);
-      const { data } = res;
-      setSubtotal(data.net_amount);
-      setShippingPrice(data.shipping_price);
-      setTaxPrice(data.tax_price);
-      setDiscountAmount(data.discount_amount);
+      const { order } = res.data;
+      setSubtotal(order.net_amount);
+      setShippingPrice(order.shipping_price);
+      setTaxPrice(order.tax_price);
+      setDiscountAmount(order.discount_amount);
     });
   }, []);
 

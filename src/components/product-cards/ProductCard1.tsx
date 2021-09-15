@@ -2,7 +2,7 @@ import LazyImage from "@component/LazyImage";
 import { useAppContext } from "@context/app/AppContext";
 import {
   BASE_URL,
-  Customer_Order_Details,
+  Customer_Order_Pending_Details,
   loadingImg,
   notFoundImg,
 } from "@data/constants";
@@ -78,8 +78,8 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
   useEffect(() => {
     const order_Id = localStorage.getItem("OrderId");
 
-    axios.get(`${Customer_Order_Details}${order_Id}`).then((res) => {
-      setCartProductLists(res.data);
+    axios.get(`${Customer_Order_Pending_Details}${order_Id}`).then((res) => {
+      setCartProductLists(res.data.order?.order_items);
     });
   }, []);
 

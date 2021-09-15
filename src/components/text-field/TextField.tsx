@@ -10,6 +10,7 @@ export interface TextFieldProps {
   errorText?: any;
   id?: any;
   fullwidth?: boolean;
+  boxShadow?: boolean;
   endAdornment?: any;
   onChange?: any;
 }

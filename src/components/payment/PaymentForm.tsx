@@ -1,3 +1,4 @@
+import { useAppContext } from "@context/app/AppContext";
 import { Customer_Order_Confirm } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
@@ -29,6 +30,8 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [setInRef, setSetInRef] = useState(0);
 
+  const { dispatch } = useAppContext();
+
   const width = useWindowSize();
   const isMobile = width < 769;
 
@@ -40,6 +43,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
   const bkashNoRef = useRef();
   const rocketNoRef = useRef();
   const nagadNoRef = useRef();
+  const confirmedOrderRes = useRef(false);
 
   const useKeys = {
     payment_mathod: null,
@@ -77,7 +81,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
     return () => {
       console.log("paymentComponentUnMounted");
 
-      try {
+      if (!confirmedOrderRes.current) {
         paymentMethod && localStorage.setItem("payment_mathod", paymentMethod);
 
         cardNumberRef.current &&
@@ -101,7 +105,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
           localStorage.setItem("rocket", rocketNoRef.current);
 
         nagadNoRef.current && localStorage.setItem("nagad", nagadNoRef.current);
-      } catch (err) {}
+      }
     };
   }, [paymentMethod]);
 
@@ -170,9 +174,14 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
       .post(`${Customer_Order_Confirm}${order_Id}`, confirmData, authTOKEN)
       .then((res) => {
         console.log("confirmOrderRes", res);
+        confirmedOrderRes.current = true;
         for (let key in useKeys) {
           localStorage.removeItem(`${key}`);
         }
+        dispatch({
+          type: "CHANGE_CART_QUANTITY",
+          payload: Math.random(),
+        });
       });
   };
 
