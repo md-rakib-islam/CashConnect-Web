@@ -9,6 +9,7 @@ import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import VendorDashboardLayout from "@component/layout/VendorDashboardLayout";
 import Select from "@component/Select";
 import TextField from "@component/text-field/TextField";
+import useJsonToFormData from "@customHook/useJsonToFormData";
 import {
   BASE_URL,
   Branch_All,
@@ -132,39 +133,10 @@ const AccountSettings = () => {
         typeof values.branch != "object" ? values?.branch : values?.branch?.id,
     };
 
-    function buildFormData(formData, data, parentKey?: any) {
-      if (
-        data &&
-        typeof data === "object" &&
-        !(data instanceof Date) &&
-        !(data instanceof File)
-      ) {
-        Object.keys(data).forEach((key) => {
-          buildFormData(
-            formData,
-            data[key],
-            parentKey ? `${parentKey}[${key}]` : key
-          );
-        });
-      } else {
-        const value = data == null ? "" : data;
-
-        formData.append(parentKey, value);
-      }
-    }
-
-    function jsonToFormData(data) {
-      const formData = new FormData();
-
-      buildFormData(formData, data);
-
-      return formData;
-    }
-
-    const getFormDateFJ = jsonToFormData(data);
+    const [vendorEditData] = useJsonToFormData(data);
 
     axios
-      .put(`${Vendor_Update}${UserId}`, getFormDateFJ, authTOKEN)
+      .put(`${Vendor_Update}${UserId}`, vendorEditData, authTOKEN)
       .then((data) => {
         console.log("VenderUpdatedRes", data);
       });

@@ -10,6 +10,7 @@ import DashboardLayout from "@component/layout/CustomerDashboardLayout";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import Select from "@component/Select";
 import TextField from "@component/text-field/TextField";
+import useJsonToFormData from "@customHook/useJsonToFormData";
 import {
   BASE_URL,
   Branch_All,
@@ -90,39 +91,10 @@ const ProfileEditor = ({
           : values?.cusotmer_type?.id,
     };
 
-    function buildFormData(formData, data, parentKey?: any) {
-      if (
-        data &&
-        typeof data === "object" &&
-        !(data instanceof Date) &&
-        !(data instanceof File)
-      ) {
-        Object.keys(data).forEach((key) => {
-          buildFormData(
-            formData,
-            data[key],
-            parentKey ? `${parentKey}[${key}]` : key
-          );
-        });
-      } else {
-        const value = data == null ? "" : data;
-
-        formData.append(parentKey, value);
-      }
-    }
-
-    function jsonToFormData(data) {
-      const formData = new FormData();
-
-      buildFormData(formData, data);
-
-      return formData;
-    }
-
-    const getFormDateFJ = jsonToFormData(data);
+    const [customerEditData] = useJsonToFormData(data);
 
     axios
-      .put(`${Customer_Update}${UserId}`, getFormDateFJ, authTOKEN)
+      .put(`${Customer_Update}${UserId}`, customerEditData, authTOKEN)
       .then((data) => {
         console.log("updatedRes", data);
       });

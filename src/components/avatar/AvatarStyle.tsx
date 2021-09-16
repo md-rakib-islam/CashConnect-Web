@@ -19,9 +19,10 @@ const StyledAvatar = styled.div<
   text-align: center;
   font-weight: 600;
   font-size: ${(props) => props.size / 2}px;
-  border-radius: ${(props) => props.size}px;
+  border-radius: ${(props) => props.radius || props.size}px;
   min-width: ${(props) => props.size}px;
   overflow: hidden;
+  float: ${(props) => props.float || "none"};
 
   img {
     display: block;

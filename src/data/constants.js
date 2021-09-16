@@ -117,3 +117,6 @@ export const Customer_Order_Pending_Details = `${BASE_URL}/customerorder/api/v1/
 export const Shipping_Adress_By_Order_Id = `${BASE_URL}/shippingaddress/api/v1/shippingaddress/`;
 
 export const Shipping_Address_Delete = `${BASE_URL}/shippingaddress/api/v1/shippingaddress/delete/`;
+
+//purchase apis
+export const Purshase_Create = `${BASE_URL}/purchase_request/api/v1/purchase_request/create_seller_purchase_request/`;

@@ -119,12 +119,10 @@ export const Tiny2: React.FC<CustomProps> = (props) => {
     fetch(`${Customer_Order_Pending_Details}${order_Id}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("tinyProductQuantity", data.order.order_items.length);
-        setProductQuantity(data.order.order_items.length);
+        setProductQuantity(data?.order?.order_items?.length);
       });
   }, [cartCanged]);
 
-  console.log("tiny2ReRendered");
   return (
     <Typography as="span" fontSize="10px" {...props}>
       {productQuantity}
