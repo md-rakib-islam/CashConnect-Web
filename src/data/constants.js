@@ -37,15 +37,6 @@ export var UserId = user_id;
 //login
 export const LOGIN_URL = `${BASE_URL}/users/api/v1/users/login/`;
 
-//ProductByCategoryId
-export const ProductByCategoryId = "/product/api/v1/product_using_category/";
-
-//product all
-export const Category_All = "/category/api/v1/categories_tree/all/";
-
-//product by id
-export const Product_by_id = "/product/api/v1/product/";
-
 //brand by id
 export const Brand_By_Id = "/brand/api/v1/brand/";
 
@@ -120,3 +111,26 @@ export const Shipping_Address_Delete = `${BASE_URL}/shippingaddress/api/v1/shipp
 
 //purchase apis
 export const Purshase_Create = `${BASE_URL}/purchase_request/api/v1/purchase_request/create_seller_purchase_request/`;
+
+//site settings apis
+export const Site_Setting_All = `${BASE_URL}/site_settings/api/v1/general_setting/all/`
+
+//review_and_rating​ apis
+export const Review_Create = `${BASE_URL}/review_and_rating/api/v1/review_and_rating/create/`
+
+export const Review_Bt_Product_Id = `${BASE_URL}/review_and_rating/api/v1/all_review_and_rating_of_a_product/`
+
+//user apis
+export const User_By_Id = `${BASE_URL}/users/api/v1/users/`
+
+//product apis
+export const ProductByCategoryId = "/product/api/v1/product_using_category/";
+
+export const Product_by_id = "/product/api/v1/product/";
+
+export const Product_Flash_Deals = `${BASE_URL}/product/api/v1/product_with_top_selling/all/`
+
+//catogory apis
+export const Category_All = "/category/api/v1/categories_tree/all/";
+
+export const Category_Top_All = `${BASE_URL}/category/api/v1/top_categories/all/`

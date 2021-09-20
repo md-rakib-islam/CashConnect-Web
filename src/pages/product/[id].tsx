@@ -23,6 +23,7 @@ const ProductDetails = () => {
   const [imgUrl, setimgUrl] = useState(
     "/assets/images/products/loadingProduct.png"
   );
+  const [reviewsQuantity, setreviewsQuantity] = useState(0)
   const [brand, setbrand] = useState(0);
 
   useEffect(() => {
@@ -36,6 +37,7 @@ const ProductDetails = () => {
           setimgUrl(`${BASE_URL}${data?.thumbnail}`);
           setbrand(data?.brand);
           setfullDes(data?.full_desc)
+          setreviewsQuantity(data?.numReviews)
 
           // dispatch({
           //   type: "CHANGE_PRODUCT_DETAILS",
@@ -44,6 +46,10 @@ const ProductDetails = () => {
         });
     }
   }, [id]);
+
+  const setNumOfReviews = (quantity = 0) => {
+    setreviewsQuantity(quantity)
+  }
 
   const [selectedOption, setSelectedOption] = useState("description");
 
@@ -88,13 +94,13 @@ const ProductDetails = () => {
           borderBottom={selectedOption === "review" && "2px solid"}
           borderColor="primary.main"
         >
-          Review (3)
+          Review {reviewsQuantity}
         </H5>
       </FlexBox>
 
       <Box mb="50px">
-        {selectedOption === "description" && <ProductDescription fullDes={fullDes}/>}
-        {selectedOption === "review" && <ProductReview />}
+        {selectedOption === "description" && <ProductDescription fullDes={fullDes} />}
+        {selectedOption === "review" && <ProductReview productId={id} setReviews={setNumOfReviews} />}
       </Box>
 
       <FrequentlyBought />

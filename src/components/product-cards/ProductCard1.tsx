@@ -2,13 +2,16 @@ import LazyImage from "@component/LazyImage";
 import { useAppContext } from "@context/app/AppContext";
 import {
   BASE_URL,
-  Customer_Order_Pending_Details,
-  loadingImg,
-  notFoundImg,
+  Customer_decrease_Quantity,
+  Customer_Increase_Quantity,
+  Customer_Order_Create,
+  Customer_Order_Item_By_Product_Id, Customer_Order_Remove_Item, loadingImg,
+  notFoundImg
 } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
-import React, { Fragment, useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import React, { Fragment, useCallback, useLayoutEffect, useState } from "react";
 import { CSSProperties } from "styled-components";
 import Box from "../Box";
 import Button from "../buttons/Button";
@@ -57,33 +60,114 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 }) => {
   const [open, setOpen] = useState(false);
 
+  const router = useRouter();
+
   const { dispatch } = useAppContext();
-  const [cartProductLists, setCartProductLists] = useState([]);
-  const cartProductList = cartProductLists.find((item) => item.id === id);
+
+  const [cartQuantity, setCartQuantity] = useState(0);
+  const [itemId, setItemId] = useState(0);
+  const [getItemId, setGetItemId] = useState(0);
 
   const toggleDialog = useCallback(() => {
     setOpen((open) => !open);
   }, []);
 
-  const handleCartAmountChange = useCallback(
-    () => () => {
-      dispatch({
-        type: "CHANGE_CART_QUANTITY",
-        payload: Math.random(),
-      });
-    },
-    []
-  );
+  const handleCartAmountChange = (amount, action) => {
+    var UserId: any = localStorage.getItem("UserId");
 
-  useEffect(() => {
+    const dateObj: any = new Date();
+    const currentDate =
+      dateObj.getFullYear() +
+      "-" +
+      (dateObj.getMonth() + 1).toString().padStart(2, 0) +
+      "-" +
+      dateObj.getDate().toString().padStart(2, 0);
+
+    const orderData = {
+      product_id: id,
+      quantity: 1,
+      price: price,
+      order_date: currentDate,
+      branch_id: 1,
+      user_id: UserId,
+    };
+
     const order_Id = localStorage.getItem("OrderId");
 
-    axios.get(`${Customer_Order_Pending_Details}${order_Id}`).then((res) => {
-      setCartProductLists(res.data.order?.order_items);
-    });
-  }, []);
+    //add to cart
+    if ((action == "increase") && (amount == 1)) {
+      if (UserId) {
+        console.log("orderData", orderData);
+        axios.post(`${Customer_Order_Create}`, orderData).then((res) => {
+          console.log("orderRes", res);
 
-  // const notFoundImg = "/assets/images/products/notFoundImg.png";
+          localStorage.setItem("OrderId", res.data.order_details.id);
+          setGetItemId(Math.random());
+          dispatch({
+            type: "CHANGE_CART_QUANTITY",
+            payload: Math.random(),
+          });
+        });
+      } else {
+        localStorage.setItem("backAfterLogin", `product/${id}`);
+        router.push({
+          pathname: "/login",
+        });
+      }
+    }
+
+    //increase
+    else if (action == "increase") {
+      axios
+        .put(`${Customer_Increase_Quantity}${order_Id}/${itemId}`, orderData)
+        .then((res) => {
+          console.log("increaseRes", res);
+          // setGetItemId(Math.random());
+        });
+    }
+
+    //romove
+    else if (amount == 0 && action == "decrease") {
+      axios
+        .delete(`${Customer_Order_Remove_Item}${order_Id}/${itemId}`)
+        .then((res) => {
+          console.log("removeRes", res);
+          setCartQuantity(0);
+          dispatch({
+            type: "CHANGE_CART_QUANTITY",
+            payload: Math.random(),
+          });
+        });
+    }
+
+    //decrease
+    else if (action == "decrease") {
+      axios
+        .put(`${Customer_decrease_Quantity}${order_Id}/${itemId}`, orderData)
+        .then((res) => {
+          console.log("decreaseRes", res);
+          // setGetItemId(Math.random());
+        });
+    }
+  };
+
+
+  useLayoutEffect(() => {
+    const order_Id = localStorage.getItem("OrderId");
+
+    if (id) {
+      axios
+        .get(`${Customer_Order_Item_By_Product_Id}${order_Id}/${id}`)
+        .then((item) => {
+          console.log("item", item?.data?.order_item);
+          setItemId(item?.data?.order_item?.id);
+          setCartQuantity(item?.data?.order_item?.quantity);
+        })
+        .catch(() => setCartQuantity(0));
+    }
+  }, [getItemId, id]);
+
+  console.log("produtId", id)
 
   return (
     <StyledProductCard1 {...props}>
@@ -173,7 +257,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
             flexDirection="column-reverse"
             alignItems="center"
             justifyContent={
-              !!cartProductList?.quantity ? "space-between" : "flex-start"
+              !!cartQuantity ? "space-between" : "flex-start"
             }
             width="30px"
           >
@@ -184,15 +268,15 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
               padding="3px"
               size="none"
               borderColor="primary.light"
-              onClick={handleCartAmountChange()}
+              onClick={() => handleCartAmountChange(cartQuantity + 1, "increase")}
             >
               <Icon variant="small">plus</Icon>
             </Button>
 
-            {!!cartProductList?.quantity && (
+            {cartQuantity ? (
               <Fragment>
                 <SemiSpan color="text.primary" fontWeight="600">
-                  {cartProductList?.quantity}
+                  {cartQuantity}
                 </SemiSpan>
                 <Button
                   variant="outlined"
@@ -200,12 +284,12 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
                   padding="3px"
                   size="none"
                   borderColor="primary.light"
-                  onClick={handleCartAmountChange()}
+                  onClick={() => handleCartAmountChange(cartQuantity - 1, "decrease")}
                 >
                   <Icon variant="small">minus</Icon>
                 </Button>
               </Fragment>
-            )}
+            ) : ""}
           </FlexBox>
         </FlexBox>
       </div>

@@ -1,4 +1,5 @@
-import React from "react";
+import { BASE_URL, User_By_Id } from "@data/constants";
+import React, { useEffect, useState } from "react";
 import { getDateDifference } from "../../utils/utils";
 import Avatar from "../avatar/Avatar";
 import Box from "../Box";
@@ -10,27 +11,39 @@ export interface ProductCommentProps {
   name;
   imgUrl: string;
   rating: number;
-  date: string;
+  created_at: string;
   comment: string;
+  user: number | string;
 }
 
 const ProductComment: React.FC<ProductCommentProps> = ({
-  name,
-  imgUrl,
+
   rating,
-  date,
+  created_at,
   comment,
+  user,
 }) => {
+  const [userName, setUserName] = useState("")
+  const [userImg, setUserImg] = useState("")
+
+  useEffect(() => {
+    fetch(`${User_By_Id}${user}`).then(res => res.json()).then(userEes => {
+      console.log("userRes", userEes)
+      const { first_name, last_name, image } = userEes
+      setUserName(`${first_name} ${last_name}`)
+      setUserImg(image)
+    })
+  }, [])
   return (
     <Box mb="32px" maxWidth="600px">
       <FlexBox alignItems="center" mb="1rem">
-        <Avatar src={imgUrl} />
+        <Avatar src={`${BASE_URL}${userImg}`} />
         <Box ml="1rem">
-          <H5 mb="4px">{name}</H5>
+          <H5 mb="4px">{userName}</H5>
           <FlexBox alignItems="center">
             <Rating value={rating} color="warn" readonly />
             <H6 mx="10px">{rating}</H6>
-            <SemiSpan>{getDateDifference(date)}</SemiSpan>
+            <SemiSpan>{getDateDifference(created_at)}</SemiSpan>
           </FlexBox>
         </Box>
       </FlexBox>

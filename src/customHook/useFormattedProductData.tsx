@@ -9,6 +9,7 @@ function useFormattedProductData(productData) {
             category: data?.category,
             id: data?.id,
             brand: data?.brand,
+            rating: data?.rating,
         }
     }
     )

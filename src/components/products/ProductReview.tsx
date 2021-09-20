@@ -1,4 +1,8 @@
-import React from "react";
+import { Review_Bt_Product_Id, Review_Create } from "@data/constants";
+import axios from "axios";
+import { useFormik } from "formik";
+import React, { useEffect, useState } from "react";
+import * as yup from "yup";
 import Box from "../Box";
 import Button from "../buttons/Button";
 import FlexBox from "../FlexBox";
@@ -6,16 +10,48 @@ import Rating from "../rating/Rating";
 import TextArea from "../textarea/TextArea";
 import { H2, H5 } from "../Typography";
 import ProductComment from "./ProductComment";
-import { useFormik } from "formik";
-import * as yup from "yup";
 
-export interface ProductReviewProps {}
+export interface ProductReviewProps {
+  productId: string | number;
+  setReviews: any;
+}
 
-const ProductReview: React.FC<ProductReviewProps> = () => {
+const ProductReview: React.FC<ProductReviewProps> = ({ productId, setReviews }) => {
+
+  const [commentList, setCommentList] = useState([])
+  const [reloadreviews, setReloadreviews] = useState(0)
+
   const handleFormSubmit = async (values, { resetForm }) => {
     console.log(values);
-    resetForm();
+
+    const user_id = localStorage.getItem("UserId")
+    var authTOKEN = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: localStorage.getItem("jwt_access_token"),
+      },
+    };
+
+    const reviewData = {
+      ...values,
+      user_id,
+      product_id: productId,
+    }
+    console.log("reviewData", reviewData)
+    axios.post(`${Review_Create}`, reviewData, authTOKEN).then(res => {
+      console.log("reviewCreateRe", res)
+      resetForm();
+      setReloadreviews(Math.random())
+    })
   };
+
+  useEffect(() => {
+    axios.get(`${Review_Bt_Product_Id}${productId}`).then(res => {
+      console.log("ReviewAllRes", res)
+      setCommentList(res?.data)
+      setReviews(res?.data?.length)
+    })
+  }, [reloadreviews])
 
   const {
     values,
@@ -96,32 +132,32 @@ const ProductReview: React.FC<ProductReviewProps> = () => {
   );
 };
 
-const commentList = [
-  {
-    name: "Jannie Schumm",
-    imgUrl: "/assets/images/faces/7.png",
-    rating: 4.7,
-    date: "2021-02-14",
-    comment:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius massa id ut mattis. Facilisis vitae gravida egestas ac account.",
-  },
-  {
-    name: "Joe Kenan",
-    imgUrl: "/assets/images/faces/6.png",
-    rating: 4.7,
-    date: "2019-08-10",
-    comment:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius massa id ut mattis. Facilisis vitae gravida egestas ac account.",
-  },
-  {
-    name: "Jenifer Tulio",
-    imgUrl: "/assets/images/faces/8.png",
-    rating: 4.7,
-    date: "2021-02-05",
-    comment:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius massa id ut mattis. Facilisis vitae gravida egestas ac account.",
-  },
-];
+// const commentList = [
+//   {
+//     name: "Jannie Schumm",
+//     imgUrl: "/assets/images/faces/7.png",
+//     rating: 4.7,
+//     date: "2021-02-14",
+//     comment:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius massa id ut mattis. Facilisis vitae gravida egestas ac account.",
+//   },
+//   {
+//     name: "Joe Kenan",
+//     imgUrl: "/assets/images/faces/6.png",
+//     rating: 4.7,
+//     date: "2019-08-10",
+//     comment:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius massa id ut mattis. Facilisis vitae gravida egestas ac account.",
+//   },
+//   {
+//     name: "Jenifer Tulio",
+//     imgUrl: "/assets/images/faces/8.png",
+//     rating: 4.7,
+//     date: "2021-02-05",
+//     comment:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius massa id ut mattis. Facilisis vitae gravida egestas ac account.",
+//   },
+// ];
 
 const initialValues = {
   rating: "",

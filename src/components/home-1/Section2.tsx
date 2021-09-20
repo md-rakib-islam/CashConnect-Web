@@ -1,4 +1,7 @@
 import Box from "@component/Box";
+import useFormattedProductData from "@customHook/useFormattedProductData";
+import { Product_Flash_Deals } from "@data/constants";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import useWindowSize from "../../hooks/useWindowSize";
 import Carousel from "../carousel/Carousel";
@@ -8,6 +11,22 @@ import ProductCard1 from "../product-cards/ProductCard1";
 const Section2: React.FC = () => {
   const [visibleSlides, setVisibleSlides] = useState(4);
   const width = useWindowSize();
+
+  const [productList, setProductList] = useState([])
+  const [productData, setProductData] = useState([{}]);
+  const [formattedProductData] =
+    productData != [] ? useFormattedProductData(productData) : [];
+
+  useEffect(() => {
+    setProductData(productList);
+  }, [productList]);
+
+  useEffect(() => {
+    axios.get(`${Product_Flash_Deals}`).then(res => {
+      console.log("Product_Flash_DealsRes", res.data.top_selling_products)
+      setProductData(res.data.top_selling_products)
+    })
+  }, [])
 
   useEffect(() => {
     if (width < 500) setVisibleSlides(1);
@@ -24,16 +43,16 @@ const Section2: React.FC = () => {
     >
       <Box mt="-0.25rem" mb="-0.25rem">
         <Carousel totalSlides={10} visibleSlides={visibleSlides}>
-          {productList.map((item, ind) => (
-            <Box py="0.25rem" key={ind}>
+          {formattedProductData.map((item) => (
+            <Box py="0.25rem" key={item.id}>
               <ProductCard1
-                id={ind}
+                id={item.id}
                 imgUrl={item.imgUrl}
-                title="Smart watch black"
-                rating={4}
-                price={250}
-                off={56}
-                key={ind}
+                title={item.title}
+                rating={item.rating}
+                price={item.price}
+                off={0}
+                key={item.id}
               />
             </Box>
           ))}

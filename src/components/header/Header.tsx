@@ -1,7 +1,9 @@
 import IconButton from "@component/buttons/IconButton";
 import Image from "@component/Image";
+import Signup from "@component/sessions/Signup";
+import { BASE_URL, Site_Setting_All } from "@data/constants";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "../Box";
 import Categories from "../categories/Categories";
 import Container from "../Container";
@@ -14,6 +16,7 @@ import Sidenav from "../sidenav/Sidenav";
 import { Tiny2 } from "../Typography";
 import StyledHeader from "./HeaderStyle";
 import UserLoginDialog from "./UserLoginDialog";
+import UserRegisterDialog from "./UserRegisterDialog";
 
 type HeaderProps = {
   isFixed?: boolean;
@@ -23,6 +26,14 @@ type HeaderProps = {
 const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
   const [open, setOpen] = useState(false);
   const toggleSidenav = () => setOpen(!open);
+  const [logo, setLogo] = useState("")
+
+  useEffect(() => {
+    fetch(`${Site_Setting_All}`).then(res => res.json()).then(res => {
+      console.log("SiteSettingRes", res.general_settings[0])
+      setLogo(res.general_settings[0].logo)
+    })
+  }, [])
 
   const cartHandle = (
     <FlexBox ml="20px" alignItems="flex-start">
@@ -59,7 +70,7 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
         <FlexBox className="logo" alignItems="center" mr="1rem">
           <Link href="/">
             <a>
-              <Image src="/assets/images/logo.svg" alt="logo" />
+              <Image src={`${BASE_URL}${logo}`} alt="logo" height="45" width="100" />
             </a>
           </Link>
 
@@ -91,6 +102,18 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
               <Login />
             </Box>
           </UserLoginDialog>
+
+          <UserRegisterDialog
+            handle={
+              <IconButton ml="1rem" bg="gray.200" p="13px">
+                <Icon size="18px">register</Icon>
+              </IconButton>
+            }
+          >
+            <Box>
+              <Signup />
+            </Box>
+          </UserRegisterDialog>
 
           <Sidenav
             handle={cartHandle}

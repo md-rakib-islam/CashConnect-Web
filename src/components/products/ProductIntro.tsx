@@ -9,7 +9,7 @@ import {
   Customer_Order_Item_By_Product_Id,
   Customer_Order_Remove_Item,
   loadingImg,
-  notFoundImg,
+  notFoundImg
 } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
@@ -84,7 +84,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   };
 
   const handleCartAmountChange = (amount, action) => {
-    var UserId: any = localStorage?.getItem("UserId");
+    var UserId: any = localStorage.getItem("UserId");
 
     const dateObj: any = new Date();
     const currentDate =
@@ -99,13 +99,14 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       quantity: 1,
       price: price,
       order_date: currentDate,
-      branch_id: 2,
+      branch_id: 1,
       user_id: UserId,
     };
 
     const order_Id = localStorage.getItem("OrderId");
 
-    if (action == "order") {
+    //addToCart
+    if (action == "addToCart") {
       if (UserId) {
         console.log("orderData", orderData);
         axios.post(`${Customer_Order_Create}`, orderData).then((res) => {
@@ -124,14 +125,20 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
           pathname: "/login",
         });
       }
-    } else if (action == "increase") {
+    }
+
+    //increase quantity
+    else if (action == "increase") {
       axios
         .put(`${Customer_Increase_Quantity}${order_Id}/${itemId}`, orderData)
         .then((res) => {
           console.log("increaseRes", res);
-          setGetItemId(Math.random());
+          // setGetItemId(Math.random());
         });
-    } else if (amount == 0 && action == "decrease") {
+    }
+
+    //remove
+    else if (amount == 0 && action == "decrease") {
       axios
         .delete(`${Customer_Order_Remove_Item}${order_Id}/${itemId}`)
         .then((res) => {
@@ -142,17 +149,20 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
             payload: Math.random(),
           });
         });
-    } else if (action == "decrease") {
+    }
+
+    //decrease quantity
+    else if (action == "decrease") {
       axios
         .put(`${Customer_decrease_Quantity}${order_Id}/${itemId}`, orderData)
         .then((res) => {
           console.log("decreaseRes", res);
-          setGetItemId(Math.random());
+          // setGetItemId(Math.random());
         });
     }
   };
 
-  console.log("productId", id);
+  // console.log("productId", id);
 
   return (
     <Box overflow="hidden">
@@ -234,7 +244,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               size="small"
               color="primary"
               mb="36px"
-              onClick={() => handleCartAmountChange(1, "order")}
+              onClick={() => handleCartAmountChange(1, "addToCart")}
             >
               Add to Cart
             </Button>

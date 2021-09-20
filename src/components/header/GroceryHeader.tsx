@@ -1,8 +1,9 @@
 import IconButton from "@component/buttons/IconButton";
 import GrocerySearchBox from "@component/search-box/GrocerySearchBox";
 import { Tiny2 } from "@component/Typography";
+import { BASE_URL, Site_Setting_All } from "@data/constants";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "../Box";
 import Container from "../Container";
 import FlexBox from "../FlexBox";
@@ -21,6 +22,14 @@ type HeaderProps = {
 const GroceryHeader: React.FC<HeaderProps> = ({ className }) => {
   const [open, setOpen] = useState(false);
   const toggleSidenav = () => setOpen(!open);
+  const [logo, setLogo] = useState("")
+
+  useEffect(() => {
+    fetch(`${Site_Setting_All}`).then(res => res.json()).then(res => {
+      console.log("SiteSettingRes", res.general_settings[0])
+      setLogo(res.general_settings[0].logo)
+    })
+  }, [])
 
   const cartHandle = (
     <FlexBox ml="20px" alignItems="flex-start">
@@ -57,7 +66,7 @@ const GroceryHeader: React.FC<HeaderProps> = ({ className }) => {
         <FlexBox className="logo" alignItems="center" mr="1rem">
           <Link href="/">
             <a>
-              <img src="/assets/images/logo.svg" alt="logo" />
+              <img src={`${BASE_URL}${logo}`} alt="logo" height="40" width="100" />
             </a>
           </Link>
         </FlexBox>

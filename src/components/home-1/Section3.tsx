@@ -1,5 +1,6 @@
 import Card from "@component/Card";
 import Carousel from "@component/carousel/Carousel";
+import { Category_Top_All } from "@data/constants";
 import useWindowSize from "@hook/useWindowSize";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -10,6 +11,11 @@ const Section3: React.FC = () => {
   const [visibleSlides, setVisibleSlides] = useState(3);
   const width = useWindowSize();
 
+  useEffect(() => {
+    fetch(`${Category_Top_All}`).then(res => res.json()).then(res => {
+      console.log("Category_Top_AllRes", res)
+    })
+  }, [])
   useEffect(() => {
     if (width < 650) setVisibleSlides(1);
     else if (width < 950) setVisibleSlides(2);

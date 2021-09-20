@@ -1,7 +1,8 @@
 import AppStore from "@component/AppStore";
 import Image from "@component/Image";
+import { BASE_URL, Site_Setting_All } from "@data/constants";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { getTheme } from "../../utils/utils";
 import Box from "../Box";
@@ -23,7 +24,36 @@ const StyledLink = styled.a`
   }
 `;
 
+const initialIconLists = [
+  { iconName: "facebook", url: "https://facebook.com/bonik" },
+  { iconName: "twitter", url: "https://twitter.com/bonik" },
+  { iconName: "instagram", url: "https://www.instagram.com/bonik/" },
+];
+
 const Footer: React.FC = () => {
+  const [logo, setLogo] = useState("")
+  const [address, setAddress] = useState("")
+  const [phone, setPhone] = useState("")
+  const [email, setEmail] = useState("")
+
+  const [iconList, setIconList] = useState(initialIconLists)
+
+  useEffect(() => {
+    fetch(`${Site_Setting_All}`).then(res => res.json()).then(res => {
+      const data = res?.general_settings[0]
+      setLogo(data?.logo)
+      setAddress(data?.address)
+      setPhone(data?.phone)
+      setEmail(data?.email)
+
+      let newIconList = []
+      newIconList.push({ iconName: "facebook", url: data?.facebook_url })
+      newIconList.push({ iconName: "twitter", url: data?.twitter_url })
+      newIconList.push({ iconName: "instagram", url: data?.instagram_url })
+      setIconList(newIconList)
+    })
+  }, [])
+
   return (
     <footer>
       <Box bg="#0F3460">
@@ -35,8 +65,7 @@ const Footer: React.FC = () => {
                   <a>
                     <Image
                       mb="1.25rem"
-                      src="/assets/images/logo.svg"
-                      alt="logo"
+                      src={`${BASE_URL}${logo}`} alt="logo" height="40" width="100"
                     />
                   </a>
                 </Link>
@@ -98,13 +127,13 @@ const Footer: React.FC = () => {
                   Contact Us
                 </Typography>
                 <Typography py="0.3rem" color="gray.500">
-                  70 Washington Square South, New York, NY 10012, United States
+                  {address}
                 </Typography>
                 <Typography py="0.3rem" color="gray.500">
-                  Email: uilib.help@gmail.com
+                  {email}
                 </Typography>
                 <Typography py="0.3rem" mb="1rem" color="gray.500">
-                  Phone: +1 1123 456 780
+                  {phone}
                 </Typography>
 
                 <FlexBox className="flex" mx="-5px">
@@ -152,17 +181,6 @@ const customerCareLinks = [
   "Track Your Order",
   "Corporate & Bulk Purchasing",
   "Returns & Refunds",
-];
-
-const iconList = [
-  { iconName: "facebook", url: "https://www.facebook.com/UILibOfficial" },
-  { iconName: "twitter", url: "/" },
-  {
-    iconName: "youtube",
-    url: "https://www.youtube.com/channel/UCsIyD-TSO1wQFz-n2Y4i3Rg",
-  },
-  { iconName: "google", url: "/" },
-  { iconName: "instagram", url: "/" },
 ];
 
 export default Footer;
