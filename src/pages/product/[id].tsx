@@ -25,6 +25,7 @@ const ProductDetails = () => {
   );
   const [reviewsQuantity, setreviewsQuantity] = useState(0)
   const [brand, setbrand] = useState(0);
+  const [rating, setRating] = useState(0)
 
   useEffect(() => {
     if (id) {
@@ -38,11 +39,7 @@ const ProductDetails = () => {
           setbrand(data?.brand);
           setfullDes(data?.full_desc)
           setreviewsQuantity(data?.numReviews)
-
-          // dispatch({
-          //   type: "CHANGE_PRODUCT_DETAILS",
-          //   payload: data,
-          // });
+          setRating(data?.rating)
         });
     }
   }, [id]);
@@ -57,6 +54,7 @@ const ProductDetails = () => {
     setSelectedOption(opt);
   };
 
+
   return (
     <div>
       <ProductIntro
@@ -65,6 +63,8 @@ const ProductDetails = () => {
         imgUrl={[imgUrl]}
         id={id}
         brand={brand}
+        rating={rating}
+        reviewCount={reviewsQuantity}
       />
 
       <FlexBox

@@ -2,13 +2,14 @@ import Avatar from "@component/avatar/Avatar";
 import FlexBox from "@component/FlexBox";
 import LazyImage from "@component/LazyImage";
 import { useAppContext } from "@context/app/AppContext";
+import useUserInf from "@customHook/useUserInf";
 import {
   BASE_URL,
   Customer_decrease_Quantity,
   Customer_Increase_Quantity,
   Customer_Order_Pending_Details,
   Customer_Order_Remove_Item,
-  notFoundImg,
+  notFoundImg
 } from "@data/constants";
 // import { CartItem } from "@reducer/cartReducer";
 import axios from "axios";
@@ -38,8 +39,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
 
   const handleCartAmountChange = useCallback(
     (product, action) => () => {
-      var UserId: any = localStorage?.getItem("UserId");
-      const order_Id = localStorage.getItem("OrderId");
+      const { user_id, order_Id } = useUserInf()
 
       const item_id = product?.id;
       const orderData = {
@@ -47,7 +47,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
         quantity: 1,
         price: product?.price,
         branch_id: 1,
-        user_id: UserId,
+        user_id: user_id,
       };
 
       if (action == "remove") {
@@ -88,7 +88,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
   };
 
   useEffect(() => {
-    const order_Id = localStorage.getItem("OrderId");
+    const { order_Id } = useUserInf()
 
     axios.get(`${Customer_Order_Pending_Details}${order_Id}`).then((res) => {
       setCartProductList(res.data.order.order_items);
@@ -162,7 +162,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                 </Button>
               </FlexBox>
 
-              <Link href={`/product/${item.id}`}>
+              <Link href={`/product/${item?.product?.id}`}>
                 <a>
                   <Avatar
                     src={
@@ -244,7 +244,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
 };
 
 MiniCart.defaultProps = {
-  toggleSidenav: () => {},
+  toggleSidenav: () => { },
 };
 
 export default MiniCart;

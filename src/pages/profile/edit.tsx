@@ -11,6 +11,7 @@ import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import Select from "@component/Select";
 import TextField from "@component/text-field/TextField";
 import useJsonToFormData from "@customHook/useJsonToFormData";
+import useUserInf from "@customHook/useUserInf";
 import {
   BASE_URL,
   Branch_All,
@@ -21,7 +22,7 @@ import {
   Customer_Update,
   loadingImg,
   Role_All,
-  Thana_All,
+  Thana_All
 } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
@@ -50,22 +51,7 @@ const ProfileEditor = ({
     { label: "Others", value: "others" },
   ];
 
-  try {
-    var UserId: any = localStorage?.getItem("UserId");
-  } catch (err) {
-    UserId = 0;
-  }
-
-  try {
-    var authTOKEN = {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: localStorage.getItem("jwt_access_token"),
-      },
-    };
-  } catch (err) {
-    authTOKEN = null;
-  }
+  const { user_id, authTOKEN } = useUserInf()
 
   const handleFormSubmit = (values) => {
     const data = {
@@ -94,14 +80,14 @@ const ProfileEditor = ({
     const [customerEditData] = useJsonToFormData(data);
 
     axios
-      .put(`${Customer_Update}${UserId}`, customerEditData, authTOKEN)
+      .put(`${Customer_Update}${user_id}`, customerEditData, authTOKEN)
       .then((data) => {
         console.log("updatedRes", data);
       });
   };
 
   useEffect(() => {
-    axios.get(`${Customer_By_Id}${UserId}`, authTOKEN).then((datas) => {
+    axios.get(`${Customer_By_Id}${user_id}`, authTOKEN).then((datas) => {
       console.log("EditDetails", datas.data);
       const { data } = datas;
 
@@ -116,7 +102,7 @@ const ProfileEditor = ({
           ?.label,
       });
     });
-  }, [UserId]);
+  }, [user_id]);
 
   const {
     values,
@@ -153,7 +139,7 @@ const ProfileEditor = ({
           <Avatar
             src={previewImage || loadingImg}
             size={64}
-            // loader={() => previewImage}
+          // loader={() => previewImage}
           />
 
           <Box ml="-20px" zIndex={1}>

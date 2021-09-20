@@ -1,5 +1,6 @@
 import LazyImage from "@component/LazyImage";
 import { useAppContext } from "@context/app/AppContext";
+import useUserInf from "@customHook/useUserInf";
 import {
   BASE_URL,
   Brand_By_Id,
@@ -30,6 +31,8 @@ export interface ProductIntroProps {
   price: number;
   id?: string | number;
   brand?: string | number;
+  reviewCount?: string | number;
+  rating?: number;
 }
 
 const ProductIntro: React.FC<ProductIntroProps> = ({
@@ -38,6 +41,8 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   price,
   id,
   brand,
+  reviewCount,
+  rating,
 }) => {
   const [brandName, setbrandName] = useState(brand);
   const [selectedImage, setSelectedImage] = useState(0);
@@ -63,7 +68,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   }, [brand]);
 
   useEffect(() => {
-    const order_Id = localStorage.getItem("OrderId");
+    const { order_Id } = useUserInf()
 
     if (id) {
       axios
@@ -84,7 +89,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   };
 
   const handleCartAmountChange = (amount, action) => {
-    var UserId: any = localStorage.getItem("UserId");
+    const { user_id } = useUserInf()
 
     const dateObj: any = new Date();
     const currentDate =
@@ -100,14 +105,14 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       price: price,
       order_date: currentDate,
       branch_id: 1,
-      user_id: UserId,
+      user_id: user_id,
     };
 
-    const order_Id = localStorage.getItem("OrderId");
+    const { order_Id } = useUserInf()
 
     //addToCart
     if (action == "addToCart") {
-      if (UserId) {
+      if (user_id) {
         console.log("orderData", orderData);
         axios.post(`${Customer_Order_Create}`, orderData).then((res) => {
           console.log("orderRes", res);
@@ -226,9 +231,9 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
           <FlexBox alignItems="center" mb="1rem">
             <SemiSpan>Rated:</SemiSpan>
             <Box ml="8px" mr="8px">
-              <Rating color="warn" value={4} outof={5} />
+              <Rating color="warn" value={rating} outof={5} />
             </Box>
-            <H6>(50)</H6>
+            <H6>({reviewCount})</H6>
           </FlexBox>
 
           <Box mb="24px">

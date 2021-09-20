@@ -11,20 +11,20 @@ export interface ProductCard1ListProps {
 }
 
 const ProductCard1List: React.FC<ProductCard1ListProps> = ({ productList }) => {
-  const [productData, setProductData] = useState([{}]);
-  const [formattedProductData] =
-    productData != [] ? useFormattedProductData(productData) : [];
+  const [productData, setProductData] = useState([]);
+  const [formattedProductData] = useFormattedProductData(productData);
 
   useEffect(() => {
     setProductData(productList);
   }, [productList]);
 
+  console.log("productCard",)
   return (
     <div>
       <Grid container spacing={6}>
         {formattedProductData.map((item, ind) => (
           <Grid item lg={4} sm={6} xs={12} key={ind}>
-            <ProductCard1 {...item} />
+            <ProductCard1 {...item} reviewCount={item.numReview} />
           </Grid>
         ))}
       </Grid>

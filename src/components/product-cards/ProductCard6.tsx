@@ -31,7 +31,7 @@ const ProductCard6: React.FC<ProductCard6Props> = ({
         {title}
       </Chip>
 
-      <Chip
+      {/* <Chip
         bg="gray.300"
         position="absolute"
         color="gray.800"
@@ -43,10 +43,10 @@ const ProductCard6: React.FC<ProductCard6Props> = ({
         zIndex={2}
       >
         {subtitle}
-      </Chip>
+      </Chip> */}
 
-      <HoverBox position="relative" height="120px" borderRadius={8}>
-        <LazyImage src={imgUrl} layout="fill" objectFit="cover" />
+      <HoverBox height="120px" borderRadius={8}>
+        <LazyImage src={imgUrl} layout="fill" objectFit="cover" loader={() => imgUrl} />
       </HoverBox>
     </Card>
   );

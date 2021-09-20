@@ -1,7 +1,8 @@
 import TextArea from "@component/textarea/TextArea";
+import useUserInf from "@customHook/useUserInf";
 import {
   Customer_Order_Comment,
-  Customer_Order_Pending_Details,
+  Customer_Order_Pending_Details
 } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
@@ -28,23 +29,7 @@ const Cart = () => {
   const [cartProductList, setCartProductList] = useState<CartItem[]>([]);
   const [reloadCart, setReloadCart] = useState(0);
 
-  try {
-    var order_Id: any = localStorage.getItem("OrderId");
-    var authTOKEN: any = {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: localStorage.getItem("jwt_access_token"),
-      },
-    };
-  } catch (err) {
-    var order_Id = null;
-    var authTOKEN: any = {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: null,
-      },
-    };
-  }
+  const { order_Id, authTOKEN } = useUserInf()
 
   const getTotalPrice = () => {
     return (
@@ -86,7 +71,7 @@ const Cart = () => {
     comment: "",
   };
   const checkoutSchema = null;
-  const handleFormSubmit = () => {};
+  const handleFormSubmit = () => { };
 
   const {
     values,

@@ -1,5 +1,6 @@
 import LazyImage from "@component/LazyImage";
 import { useAppContext } from "@context/app/AppContext";
+import useUserInf from "@customHook/useUserInf";
 import {
   BASE_URL,
   Customer_decrease_Quantity,
@@ -35,6 +36,7 @@ export interface ProductCard1Props extends CardProps {
   rating?: number;
   id?: string | number;
   brand?: string | number;
+  reviewCount?: string | number;
   // className?: string;
   // style?: CSSProperties;
   // imgUrl: string;
@@ -56,6 +58,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
   brand,
   off,
   rating,
+  reviewCount,
   ...props
 }) => {
   const [open, setOpen] = useState(false);
@@ -73,7 +76,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
   }, []);
 
   const handleCartAmountChange = (amount, action) => {
-    var UserId: any = localStorage.getItem("UserId");
+    const { user_id, order_Id } = useUserInf()
 
     const dateObj: any = new Date();
     const currentDate =
@@ -89,14 +92,12 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
       price: price,
       order_date: currentDate,
       branch_id: 1,
-      user_id: UserId,
+      user_id: user_id,
     };
-
-    const order_Id = localStorage.getItem("OrderId");
 
     //add to cart
     if ((action == "increase") && (amount == 1)) {
-      if (UserId) {
+      if (user_id) {
         console.log("orderData", orderData);
         axios.post(`${Customer_Order_Create}`, orderData).then((res) => {
           console.log("orderRes", res);
@@ -153,7 +154,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 
 
   useLayoutEffect(() => {
-    const order_Id = localStorage.getItem("OrderId");
+    const { order_Id } = useUserInf()
 
     if (id) {
       axios
@@ -167,7 +168,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
     }
   }, [getItemId, id]);
 
-  console.log("produtId", id)
+  // console.log("produtId", id)
 
   return (
     <StyledProductCard1 {...props}>
@@ -302,6 +303,8 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
             price={price}
             id={id}
             brand={brand}
+            rating={rating}
+            reviewCount={reviewCount}
           />
           <Box
             position="absolute"

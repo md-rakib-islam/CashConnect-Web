@@ -25,7 +25,7 @@ const Rating: React.FC<RatingProps> = ({
 }) => {
   const [state, setState] = useState(value);
 
-  let fullStar = parseInt(state.toString());
+  let fullStar = parseInt(state?.toString());
   let halfStar = Math.ceil(state - fullStar);
   let emptyStar = outof - Math.ceil(state);
   let starList = [];

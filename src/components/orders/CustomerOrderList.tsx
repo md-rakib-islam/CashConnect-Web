@@ -1,3 +1,4 @@
+import useUserInf from "@customHook/useUserInf";
 import { orders_By_Customer_Id } from "@data/constants";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -9,31 +10,16 @@ import TableRow from "../TableRow";
 import { H5 } from "../Typography";
 import OrderRow from "./OrderRow";
 
-export interface CustomerOrderListProps {}
+export interface CustomerOrderListProps { }
 
 const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
   const [ordersList, setorderList] = useState([]);
 
-  // try {
-  var UserId: any = localStorage?.getItem("UserId");
-  // } catch (err) {
-  //   UserId = 0;
-  // }
-
-  // try {
-  var authTOKEN = {
-    headers: {
-      "Content-type": "application/json",
-      Authorization: localStorage.getItem("jwt_access_token"),
-    },
-  };
-  // } catch (err) {
-  //   authTOKEN = null;
-  // }
+  const { user_id, authTOKEN } = useUserInf()
 
   useEffect(() => {
     axios
-      .get(`${orders_By_Customer_Id}${UserId}`, authTOKEN)
+      .get(`${orders_By_Customer_Id}${user_id}`, authTOKEN)
       .then((orders: any) => {
         console.log("orderRes", orders);
         let Orders = [];
@@ -50,7 +36,7 @@ const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
         setorderList(Orders);
         console.log("Orders", Orders);
       });
-  }, [UserId]);
+  }, [user_id]);
 
   console.log("ordersList", ordersList);
   return (

@@ -1,4 +1,5 @@
 import { useAppContext } from "@context/app/AppContext";
+import useUserInf from "@customHook/useUserInf";
 import { Customer_Order_Confirm } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
@@ -8,7 +9,7 @@ import React, {
   useEffect,
   useLayoutEffect,
   useRef,
-  useState,
+  useState
 } from "react";
 import * as yup from "yup";
 import useWindowSize from "../../hooks/useWindowSize";
@@ -112,16 +113,8 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
   const handleFormSubmit = async (values) => {
     console.log(values);
 
-    console.log("paymentMathod", paymentMethod);
-    // const user_id = localStorage.getItem("UserId");
-    const order_Id = localStorage.getItem("OrderId");
-    const user_id = localStorage?.getItem("UserId");
-    const authTOKEN = {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: localStorage.getItem("jwt_access_token"),
-      },
-    };
+    const { user_id, authTOKEN, order_Id } = useUserInf()
+
     const pay_amount = Subtotal;
 
     if (paymentMethod === "card") {

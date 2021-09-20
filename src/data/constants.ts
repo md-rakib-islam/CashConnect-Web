@@ -9,7 +9,7 @@ export const notFoundImg = "/assets/images/products/notFoundImg.png";
 export const loadingImg = "/assets/images/products/loadingProduct.png";
 
 try {
-  var jwtToken = {
+  var jwtToken: any = {
     headers: {
       "Content-type": "application/json",
       Authorization: localStorage.getItem("jwt_access_token"),
@@ -26,7 +26,7 @@ try {
 export const authTOKEN = jwtToken;
 
 try {
-  var user_id = localStorage?.getItem("UserId");
+  var user_id: any = localStorage?.getItem("UserId");
 } catch (err) {
   user_id = 0;
 }
@@ -36,9 +36,6 @@ export var UserId = user_id;
 
 //login
 export const LOGIN_URL = `${BASE_URL}/users/api/v1/users/login/`;
-
-//brand by id
-export const Brand_By_Id = "/brand/api/v1/brand/";
 
 //category by id
 export const Category_By_Id = "/category/api/v1/category/";
@@ -78,6 +75,11 @@ export const Vendor_By_Id = `${BASE_URL}/vendor/api/v1/vendor/`;
 export const order_Status_All = `${BASE_URL}/orderstatus/api/v1/orderstatus/all/`;
 
 export const Order_Details_By_Id = `${BASE_URL}/order/api/v1/order/`;
+
+//brand apis
+export const Brand_By_Id = "/brand/api/v1/brand/";
+
+export const Brand_Featured = `${BASE_URL}/brand/api/v1/featured_brand/all/`
 
 //customer order apis
 export const orders_By_Customer_Id = `${BASE_URL}/customerorder/api/v1/customerorder/get_all_orders_of_a_customer/`;
@@ -129,6 +131,12 @@ export const ProductByCategoryId = "/product/api/v1/product_using_category/";
 export const Product_by_id = "/product/api/v1/product/";
 
 export const Product_Flash_Deals = `${BASE_URL}/product/api/v1/product_with_top_selling/all/`
+
+export const Product_Arrival = `${BASE_URL}/product/api/v1/product_with_arrival_status_true/all/`
+
+export const Product_Discount = `${BASE_URL}/product/api/v1/product_with_discount_status_true/all/`
+
+export const Product_Top_Rated = `${BASE_URL}/product/api/v1/product_with_top_rating/all/`
 
 //catogory apis
 export const Category_All = "/category/api/v1/categories_tree/all/";

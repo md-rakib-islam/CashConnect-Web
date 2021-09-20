@@ -1,6 +1,9 @@
 import Card from "@component/Card";
+import useFormattedProductData from "@customHook/useFormattedProductData";
+import { Brand_Featured, Product_Top_Rated } from "@data/constants";
+import axios from "axios";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Box from "../Box";
 import CategorySectionHeader from "../CategorySectionHeader";
 import Container from "../Container";
@@ -9,6 +12,28 @@ import ProductCard4 from "../product-cards/ProductCard4";
 import ProductCard5 from "../product-cards/ProductCard5";
 
 const Section4: React.FC = () => {
+
+  const [productData, setProductData] = useState([]);
+  const [brandData, setBrandData] = useState([])
+
+  const [formattedProductData] = useFormattedProductData(productData, "TopRated")
+
+  const [formattedBrandData] = useFormattedProductData(brandData, "FeaturedBrands")
+
+  useEffect(() => {
+    axios.get(`${Product_Top_Rated}`).then(res => {
+      console.log("Product_Top_RatedRes", res.data?.top_rating_products)
+      setProductData(res.data?.top_rating_products)
+    })
+
+    axios.get(`${Brand_Featured}`).then(res => {
+      console.log("Brand_FeaturedRes", res.data)
+      setBrandData(res.data)
+    })
+  }, [])
+
+  console.log("formattedBrandData", formattedBrandData)
+
   return (
     <Box mb="3.75rem">
       <Container>
@@ -22,8 +47,8 @@ const Section4: React.FC = () => {
               />
               <Card p="1rem">
                 <Grid container spacing={4}>
-                  {topRatedList.map((item) => (
-                    <Grid item md={3} sm={6} xs={6} key={item.title}>
+                  {formattedProductData.slice(0, 4).map((item, key) => (
+                    <Grid item md={3} sm={6} xs={6} key={key}>
                       <Link href={item.productUrl}>
                         <a>
                           <ProductCard4 {...item} />
@@ -42,8 +67,8 @@ const Section4: React.FC = () => {
               />
               <Card p="1rem">
                 <Grid container spacing={4}>
-                  {brandList.map((item) => (
-                    <Grid item sm={6} xs={12} key={item.title}>
+                  {formattedBrandData.slice(0, 2).map((item, key) => (
+                    <Grid item sm={6} xs={12} key={key}>
                       <Link href={item.productUrl}>
                         <a>
                           <ProductCard5 {...item} />
@@ -60,41 +85,6 @@ const Section4: React.FC = () => {
     </Box>
   );
 };
-
-const topRatedList = [
-  {
-    imgUrl: "/assets/images/products/camera-1.png",
-    title: "Camera",
-    rating: 4,
-    price: 3300,
-    reviewCount: 49,
-    productUrl: "/product/d1",
-  },
-  {
-    imgUrl: "/assets/images/products/shoes-2.png",
-    title: "Shoe",
-    rating: 4.75,
-    price: 400,
-    reviewCount: 20,
-    productUrl: "/product/d12",
-  },
-  {
-    imgUrl: "/assets/images/products/mobile-1.png",
-    title: "Phone",
-    rating: 5,
-    price: 999,
-    reviewCount: 65,
-    productUrl: "/product/d14",
-  },
-  {
-    imgUrl: "/assets/images/products/watch-1.png",
-    title: "Watch",
-    rating: 5,
-    price: 999,
-    reviewCount: 75,
-    productUrl: "/product/d16",
-  },
-];
 
 const brandList = [
   {

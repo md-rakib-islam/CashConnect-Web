@@ -4,7 +4,7 @@ function useUserInf() {
     try {
         var user_id: any = localStorage?.getItem("UserId");
     } catch (err) {
-        var user_id = null;
+        user_id = null;
     }
 
     try {
@@ -15,16 +15,20 @@ function useUserInf() {
             },
         };
     } catch (err) {
-        var authTOKEN: any = {
+        authTOKEN = {
             headers: {
                 "Content-type": "application/json",
                 Authorization: null
             },
         };
     }
+    try {
+        var order_Id = localStorage.getItem("OrderId");
+    } catch (err) {
+        order_Id = null
+    }
 
-
-    return { user_id, authTOKEN }
+    return { user_id, authTOKEN, order_Id }
 }
 
 export default useUserInf

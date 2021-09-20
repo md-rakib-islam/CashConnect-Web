@@ -10,6 +10,7 @@ import VendorDashboardLayout from "@component/layout/VendorDashboardLayout";
 import Select from "@component/Select";
 import TextField from "@component/text-field/TextField";
 import useJsonToFormData from "@customHook/useJsonToFormData";
+import useUserInf from "@customHook/useUserInf";
 import {
   BASE_URL,
   Branch_All,
@@ -19,7 +20,7 @@ import {
   Role_All,
   Thana_All,
   Vendor_By_Id,
-  Vendor_Update,
+  Vendor_Update
 } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
@@ -44,22 +45,7 @@ const AccountSettings = () => {
     { label: "Others", value: "others" },
   ];
 
-  try {
-    var UserId: any = localStorage?.getItem("UserId");
-  } catch (err) {
-    UserId = 0;
-  }
-
-  try {
-    var authTOKEN = {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: localStorage.getItem("jwt_access_token"),
-      },
-    };
-  } catch (err) {
-    authTOKEN = null;
-  }
+  const { user_id, authTOKEN } = useUserInf()
 
   useEffect(() => {
     fetch(`${Role_All}`)
@@ -94,7 +80,7 @@ const AccountSettings = () => {
   }, []);
 
   useEffect(() => {
-    axios.get(`${Vendor_By_Id}${UserId}`, authTOKEN).then((datas) => {
+    axios.get(`${Vendor_By_Id}${user_id}`, authTOKEN).then((datas) => {
       console.log("VendorEditDetails", datas.data);
       const { data } = datas;
 
@@ -110,7 +96,7 @@ const AccountSettings = () => {
           ?.label,
       });
     });
-  }, [UserId]);
+  }, [user_id]);
 
   const handleFormSubmit = async (values) => {
     // const user_id = state.auth.user?.id;
@@ -136,7 +122,7 @@ const AccountSettings = () => {
     const [vendorEditData] = useJsonToFormData(data);
 
     axios
-      .put(`${Vendor_Update}${UserId}`, vendorEditData, authTOKEN)
+      .put(`${Vendor_Update}${user_id}`, vendorEditData, authTOKEN)
       .then((data) => {
         console.log("VenderUpdatedRes", data);
       });

@@ -1,3 +1,4 @@
+import useUserInf from "@customHook/useUserInf";
 import { Customer_Order_Pending_Details } from "@data/constants";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -13,7 +14,7 @@ const Checkout = () => {
   const [discountAmount, setDiscountAmount] = useState(null);
 
   useEffect(() => {
-    const order_Id = localStorage.getItem("OrderId");
+    const { order_Id } = useUserInf()
 
     axios.get(`${Customer_Order_Pending_Details}${order_Id}`).then((res) => {
       console.log("orderDetailsRes", res);

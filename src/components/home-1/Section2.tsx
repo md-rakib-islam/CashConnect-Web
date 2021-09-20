@@ -9,17 +9,11 @@ import CategorySectionCreator from "../CategorySectionCreator";
 import ProductCard1 from "../product-cards/ProductCard1";
 
 const Section2: React.FC = () => {
-  const [visibleSlides, setVisibleSlides] = useState(4);
+  const [visibleSlides, setVisibleSlides] = useState(5);
   const width = useWindowSize();
 
-  const [productList, setProductList] = useState([])
-  const [productData, setProductData] = useState([{}]);
-  const [formattedProductData] =
-    productData != [] ? useFormattedProductData(productData) : [];
-
-  useEffect(() => {
-    setProductData(productList);
-  }, [productList]);
+  const [productData, setProductData] = useState([]);
+  const [formattedProductData] = useFormattedProductData(productData);
 
   useEffect(() => {
     axios.get(`${Product_Flash_Deals}`).then(res => {
@@ -32,7 +26,7 @@ const Section2: React.FC = () => {
     if (width < 500) setVisibleSlides(1);
     else if (width < 650) setVisibleSlides(2);
     else if (width < 950) setVisibleSlides(3);
-    else setVisibleSlides(4);
+    else setVisibleSlides(5);
   }, [width]);
 
   return (
@@ -42,7 +36,7 @@ const Section2: React.FC = () => {
       seeMoreLink="#"
     >
       <Box mt="-0.25rem" mb="-0.25rem">
-        <Carousel totalSlides={10} visibleSlides={visibleSlides}>
+        <Carousel totalSlides={formattedProductData.length} visibleSlides={visibleSlides}>
           {formattedProductData.map((item) => (
             <Box py="0.25rem" key={item.id}>
               <ProductCard1
@@ -53,6 +47,7 @@ const Section2: React.FC = () => {
                 price={item.price}
                 off={0}
                 key={item.id}
+                reviewCount={item.reviewCount}
               />
             </Box>
           ))}
@@ -61,6 +56,8 @@ const Section2: React.FC = () => {
     </CategorySectionCreator>
   );
 };
+
+export default Section2;
 
 const productList = [
   {
@@ -94,5 +91,3 @@ const productList = [
     imgUrl: "/assets/images/products/flash-2.png",
   },
 ];
-
-export default Section2;

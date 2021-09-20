@@ -15,6 +15,7 @@ const ProductCard5: React.FC<ProductCard5Props> = ({ imgUrl, title }) => {
       <HoverBox borderRadius={5} mb="0.5rem">
         <LazyImage
           src={imgUrl}
+          loader={() => imgUrl}
           width={260}
           height={175}
           layout="responsive"

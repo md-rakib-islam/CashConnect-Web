@@ -1,10 +1,11 @@
+import useUserInf from "@customHook/useUserInf";
 import {
   City_All,
   Country_All,
   Customer_Order_Shipping_Address,
   Shipping_Address_Delete,
   Shipping_Adress_By_Order_Id,
-  Thana_All,
+  Thana_All
 } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
@@ -31,14 +32,8 @@ const CheckoutForm = () => {
 
   const handleFormSubmit = async (values) => {
     if (!sameAsProfile) {
-      const order_Id = localStorage.getItem("OrderId");
-      const user_id = localStorage?.getItem("UserId");
-      const authTOKEN = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: localStorage.getItem("jwt_access_token"),
-        },
-      };
+      const { user_id, authTOKEN, order_Id } = useUserInf()
+
       console.log(values);
 
       const shippingData = {
@@ -88,18 +83,13 @@ const CheckoutForm = () => {
 
   const handleCheckboxChange =
     (values: typeof initialValues, setFieldValue) =>
-    ({ target: { checked } }) => {
-      setSameAsProfile(checked);
-      setFieldValue("same_as_profile_address", checked);
-    };
+      ({ target: { checked } }) => {
+        setSameAsProfile(checked);
+        setFieldValue("same_as_profile_address", checked);
+      };
 
   useEffect(() => {
-    try {
-      var order_Id: any = localStorage.getItem("OrderId");
-    } catch (err) {
-      var order_Id = null;
-    }
-
+    const { order_Id } = useUserInf()
     axios.get(`${Shipping_Adress_By_Order_Id}${order_Id}`).then((res) => {
       console.log("shippingDetailsRes", res);
       const { data } = res;

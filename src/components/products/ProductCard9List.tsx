@@ -11,8 +11,7 @@ export interface ProductCard9ListProps {
 
 const ProductCard9List: React.FC<ProductCard9ListProps> = ({ productList }) => {
   const [productData, setProductData] = useState([]);
-  const [formattedProductData] =
-    productData != [] ? useFormattedProductData(productData) : [];
+  const [formattedProductData] = useFormattedProductData(productData);
 
   useEffect(() => {
     setProductData(productList);
@@ -21,7 +20,7 @@ const ProductCard9List: React.FC<ProductCard9ListProps> = ({ productList }) => {
   return (
     <div>
       {formattedProductData.map((item, ind) => (
-        <ProductCard9 mb="1.25rem" key={ind} {...item} />
+        <ProductCard9 mb="1.25rem" key={ind} {...item} reviewCount={item.numReview} />
       ))}
 
       <FlexBox

@@ -1,6 +1,6 @@
 import Card from "@component/Card";
 import Carousel from "@component/carousel/Carousel";
-import { Category_Top_All } from "@data/constants";
+import { BASE_URL, Category_Top_All } from "@data/constants";
 import useWindowSize from "@hook/useWindowSize";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -8,35 +8,40 @@ import CategorySectionCreator from "../CategorySectionCreator";
 import ProductCard6 from "../product-cards/ProductCard6";
 
 const Section3: React.FC = () => {
-  const [visibleSlides, setVisibleSlides] = useState(3);
+  const [visibleSlides, setVisibleSlides] = useState(6);
   const width = useWindowSize();
+
+  const [topCategorys, setTopCategorys] = useState([])
 
   useEffect(() => {
     fetch(`${Category_Top_All}`).then(res => res.json()).then(res => {
-      console.log("Category_Top_AllRes", res)
+      console.log("Category_Top_AllRes", res.top_categories)
+      setTopCategorys(res.top_categories)
     })
   }, [])
+
   useEffect(() => {
-    if (width < 650) setVisibleSlides(1);
-    else if (width < 950) setVisibleSlides(2);
-    else setVisibleSlides(3);
+    if (width < 650) setVisibleSlides(2);
+    else if (width < 950) setVisibleSlides(4);
+    else setVisibleSlides(6);
   }, [width]);
 
+  console.log("topCategorys", topCategorys)
   return (
     <CategorySectionCreator
       iconName="categories"
       title="Top Categories"
       seeMoreLink="#"
     >
-      <Carousel totalSlides={5} visibleSlides={visibleSlides}>
-        {categoryList.map((item, ind) => (
-          <Link href={item.categoryUrl} key={ind}>
+      <Carousel totalSlides={topCategorys.length} visibleSlides={visibleSlides}>
+        {topCategorys.map((item, ind) => (
+          <Link href={`product/search/${item?.id}`} key={ind}>
             <a>
               <Card p="1rem">
                 <ProductCard6
-                  title={item.title}
-                  subtitle={item.subtitle}
-                  imgUrl={item.imgUrl}
+                  title={item?.name}
+                  subtitle={"3k orders in this week"}
+                  imgUrl={`${BASE_URL}${item?.image}`}
                 />
               </Card>
             </a>
@@ -46,38 +51,5 @@ const Section3: React.FC = () => {
     </CategorySectionCreator>
   );
 };
-
-const categoryList = [
-  {
-    title: "Headphone",
-    subtitle: "3k orders this week",
-    categoryUrl: "/",
-    imgUrl: "/assets/images/banners/category-1.png",
-  },
-  {
-    title: "Watch",
-    subtitle: "3k orders this week",
-    categoryUrl: "/",
-    imgUrl: "/assets/images/banners/category-2.png",
-  },
-  {
-    title: "Sunglass",
-    subtitle: "3k orders this week",
-    categoryUrl: "/",
-    imgUrl: "/assets/images/banners/category-3.png",
-  },
-  {
-    title: "Headphone",
-    subtitle: "3k orders this week",
-    categoryUrl: "/",
-    imgUrl: "/assets/images/banners/category-1.png",
-  },
-  {
-    title: "Watch",
-    subtitle: "3k orders this week",
-    categoryUrl: "/",
-    imgUrl: "/assets/images/banners/category-2.png",
-  },
-];
 
 export default Section3;

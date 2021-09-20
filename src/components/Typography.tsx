@@ -1,4 +1,5 @@
 import { useAppContext } from "@context/app/AppContext";
+import useUserInf from "@customHook/useUserInf";
 import { Customer_Order_Pending_Details } from "@data/constants";
 import React, { useEffect, useState } from "react";
 import styled, { CSSProperties } from "styled-components";
@@ -14,16 +15,16 @@ import {
   space,
   SpaceProps,
   typography,
-  TypographyProps,
+  TypographyProps
 } from "styled-system";
 
 interface CustomProps
   extends TypographyProps,
-    SpaceProps,
-    ColorProps,
-    FlexProps,
-    LayoutProps,
-    BorderProps {
+  SpaceProps,
+  ColorProps,
+  FlexProps,
+  LayoutProps,
+  BorderProps {
   ref?: any;
   as?: any;
   title?: string;
@@ -114,7 +115,7 @@ export const Tiny2: React.FC<CustomProps> = (props) => {
   const { state } = useAppContext();
   const cartCanged = state.cart.chartQuantity;
   useEffect(() => {
-    const order_Id = localStorage.getItem("OrderId");
+    const { order_Id } = useUserInf()
 
     fetch(`${Customer_Order_Pending_Details}${order_Id}`)
       .then((res) => res.json())

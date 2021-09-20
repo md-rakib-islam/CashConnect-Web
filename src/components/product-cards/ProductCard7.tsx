@@ -1,12 +1,13 @@
 import Box from "@component/Box";
 import Image from "@component/Image";
 import { useAppContext } from "@context/app/AppContext";
+import useUserInf from "@customHook/useUserInf";
 import {
   BASE_URL,
   Customer_decrease_Quantity,
   Customer_Increase_Quantity,
   Customer_Order_Remove_Item,
-  notFoundImg,
+  notFoundImg
 } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
@@ -39,16 +40,15 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
 
   const handleCartAmountChange = useCallback(
     (action) => () => {
-      var UserId: any = localStorage?.getItem("UserId");
+      const { user_id, order_Id } = useUserInf()
 
-      const order_Id = localStorage.getItem("OrderId");
       const item_id = id;
       const orderData = {
         product_id: product?.id,
         quantity: 1,
         price: price,
         branch_id: 1,
-        user_id: UserId,
+        user_id: user_id,
       };
 
       console.log("orderData", orderData);

@@ -32,6 +32,7 @@ export interface ProductCard9Props {
     url: string;
   }>;
   [key: string]: unknown;
+  reviewCount?: string | number;
   // className?: string;
   // style?: CSSProperties;
   // imgUrl: string;
@@ -54,6 +55,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
   rating,
   brand,
   id,
+  reviewCount,
   ...props
 }) => {
   const [cartAmount, setCartAmount] = useState(0);
@@ -259,6 +261,8 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
             price={price}
             brand={brand}
             id={id}
+            rating={rating}
+            reviewCount={reviewCount}
           />
           <Box
             position="absolute"

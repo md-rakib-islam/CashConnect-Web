@@ -8,6 +8,7 @@ import DashboardLayout from "@component/layout/CustomerDashboardLayout";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import TableRow from "@component/TableRow";
 import Typography, { H3, H5, Small } from "@component/Typography";
+import useUserInf from "@customHook/useUserInf";
 import { BASE_URL, Customer_By_Id, loadingImg } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
@@ -21,25 +22,10 @@ const Profile = () => {
   const [phone, setphone] = useState("");
   const [birth_day, setbirth_day] = useState("");
 
-  try {
-    var UserId: any = localStorage?.getItem("UserId");
-  } catch (err) {
-    UserId = 0;
-  }
-
-  try {
-    var authTOKEN = {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: localStorage.getItem("jwt_access_token"),
-      },
-    };
-  } catch (err) {
-    authTOKEN = null;
-  }
+  const { user_id, authTOKEN } = useUserInf()
 
   useEffect(() => {
-    axios.get(`${Customer_By_Id}${UserId}`, authTOKEN).then((user) => {
+    axios.get(`${Customer_By_Id}${user_id}`, authTOKEN).then((user) => {
       const { data } = user;
       setpreViewImg(`${BASE_URL}${data.image}`);
       setfirst_name(data.first_name);
@@ -48,7 +34,7 @@ const Profile = () => {
       setphone(data.primary_phone);
       setbirth_day(data.date_of_birth);
     });
-  }, [UserId]);
+  }, [user_id]);
   return (
     <div>
       <DashboardPageHeader

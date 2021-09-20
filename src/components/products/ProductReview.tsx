@@ -1,3 +1,4 @@
+import useUserInf from "@customHook/useUserInf";
 import { Review_Bt_Product_Id, Review_Create } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
@@ -24,13 +25,7 @@ const ProductReview: React.FC<ProductReviewProps> = ({ productId, setReviews }) 
   const handleFormSubmit = async (values, { resetForm }) => {
     console.log(values);
 
-    const user_id = localStorage.getItem("UserId")
-    var authTOKEN = {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: localStorage.getItem("jwt_access_token"),
-      },
-    };
+    const { user_id, authTOKEN } = useUserInf()
 
     const reviewData = {
       ...values,

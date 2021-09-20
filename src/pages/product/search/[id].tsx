@@ -44,10 +44,6 @@ const ProductSearchResult = () => {
           setTotalProduct(data.length);
 
           setProductList(data);
-          // dispatch({
-          //   type: "CHANGE_PRODUCT_LIST",
-          //   payload: data,
-          // });
         });
       fetch(`${BASE_URL}${Category_By_Id}${id}`)
         .then((res) => res.json())

@@ -13,7 +13,7 @@ export interface ProductCard4Props {
   imgUrl: string;
   rating: number;
   title: string;
-  price: number;
+  price: number | string;
   reviewCount: number;
 }
 
@@ -29,6 +29,7 @@ const ProductCard4: React.FC<ProductCard4Props> = ({
       <HoverBox mb="1rem" mx="auto" borderRadius={8}>
         <LazyImage
           src={imgUrl}
+          loader={() => imgUrl}
           width="100%"
           height="auto"
           layout="responsive"
@@ -60,7 +61,7 @@ const ProductCard4: React.FC<ProductCard4Props> = ({
         textAlign="center"
         color="primary.main"
       >
-        ${Math.ceil(price).toLocaleString()}
+        ${Number(price).toFixed(2)}
       </H4>
     </Box>
   );

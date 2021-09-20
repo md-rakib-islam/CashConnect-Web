@@ -1,10 +1,33 @@
 import Card from "@component/Card";
-import React from "react";
+import useFormattedProductData from "@customHook/useFormattedProductData";
+import { Product_Arrival } from "@data/constants";
+import useWindowSize from "@hook/useWindowSize";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import CategorySectionCreator from "../CategorySectionCreator";
 import Grid from "../grid/Grid";
 import ProductCard2 from "../product-cards/ProductCard2";
 
 const Section5: React.FC = () => {
+  const [visibleSlides, setVisibleSlides] = useState(6);
+  const width = useWindowSize();
+
+  const [productData, setProductData] = useState([]);
+  const [formattedProductData] = useFormattedProductData(productData, "Arrivals");
+
+  useEffect(() => {
+    axios.get(`${Product_Arrival}`).then(res => {
+      console.log("Product_ArrivalRes", res)
+      setProductData(res.data.newly_arrived_products)
+    })
+  }, [])
+
+  useEffect(() => {
+    if (width < 650) setVisibleSlides(6);
+    else if (width < 950) setVisibleSlides(6);
+    else setVisibleSlides(6);
+  }, [width]);
+
   return (
     <CategorySectionCreator
       iconName="new-product-1"
@@ -13,8 +36,8 @@ const Section5: React.FC = () => {
     >
       <Card p="1rem">
         <Grid container spacing={6}>
-          {productList.map((item) => (
-            <Grid item lg={2} md={3} sm={4} xs={6} key={item.title}>
+          {formattedProductData.slice(0, 6).map((item) => (
+            <Grid item lg={2} md={3} sm={4} xs={6} key={item.id}>
               <ProductCard2 {...item} />
             </Grid>
           ))}
@@ -23,44 +46,5 @@ const Section5: React.FC = () => {
     </CategorySectionCreator>
   );
 };
-
-const productList = [
-  {
-    title: "Sunglass",
-    price: 150,
-    imgUrl: "/assets/images/products/imagegoggles.png",
-    productUrl: "/product/a1",
-  },
-  {
-    title: "Makeup",
-    price: 250,
-    imgUrl: "/assets/images/products/lipstick (2).png",
-    productUrl: "/product/a12",
-  },
-  {
-    title: "Smart Watch",
-    price: 350,
-    imgUrl: "/assets/images/products/bgwatch.png",
-    productUrl: "/product/a13",
-  },
-  {
-    title: "Lipstick",
-    price: 15,
-    imgUrl: "/assets/images/products/lipstick (1).png",
-    productUrl: "/product/a14",
-  },
-  {
-    title: "Green plant",
-    price: 55,
-    imgUrl: "/assets/images/products/lipstick (4).png",
-    productUrl: "/product/a15",
-  },
-  {
-    title: "Bonsai tree",
-    price: 535,
-    imgUrl: "/assets/images/products/lipstick (3).png",
-    productUrl: "/product/a1",
-  },
-];
 
 export default Section5;
