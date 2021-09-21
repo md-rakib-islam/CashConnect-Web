@@ -15,12 +15,7 @@ function useUserInf() {
             },
         };
     } catch (err) {
-        authTOKEN = {
-            headers: {
-                "Content-type": "application/json",
-                Authorization: null
-            },
-        };
+        authTOKEN = null
     }
     try {
         var order_Id = localStorage.getItem("OrderId");
@@ -28,7 +23,9 @@ function useUserInf() {
         order_Id = null
     }
 
-    return { user_id, authTOKEN, order_Id }
+    const isLogin = (user_id && localStorage.getItem("jwt_access_token")) ? true : false
+
+    return { user_id, authTOKEN, order_Id, isLogin }
 }
 
 export default useUserInf

@@ -1,3 +1,4 @@
+import SignupPopup from "@component/SignupPopup";
 import { useAppContext } from "@context/app/AppContext";
 import { useFormik } from "formik";
 import Link from "next/link";
@@ -15,10 +16,30 @@ import TextField from "../text-field/TextField";
 import { H3, H5, H6, SemiSpan, Small, Span } from "../Typography";
 import { StyledSessionCard } from "./SessionStyle";
 
-const Login: React.FC = () => {
+interface LoginProps {
+  type?: string,
+  closeLoginDialog?: any,
+}
+
+const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const router = useRouter();
   const { state, dispatch } = useAppContext();
+
+  const [openSignup, setOpenSignup] = useState(false)
+
+  const closeSignupTab = () => {
+    setOpenSignup(false)
+  }
+
+  const gotosingup = () => {
+    if (type == "loginPage") {
+      router.push("/signup")
+    }
+    else {
+      setOpenSignup(true)
+    }
+  }
 
   const togglePasswordVisibility = useCallback(() => {
     setPasswordVisibility((visible) => !visible);
@@ -45,25 +66,36 @@ const Login: React.FC = () => {
         });
 
         if (user.user_type == 3) {
-          const backUrl = localStorage.getItem("backAfterLogin");
-          if (backUrl) {
-            localStorage.removeItem("backAfterLogin");
-            router.push(`${backUrl}`);
+
+          if (type != "popup") {
+            const backUrl = localStorage.getItem("backAfterLogin");
+            if (backUrl) {
+              localStorage.removeItem("backAfterLogin");
+              router.push(`${backUrl}`);
+            } else {
+              router.push("/vendor/account-settings");
+            }
           } else {
-            router.push("/profile");
+            closeLoginDialog()
+            localStorage.removeItem("backAfterLogin")
           }
-        } else if (user.user_type == 2) {
-          const backUrl = localStorage.getItem("backAfterLogin");
-          if (backUrl) {
-            localStorage.removeItem("backAfterLogin");
-            router.push(`${backUrl}`);
-          } else {
-            router.push("/vendor/account-settings");
-          }
-        } else {
-          router.push("/signup");
+
         }
-        // localStorage.setItem("UserId", user.id);
+        else if (user.user_type == 2) {
+
+          if (type != "popup") {
+            const backUrl = localStorage.getItem("backAfterLogin");
+            if (backUrl) {
+              localStorage.removeItem("backAfterLogin");
+              router.push(`${backUrl}`);
+            } else {
+              router.push("/vendor/account-settings");
+            }
+          } else {
+            closeLoginDialog()
+            localStorage.removeItem("backAfterLogin")
+          }
+        }
       },
       (errors) => {
         console.log("login failed");
@@ -74,7 +106,9 @@ const Login: React.FC = () => {
             error: errors,
           },
         });
-        router.push("/login");
+        if (type != "popup") {
+          router.push("/login");
+        }
       }
     );
   };
@@ -89,135 +123,134 @@ const Login: React.FC = () => {
     });
 
   return (
-    <StyledSessionCard mx="auto" my="2rem" boxShadow="large">
-      <form className="content" onSubmit={handleSubmit}>
-        <H3 textAlign="center" mb="0.5rem">
-          Welcome To Ecommerce
-        </H3>
-        <H5
-          fontWeight="600"
-          fontSize="12px"
-          color="gray.800"
-          textAlign="center"
-          mb="2.25rem"
-        >
-          Log in with email & password
-        </H5>
+    <>
+      <SignupPopup open={openSignup} closeSignupDialog={closeSignupTab} />
+      <StyledSessionCard mx="auto" my="2rem" boxShadow="large">
+        <form className="content" onSubmit={handleSubmit}>
+          <H3 textAlign="center" mb="0.5rem">
+            Welcome To Ecommerce
+          </H3>
+          <H5
+            fontWeight="600"
+            fontSize="12px"
+            color="gray.800"
+            textAlign="center"
+            mb="2.25rem"
+          >
+            Log in with email & password
+          </H5>
 
-        <TextField
-          mb="0.75rem"
-          name="email"
-          placeholder="exmple@mail.com"
-          label="Email or Phone Number"
-          type="email"
-          fullwidth
-          onBlur={handleBlur}
-          onChange={handleChange}
-          value={values.email || ""}
-          errorText={touched.email && errors.email}
-        />
-        <TextField
-          mb="1rem"
-          name="password"
-          placeholder="*********"
-          autoComplete="on"
-          type={passwordVisibility ? "text" : "password"}
-          label="Password"
-          fullwidth
-          endAdornment={
-            <IconButton
-              size="small"
-              type="button"
-              p="0.25rem"
-              mr="0.25rem"
-              color={passwordVisibility ? "gray.700" : "gray.600"}
-              onClick={togglePasswordVisibility}
-            >
-              <Icon variant="small" defaultcolor="currentColor">
-                {passwordVisibility ? "eye-alt" : "eye"}
-              </Icon>
-            </IconButton>
-          }
-          onBlur={handleBlur}
-          onChange={handleChange}
-          value={values.password || ""}
-          errorText={touched.password && errors.password}
-        />
+          <TextField
+            mb="0.75rem"
+            name="email"
+            placeholder="exmple@mail.com"
+            label="Email or Phone Number"
+            type="email"
+            fullwidth
+            onBlur={handleBlur}
+            onChange={handleChange}
+            value={values.email || ""}
+            errorText={touched.email && errors.email}
+          />
+          <TextField
+            mb="1rem"
+            name="password"
+            placeholder="*********"
+            autoComplete="on"
+            type={passwordVisibility ? "text" : "password"}
+            label="Password"
+            fullwidth
+            endAdornment={
+              <IconButton
+                size="small"
+                type="button"
+                p="0.25rem"
+                mr="0.25rem"
+                color={passwordVisibility ? "gray.700" : "gray.600"}
+                onClick={togglePasswordVisibility}
+              >
+                <Icon variant="small" defaultcolor="currentColor">
+                  {passwordVisibility ? "eye-alt" : "eye"}
+                </Icon>
+              </IconButton>
+            }
+            onBlur={handleBlur}
+            onChange={handleChange}
+            value={values.password || ""}
+            errorText={touched.password && errors.password}
+          />
 
-        <Button
-          mb="1.65rem"
-          variant="contained"
-          color="primary"
-          type="submit"
-          fullwidth
-        >
-          Login
-        </Button>
+          <Button
+            mb="1.65rem"
+            variant="contained"
+            color="primary"
+            type="submit"
+            fullwidth
+          >
+            Login
+          </Button>
 
-        <Box mb="1rem">
-          <Divider width="200px" mx="auto" />
-          <FlexBox justifyContent="center" mt="-14px">
-            <Span color="text.muted" bg="body.paper" px="1rem">
-              on
-            </Span>
+          <Box mb="1rem">
+            <Divider width="200px" mx="auto" />
+            <FlexBox justifyContent="center" mt="-14px">
+              <Span color="text.muted" bg="body.paper" px="1rem">
+                on
+              </Span>
+            </FlexBox>
+          </Box>
+
+          <FlexBox
+            justifyContent="center"
+            alignItems="center"
+            bg="#3B5998"
+            borderRadius={5}
+            height="40px"
+            color="white"
+            cursor="pointer"
+            mb="0.75rem"
+          >
+            <Icon variant="small" defaultcolor="auto" mr="0.5rem">
+              facebook-filled-white
+            </Icon>
+            <Small fontWeight="600">Continue with Facebook</Small>
           </FlexBox>
-        </Box>
 
-        <FlexBox
-          justifyContent="center"
-          alignItems="center"
-          bg="#3B5998"
-          borderRadius={5}
-          height="40px"
-          color="white"
-          cursor="pointer"
-          mb="0.75rem"
-        >
-          <Icon variant="small" defaultcolor="auto" mr="0.5rem">
-            facebook-filled-white
-          </Icon>
-          <Small fontWeight="600">Continue with Facebook</Small>
-        </FlexBox>
+          <FlexBox
+            justifyContent="center"
+            alignItems="center"
+            bg="#4285F4"
+            borderRadius={5}
+            height="40px"
+            color="white"
+            cursor="pointer"
+            mb="1.25rem"
+          >
+            <Icon variant="small" defaultcolor="auto" mr="0.5rem">
+              google-1
+            </Icon>
+            <Small fontWeight="600">Continue with Google</Small>
+          </FlexBox>
 
-        <FlexBox
-          justifyContent="center"
-          alignItems="center"
-          bg="#4285F4"
-          borderRadius={5}
-          height="40px"
-          color="white"
-          cursor="pointer"
-          mb="1.25rem"
-        >
-          <Icon variant="small" defaultcolor="auto" mr="0.5rem">
-            google-1
-          </Icon>
-          <Small fontWeight="600">Continue with Google</Small>
-        </FlexBox>
+          <FlexBox justifyContent="center" mb="1.25rem">
+            <SemiSpan>Don’t have account?</SemiSpan>
+            <H6 style={{ cursor: "pointer" }} onClick={gotosingup} ml="0.5rem" borderBottom="1px solid" borderColor="gray.900">
+              Sign Up
+            </H6>
+          </FlexBox>
+        </form>
 
-        <FlexBox justifyContent="center" mb="1.25rem">
-          <SemiSpan>Don’t have account?</SemiSpan>
-          <Link href="/signup">
+        <FlexBox justifyContent="center" bg="gray.200" py="19px">
+          <SemiSpan>Forgot your password?</SemiSpan>
+          <Link href="/">
             <a>
               <H6 ml="0.5rem" borderBottom="1px solid" borderColor="gray.900">
-                Sign Up
+                Reset It
               </H6>
             </a>
           </Link>
         </FlexBox>
-      </form>
-
-      <FlexBox justifyContent="center" bg="gray.200" py="19px">
-        <SemiSpan>Forgot your password?</SemiSpan>
-        <Link href="/">
-          <a>
-            <H6 ml="0.5rem" borderBottom="1px solid" borderColor="gray.900">
-              Reset It
-            </H6>
-          </a>
-        </Link>
-      </FlexBox>
-    </StyledSessionCard>
+      </StyledSessionCard>
+    </>
   );
 };
 

@@ -70,6 +70,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
   const [cartQuantity, setCartQuantity] = useState(0);
   const [itemId, setItemId] = useState(0);
   const [getItemId, setGetItemId] = useState(0);
+  const [getChartquantity, setGetChartquantity] = useState(0)
 
   const toggleDialog = useCallback(() => {
     setOpen((open) => !open);
@@ -123,7 +124,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
         .put(`${Customer_Increase_Quantity}${order_Id}/${itemId}`, orderData)
         .then((res) => {
           console.log("increaseRes", res);
-          // setGetItemId(Math.random());
+          setGetChartquantity(Math.random())
         });
     }
 
@@ -133,7 +134,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
         .delete(`${Customer_Order_Remove_Item}${order_Id}/${itemId}`)
         .then((res) => {
           console.log("removeRes", res);
-          setCartQuantity(0);
+          setGetChartquantity(Math.random())
           dispatch({
             type: "CHANGE_CART_QUANTITY",
             payload: Math.random(),
@@ -147,7 +148,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
         .put(`${Customer_decrease_Quantity}${order_Id}/${itemId}`, orderData)
         .then((res) => {
           console.log("decreaseRes", res);
-          // setGetItemId(Math.random());
+          setGetChartquantity(Math.random())
         });
     }
   };
@@ -160,13 +161,12 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
       axios
         .get(`${Customer_Order_Item_By_Product_Id}${order_Id}/${id}`)
         .then((item) => {
-          console.log("item", item?.data?.order_item);
           setItemId(item?.data?.order_item?.id);
           setCartQuantity(item?.data?.order_item?.quantity);
         })
         .catch(() => setCartQuantity(0));
     }
-  }, [getItemId, id]);
+  }, [getItemId, id, getChartquantity]);
 
   // console.log("produtId", id)
 
@@ -331,7 +331,7 @@ ProductCard1.defaultProps = {
   id: "324321",
   title: "KSUS ROG Strix G15",
   imgUrl: loadingImg,
-  off: 50,
+  off: 0,
   price: 450,
   rating: 0,
   brand: "Unknown",

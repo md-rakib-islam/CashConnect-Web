@@ -12,18 +12,19 @@ import ProductFilterCard from "@component/products/ProductFilterCard";
 import Select from "@component/Select";
 import Sidenav from "@component/sidenav/Sidenav";
 import { H5, Paragraph } from "@component/Typography";
-import { BASE_URL, Category_By_Id, ProductByCategoryId } from "@data/constants";
+import { BASE_URL, Category_By_Id, ProductByCategoryId, Product_Search } from "@data/constants";
+import axios from "axios";
+import { GetServerSideProps } from 'next';
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
 import useWindowSize from "../../../hooks/useWindowSize";
 
-const ProductSearchResult = () => {
+const ProductSearchResult = ({ productList }) => {
   const [view, setView] = useState("grid");
   const width = useWindowSize();
   const isTablet = width < 1025;
   const [categoryName, setcategoryName] = useState("Unknown");
   const [totalProduct, setTotalProduct] = useState(0);
-  const [productList, setProductList] = useState([]);
 
   const router = useRouter();
   const { id } = router.query;
@@ -38,13 +39,6 @@ const ProductSearchResult = () => {
 
   useEffect(() => {
     if (id) {
-      fetch(`${BASE_URL}${ProductByCategoryId}${id}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setTotalProduct(data.length);
-
-          setProductList(data);
-        });
       fetch(`${BASE_URL}${Category_By_Id}${id}`)
         .then((res) => res.json())
         .then((data) => {
@@ -151,3 +145,39 @@ const sortOptions = [
 ProductSearchResult.layout = NavbarLayout;
 
 export default ProductSearchResult;
+
+
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+
+  if (params.id.length == 1) {
+    const res = await fetch(`${BASE_URL}${ProductByCategoryId}${params.id[0]}`)
+    var data = await res.json()
+  }
+  else if (params.id.length == 2) {
+    try {
+      let categoryId = ""
+      if (!params.id[0]) {
+        categoryId = params.id[0]
+      }
+
+      const res = await axios.post(`${Product_Search}`, { product_name: params.id[1], category: categoryId })
+      var data = await res.data.products
+    }
+    catch (err) {
+      var data = null
+    }
+  }
+
+  if (!data) {
+    return {
+      notFound: true,
+    }
+  }
+
+  console.log("product_name", params.id[1])
+  return {
+    props: {
+      productList: data,
+    },
+  }
+}

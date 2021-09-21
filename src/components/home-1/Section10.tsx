@@ -1,7 +1,8 @@
 import LazyImage from "@component/LazyImage";
-import productDatabase from "@data/product-database";
+import { BASE_URL, Category_Wth_Name_Img } from "@data/constants";
+import axios from "axios";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Card from "../Card";
 import CategorySectionHeader from "../CategorySectionHeader";
 import Container from "../Container";
@@ -9,6 +10,14 @@ import Grid from "../grid/Grid";
 import Typography from "../Typography";
 
 const Section10: React.FC = () => {
+  const [categories, setCategories] = useState([])
+  useEffect(() => {
+    axios.get(`${Category_Wth_Name_Img}`).then(res => {
+      console.log("Category_Wth_Name_ImgRes", res)
+      setCategories(res.data.categories)
+    })
+  }, [])
+
   return (
     <Container mb="70px">
       <CategorySectionHeader
@@ -18,7 +27,7 @@ const Section10: React.FC = () => {
       />
 
       <Grid container spacing={6}>
-        {categoryList.map((item, ind) => (
+        {categories.map((item, ind) => (
           <Grid item lg={2} md={3} sm={4} xs={12} key={ind}>
             <Link href="/">
               <a>
@@ -31,15 +40,16 @@ const Section10: React.FC = () => {
                   hoverEffect
                 >
                   <LazyImage
-                    src={productDatabase[ind * 13 + 100].imgUrl}
+                    src={`${BASE_URL}${item.image}`}
+                    loader={() => `${BASE_URL}${item.image}`}
                     alt="fashion"
-                    height="52px"
-                    width="52px"
+                    height="40px"
+                    width="40px"
                     objectFit="contain"
                     borderRadius={8}
                   />
                   <Typography fontWeight="600" fontSize="14px" ml="10px">
-                    {item}
+                    {item.name}
                   </Typography>
                 </Card>
               </a>

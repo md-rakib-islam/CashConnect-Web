@@ -1,5 +1,7 @@
 import LazyImage from "@component/LazyImage";
-import productDatabase from "@data/product-database";
+import ProductCard1 from "@component/product-cards/ProductCard1";
+import useFormattedProductData from "@customHook/useFormattedProductData";
+import { BASE_URL } from "@data/constants";
 import React, { useState } from "react";
 import Box from "../Box";
 import CategorySectionHeader from "../CategorySectionHeader";
@@ -7,11 +9,16 @@ import Container from "../Container";
 import FlexBox from "../FlexBox";
 import Grid from "../grid/Grid";
 import Hidden from "../hidden/Hidden";
-import ProductCard1 from "../product-cards/ProductCard1";
 import StyledProductCategory from "./ProductCategoryStyle";
 
-const Section6: React.FC = () => {
+export interface Section6Props {
+  data?: any;
+}
+
+const Section6: React.FC<Section6Props> = ({ data }) => {
   const [selected, setSelected] = useState("");
+
+  const [productList] = useFormattedProductData(data.products)
 
   const handleCategoryClick = ({ target: { id: brand } }) => {
     if (selected.match(brand)) {
@@ -19,18 +26,19 @@ const Section6: React.FC = () => {
     } else setSelected(brand);
   };
 
+
   return (
     <Container mb="80px">
       <FlexBox>
         <Hidden down={768} mr="1.75rem">
           <Box shadow={6} borderRadius={10} padding="1.25rem" bg="white">
-            {brandList.map((brand, ind) => (
+            {data?.brands?.slice(0.9)?.map((brand, ind) => (
               <StyledProductCategory
-                key={brand}
-                id={brand}
+                key={brand?.id}
+                id={brand?.id}
                 mb="0.75rem"
-                bg={selected.match(brand) ? "white" : "gray.100"}
-                shadow={selected.match(brand) ? 4 : null}
+                bg={selected.match(brand?.name) ? "white" : "gray.100"}
+                shadow={selected.match(brand?.name) ? 4 : null}
                 onClick={handleCategoryClick}
               >
                 <LazyImage
@@ -38,10 +46,11 @@ const Section6: React.FC = () => {
                   height="20px"
                   layout="fixed"
                   objectFit="contain"
-                  src={`/assets/images/logos/${ind % 2 === 0 ? "v" : "u"}.png`}
+                  src={`${BASE_URL}${brand?.image}`}
+                  loader={() => `${BASE_URL}${brand?.image}`}
                   alt="apple"
                 />
-                <span className="product-category-title">{brand}</span>
+                <span className="product-category-title">{brand?.name}</span>
               </StyledProductCategory>
             ))}
 
@@ -60,9 +69,9 @@ const Section6: React.FC = () => {
         </Hidden>
 
         <Box flex="1 1 0" minWidth="0px">
-          <CategorySectionHeader title="Cars" seeMoreLink="#" />
+          <CategorySectionHeader title={data?.category?.name} seeMoreLink="#" />
           <Grid container spacing={6}>
-            {productDatabase.slice(0, 6).map((item, ind) => (
+            {productList.map((item, ind) => (
               <Grid item lg={4} sm={6} xs={12} key={ind}>
                 <ProductCard1 hoverEffect {...item} />
               </Grid>

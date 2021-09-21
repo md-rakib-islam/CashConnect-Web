@@ -1,7 +1,7 @@
+import LoginPopup from "@component/LoginPopup";
 import { Customer_Create, Vendor_Create } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import * as yup from "yup";
@@ -16,13 +16,32 @@ import TextField from "../text-field/TextField";
 import { H3, H5, H6, SemiSpan, Small, Span } from "../Typography";
 import { StyledSessionCard } from "./SessionStyle";
 
-const Signup: React.FC = () => {
+interface SignupProps {
+  type?: string,
+  closeSignupDialog?: any,
+}
+
+const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog }) => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const [customerVariant, setCustomerVariant] = useState("contained");
   const [vendorVariant, setvendorVariant] = useState("outlined");
   const [user_type, setUser_type] = useState(3);
+  const [openLogin, setOpenLogin] = useState(false)
 
   const router = useRouter();
+
+  const closeLoginTab = () => {
+    setOpenLogin(false)
+  }
+
+  const gotologin = () => {
+    if (type == "SignupPage") {
+      router.push("/login")
+    }
+    else {
+      setOpenLogin(true)
+    }
+  }
 
   const togglePasswordVisibility = () => {
     setPasswordVisibility((visible) => !visible);
@@ -49,16 +68,25 @@ const Signup: React.FC = () => {
     if (user_type == 3) {
       axios.post(`${Customer_Create}`, data).then((data) => {
         console.log("createdCustomerRes", data);
-        router.push("/login");
+        if (type == "SignupPage") {
+          router.push("/login");
+        } else {
+          closeSignupDialog()
+        }
       });
     }
 
-    if (user_type == 2) {
+    else if (user_type == 2) {
       axios.post(`${Vendor_Create}`, data).then((data) => {
         console.log("createdVendorRes", data);
-        router.push("/login");
+        if (type == "SignupPage") {
+          router.push("/login");
+        } else {
+          closeSignupDialog()
+        }
       });
     }
+
 
     console.log("saveData", data);
   };
@@ -71,238 +99,238 @@ const Signup: React.FC = () => {
     });
 
   return (
-    <StyledSessionCard mx="auto" my="2rem" boxShadow="large">
-      <H3 textAlign="center" mb="0.5rem">
-        Create Your Account
-      </H3>
-      <H5
-        fontWeight="600"
-        fontSize="12px"
-        color="gray.800"
-        textAlign="center"
-        mb="2.25rem"
-      >
-        Please fill all forms to continued
-      </H5>
+    <>
+      <LoginPopup open={openLogin} closeLoginDialog={closeLoginTab} />
 
-      <div
-        className="content"
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          paddingTop: "0px",
-        }}
-      >
-        <Button
-          mb="1.65rem"
-          size="large"
-          variant={customerVariant}
-          color="secondary"
-          width="50%"
-          onClick={singUpAsCustomer}
+      <StyledSessionCard mx="auto" my="2rem" boxShadow="large">
+        <H3 textAlign="center" mb="0.5rem">
+          Create Your Account
+        </H3>
+        <H5
+          fontWeight="600"
+          fontSize="12px"
+          color="gray.800"
+          textAlign="center"
+          mb="2.25rem"
         >
-          Customer
-        </Button>
+          Please fill all forms to continued
+        </H5>
 
-        <Button
-          mb="1.65rem"
-          size="large"
-          variant={vendorVariant}
-          color="secondary"
-          width="50%"
-          onClick={singUpAsVendor}
+        <div
+          className="content"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            paddingTop: "0px",
+          }}
         >
-          Vendor
-        </Button>
-      </div>
+          <Button
+            mb="1.65rem"
+            size="large"
+            variant={customerVariant}
+            color="secondary"
+            width="50%"
+            onClick={singUpAsCustomer}
+          >
+            Customer
+          </Button>
 
-      <form
-        className="content"
-        style={{ paddingTop: "0px" }}
-        onSubmit={handleSubmit}
-      >
-        <TextField
-          mb="0.75rem"
-          name="first_name"
-          label="First Name"
-          placeholder="Ralph Adwards"
-          fullwidth
-          onBlur={handleBlur}
-          onChange={handleChange}
-          value={values.first_name || ""}
-          errorText={touched.first_name && errors.first_name}
-        />
+          <Button
+            mb="1.65rem"
+            size="large"
+            variant={vendorVariant}
+            color="secondary"
+            width="50%"
+            onClick={singUpAsVendor}
+          >
+            Vendor
+          </Button>
+        </div>
 
-        <TextField
-          mb="0.75rem"
-          name="last_name"
-          label="Last Name"
-          placeholder="Ralph Adwards"
-          fullwidth
-          onBlur={handleBlur}
-          onChange={handleChange}
-          value={values.last_name || ""}
-          errorText={touched.last_name && errors.last_name}
-        />
+        <form
+          className="content"
+          style={{ paddingTop: "0px" }}
+          onSubmit={handleSubmit}
+        >
+          <TextField
+            mb="0.75rem"
+            name="first_name"
+            label="First Name"
+            placeholder="Ralph Adwards"
+            fullwidth
+            onBlur={handleBlur}
+            onChange={handleChange}
+            value={values.first_name || ""}
+            errorText={touched.first_name && errors.first_name}
+          />
 
-        <TextField
-          mb="0.75rem"
-          name="email"
-          placeholder="exmple@mail.com"
-          label="Email"
-          type="email"
-          fullwidth
-          onBlur={handleBlur}
-          onChange={handleChange}
-          value={values.email || ""}
-          errorText={touched.email && errors.email}
-        />
+          <TextField
+            mb="0.75rem"
+            name="last_name"
+            label="Last Name"
+            placeholder="Ralph Adwards"
+            fullwidth
+            onBlur={handleBlur}
+            onChange={handleChange}
+            value={values.last_name || ""}
+            errorText={touched.last_name && errors.last_name}
+          />
 
-        <TextField
-          mb="0.75rem"
-          name="number"
-          placeholder="Obtional"
-          label="Phone Number"
-          fullwidth
-          onBlur={handleBlur}
-          onChange={handleChange}
-          value={values.number || ""}
-          errorText={touched.number && errors.number}
-        />
+          <TextField
+            mb="0.75rem"
+            name="email"
+            placeholder="exmple@mail.com"
+            label="Email"
+            type="email"
+            fullwidth
+            onBlur={handleBlur}
+            onChange={handleChange}
+            value={values.email || ""}
+            errorText={touched.email && errors.email}
+          />
 
-        <TextField
-          mb="0.75rem"
-          name="password"
-          placeholder="*********"
-          type={passwordVisibility ? "text" : "password"}
-          label="Password"
-          fullwidth
-          endAdornment={
-            <IconButton
-              size="small"
-              type="button"
-              p="0.25rem"
-              mr="0.25rem"
-              color={passwordVisibility ? "gray.700" : "gray.600"}
-              onClick={togglePasswordVisibility}
-            >
-              <Icon variant="small" defaultcolor="currentColor">
-                {passwordVisibility ? "eye-alt" : "eye"}
-              </Icon>
-            </IconButton>
-          }
-          onBlur={handleBlur}
-          onChange={handleChange}
-          value={values.password || ""}
-          errorText={touched.password && errors.password}
-        />
-        <TextField
-          mb="1rem"
-          name="re_password"
-          placeholder="*********"
-          type={passwordVisibility ? "text" : "password"}
-          label="Confirm Password"
-          fullwidth
-          endAdornment={
-            <IconButton
-              size="small"
-              type="button"
-              p="0.25rem"
-              mr="0.25rem"
-              color={passwordVisibility ? "gray.700" : "gray.600"}
-              onClick={togglePasswordVisibility}
-            >
-              <Icon variant="small" defaultcolor="currentColor">
-                {passwordVisibility ? "eye-alt" : "eye"}
-              </Icon>
-            </IconButton>
-          }
-          onBlur={handleBlur}
-          onChange={handleChange}
-          value={values.re_password || ""}
-          errorText={touched.re_password && errors.re_password}
-        />
+          <TextField
+            mb="0.75rem"
+            name="number"
+            placeholder="Obtional"
+            label="Phone Number"
+            fullwidth
+            onBlur={handleBlur}
+            onChange={handleChange}
+            value={values.number || ""}
+            errorText={touched.number && errors.number}
+          />
 
-        <CheckBox
-          mb="1.75rem"
-          name="agreement"
-          color="secondary"
-          checked={values.agreement}
-          onChange={handleChange}
-          label={
-            <FlexBox>
-              <SemiSpan>By signing up, you agree to</SemiSpan>
-              <a href="/" target="_blank" rel="noreferrer noopener">
-                <H6 ml="0.5rem" borderBottom="1px solid" borderColor="gray.900">
-                  Terms & Condtion
-                </H6>
-              </a>
+          <TextField
+            mb="0.75rem"
+            name="password"
+            placeholder="*********"
+            type={passwordVisibility ? "text" : "password"}
+            label="Password"
+            fullwidth
+            endAdornment={
+              <IconButton
+                size="small"
+                type="button"
+                p="0.25rem"
+                mr="0.25rem"
+                color={passwordVisibility ? "gray.700" : "gray.600"}
+                onClick={togglePasswordVisibility}
+              >
+                <Icon variant="small" defaultcolor="currentColor">
+                  {passwordVisibility ? "eye-alt" : "eye"}
+                </Icon>
+              </IconButton>
+            }
+            onBlur={handleBlur}
+            onChange={handleChange}
+            value={values.password || ""}
+            errorText={touched.password && errors.password}
+          />
+          <TextField
+            mb="1rem"
+            name="re_password"
+            placeholder="*********"
+            type={passwordVisibility ? "text" : "password"}
+            label="Confirm Password"
+            fullwidth
+            endAdornment={
+              <IconButton
+                size="small"
+                type="button"
+                p="0.25rem"
+                mr="0.25rem"
+                color={passwordVisibility ? "gray.700" : "gray.600"}
+                onClick={togglePasswordVisibility}
+              >
+                <Icon variant="small" defaultcolor="currentColor">
+                  {passwordVisibility ? "eye-alt" : "eye"}
+                </Icon>
+              </IconButton>
+            }
+            onBlur={handleBlur}
+            onChange={handleChange}
+            value={values.re_password || ""}
+            errorText={touched.re_password && errors.re_password}
+          />
+
+          <CheckBox
+            mb="1.75rem"
+            name="agreement"
+            color="secondary"
+            checked={values.agreement}
+            onChange={handleChange}
+            label={
+              <FlexBox>
+                <SemiSpan>By signing up, you agree to</SemiSpan>
+                <a href="/" target="_blank" rel="noreferrer noopener">
+                  <H6 ml="0.5rem" borderBottom="1px solid" borderColor="gray.900">
+                    Terms & Condtion
+                  </H6>
+                </a>
+              </FlexBox>
+            }
+          />
+
+          <Button
+            mb="1.65rem"
+            variant="contained"
+            color="primary"
+            type="submit"
+            fullwidth
+          >
+            Create Account
+          </Button>
+
+          <Box mb="1rem">
+            <Divider width="200px" mx="auto" />
+            <FlexBox justifyContent="center" mt="-14px">
+              <Span color="text.muted" bg="body.paper" px="1rem">
+                on
+              </Span>
             </FlexBox>
-          }
-        />
+          </Box>
 
-        <Button
-          mb="1.65rem"
-          variant="contained"
-          color="primary"
-          type="submit"
-          fullwidth
-        >
-          Create Account
-        </Button>
-
-        <Box mb="1rem">
-          <Divider width="200px" mx="auto" />
-          <FlexBox justifyContent="center" mt="-14px">
-            <Span color="text.muted" bg="body.paper" px="1rem">
-              on
-            </Span>
+          <FlexBox
+            justifyContent="center"
+            alignItems="center"
+            bg="#3B5998"
+            borderRadius={5}
+            height="40px"
+            color="white"
+            cursor="pointer"
+            mb="0.75rem"
+          >
+            <Icon variant="small" defaultcolor="auto" mr="0.5rem">
+              facebook-filled-white
+            </Icon>
+            <Small fontWeight="600">Continue with Facebook</Small>
           </FlexBox>
-        </Box>
 
-        <FlexBox
-          justifyContent="center"
-          alignItems="center"
-          bg="#3B5998"
-          borderRadius={5}
-          height="40px"
-          color="white"
-          cursor="pointer"
-          mb="0.75rem"
-        >
-          <Icon variant="small" defaultcolor="auto" mr="0.5rem">
-            facebook-filled-white
-          </Icon>
-          <Small fontWeight="600">Continue with Facebook</Small>
+          <FlexBox
+            justifyContent="center"
+            alignItems="center"
+            bg="#4285F4"
+            borderRadius={5}
+            height="40px"
+            color="white"
+            cursor="pointer"
+            mb="1.25rem"
+          >
+            <Icon variant="small" defaultcolor="auto" mr="0.5rem">
+              google-1
+            </Icon>
+            <Small fontWeight="600">Continue with Google</Small>
+          </FlexBox>
+        </form>
+        <FlexBox justifyContent="center" bg="gray.200" py="19px">
+          <SemiSpan>Already have account?</SemiSpan>
+          <H6 style={{ cursor: "pointer" }} onClick={gotologin} ml="0.5rem" borderBottom="1px solid" borderColor="gray.900">
+            Log in
+          </H6>
         </FlexBox>
-
-        <FlexBox
-          justifyContent="center"
-          alignItems="center"
-          bg="#4285F4"
-          borderRadius={5}
-          height="40px"
-          color="white"
-          cursor="pointer"
-          mb="1.25rem"
-        >
-          <Icon variant="small" defaultcolor="auto" mr="0.5rem">
-            google-1
-          </Icon>
-          <Small fontWeight="600">Continue with Google</Small>
-        </FlexBox>
-      </form>
-      <FlexBox justifyContent="center" bg="gray.200" py="19px">
-        <SemiSpan>Already have account?</SemiSpan>
-        <Link href="/login">
-          <a>
-            <H6 ml="0.5rem" borderBottom="1px solid" borderColor="gray.900">
-              Log in
-            </H6>
-          </a>
-        </Link>
-      </FlexBox>
-    </StyledSessionCard>
+      </StyledSessionCard>
+    </>
   );
 };
 

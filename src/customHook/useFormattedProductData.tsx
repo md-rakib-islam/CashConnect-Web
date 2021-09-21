@@ -17,11 +17,11 @@ function useFormattedProductData(productData, type?: string) {
             id: data?.id,
             price: Number(data?.unit_price),
             title: data?.name,
-            imgUrl: `${BASE_URL}${data.thumbnail || data.image}`,
-            category: data?.categor,
+            imgUrl: `${BASE_URL}${data?.thumbnail || data?.image}`,
+            category: data?.category,
             brand: data?.brand,
             rating: data?.rating,
-            reviewCount: data?.numReview,
+            reviewCount: data?.numReviews,
         }
     }
     )

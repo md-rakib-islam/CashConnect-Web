@@ -20,7 +20,7 @@ const ProductCard9List: React.FC<ProductCard9ListProps> = ({ productList }) => {
   return (
     <div>
       {formattedProductData.map((item, ind) => (
-        <ProductCard9 mb="1.25rem" key={ind} {...item} reviewCount={item.numReview} />
+        <ProductCard9 mb="1.25rem" key={ind} {...item} />
       ))}
 
       <FlexBox

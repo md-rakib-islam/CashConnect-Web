@@ -138,7 +138,16 @@ export const Product_Discount = `${BASE_URL}/product/api/v1/product_with_discoun
 
 export const Product_Top_Rated = `${BASE_URL}/product/api/v1/product_with_top_rating/all/`
 
+export const Product_Search = `${BASE_URL}/product/api/v1/product/search/`
+
 //catogory apis
-export const Category_All = "/category/api/v1/categories_tree/all/";
+export const Category_All = `${BASE_URL}/category/api/v1/category/all/`
+
+export const Category_All_With_Child = `${BASE_URL}/category/api/v1/categories_tree/all/`;
 
 export const Category_Top_All = `${BASE_URL}/category/api/v1/top_categories/all/`
+
+export const Category_With_Product_Brand = `${BASE_URL}/category/api/v1/homepage_categories_with_related_products_and_brands/all/`
+
+export const Category_Wth_Name_Img = `${BASE_URL}/category/api/v1/homepage_categories_with_id_name_image/all/`
+

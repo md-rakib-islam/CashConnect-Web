@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import Container from "../Container";
 import Box from "../Box";
+import Container from "../Container";
 import Grid from "../grid/Grid";
 import Navbar from "../navbar/Navbar";
 import Stepper from "../stepper/Stepper";
@@ -82,7 +82,7 @@ const stepperList = [
     disabled: false,
   },
   {
-    title: "Review",
+    title: "Confirm",
     disabled: true,
   },
 ];

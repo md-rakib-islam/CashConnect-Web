@@ -1,4 +1,4 @@
-import { BASE_URL, Category_All } from "@data/constants";
+import { Category_All_With_Child } from "@data/constants";
 //import navigations from "@data/navigations";
 import React, { useEffect, useState } from "react";
 import useFormattedNavigationData from "../../customHook/useFormattedCategoryData";
@@ -26,7 +26,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
     useFormattedNavigationData(navigationData);
 
   useEffect(() => {
-    fetch(`${BASE_URL}${Category_All}`)
+    fetch(`${Category_All_With_Child}`)
       .then((res) => res.json())
       .then((data) => {
         console.log("category", data.categories);

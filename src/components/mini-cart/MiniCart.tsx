@@ -14,6 +14,7 @@ import {
 // import { CartItem } from "@reducer/cartReducer";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import Button from "../buttons/Button";
 import Divider from "../Divider";
@@ -37,41 +38,52 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
   const [cartProductList, setCartProductList] = useState([]);
   const [reloadCart, setReloadCart] = useState(0);
 
+  const router = useRouter()
+
   const handleCartAmountChange = useCallback(
     (product, action) => () => {
-      const { user_id, order_Id } = useUserInf()
+      const { user_id, order_Id, isLogin } = useUserInf()
 
-      const item_id = product?.id;
-      const orderData = {
-        product_id: product?.product?.id,
-        quantity: 1,
-        price: product?.price,
-        branch_id: 1,
-        user_id: user_id,
-      };
+      if (isLogin) {
+        const item_id = product?.id;
+        const orderData = {
+          product_id: product?.product?.id,
+          quantity: 1,
+          price: product?.price,
+          branch_id: 1,
+          user_id: user_id,
+        };
 
-      if (action == "remove") {
-        axios
-          .delete(`${Customer_Order_Remove_Item}${order_Id}/${item_id}`)
-          .then(() => {
-            setReloadCart(Math.random());
-            dispatch({
-              type: "CHANGE_CART_QUANTITY",
-              payload: Math.random(),
+        if (action == "remove") {
+          axios
+            .delete(`${Customer_Order_Remove_Item}${order_Id}/${item_id}`)
+            .then(() => {
+              setReloadCart(Math.random());
+              dispatch({
+                type: "CHANGE_CART_QUANTITY",
+                payload: Math.random(),
+              });
             });
-          });
-      } else if (action == "increase") {
-        axios
-          .put(`${Customer_Increase_Quantity}${order_Id}/${item_id}`, orderData)
-          .then(() => {
-            setReloadCart(Math.random());
-          });
-      } else if (action == "decrease") {
-        axios
-          .put(`${Customer_decrease_Quantity}${order_Id}/${item_id}`, orderData)
-          .then(() => {
-            setReloadCart(Math.random());
-          });
+        } else if (action == "increase") {
+          axios
+            .put(`${Customer_Increase_Quantity}${order_Id}/${item_id}`, orderData)
+            .then(() => {
+              setReloadCart(Math.random());
+            });
+        } else if (action == "decrease") {
+          axios
+            .put(`${Customer_decrease_Quantity}${order_Id}/${item_id}`, orderData)
+            .then(() => {
+              setReloadCart(Math.random());
+            });
+        }
+
+      }
+      else {
+        localStorage.setItem("backAfterLogin", `product/`);
+        router.push({
+          pathname: "/login",
+        });
       }
     },
     []
