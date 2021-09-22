@@ -22,8 +22,8 @@ const Section4: React.FC = () => {
 
   useEffect(() => {
     axios.get(`${Product_Top_Rated}`).then(res => {
-      console.log("Product_Top_RatedRes", res.data?.top_rating_products)
-      setProductData(res.data?.top_rating_products)
+      console.log("Product_Top_RatedRes", res.data?.products)
+      setProductData(res.data?.products)
     })
 
     axios.get(`${Brand_Featured}`).then(res => {

@@ -28,7 +28,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
 
   const handleFormSubmit = (values) => {
     console.log("values", values)
-    router.push(`${categoryId}/${values.search}`)
+    router.push(`/product/search/${categoryId}/${values.search}`)
   }
 
   const handleCategoryChange = (cat) => () => {
@@ -84,7 +84,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
     <Box position="relative" flex="1 1 0" maxWidth="670px" mx="auto">
       <form onSubmit={handleSubmit}>
         <StyledSearchBox>
-          <Icon className="search-icon" size="18px" onClick={handleSubmit}>
+          <Icon className="search-icon" size="18px" onClick={() => handleSubmit()}>
             search
           </Icon>
           <TextField

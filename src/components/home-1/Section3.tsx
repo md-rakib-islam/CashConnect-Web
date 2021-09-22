@@ -15,8 +15,8 @@ const Section3: React.FC = () => {
 
   useEffect(() => {
     fetch(`${Category_Top_All}`).then(res => res.json()).then(res => {
-      console.log("Category_Top_AllRes", res.top_categories)
-      setTopCategorys(res.top_categories)
+      console.log("Category_Top_AllRes", res.categories)
+      setTopCategorys(res.categories)
     })
   }, [])
 

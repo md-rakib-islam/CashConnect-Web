@@ -3,9 +3,7 @@ import LoginPopup from "@component/LoginPopup";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import {
-  BASE_URL,
-  Brand_By_Id,
-  Customer_decrease_Quantity,
+  BASE_URL, Brand_By_Id, Customer_decrease_Quantity,
   Customer_Increase_Quantity,
   Customer_Order_Create,
   Customer_Order_Item_By_Product_Id,
@@ -45,11 +43,17 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   reviewCount,
   rating,
 }) => {
-  const [brandName, setbrandName] = useState(brand);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [brandName, setbrandName] = useState(brand);
+
   const { dispatch } = useAppContext();
   const router = useRouter();
-  const routerId = router.query.id as string;
+  try {
+    var routerId = router.query?.id[0] as string;
+  } catch (err) {
+    var routerId = router.query?.id as string;
+  }
+
 
   const [cartQuantity, setCartQuantity] = useState(0);
   const [itemId, setItemId] = useState(0);
@@ -60,18 +64,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
     setOpenLogin(false)
   }
 
-  useEffect(() => {
-    if (brand) {
-      fetch(`${BASE_URL}${Brand_By_Id}${brand}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setbrandName(data.name);
-        })
-        .catch(() => {
-          setbrandName("Not Found");
-        });
-    }
-  }, [brand]);
+  console.log("brand", brand)
 
   useEffect(() => {
     const { order_Id } = useUserInf()
@@ -88,7 +81,20 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
     } else {
       setGetItemId(Math.random());
     }
-  }, [getItemId,]);
+  }, [getItemId]);
+
+  useEffect(() => {
+    if (typeof brand == "number") {
+      fetch(`${BASE_URL}${Brand_By_Id}${brand}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setbrandName(data.name);
+        })
+        .catch(() => {
+          setbrandName("Not Found");
+        });
+    }
+  }, [brand]);
 
   const handleImageClick = (ind) => () => {
     setSelectedImage(ind);
@@ -166,10 +172,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
     }
     else {
-      // localStorage.setItem("backAfterLogin", `product/${id}`);
-      // router.push({
-      //   pathname: "/login",
-      // });
       setOpenLogin(true)
     }
   };
@@ -236,7 +238,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
             <FlexBox alignItems="center" mb="1rem">
               <SemiSpan>Brand:</SemiSpan>
-              <H6 ml="8px">{brandName ? brandName : "Unknown"}</H6>
+              <H6 ml="8px">{brandName || "Unknown"}</H6>
             </FlexBox>
 
             <FlexBox alignItems="center" mb="1rem">

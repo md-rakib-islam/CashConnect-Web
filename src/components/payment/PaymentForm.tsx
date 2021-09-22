@@ -1,3 +1,4 @@
+import LoginPopup from "@component/LoginPopup";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import { Customer_Order_Confirm } from "@data/constants";
@@ -30,7 +31,7 @@ type PaymentFormProps = {
 const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [setInRef, setSetInRef] = useState(0);
-
+  const [openLogin, setOpenLogin] = useState(false)
   const { dispatch } = useAppContext();
 
   const width = useWindowSize();
@@ -57,6 +58,10 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
     rocket: null,
     nagad: null,
   };
+
+  const closeLoginTab = () => {
+    setOpenLogin(false)
+  }
 
   useLayoutEffect(() => {
     cardNumberRef.current = values.card_number;
@@ -113,69 +118,76 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
   const handleFormSubmit = async (values) => {
     console.log(values);
 
-    const { user_id, authTOKEN, order_Id } = useUserInf()
+    const { user_id, authTOKEN, order_Id, isLogin } = useUserInf()
 
-    const pay_amount = Subtotal;
+    if (isLogin) {
 
-    if (paymentMethod === "card") {
-      var confirmData: any = {
-        user_id,
-        pay_amount,
-        payment_method: paymentMethod,
-        card_number: values.card_number,
-        card_holder: values.card_holder,
-        cvc_code: values.cvc_code,
-        expiry_date: values.expiry_date,
-      };
-    } else if (paymentMethod === "paypal") {
-      var confirmData: any = {
-        user_id,
-        pay_amount,
-        payment_method: paymentMethod,
-        email: values.email,
-      };
-    } else if (paymentMethod === "bkash") {
-      var confirmData: any = {
-        user_id,
-        pay_amount,
-        payment_method: paymentMethod,
-        bkash: values.bkash,
-      };
-    } else if (paymentMethod === "rocket") {
-      var confirmData: any = {
-        user_id,
-        pay_amount,
-        payment_method: paymentMethod,
-        rocket: values.rocket,
-      };
-    } else if (paymentMethod === "nagad") {
-      var confirmData: any = {
-        user_id,
-        pay_amount,
-        payment_method: paymentMethod,
-        nagad: values.nagad,
-      };
-    } else if (paymentMethod === "cash") {
-      var confirmData: any = {
-        user_id,
-        payment_method: paymentMethod,
-      };
-    }
+      const pay_amount = Subtotal;
 
-    console.log("confirmData", confirmData);
-    axios
-      .post(`${Customer_Order_Confirm}${order_Id}`, confirmData, authTOKEN)
-      .then((res) => {
-        console.log("confirmOrderRes", res);
-        confirmedOrderRes.current = true;
-        for (let key in useKeys) {
-          localStorage.removeItem(`${key}`);
-        }
-        dispatch({
-          type: "CHANGE_CART_QUANTITY",
-          payload: Math.random(),
+      if (paymentMethod === "card") {
+        var confirmData: any = {
+          user_id,
+          pay_amount,
+          payment_method: paymentMethod,
+          card_number: values.card_number,
+          card_holder: values.card_holder,
+          cvc_code: values.cvc_code,
+          expiry_date: values.expiry_date,
+        };
+      } else if (paymentMethod === "paypal") {
+        var confirmData: any = {
+          user_id,
+          pay_amount,
+          payment_method: paymentMethod,
+          email: values.email,
+        };
+      } else if (paymentMethod === "bkash") {
+        var confirmData: any = {
+          user_id,
+          pay_amount,
+          payment_method: paymentMethod,
+          bkash: values.bkash,
+        };
+      } else if (paymentMethod === "rocket") {
+        var confirmData: any = {
+          user_id,
+          pay_amount,
+          payment_method: paymentMethod,
+          rocket: values.rocket,
+        };
+      } else if (paymentMethod === "nagad") {
+        var confirmData: any = {
+          user_id,
+          pay_amount,
+          payment_method: paymentMethod,
+          nagad: values.nagad,
+        };
+      } else if (paymentMethod === "cash") {
+        var confirmData: any = {
+          user_id,
+          payment_method: paymentMethod,
+        };
+      }
+
+      console.log("confirmData", confirmData);
+      axios
+        .post(`${Customer_Order_Confirm}${order_Id}`, confirmData, authTOKEN)
+        .then((res) => {
+          console.log("confirmOrderRes", res);
+          confirmedOrderRes.current = true;
+          for (let key in useKeys) {
+            localStorage.removeItem(`${key}`);
+          }
+          dispatch({
+            type: "CHANGE_CART_QUANTITY",
+            payload: Math.random(),
+          });
         });
-      });
+
+    }
+    else {
+      setOpenLogin(true)
+    }
   };
 
   const handlePaymentMethodChange = ({ target: { name } }) => {
@@ -225,6 +237,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
 
   return (
     <Fragment>
+      <LoginPopup open={openLogin} closeLoginDialog={closeLoginTab} />
       <form onSubmit={handleSubmit}>
         <Card1 mb="2rem">
           <Radio

@@ -9,40 +9,14 @@ import ProductReview from "@component/products/ProductReview";
 import RelatedProducts from "@component/products/RelatedProducts";
 import { H5 } from "@component/Typography";
 import { BASE_URL, Product_by_id } from "@data/constants";
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { GetServerSideProps } from "next";
+import React, { useState } from "react";
 
-const ProductDetails = () => {
-  const router = useRouter();
-  const id = router.query.id as string;
-  // const { dispatch } = useAppContext();
+const ProductDetails = ({ id, title, price, imgUrl, brand, rating, initialReviewsQuantity, fullDes }) => {
 
-  const [fullDes, setfullDes] = useState("")
-  const [title, settitle] = useState("");
-  const [price, setprice] = useState(0);
-  const [imgUrl, setimgUrl] = useState(
-    "/assets/images/products/loadingProduct.png"
-  );
-  const [reviewsQuantity, setreviewsQuantity] = useState(0)
-  const [brand, setbrand] = useState(0);
-  const [rating, setRating] = useState(0)
+  const [reviewsQuantity, setreviewsQuantity] = useState(initialReviewsQuantity)
 
-  useEffect(() => {
-    if (id) {
-      fetch(`${BASE_URL}${Product_by_id}${id}`)
-        .then((res) => res.json())
-        .then((data) => {
-          console.log("productById", data);
-          settitle(data?.name);
-          setprice(data?.unit_price);
-          setimgUrl(`${BASE_URL}${data?.thumbnail}`);
-          setbrand(data?.brand);
-          setfullDes(data?.full_desc)
-          setreviewsQuantity(data?.numReviews)
-          setRating(data?.rating)
-        });
-    }
-  }, [id]);
 
   const setNumOfReviews = (quantity = 0) => {
     setreviewsQuantity(quantity)
@@ -115,3 +89,23 @@ const ProductDetails = () => {
 ProductDetails.layout = NavbarLayout;
 
 export default ProductDetails;
+
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+
+  const res = await axios.get(`${BASE_URL}${Product_by_id}${params.id}`)
+  const data = await res.data
+
+  console.log("productDetails", data)
+  return {
+    props: {
+      id: params.id,
+      title: data.name,
+      price: data?.unit_price,
+      imgUrl: `${BASE_URL}${data?.thumbnail}`,
+      brand: data?.brand,
+      fullDes: data?.full_desc,
+      initialReviewsQuantity: data?.numReviews,
+      rating: data?.rating,
+    },
+  }
+}

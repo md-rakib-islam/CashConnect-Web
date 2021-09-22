@@ -1,3 +1,4 @@
+import LoginPopup from "@component/LoginPopup";
 import TextArea from "@component/textarea/TextArea";
 import useUserInf from "@customHook/useUserInf";
 import {
@@ -28,8 +29,13 @@ type CartItem = {
 const Cart = () => {
   const [cartProductList, setCartProductList] = useState<CartItem[]>([]);
   const [reloadCart, setReloadCart] = useState(0);
+  const [openLogin, setOpenLogin] = useState(false)
 
-  const { order_Id, authTOKEN } = useUserInf()
+  const { order_Id, authTOKEN, isLogin } = useUserInf()
+
+  const closeLoginTab = () => {
+    setOpenLogin(false)
+  }
 
   const getTotalPrice = () => {
     return (
@@ -40,19 +46,24 @@ const Cart = () => {
     );
   };
 
+
   const addComment = () => {
-    console.log("add comment called");
     console.log("comment", values.comment);
 
-    const comment = {
-      comment: values.comment,
-    };
-    console.log("commentData", comment);
-    axios
-      .post(`${Customer_Order_Comment}${order_Id}`, comment, authTOKEN)
-      .then((res) => {
-        console.log("comentRes", res);
-      });
+    if (isLogin) {
+      const comment = {
+        comment: values.comment,
+      };
+      console.log("commentData", comment);
+      axios
+        .post(`${Customer_Order_Comment}${order_Id}`, comment, authTOKEN)
+        .then((res) => {
+          console.log("comentRes", res);
+        });
+    }
+    else {
+
+    }
   };
 
   useEffect(() => {
@@ -89,6 +100,7 @@ const Cart = () => {
 
   return (
     <Fragment>
+      <LoginPopup open={openLogin} closeLoginDialog={closeLoginTab} />
       <Grid container spacing={6}>
         <Grid item lg={8} md={8} xs={12}>
           {cartProductList.map((item) => (
@@ -144,51 +156,6 @@ const Cart = () => {
 
             <Divider mb="1rem" />
 
-            {/* 
-            <TextField placeholder="Voucher" fullwidth />
-
-            <Button
-              variant="outlined"
-              color="primary"
-              mt="1rem"
-              mb="30px"
-              fullwidth
-            >
-              Apply Voucher
-            </Button>
-
-            <Divider mb="1.5rem" />
-
-            <Typography fontWeight="600" mb="1rem">
-              Shipping Estimates
-            </Typography>
-
-            <Select
-              mb="1rem"
-              label="Country"
-              placeholder="Select Country"
-              options={countryList}
-              onChange={(e) => {
-                console.log(e);
-              }}
-            />
-
-            <Select
-              label="State"
-              placeholder="Select State"
-              options={stateList}
-              onChange={(e) => {
-                console.log(e);
-              }}
-            />
-
-            <Box mt="1rem">
-              <TextField label="Zip Code" placeholder="3100" fullwidth />
-            </Box>
-
-            <Button variant="outlined" color="primary" my="1rem" fullwidth>
-              Calculate Shipping
-            </Button> */}
             <Link href="/checkout">
               <Button
                 variant="contained"

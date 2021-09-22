@@ -17,8 +17,8 @@ const Section2: React.FC = () => {
 
   useEffect(() => {
     axios.get(`${Product_Flash_Deals}`).then(res => {
-      console.log("Product_Flash_DealsRes", res.data.top_selling_products)
-      setProductData(res.data.top_selling_products)
+      console.log("Product_Flash_DealsRes", res.data.products)
+      setProductData(res.data.products)
     })
   }, [])
 

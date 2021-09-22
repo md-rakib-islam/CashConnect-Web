@@ -1,4 +1,8 @@
-import React from "react";
+import { Brand_All, Product_Filter } from "@data/constants";
+import axios from "axios";
+import { useFormik } from "formik";
+import React, { useEffect, useState } from "react";
+import * as yup from "yup";
 import Accordion from "../accordion/Accordion";
 import AccordionHeader from "../accordion/AccordionHeader";
 import Avatar from "../avatar/Avatar";
@@ -10,7 +14,48 @@ import Rating from "../rating/Rating";
 import TextField from "../text-field/TextField";
 import { H5, H6, Paragraph, SemiSpan } from "../Typography";
 
+
 const ProductFilterCard = () => {
+  const [brandlist, setBrandlist] = useState([])
+
+  const handleFormSubmit = () => { }
+
+  const filterProduct = (type, e) => {
+    const value = e.target.value
+    console.log("type", type)
+    console.log("e", e.target.value)
+
+    const min_price = type === "min_price" ? value : values.min_price
+    const max_price = type === "max_price" ? value : values.max_price
+
+    console.log("pram:", { min_price, max_price, brand: 1, })
+
+    axios.get(`${Product_Filter}`, { params: { min_price, max_price, brand: [1, 2] } }).then(res => {
+      console.log("Product_FilterRes", res.data.products)
+    })
+  }
+
+  useEffect(() => {
+    axios.get(`${Brand_All}`).then(res => {
+      console.log("brands", res.data.brands)
+      setBrandlist(res.data.brands)
+    })
+  }, [])
+
+  const {
+    values,
+    errors,
+    touched,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    setFieldValue,
+  } = useFormik({
+    initialValues: initialValues,
+    validationSchema: checkoutSchema,
+    onSubmit: handleFormSubmit,
+  });
+
   return (
     <Card p="18px 27px" elevation={5}>
       <H6 mb="10px">Categories</H6>
@@ -22,7 +67,7 @@ const ProductFilterCard = () => {
               px="0px"
               py="6px"
               color="text.muted"
-              // justifyContent="flex-start"
+            // justifyContent="flex-start"
             >
               <SemiSpan className="cursor-pointer" mr="9px">
                 {item.title}
@@ -58,26 +103,48 @@ const ProductFilterCard = () => {
 
       <H6 mb="16px">Price Range</H6>
       <FlexBox justifyContent="space-between" alignItems="center">
-        <TextField placeholder="0" type="number" fullwidth />
+        <TextField
+          name="min_price"
+          placeholder="0"
+          type="number"
+          fullwidth
+          onChange={(e) => {
+            filterProduct("min_price", e);
+            handleChange(e);
+          }}
+          value={values.min_price || ""}
+          errorText={touched.min_price && errors.min_price}
+        />
         <H5 color="text.muted" px="0.5rem">
           -
         </H5>
-        <TextField placeholder="250" type="number" fullwidth />
+        <TextField
+          name="max_price"
+          placeholder="250"
+          type="number"
+          fullwidth onChange={(e) => {
+            filterProduct("max_price", e);
+            handleChange(e)
+          }}
+          value={values.max_price || ""}
+          errorText={touched.max_price && errors.max_price}
+        />
       </FlexBox>
 
       <Divider my="24px" />
 
       <H6 mb="16px">Brands</H6>
-      {brandList.map((item) => (
+      {brandlist.map((brand) => (
         <CheckBox
-          key={item}
-          name={item}
-          value={item}
+          key={brand.id}
+          name={`brand${brand.id}`}
+          value={`brand${brand.id}`}
           color="secondary"
-          label={<SemiSpan color="inherit">{item}</SemiSpan>}
+          label={<SemiSpan color="inherit">{brand.name}</SemiSpan>}
           my="10px"
           onChange={(e) => {
-            console.log(e.target.value, e.target.checked);
+            filterProduct("brand", `brand${brand.id}`);
+            handleChange(e);
           }}
         />
       ))}
@@ -142,7 +209,7 @@ const categroyList = [
   },
 ];
 
-const brandList = ["Maccs", "Karts", "Baars", "Bukks", "Luasis"];
+// const brandList = ["Maccs", "Karts", "Baars", "Bukks", "Luasis"];
 const otherOptions = ["On Sale", "In Stock", "Featured"];
 const colorList = [
   "#1C1C1C",
@@ -152,5 +219,12 @@ const colorList = [
   "#70F6FF",
   "#6B7AFF",
 ];
+
+const initialValues = {
+  min_price: "",
+  max_price: "",
+}
+
+const checkoutSchema: any = yup.object().shape({});
 
 export default ProductFilterCard;

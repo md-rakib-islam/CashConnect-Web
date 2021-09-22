@@ -39,7 +39,7 @@ const ProductSearchResult = ({ productList }) => {
 
   useEffect(() => {
     if (id) {
-      fetch(`${BASE_URL}${Category_By_Id}${id}`)
+      fetch(`${BASE_URL}${Category_By_Id}${id[0]}`)
         .then((res) => res.json())
         .then((data) => {
           console.log("categoryName", data.name);
@@ -51,6 +51,7 @@ const ProductSearchResult = ({ productList }) => {
     }
   }, [id]);
 
+  console.log("product_list", productList)
   return (
     // <AppContext.Provider value="sakib">
     <Box pt="20px">
@@ -151,17 +152,17 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
   if (params.id.length == 1) {
     const res = await fetch(`${BASE_URL}${ProductByCategoryId}${params.id[0]}`)
-    var data = await res.json()
+    var json = await res.json()
+    var data = await json.products
   }
+
   else if (params.id.length == 2) {
     try {
-      let categoryId = ""
-      if (!params.id[0]) {
-        categoryId = params.id[0]
-      }
+      const category = params.id[0] == 0 ? "" : params.id[0]
 
-      const res = await axios.post(`${Product_Search}`, { product_name: params.id[1], category: categoryId })
+      const res = await axios.get(`${Product_Search}`, { params: { name: params.id[1], category } })
       var data = await res.data.products
+      console.log("filtered", res.data.products)
     }
     catch (err) {
       var data = null
@@ -174,7 +175,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     }
   }
 
-  console.log("product_name", params.id[1])
+  console.log("pramLength", params.id.length)
   return {
     props: {
       productList: data,

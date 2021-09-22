@@ -144,11 +144,11 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
 
             <FlexBox mt="0.5rem" mb="1rem" alignItems="center">
               <H5 fontWeight={600} color="primary.main" mr="0.5rem">
-                ${price?.toFixed(2)}
+                ${(price - ((price * off) / 100))}
               </H5>
               {off && (
                 <SemiSpan fontWeight="600">
-                  <del>${(price - (price * off) / 100).toFixed(2)}</del>
+                  <del>${price?.toFixed(2)}</del>
                 </SemiSpan>
               )}
             </FlexBox>
@@ -286,11 +286,11 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
 };
 
 ProductCard9.defaultProps = {
-  id: "324321",
-  title: "KSUS ROG Strix G15",
+  id: "30",
+  title: "Product",
   imgUrl: "/assets/images/products/loadingProduct.png",
-  off: 50,
-  price: 450,
+  off: null,
+  price: 0.00,
   rating: 0,
   brand: "Unknown",
 };

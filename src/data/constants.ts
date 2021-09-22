@@ -81,6 +81,8 @@ export const Brand_By_Id = "/brand/api/v1/brand/";
 
 export const Brand_Featured = `${BASE_URL}/brand/api/v1/featured_brand/all/`
 
+export const Brand_All = `${BASE_URL}/brand/api/v1/brand/all/`
+
 //customer order apis
 export const orders_By_Customer_Id = `${BASE_URL}/customerorder/api/v1/customerorder/get_all_orders_of_a_customer/`;
 
@@ -139,6 +141,10 @@ export const Product_Discount = `${BASE_URL}/product/api/v1/product_with_discoun
 export const Product_Top_Rated = `${BASE_URL}/product/api/v1/product_with_top_rating/all/`
 
 export const Product_Search = `${BASE_URL}/product/api/v1/product/search/`
+
+export const Product_For_You = `${BASE_URL}/product/api/v1/product/more_for_you/all/`
+
+export const Product_Filter = `${BASE_URL}/product/api/v1/product/filter/`
 
 //catogory apis
 export const Category_All = `${BASE_URL}/category/api/v1/category/all/`
