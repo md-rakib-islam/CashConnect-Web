@@ -1,11 +1,12 @@
-import { Brand_All, Product_Filter } from "@data/constants";
+import useFormattedNavigationData from "@customHook/useFormattedCategoryData";
+import { Brand_All, Category_All_With_Child, Product_Filter } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
+import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import * as yup from "yup";
 import Accordion from "../accordion/Accordion";
 import AccordionHeader from "../accordion/AccordionHeader";
-import Avatar from "../avatar/Avatar";
 import Card from "../Card";
 import CheckBox from "../CheckBox";
 import Divider from "../Divider";
@@ -14,24 +15,91 @@ import Rating from "../rating/Rating";
 import TextField from "../text-field/TextField";
 import { H5, H6, Paragraph, SemiSpan } from "../Typography";
 
+interface ProductFilterProps {
+  setFilteredProduct: (products: any[], totalProduct: number | string) => void
+}
 
-const ProductFilterCard = () => {
+const ProductFilterCard: React.FC<ProductFilterProps> = ({ setFilteredProduct }) => {
   const [brandlist, setBrandlist] = useState([])
+  const [brandIds, setBrandIds] = useState({})
+  const [ratingIds, setRatingIds] = useState({})
+  const [categoryIds, setCategoryIds] = useState({})
+  const [categoryId, setCategoryId] = useState<string | number>("")
+
+  const [categoryData, setCategoryData] = useState([]);
+  const [formattedCategoryData] =
+    useFormattedNavigationData(categoryData);
 
   const handleFormSubmit = () => { }
 
-  const filterProduct = (type, e) => {
+  const filterProduct = (type, e, id?: string | number) => {
     const value = e.target.value
-    console.log("type", type)
-    console.log("e", e.target.value)
 
     const min_price = type === "min_price" ? value : values.min_price
     const max_price = type === "max_price" ? value : values.max_price
 
-    console.log("pram:", { min_price, max_price, brand: 1, })
+    if (type === "brand") {
+      setBrandIds({ ...brandIds, [`brand${id}`]: brandIds[`brand${id}`] ? 0 : id })
+      var brandIDs = { ...brandIds, [`brand${id}`]: brandIds[`brand${id}`] ? 0 : id }
+      var brand = []
+      for (let x in brandIDs) {
+        if (brandIDs[x]) {
+          brand.push(brandIDs[x]);
+        }
+      }
+    } else {
+      var brand = []
+      for (let x in brandIds) {
+        if (brandIds[x]) {
+          brand.push(brandIds[x]);
+        }
+      }
+    }
 
-    axios.get(`${Product_Filter}`, { params: { min_price, max_price, brand: [1, 2] } }).then(res => {
+    if (type === "rating") {
+      setRatingIds({ ...ratingIds, [`rating${id}`]: ratingIds[`rating${id}`] ? 0 : id })
+      var ratingIDs = { ...ratingIds, [`rating${id}`]: ratingIds[`rating${id}`] ? 0 : id }
+      var rating = []
+      for (let x in ratingIDs) {
+        if (ratingIDs[x]) {
+          rating.push(ratingIDs[x]);
+        }
+      }
+    } else {
+      var rating = []
+      for (let x in ratingIds) {
+        if (ratingIds[x]) {
+          rating.push(ratingIds[x]);
+        }
+      }
+    }
+
+    if (type === "category") {
+      setCategoryIds({ [`category${id}`]: categoryIds[`category${id}`] ? 0 : id })
+      setCategoryId(id)
+      var categoryIDs = { [`category${id}`]: categoryIds[`category${id}`] ? 0 : id }
+      var category = []
+      for (let x in categoryIDs) {
+        if (categoryIDs[x]) {
+          category.push(categoryIDs[x]);
+        }
+      }
+    } else {
+      var category = []
+      for (let x in categoryIds) {
+        if (categoryIds[x]) {
+          category.push(categoryIds[x]);
+        }
+      }
+    }
+
+    console.log("pram:", { min_price, max_price, brand, rating, category })
+
+    axios.get(`${Product_Filter}`, { params: { min_price, max_price, category: type === "category" ? (categoryIds[`category${id}`] ? "" : id) : categoryId } }).then(res => {
       console.log("Product_FilterRes", res.data.products)
+      setFilteredProduct(res.data.products, res.data.total_elements)
+    }).catch(err => {
+      setFilteredProduct([], 0)
     })
   }
 
@@ -40,15 +108,17 @@ const ProductFilterCard = () => {
       console.log("brands", res.data.brands)
       setBrandlist(res.data.brands)
     })
+    axios.get(`${Category_All_With_Child}`).then(res => {
+      setCategoryData(res.data.categories)
+    })
   }, [])
 
+  console.log("formattedCategoryData", formattedCategoryData)
   const {
     values,
     errors,
     touched,
     handleChange,
-    handleBlur,
-    handleSubmit,
     setFieldValue,
   } = useFormik({
     initialValues: initialValues,
@@ -56,48 +126,98 @@ const ProductFilterCard = () => {
     onSubmit: handleFormSubmit,
   });
 
+  console.log("categoryId", categoryId)
+
   return (
     <Card p="18px 27px" elevation={5}>
       <H6 mb="10px">Categories</H6>
 
-      {categroyList.map((item) =>
-        item.subCategories ? (
-          <Accordion key={item.title} expanded>
-            <AccordionHeader
-              px="0px"
-              py="6px"
-              color="text.muted"
-            // justifyContent="flex-start"
-            >
-              <SemiSpan className="cursor-pointer" mr="9px">
-                {item.title}
-              </SemiSpan>
-            </AccordionHeader>
-            {item.subCategories.map((name) => (
-              <Paragraph
-                className="cursor-pointer"
-                fontSize="14px"
-                color="text.muted"
-                pl="22px"
+      {!_.isEmpty(formattedCategoryData) ? (
+        formattedCategoryData.map((item) => {
+          return !_.isEmpty(item.menuData.categories) ? (
+            <Accordion key={item.id} expanded>
+              <AccordionHeader
+                px="0px"
                 py="6px"
-                key={name}
+                color="text.muted"
+              // justifyContent="flex-start"
               >
-                {name}
-              </Paragraph>
-            ))}
-          </Accordion>
-        ) : (
-          <Paragraph
-            className="cursor-pointer"
-            fontSize="14px"
-            color="text.muted"
-            py="6px"
-            key={item.title}
-          >
-            {item.title}
-          </Paragraph>
+                <SemiSpan className="cursor-pointer" mr="9px"
+                // onClick={(e) => filterProduct("category", e, item.id)}
+                >
+                  {item.title}
+                </SemiSpan>
+              </AccordionHeader>
+              {item.menuData.categories.map((category) => {
+
+                return !_.isEmpty(category.subCategories) ? (
+                  <Accordion key={category.id} pl="22px" expanded>
+                    <AccordionHeader
+                      px="0px"
+                      py="6px"
+                      color="text.muted"
+                    // justifyContent="flex-start"
+                    >
+                      <SemiSpan className="cursor-pointer" mr="9px"
+                      // onClick={(e) => filterProduct("category", e, category.id)}
+                      >
+                        {category.title}
+                      </SemiSpan>
+                    </AccordionHeader>
+                    {category.subCategories.map((subCaterory) => (
+                      <Paragraph
+                        className="cursor-pointer"
+                        fontSize="14px"
+                        color="text.muted"
+                        pl="22px"
+                        py="6px"
+                        borderRadius={5}
+                        bg={categoryIds[`category${subCaterory.id}`] && "#d4d4d4"}
+                        key={subCaterory.id}
+                        onClick={(e) => filterProduct("category", e, subCaterory.id)}
+                      >
+                        {subCaterory.title}
+                      </Paragraph>
+                    )
+                    )}
+                  </Accordion>
+                )
+                  : (
+                    <Paragraph
+                      className="cursor-pointer"
+                      fontSize="14px"
+                      color="text.muted"
+                      pl="22px"
+                      py="6px"
+                      borderRadius={5}
+                      bg={categoryIds[`category${category.id}`] && "#d4d4d4"}
+                      key={category.id}
+                      onClick={(e) => filterProduct("category", e, category.id)}
+                    >
+                      {category.title}
+                    </Paragraph>
+                  )
+              })}
+            </Accordion>
+          ) : (
+            <Paragraph
+              className="cursor-pointer"
+              fontSize="14px"
+              color="text.muted"
+              py="6px"
+              key={item.id}
+              borderRadius={5}
+              bg={categoryIds[`category${item.id}`] && "#d4d4d4"}
+              onClick={(e) => filterProduct("category", e, item.id)}
+            >
+              {item.title}
+            </Paragraph>
+          )
+        }
         )
-      )}
+      ) : ""
+      }
+
 
       <Divider mt="18px" mb="24px" />
 
@@ -134,24 +254,25 @@ const ProductFilterCard = () => {
       <Divider my="24px" />
 
       <H6 mb="16px">Brands</H6>
-      {brandlist.map((brand) => (
-        <CheckBox
-          key={brand.id}
-          name={`brand${brand.id}`}
-          value={`brand${brand.id}`}
-          color="secondary"
-          label={<SemiSpan color="inherit">{brand.name}</SemiSpan>}
-          my="10px"
-          onChange={(e) => {
-            filterProduct("brand", `brand${brand.id}`);
-            handleChange(e);
-          }}
-        />
-      ))}
+      {
+        brandlist.map((brand) => (
+          <CheckBox
+            key={brand.id}
+            name={`brand${brand.id}`}
+            checked={brandIds[`brand${brand.id}`]}
+            color="secondary"
+            label={<SemiSpan color="inherit">{brand.name}</SemiSpan>}
+            my="10px"
+            onChange={(e) => {
+              filterProduct("brand", e, brand.id);
+            }}
+          />
+        ))
+      }
 
       <Divider my="24px" />
 
-      {otherOptions.map((item) => (
+      {/* {otherOptions.map((item) => (
         <CheckBox
           key={item}
           name={item}
@@ -163,62 +284,49 @@ const ProductFilterCard = () => {
             console.log(e.target.value, e.target.checked);
           }}
         />
-      ))}
+      ))} */}
 
       <Divider my="24px" />
 
       <H6 mb="16px">Ratings</H6>
-      {[5, 4, 3, 2, 1].map((item) => (
-        <CheckBox
-          key={item}
-          value={item}
-          color="secondary"
-          label={<Rating value={item} outof={5} color="warn" />}
-          my="10px"
-          onChange={(e) => {
-            console.log(e.target.value, e.target.checked);
-          }}
-        />
-      ))}
+      {
+        [5, 4, 3, 2, 1].map((rating) => (
+          <CheckBox
+            key={rating}
+            checked={ratingIds[`rating${rating}`]}
+            color="secondary"
+            label={<Rating value={rating} outof={5} color="warn" />}
+            my="10px"
+            onChange={(e) => {
+              filterProduct("rating", e, rating);
+            }}
+          />
+        ))
+      }
 
       <Divider my="24px" />
 
-      <H6 mb="16px">Colors</H6>
+      {/* <H6 mb="16px">Colors</H6>
       <FlexBox mb="1rem">
         {colorList.map((item) => (
           <Avatar bg={item} size={25} mr="10px" style={{ cursor: "pointer" }} />
         ))}
-      </FlexBox>
-    </Card>
+      </FlexBox> */}
+    </Card >
   );
 };
 
-const categroyList = [
-  {
-    title: "Bath Preparations",
-    subCategories: ["Bubble Bath", "Bath Capsules", "Others"],
-  },
-  {
-    title: "Eye Makeup Preparations",
-  },
-  {
-    title: "Fragrance",
-  },
-  {
-    title: "Hair Preparations",
-  },
-];
 
 // const brandList = ["Maccs", "Karts", "Baars", "Bukks", "Luasis"];
-const otherOptions = ["On Sale", "In Stock", "Featured"];
-const colorList = [
-  "#1C1C1C",
-  "#FF7A7A",
-  "#FFC672",
-  "#84FFB5",
-  "#70F6FF",
-  "#6B7AFF",
-];
+// const otherOptions = ["On Sale", "In Stock", "Featured"];
+// const colorList = [
+//   "#1C1C1C",
+//   "#FF7A7A",
+//   "#FFC672",
+//   "#84FFB5",
+//   "#70F6FF",
+//   "#6B7AFF",
+// ];
 
 const initialValues = {
   min_price: "",

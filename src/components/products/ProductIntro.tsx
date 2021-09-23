@@ -78,10 +78,8 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
           setCartQuantity(item.data.order_item.quantity);
         })
         .catch(() => setCartQuantity(0));
-    } else {
-      setGetItemId(Math.random());
     }
-  }, [getItemId]);
+  }, [getItemId, id]);
 
   useEffect(() => {
     if (typeof brand == "number") {

@@ -22,7 +22,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
   };
 
   const [navigationData, setNavigationData] = useState([]);
-  const { formattedNavigationData } =
+  const [formattedCategoryData] =
     useFormattedNavigationData(navigationData);
 
   useEffect(() => {
@@ -34,10 +34,10 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
       });
   }, []);
 
-  console.log("formatedCategory", formattedNavigationData);
+  console.log("formatedCategory", formattedCategoryData);
   return (
     <StyledCategoryDropdown open={open} position={position}>
-      {formattedNavigationData?.map((item) => {
+      {formattedCategoryData?.map((item) => {
         let MegaMenu = megaMenu[item.menuComponent];
 
         return (

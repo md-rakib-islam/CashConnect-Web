@@ -19,16 +19,27 @@ import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
 import useWindowSize from "../../../hooks/useWindowSize";
 
-const ProductSearchResult = ({ productList }) => {
+const ProductSearchResult = ({ productLists, totalProduct }) => {
+  const [categoryName, setcategoryName] = useState("Unknown");
+  const [totalProducts, setTotalProducts] = useState(totalProduct);
+  const [productList, setProductList] = useState(productLists)
+
   const [view, setView] = useState("grid");
   const width = useWindowSize();
   const isTablet = width < 1025;
-  const [categoryName, setcategoryName] = useState("Unknown");
-  const [totalProduct, setTotalProduct] = useState(0);
 
   const router = useRouter();
-  const { id } = router.query;
-  // const { dispatch } = useAppContext();
+  try {
+    var id: string | string[] = router.query.id[0];
+  }
+  catch (err) {
+    var id = router.query.id;
+  }
+
+  const setFilteredProduct = (products, totalProduct) => {
+    setProductList(products)
+    setTotalProducts(totalProduct)
+  }
 
   const toggleView = useCallback(
     (v) => () => {
@@ -51,6 +62,11 @@ const ProductSearchResult = ({ productList }) => {
     }
   }, [id]);
 
+  useEffect(() => {
+    setProductList(productLists)
+    setTotalProducts(totalProduct)
+  }, [productLists, totalProduct])
+
   console.log("product_list", productList)
   return (
     // <AppContext.Provider value="sakib">
@@ -66,7 +82,7 @@ const ProductSearchResult = ({ productList }) => {
       >
         <div>
           <H5>Searching for “ {categoryName} ”</H5>
-          <Paragraph color="text.muted">{totalProduct} results found</Paragraph>
+          <Paragraph color="text.muted">{totalProducts} results found</Paragraph>
         </div>
         <FlexBox alignItems="center" flexWrap="wrap">
           <Paragraph color="text.muted" mr="1rem">
@@ -112,7 +128,7 @@ const ProductSearchResult = ({ productList }) => {
                 </IconButton>
               }
             >
-              <ProductFilterCard />
+              <ProductFilterCard setFilteredProduct={setFilteredProduct} />
             </Sidenav>
           )}
         </FlexBox>
@@ -120,7 +136,7 @@ const ProductSearchResult = ({ productList }) => {
 
       <Grid container spacing={6}>
         <Hidden as={Grid} item lg={3} xs={12} down={1024}>
-          <ProductFilterCard />
+          <ProductFilterCard setFilteredProduct={setFilteredProduct} />
         </Hidden>
 
         <Grid item lg={9} xs={12}>
@@ -153,7 +169,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   if (params.id.length == 1) {
     const res = await fetch(`${BASE_URL}${ProductByCategoryId}${params.id[0]}`)
     var json = await res.json()
-    var data = await json.products
+    var data: any[] = await json.products
+    var totalProduct: number = await json.total_elements
   }
 
   else if (params.id.length == 2) {
@@ -161,12 +178,17 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       const category = params.id[0] == 0 ? "" : params.id[0]
 
       const res = await axios.get(`${Product_Search}`, { params: { name: params.id[1], category } })
-      var data = await res.data.products
-      console.log("filtered", res.data.products)
+      var data: any[] = await res.data.products
+      var totalProduct: number = await res.data.total_elements
     }
     catch (err) {
-      var data = null
+      var data = []
+      var totalProduct = 0
     }
+  }
+  else {
+    var data = []
+    var totalProduct = 0
   }
 
   if (!data) {
@@ -178,7 +200,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   console.log("pramLength", params.id.length)
   return {
     props: {
-      productList: data,
+      productLists: data,
+      totalProduct,
     },
   }
 }
