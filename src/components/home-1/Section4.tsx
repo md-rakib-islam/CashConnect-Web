@@ -43,11 +43,11 @@ const Section4: React.FC = () => {
               <CategorySectionHeader
                 iconName="ranking-1"
                 title="Top Ratings"
-                seeMoreLink="#"
+                seeMoreLink="product/search/topRatingsAll"
               />
               <Card p="1rem">
                 <Grid container spacing={4}>
-                  {formattedProductData.slice(0, 4).map((item, key) => (
+                  {formattedProductData?.slice(0, 4)?.map((item, key) => (
                     <Grid item md={3} sm={6} xs={6} key={key}>
                       <Link href={item.productUrl}>
                         <a>

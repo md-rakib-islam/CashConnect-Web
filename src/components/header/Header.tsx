@@ -70,7 +70,7 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
         <FlexBox className="logo" alignItems="center" mr="1rem">
           <Link href="/">
             <a>
-              <Image src={`${BASE_URL}${logo}`} alt="logo" height="45" width="100" />
+              <Image src={`${BASE_URL}${logo}`} alt="logo" height="60" width="auto" borderRadius={50} />
             </a>
           </Link>
 

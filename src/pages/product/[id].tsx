@@ -1,19 +1,17 @@
 import Box from "@component/Box";
 import FlexBox from "@component/FlexBox";
 import NavbarLayout from "@component/layout/NavbarLayout";
-import AvailableShops from "@component/products/AvailableShops";
-import FrequentlyBought from "@component/products/FrequentlyBought";
 import ProductDescription from "@component/products/ProductDescription";
 import ProductIntro from "@component/products/ProductIntro";
 import ProductReview from "@component/products/ProductReview";
 import RelatedProducts from "@component/products/RelatedProducts";
 import { H5 } from "@component/Typography";
-import { BASE_URL, Product_by_id } from "@data/constants";
+import { BASE_URL, ProductByCategoryId, Product_by_id } from "@data/constants";
 import axios from "axios";
 import { GetServerSideProps } from "next";
 import React, { useState } from "react";
 
-const ProductDetails = ({ id, title, price, imgUrl, brand, rating, initialReviewsQuantity, fullDes }) => {
+const ProductDetails = ({ id, title, price, imgUrl, brand, rating, initialReviewsQuantity, fullDes, relatedProduct }) => {
 
   const [reviewsQuantity, setreviewsQuantity] = useState(initialReviewsQuantity)
 
@@ -77,11 +75,11 @@ const ProductDetails = ({ id, title, price, imgUrl, brand, rating, initialReview
         {selectedOption === "review" && <ProductReview productId={id} setReviews={setNumOfReviews} />}
       </Box>
 
-      <FrequentlyBought />
+      {/* <FrequentlyBought />
 
-      <AvailableShops />
+      <AvailableShops /> */}
 
-      <RelatedProducts />
+      <RelatedProducts relatedProduct={relatedProduct} />
     </div>
   );
 };
@@ -95,7 +93,11 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const res = await axios.get(`${BASE_URL}${Product_by_id}${params.id}`)
   const data = await res.data
 
-  console.log("productDetails", data)
+  const relatedProductRes = await fetch(`${BASE_URL}${ProductByCategoryId}${data.category}`)
+  var relatedProductjson = await relatedProductRes.json()
+  var relatedProduct: any[] = await relatedProductjson.products
+
+  console.log("relatedProduct", relatedProduct)
   return {
     props: {
       id: params.id,
@@ -106,6 +108,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       fullDes: data?.full_desc,
       initialReviewsQuantity: data?.numReviews,
       rating: data?.rating,
+      relatedProduct
     },
   }
 }

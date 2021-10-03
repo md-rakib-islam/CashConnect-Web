@@ -65,7 +65,7 @@ const Footer: React.FC = () => {
                   <a>
                     <Image
                       mb="1.25rem"
-                      src={`${BASE_URL}${logo}`} alt="logo" height="40" width="100"
+                      src={`${BASE_URL}${logo}`} alt="logo" height="50" width="auto" borderRadius={50}
                     />
                   </a>
                 </Link>

@@ -1,7 +1,7 @@
 import { Category_All_With_Child } from "@data/constants";
 //import navigations from "@data/navigations";
 import React, { useEffect, useState } from "react";
-import useFormattedNavigationData from "../../customHook/useFormattedCategoryData";
+import useFormattedCategoryData from "../../customHook/useFormattedCategoryData";
 import CategoryMenuItem from "./category-menu-item/CategoryMenuItem";
 import { StyledCategoryDropdown } from "./CategoryDropdownStyle";
 import MegaMenu1 from "./mega-menu/MegaMenu1";
@@ -23,7 +23,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
 
   const [navigationData, setNavigationData] = useState([]);
   const [formattedCategoryData] =
-    useFormattedNavigationData(navigationData);
+    useFormattedCategoryData(navigationData);
 
   useEffect(() => {
     fetch(`${Category_All_With_Child}`)
@@ -34,7 +34,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
       });
   }, []);
 
-  console.log("formatedCategory", formattedCategoryData);
+  console.log("formatedCategory", navigationData);
   return (
     <StyledCategoryDropdown open={open} position={position}>
       {formattedCategoryData?.map((item) => {

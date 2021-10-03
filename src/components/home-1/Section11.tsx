@@ -20,7 +20,7 @@ const Section11: React.FC = () => {
 
   return (
     <Container mb="70px">
-      <CategorySectionHeader title="More For You" seeMoreLink="#" />
+      <CategorySectionHeader title="More For You" seeMoreLink="product/search/moreForYouAll" />
       <Grid container spacing={6}>
         {productForYouList.map((item, ind) => (
           <Grid item lg={3} md={4} sm={6} xs={12} key={ind}>

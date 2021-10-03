@@ -28,7 +28,11 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
 
   const handleFormSubmit = (values) => {
     console.log("values", values)
-    router.push(`/product/search/${categoryId}/${values.search}`)
+    // router.push(`/product/search/${categoryId}/${values.search}`)
+    router.push({
+      pathname: '/product/search/productSearch',
+      query: { categoryId: categoryId, searchKey: values.search },
+    })
   }
 
   const handleCategoryChange = (cat) => () => {
@@ -56,7 +60,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
     axios.get(`${Category_All}`).then(res => {
       console.log("Category_All", res.data.categories)
       let Categoriess = res.data.categories
-      Categoriess.unshift({ id: 0, name: "All Categories" })
+      Categoriess?.unshift({ id: 0, name: "All Categories" })
       setCategories(Categoriess)
     })
 
@@ -110,7 +114,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
               </FlexBox>
             }
           >
-            {categories.map((item, key) => (
+            {categories?.map((item, key) => (
               <MenuItem key={key} onClick={handleCategoryChange(item)}>
                 {item?.name}
               </MenuItem>

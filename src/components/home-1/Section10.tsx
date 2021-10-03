@@ -27,7 +27,7 @@ const Section10: React.FC = () => {
       />
 
       <Grid container spacing={6}>
-        {categories.map((item, ind) => (
+        {categories?.map((item, ind) => (
           <Grid item lg={2} md={3} sm={4} xs={12} key={ind}>
             <Link href="/">
               <a>

@@ -33,11 +33,11 @@ const Section2: React.FC = () => {
     <CategorySectionCreator
       iconName="light"
       title="Flash Deals"
-      seeMoreLink="#"
+      seeMoreLink="product/search/flashDealsAll"
     >
       <Box mt="-0.25rem" mb="-0.25rem">
-        <Carousel totalSlides={formattedProductData.length} visibleSlides={visibleSlides}>
-          {formattedProductData.map((item) => (
+        <Carousel totalSlides={formattedProductData?.length} visibleSlides={visibleSlides}>
+          {formattedProductData?.map((item) => (
             <Box py="0.25rem" key={item.id}>
               <ProductCard1
                 id={item.id}
@@ -59,35 +59,3 @@ const Section2: React.FC = () => {
 
 export default Section2;
 
-const productList = [
-  {
-    imgUrl: "/assets/images/products/flash-1.png",
-  },
-  {
-    imgUrl: "/assets/images/products/flash-2.png",
-  },
-  {
-    imgUrl: "/assets/images/products/flash-3.png",
-  },
-  {
-    imgUrl: "/assets/images/products/flash-4.png",
-  },
-  {
-    imgUrl: "/assets/images/products/flash-1.png",
-  },
-  {
-    imgUrl: "/assets/images/products/flash-2.png",
-  },
-  {
-    imgUrl: "/assets/images/products/flash-3.png",
-  },
-  {
-    imgUrl: "/assets/images/products/flash-4.png",
-  },
-  {
-    imgUrl: "/assets/images/products/flash-1.png",
-  },
-  {
-    imgUrl: "/assets/images/products/flash-2.png",
-  },
-];

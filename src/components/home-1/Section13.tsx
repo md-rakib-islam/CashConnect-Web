@@ -22,7 +22,6 @@ const Section13: React.FC = () => {
 
   useEffect(() => {
     axios.get(`${Product_Discount}`).then(res => {
-      console.log("Product_DiscountRes", res.data.discounted_products)
       setProductData(res.data.products)
     })
   }, [])
@@ -40,11 +39,11 @@ const Section13: React.FC = () => {
     <CategorySectionCreator
       iconName="gift"
       title="Big Discounts"
-      seeMoreLink="#"
+      seeMoreLink="product/search/bigDiscountsAll"
     >
       <Box my="-0.25rem">
-        <Carousel totalSlides={formattedProductData.length} visibleSlides={visibleSlides}>
-          {formattedProductData.map((item) => (
+        <Carousel totalSlides={formattedProductData?.length} visibleSlides={visibleSlides}>
+          {formattedProductData?.map((item) => (
             <Box py="0.25rem" key={item.id}>
               <Card p="1rem">
                 <Link href={`/product/${item.id}`}>

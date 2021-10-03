@@ -22,7 +22,7 @@ const ProductCard1List: React.FC<ProductCard1ListProps> = ({ productList }) => {
   return (
     <div>
       <Grid container spacing={6}>
-        {formattedProductData.map((item, ind) => (
+        {formattedProductData?.map((item, ind) => (
           <Grid item lg={4} sm={6} xs={12} key={ind}>
             <ProductCard1 {...item} />
           </Grid>
@@ -35,7 +35,7 @@ const ProductCard1List: React.FC<ProductCard1ListProps> = ({ productList }) => {
         alignItems="center"
         mt="32px"
       >
-        <SemiSpan>Showing 1-10 of {productList.length} Products</SemiSpan>
+        <SemiSpan>Showing 1-10 of {productList?.length} Products</SemiSpan>
         <Pagination pageCount={10} />
       </FlexBox>
     </div>

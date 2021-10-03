@@ -19,7 +19,7 @@ const ProductCard9List: React.FC<ProductCard9ListProps> = ({ productList }) => {
 
   return (
     <div>
-      {formattedProductData.map((item, ind) => (
+      {formattedProductData?.map((item, ind) => (
         <ProductCard9 mb="1.25rem" key={ind} {...item} />
       ))}
 
@@ -29,7 +29,7 @@ const ProductCard9List: React.FC<ProductCard9ListProps> = ({ productList }) => {
         alignItems="center"
         mt="32px"
       >
-        <SemiSpan>Showing 1-10 of {productList.length} Products</SemiSpan>
+        <SemiSpan>Showing 1-10 of {productList?.length} Products</SemiSpan>
         <Pagination pageCount={10} />
       </FlexBox>
     </div>

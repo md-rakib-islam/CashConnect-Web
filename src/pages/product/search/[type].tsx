@@ -12,7 +12,7 @@ import ProductFilterCard from "@component/products/ProductFilterCard";
 import Select from "@component/Select";
 import Sidenav from "@component/sidenav/Sidenav";
 import { H5, Paragraph } from "@component/Typography";
-import { BASE_URL, Category_By_Id, ProductByCategoryId, Product_Search } from "@data/constants";
+import { BASE_URL, Category_By_Id, ProductByCategoryId, Product_Arrival, Product_Discount, Product_Filter, Product_Flash_Deals, Product_For_You, Product_Search, Product_Top_Rated } from "@data/constants";
 import axios from "axios";
 import { GetServerSideProps } from 'next';
 import { useRouter } from "next/router";
@@ -29,12 +29,8 @@ const ProductSearchResult = ({ productLists, totalProduct }) => {
   const isTablet = width < 1025;
 
   const router = useRouter();
-  try {
-    var id: string | string[] = router.query.id[0];
-  }
-  catch (err) {
-    var id = router.query.id;
-  }
+
+  var id = router.query.categoryId;
 
   const setFilteredProduct = (products, totalProduct) => {
     setProductList(products)
@@ -50,7 +46,7 @@ const ProductSearchResult = ({ productLists, totalProduct }) => {
 
   useEffect(() => {
     if (id) {
-      fetch(`${BASE_URL}${Category_By_Id}${id[0]}`)
+      fetch(`${BASE_URL}${Category_By_Id}${id}`)
         .then((res) => res.json())
         .then((data) => {
           console.log("categoryName", data.name);
@@ -67,7 +63,9 @@ const ProductSearchResult = ({ productLists, totalProduct }) => {
     setTotalProducts(totalProduct)
   }, [productLists, totalProduct])
 
+
   console.log("product_list", productList)
+  console.log("router.query", router.query)
   return (
     // <AppContext.Provider value="sakib">
     <Box pt="20px">
@@ -164,20 +162,21 @@ ProductSearchResult.layout = NavbarLayout;
 export default ProductSearchResult;
 
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
 
-  if (params.id.length == 1) {
-    const res = await fetch(`${BASE_URL}${ProductByCategoryId}${params.id[0]}`)
+  const category = query.categoryId
+
+  if (params.type === "productByCategory") {
+    const res = await fetch(`${BASE_URL}${ProductByCategoryId}${category}`)
     var json = await res.json()
     var data: any[] = await json.products
     var totalProduct: number = await json.total_elements
   }
 
-  else if (params.id.length == 2) {
+  else if (params.type === "productSearch") {
     try {
-      const category = params.id[0] == 0 ? "" : params.id[0]
 
-      const res = await axios.get(`${Product_Search}`, { params: { name: params.id[1], category } })
+      const res = await axios.get(`${Product_Search}`, { params: { name: query.searchKey, category } })
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
     }
@@ -186,6 +185,92 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       var totalProduct = 0
     }
   }
+  else if (params.type === "filter") {
+    try {
+      const brandIds = JSON.parse(query.brand)
+      const ratingIds = JSON.parse(query.rating)
+
+      var params = new URLSearchParams();
+      params.append("category", category);
+      params.append("min_price", query.min_price);
+      params.append("max_price", query.max_price);
+      brandIds.map((brand) => {
+        params.append("brand", brand);
+      })
+      ratingIds.map((rating) => {
+        params.append("rating", rating);
+      })
+
+
+      var request = {
+        params: params
+      };
+
+      const res = await axios.get(`${Product_Filter}`, request)
+      var data: any[] = await res.data.products
+      var totalProduct: number = await res.data.total_elements
+    }
+    catch (err) {
+      var data = []
+      var totalProduct = 0
+    }
+  }
+  else if (params.type === "flashDealsAll") {
+    try {
+      const res = await axios.get(`${Product_Flash_Deals}`)
+      var data: any[] = await res.data.products
+      var totalProduct: number = await res.data.total_elements
+
+    } catch (error) {
+      var data = []
+      var totalProduct = 0
+    }
+  }
+  else if (params.type === "topRatingsAll") {
+    try {
+      const res = await axios.get(`${Product_Top_Rated}`)
+      var data: any[] = await res.data.products
+      var totalProduct: number = await res.data.total_elements
+
+    } catch (error) {
+      var data = []
+      var totalProduct = 0
+    }
+  }
+  else if (params.type === "newArrivalsAll") {
+    try {
+      const res = await axios.get(`${Product_Arrival}`)
+      var data: any[] = await res.data.products
+      var totalProduct: number = await res.data.total_elements
+
+    } catch (error) {
+      var data = []
+      var totalProduct = 0
+    }
+  }
+  else if (params.type === "bigDiscountsAll") {
+    try {
+      const res = await axios.get(`${Product_Discount}`)
+      var data: any[] = await res.data.products
+      var totalProduct: number = await res.data.total_elements
+
+    } catch (error) {
+      var data = []
+      var totalProduct = 0
+    }
+  }
+  else if (params.type === "moreForYouAll") {
+    try {
+      const res = await axios.get(`${Product_For_You}`)
+      var data: any[] = await res.data.products
+      var totalProduct: number = await res.data.total_elements
+
+    } catch (error) {
+      var data = []
+      var totalProduct = 0
+    }
+  }
+
   else {
     var data = []
     var totalProduct = 0
@@ -197,7 +282,6 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     }
   }
 
-  console.log("pramLength", params.id.length)
   return {
     props: {
       productLists: data,

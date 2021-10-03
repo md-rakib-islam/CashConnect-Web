@@ -32,11 +32,11 @@ const Section5: React.FC = () => {
     <CategorySectionCreator
       iconName="new-product-1"
       title="New Arrivals"
-      seeMoreLink="#"
+      seeMoreLink="product/search/newArrivalsAll"
     >
       <Card p="1rem">
         <Grid container spacing={6}>
-          {formattedProductData.slice(0, 6).map((item) => (
+          {formattedProductData?.slice(0, 6)?.map((item) => (
             <Grid item lg={2} md={3} sm={4} xs={6} key={item.id}>
               <ProductCard2 {...item} />
             </Grid>

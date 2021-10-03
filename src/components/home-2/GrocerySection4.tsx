@@ -34,7 +34,7 @@ const GrocerySection4: React.FC = () => {
         >
           {productDatabase.slice(179, 188).map((item, ind) => (
             <Box py="0.25rem">
-              <ProductCard10 {...item} off={25} key={ind} />
+              <ProductCard10 {...item} off={0} key={ind} />
             </Box>
           ))}
         </Carousel>

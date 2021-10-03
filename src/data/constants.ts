@@ -1,38 +1,12 @@
-//http://cashconnectbackend.herokuapp.com
+//http://192.168.0.172:8001
 //base url
-export const BASE_URL = "http://192.168.0.153:8001";
+export const BASE_URL = "http://api.cashconnectbd.com";
 
 //not found image
 export const notFoundImg = "/assets/images/products/notFoundImg.png";
 
 //loding image
 export const loadingImg = "/assets/images/products/loadingProduct.png";
-
-try {
-  var jwtToken: any = {
-    headers: {
-      "Content-type": "application/json",
-      Authorization: localStorage.getItem("jwt_access_token"),
-    },
-  };
-} catch (err) {
-  jwtToken = {
-    headers: {
-      "Content-type": "application/json",
-    },
-  };
-}
-
-export const authTOKEN = jwtToken;
-
-try {
-  var user_id: any = localStorage?.getItem("UserId");
-} catch (err) {
-  user_id = 0;
-}
-
-//user id
-export var UserId = user_id;
 
 //login
 export const LOGIN_URL = `${BASE_URL}/users/api/v1/users/login/`;

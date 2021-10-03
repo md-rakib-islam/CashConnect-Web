@@ -48,12 +48,8 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
   const { dispatch } = useAppContext();
   const router = useRouter();
-  try {
-    var routerId = router.query?.id[0] as string;
-  } catch (err) {
-    var routerId = router.query?.id as string;
-  }
 
+  var routerId = router.query?.id as string;
 
   const [cartQuantity, setCartQuantity] = useState(0);
   const [itemId, setItemId] = useState(0);
@@ -79,7 +75,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
         })
         .catch(() => setCartQuantity(0));
     }
-  }, [getItemId, id]);
+  }, [getItemId, id,]);
 
   useEffect(() => {
     if (typeof brand == "number") {

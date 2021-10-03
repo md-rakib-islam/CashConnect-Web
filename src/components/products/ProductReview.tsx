@@ -2,6 +2,7 @@ import useUserInf from "@customHook/useUserInf";
 import { Review_Bt_Product_Id, Review_Create } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import * as yup from "yup";
 import Box from "../Box";
@@ -21,6 +22,8 @@ const ProductReview: React.FC<ProductReviewProps> = ({ productId, setReviews }) 
 
   const [commentList, setCommentList] = useState([])
   const [reloadreviews, setReloadreviews] = useState(0)
+
+  const { query } = useRouter()
 
   const handleFormSubmit = async (values, { resetForm }) => {
     console.log(values);
@@ -46,7 +49,7 @@ const ProductReview: React.FC<ProductReviewProps> = ({ productId, setReviews }) 
       setCommentList(res?.data)
       setReviews(res?.data?.length)
     })
-  }, [reloadreviews])
+  }, [reloadreviews, query])
 
   const {
     values,

@@ -1,8 +1,9 @@
 import useFormattedNavigationData from "@customHook/useFormattedCategoryData";
-import { Brand_All, Category_All_With_Child, Product_Filter } from "@data/constants";
+import { Brand_All, Category_All_With_Child } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
 import _ from "lodash";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import * as yup from "yup";
 import Accordion from "../accordion/Accordion";
@@ -23,20 +24,21 @@ const ProductFilterCard: React.FC<ProductFilterProps> = ({ setFilteredProduct })
   const [brandlist, setBrandlist] = useState([])
   const [brandIds, setBrandIds] = useState({})
   const [ratingIds, setRatingIds] = useState({})
-  const [categoryIds, setCategoryIds] = useState({})
   const [categoryId, setCategoryId] = useState<string | number>("")
 
   const [categoryData, setCategoryData] = useState([]);
   const [formattedCategoryData] =
     useFormattedNavigationData(categoryData);
 
+  const router = useRouter()
+
   const handleFormSubmit = () => { }
 
   const filterProduct = (type, e, id?: string | number) => {
     const value = e.target.value
 
-    const min_price = type === "min_price" ? value : values.min_price
-    const max_price = type === "max_price" ? value : values.max_price
+    const min_price = type === "min_price" ? value ? value : "" : values.min_price
+    const max_price = type === "max_price" ? value ? value : "" : values.max_price
 
     if (type === "brand") {
       setBrandIds({ ...brandIds, [`brand${id}`]: brandIds[`brand${id}`] ? 0 : id })
@@ -75,32 +77,22 @@ const ProductFilterCard: React.FC<ProductFilterProps> = ({ setFilteredProduct })
     }
 
     if (type === "category") {
-      setCategoryIds({ [`category${id}`]: categoryIds[`category${id}`] ? 0 : id })
       setCategoryId(id)
-      var categoryIDs = { [`category${id}`]: categoryIds[`category${id}`] ? 0 : id }
-      var category = []
-      for (let x in categoryIDs) {
-        if (categoryIDs[x]) {
-          category.push(categoryIDs[x]);
-        }
-      }
-    } else {
-      var category = []
-      for (let x in categoryIds) {
-        if (categoryIds[x]) {
-          category.push(categoryIds[x]);
-        }
-      }
     }
 
-    console.log("pram:", { min_price, max_price, brand, rating, category })
+    // console.log("pram:", { min_price, max_price, brand, rating, categoryId })
 
-    axios.get(`${Product_Filter}`, { params: { min_price, max_price, category: type === "category" ? (categoryIds[`category${id}`] ? "" : id) : categoryId } }).then(res => {
-      console.log("Product_FilterRes", res.data.products)
-      setFilteredProduct(res.data.products, res.data.total_elements)
-    }).catch(err => {
-      setFilteredProduct([], 0)
+    router.push({
+      pathname: '/product/search/filter',
+      query: { categoryId: type === "category" ? id : categoryId, min_price, max_price, brand: JSON.stringify(brand), rating: JSON.stringify(rating) },
     })
+
+    // axios.get(`${Product_Filter}`, { params: { min_price, max_price, category: type === "category" ? (categoryIds[`category${id}`] ? "" : id) : categoryId } }).then(res => {
+    //   console.log("Product_FilterRes", res.data.products)
+    //   setFilteredProduct(res.data.products, res.data.total_elements)
+    // }).catch(err => {
+    //   setFilteredProduct([], 0)
+    // })
   }
 
   useEffect(() => {
@@ -113,7 +105,11 @@ const ProductFilterCard: React.FC<ProductFilterProps> = ({ setFilteredProduct })
     })
   }, [])
 
-  console.log("formattedCategoryData", formattedCategoryData)
+  useEffect(() => {
+
+  }, [router.query])
+
+  console.log("categoryId", categoryId)
   const {
     values,
     errors,
@@ -143,12 +139,14 @@ const ProductFilterCard: React.FC<ProductFilterProps> = ({ setFilteredProduct })
               // justifyContent="flex-start"
               >
                 <SemiSpan className="cursor-pointer" mr="9px"
-                // onClick={(e) => filterProduct("category", e, item.id)}
+                  // onClick={(e) => filterProduct("category", e, item.id)}
+                  bg={`${categoryId === item.id && "#d4d4d4"}`}
+                  onClick={(e) => filterProduct("category", e, item.id)}
                 >
                   {item.title}
                 </SemiSpan>
               </AccordionHeader>
-              {item.menuData.categories.map((category) => {
+              {item?.menuData?.categories?.map((category) => {
 
                 return !_.isEmpty(category.subCategories) ? (
                   <Accordion key={category.id} pl="22px" expanded>
@@ -159,8 +157,11 @@ const ProductFilterCard: React.FC<ProductFilterProps> = ({ setFilteredProduct })
                     // justifyContent="flex-start"
                     >
                       <SemiSpan className="cursor-pointer" mr="9px"
-                      // onClick={(e) => filterProduct("category", e, category.id)}
+                        // onClick={(e) => filterProduct("category", e, category.id)}
+                        bg={`${categoryId === category.id && "#d4d4d4"}`}
+                        onClick={(e) => filterProduct("category", e, category.id)}
                       >
+
                         {category.title}
                       </SemiSpan>
                     </AccordionHeader>
@@ -172,7 +173,7 @@ const ProductFilterCard: React.FC<ProductFilterProps> = ({ setFilteredProduct })
                         pl="22px"
                         py="6px"
                         borderRadius={5}
-                        bg={categoryIds[`category${subCaterory.id}`] && "#d4d4d4"}
+                        bg={`${categoryId === subCaterory.id && "#d4d4d4"}`}
                         key={subCaterory.id}
                         onClick={(e) => filterProduct("category", e, subCaterory.id)}
                       >
@@ -190,7 +191,7 @@ const ProductFilterCard: React.FC<ProductFilterProps> = ({ setFilteredProduct })
                       pl="22px"
                       py="6px"
                       borderRadius={5}
-                      bg={categoryIds[`category${category.id}`] && "#d4d4d4"}
+                      bg={`${categoryId === category.id && "#d4d4d4"}`}
                       key={category.id}
                       onClick={(e) => filterProduct("category", e, category.id)}
                     >
@@ -207,7 +208,7 @@ const ProductFilterCard: React.FC<ProductFilterProps> = ({ setFilteredProduct })
               py="6px"
               key={item.id}
               borderRadius={5}
-              bg={categoryIds[`category${item.id}`] && "#d4d4d4"}
+              bg={`${categoryId === item.id && "#d4d4d4"}`}
               onClick={(e) => filterProduct("category", e, item.id)}
             >
               {item.title}
