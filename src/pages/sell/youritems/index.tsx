@@ -10,11 +10,13 @@ import Radio from "@component/radio/Radio";
 import TextField from "@component/text-field/TextField";
 import Typography from "@component/Typography";
 import useJsonToFormData from "@customHook/useJsonToFormData";
+import useUserInf from "@customHook/useUserInf";
 import { Purshase_Create } from "@data/constants";
 import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
 import { useFormik } from "formik";
 import _ from "lodash";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import * as yup from "yup";
 
@@ -30,6 +32,8 @@ function onlineSell() {
   const [images, setImages] = useState<TIMG>([[]]);
 
   const width = useWindowSize();
+
+  const router = useRouter()
 
   useEffect(() => {
     images.map((img, id) => {
@@ -70,24 +74,22 @@ function onlineSell() {
 
     const [PurchaseDataToFormData] = useJsonToFormData(purchaseData);
 
-    try {
-      var authTOKEN = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: localStorage.getItem("jwt_access_token"),
-        },
-      };
-    } catch (err) {
-      authTOKEN = null;
+    const { isLogin, authTOKEN } = useUserInf()
+
+    if (isLogin) {
+
+      axios
+        .post(`${Purshase_Create}`, PurchaseDataToFormData, authTOKEN)
+        .then((res) => {
+          console.log("purchaserequestRes", res);
+        }).catch(() => { });
+
+      console.log("purchaseData", purchaseData);
     }
-
-    axios
-      .post(`${Purshase_Create}`, PurchaseDataToFormData, authTOKEN)
-      .then((res) => {
-        console.log("purchaserequestRes", res);
-      });
-
-    console.log("purchaseData", purchaseData);
+    else {
+      router.push("/login")
+      localStorage.setItem("backAfterLogin", "/sell/youritems");
+    }
   };
 
   const handleContactTypeChange = ({ target: { name } }) => {
@@ -310,7 +312,7 @@ function onlineSell() {
               </Grid>
 
               <Grid item md={2} xs={1}>
-                {}
+                { }
               </Grid>
               <Grid item md={8} xs={10}>
                 <TextField
@@ -371,6 +373,7 @@ function onlineSell() {
                     <TextField
                       name={`item_name${idx}`}
                       label="Item Name"
+                      placeholder="Describe your item for us. Eg. Make: Samsung Model: S9 SM-G960F Colour: Lilac Storage: 64gb*"
                       fullwidth
                       boxShadow
                       onBlur={handleBlur}
@@ -438,7 +441,7 @@ function onlineSell() {
                               ml="15px"
                               src={src}
                               size={100}
-                              // loader={() => previewImage}
+                            // loader={() => previewImage}
                             />
                           </Box>
                         </>

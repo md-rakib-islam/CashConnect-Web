@@ -13,7 +13,7 @@ const Section7: React.FC = () => {
     axios.get(`${Category_With_Product_Brand}`).then(res => {
       console.log("Category_With_Product_BrandRes", res.data.categories_with_products_and_brands)
       setfetchedData(res.data.categories_with_products_and_brands)
-    })
+    }).catch(() => { })
   }, [])
 
   console.log("fetchedData", fetchedData)

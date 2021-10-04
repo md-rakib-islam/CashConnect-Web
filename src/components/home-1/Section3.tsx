@@ -17,7 +17,7 @@ const Section3: React.FC = () => {
     fetch(`${Category_Top_All}`).then(res => res.json()).then(res => {
       console.log("Category_Top_AllRes", res.categories)
       setTopCategorys(res.categories)
-    })
+    }).catch(() => { })
   }, [])
 
   useEffect(() => {

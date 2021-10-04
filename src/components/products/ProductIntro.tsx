@@ -1,4 +1,3 @@
-import LazyImage from "@component/LazyImage";
 import LoginPopup from "@component/LoginPopup";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
@@ -8,13 +7,13 @@ import {
   Customer_Order_Create,
   Customer_Order_Item_By_Product_Id,
   Customer_Order_Remove_Item,
-  loadingImg,
-  notFoundImg
+  loadingImg
 } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import ReactImageMagnify from 'react-image-magnify';
 import Avatar from "../avatar/Avatar";
 import Box from "../Box";
 import Button from "../buttons/Button";
@@ -127,7 +126,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
             type: "CHANGE_CART_QUANTITY",
             payload: Math.random(),
           });
-        });
+        }).catch(() => { });
       }
 
       //increase quantity
@@ -137,7 +136,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
           .then((res) => {
             console.log("increaseRes", res);
             setGetItemId(Math.random());
-          });
+          }).catch(() => { });
       }
 
       //remove
@@ -151,7 +150,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               type: "CHANGE_CART_QUANTITY",
               payload: Math.random(),
             });
-          });
+          }).catch(() => { });
       }
 
       //decrease quantity
@@ -161,7 +160,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
           .then((res) => {
             console.log("decreaseRes", res);
             setGetItemId(Math.random());
-          });
+          }).catch(() => { });
       }
 
     }
@@ -169,6 +168,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       setOpenLogin(true)
     }
   };
+
 
   // console.log("productId", id);
   const { isLogin } = useUserInf()
@@ -181,24 +181,24 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
         <Grid container justifyContent="center" spacing={16}>
           <Grid item md={6} xs={12} alignItems="center">
             <Box>
-              <FlexBox justifyContent="center" mb="50px">
-                <LazyImage
-                  src={
-                    imgUrl[selectedImage] != `${BASE_URL}null`
-                      ? imgUrl[selectedImage]
-                      : notFoundImg
-                  }
-                  loader={() =>
-                    imgUrl[selectedImage] != `${BASE_URL}null`
-                      ? imgUrl[selectedImage]
-                      : notFoundImg
-                  }
-                  alt={title}
-                  height="300px"
-                  width="auto"
-                  loading="eager"
-                  objectFit="contain"
-                />
+              <FlexBox justifyContent="center" mb="50px" >
+                <div style={{ width: "300px", height: "auto" }}>
+                  <ReactImageMagnify {...{
+                    smallImage: {
+                      alt: 'Wristwatch by Ted Baker London',
+                      isFluidWidth: true,
+                      src: imgUrl[selectedImage],
+                    },
+                    largeImage: {
+                      src: imgUrl[selectedImage],
+                      width: 1000,
+                      height: 1000,
+                      style: { background: "black" }
+                    },
+
+                  }} />
+                </div>
+
               </FlexBox>
               <FlexBox overflow="auto">
                 {imgUrl.map((url, ind) => (

@@ -121,7 +121,7 @@ export const Tiny2: React.FC<CustomProps> = (props) => {
       .then((res) => res.json())
       .then((data) => {
         setProductQuantity(data?.order?.order_items?.length);
-      });
+      }).catch(() => { });
   }, [cartCanged]);
 
   return (

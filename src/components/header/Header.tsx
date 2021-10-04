@@ -32,7 +32,7 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
     fetch(`${Site_Setting_All}`).then(res => res.json()).then(res => {
       console.log("SiteSettingRes", res.general_settings[0])
       setLogo(res.general_settings[0].logo)
-    })
+    }).catch(() => { })
   }, [])
 
   const cartHandle = (

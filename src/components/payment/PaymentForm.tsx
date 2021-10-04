@@ -5,6 +5,7 @@ import { Customer_Order_Confirm } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, {
   Fragment,
   useEffect,
@@ -36,6 +37,8 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
 
   const width = useWindowSize();
   const isMobile = width < 769;
+
+  const router = useRouter()
 
   const cardNumberRef = useRef();
   const cardHolderRef = useRef();
@@ -78,6 +81,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
     for (let key in useKeys) {
       var value = localStorage.getItem(`${key}`);
       setFieldValue(`${key}`, value);
+      // setFieldValue(`${key}`, _.isNull(value) ? "" : value);
     }
     const payment_Method = localStorage.getItem("payment_mathod");
     setPaymentMethod(payment_Method);
@@ -173,6 +177,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
       axios
         .post(`${Customer_Order_Confirm}${order_Id}`, confirmData, authTOKEN)
         .then((res) => {
+          const user_type = localStorage.getItem("userType")
           console.log("confirmOrderRes", res);
           confirmedOrderRes.current = true;
           for (let key in useKeys) {
@@ -182,8 +187,14 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
             type: "CHANGE_CART_QUANTITY",
             payload: Math.random(),
           });
-        });
 
+          if (user_type == 3) {
+            router.push("/orders")
+          }
+          else if (user_type == 2) {
+            router.push("/vendor/orders")
+          }
+        }).catch(() => { });
     }
     else {
       setOpenLogin(true)
@@ -198,7 +209,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
     var checkoutSchema: any = yup.object().shape({
       card_number: yup.string().required("required"),
       card_holder: yup.string().required("required"),
-      expiry_date: yup.string().required("required"),
+      expiry_date: yup.date().required("required"),
       cvc_code: yup.string().required("required"),
     });
   } else if (paymentMethod === "paypal") {
@@ -217,7 +228,8 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
     var checkoutSchema: any = yup.object().shape({
       rocket: yup.string().required("nagad"),
     });
-  } else {
+  }
+  else {
     var checkoutSchema: any = yup.object().shape({});
   }
 

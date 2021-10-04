@@ -30,7 +30,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
     console.log("values", values)
     // router.push(`/product/search/${categoryId}/${values.search}`)
     router.push({
-      pathname: '/product/search/productSearch',
+      pathname: '/product/search/search_by_product_name',
       query: { categoryId: categoryId, searchKey: values.search },
     })
   }
@@ -62,7 +62,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
       let Categoriess = res.data.categories
       Categoriess?.unshift({ id: 0, name: "All Categories" })
       setCategories(Categoriess)
-    })
+    }).catch(() => { })
 
     window.addEventListener("click", handleDocumentClick);
     return () => {
@@ -75,9 +75,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
     errors,
     touched,
     handleChange,
-    handleBlur,
     handleSubmit,
-    setFieldValue,
   } = useFormik({
     initialValues: initialValues,
     validationSchema: checkoutSchema,

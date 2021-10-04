@@ -80,29 +80,22 @@ const ProductFilterCard: React.FC<ProductFilterProps> = ({ setFilteredProduct })
       setCategoryId(id)
     }
 
-    // console.log("pram:", { min_price, max_price, brand, rating, categoryId })
-
     router.push({
       pathname: '/product/search/filter',
       query: { categoryId: type === "category" ? id : categoryId, min_price, max_price, brand: JSON.stringify(brand), rating: JSON.stringify(rating) },
     })
 
-    // axios.get(`${Product_Filter}`, { params: { min_price, max_price, category: type === "category" ? (categoryIds[`category${id}`] ? "" : id) : categoryId } }).then(res => {
-    //   console.log("Product_FilterRes", res.data.products)
-    //   setFilteredProduct(res.data.products, res.data.total_elements)
-    // }).catch(err => {
-    //   setFilteredProduct([], 0)
-    // })
   }
 
   useEffect(() => {
     axios.get(`${Brand_All}`).then(res => {
       console.log("brands", res.data.brands)
       setBrandlist(res.data.brands)
-    })
+    }).catch(() => { })
+
     axios.get(`${Category_All_With_Child}`).then(res => {
       setCategoryData(res.data.categories)
-    })
+    }).catch(() => { })
   }, [])
 
   useEffect(() => {
@@ -115,7 +108,6 @@ const ProductFilterCard: React.FC<ProductFilterProps> = ({ setFilteredProduct })
     errors,
     touched,
     handleChange,
-    setFieldValue,
   } = useFormik({
     initialValues: initialValues,
     validationSchema: checkoutSchema,

@@ -90,12 +90,22 @@ export default ProductDetails;
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
-  const res = await axios.get(`${BASE_URL}${Product_by_id}${params.id}`)
-  const data = await res.data
+  try {
+    const res = await axios.get(`${BASE_URL}${Product_by_id}${params.id}`)
+    var data: any = await res.data
+  }
+  catch (err) {
+    var data: any = {}
+  }
 
-  const relatedProductRes = await fetch(`${BASE_URL}${ProductByCategoryId}${data.category}`)
-  var relatedProductjson = await relatedProductRes.json()
-  var relatedProduct: any[] = await relatedProductjson.products
+  try {
+    const relatedProductRes = await fetch(`${BASE_URL}${ProductByCategoryId}${data.category}`)
+    var relatedProductjson = await relatedProductRes.json()
+    var relatedProduct: any[] = await relatedProductjson.products
+  }
+  catch (err) {
+    var relatedProduct = []
+  }
 
   console.log("relatedProduct", relatedProduct)
   return {

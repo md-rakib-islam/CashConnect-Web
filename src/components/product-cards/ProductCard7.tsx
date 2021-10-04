@@ -72,7 +72,8 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
                 type: "CHANGE_CART_QUANTITY",
                 payload: Math.random(),
               });
-            });
+            }).catch(() => { });
+
         } else if (action == "increase") {
           console.log("increaseData", orderData);
           axios
@@ -80,14 +81,15 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
             .then((res) => {
               console.log("itemIncreaseRes", res);
               runReloadCart();
-            });
+            }).catch(() => { });
+
         } else if (action == "decrease") {
           axios
             .put(`${Customer_decrease_Quantity}${order_Id}/${item_id}`, orderData)
             .then((res) => {
               console.log("itemDecreaseRes", res);
               runReloadCart();
-            });
+            }).catch(() => { });
         }
       }
       else {

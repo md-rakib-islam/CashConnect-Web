@@ -24,12 +24,12 @@ const Section4: React.FC = () => {
     axios.get(`${Product_Top_Rated}`).then(res => {
       console.log("Product_Top_RatedRes", res.data?.products)
       setProductData(res.data?.products)
-    })
+    }).catch(() => { })
 
     axios.get(`${Brand_Featured}`).then(res => {
       console.log("Brand_FeaturedRes", res.data)
       setBrandData(res.data)
-    })
+    }).catch(() => { })
   }, [])
 
   console.log("formattedBrandData", formattedBrandData)
@@ -43,7 +43,7 @@ const Section4: React.FC = () => {
               <CategorySectionHeader
                 iconName="ranking-1"
                 title="Top Ratings"
-                seeMoreLink="product/search/topRatingsAll"
+                seeMoreLink="product/search/top_ratings_all"
               />
               <Card p="1rem">
                 <Grid container spacing={4}>

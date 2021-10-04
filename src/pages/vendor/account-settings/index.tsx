@@ -88,6 +88,7 @@ const AccountSettings = () => {
 
       for (let key in data) {
         setFieldValue(`${key}`, data[key]);
+        // setFieldValue(`${key}`, _.isNull(data[key]) ? "" : data[key]);
       }
 
       setFieldValue("gender", {
@@ -95,7 +96,7 @@ const AccountSettings = () => {
         label: genders.find((gender: any) => gender?.value == data.gender)
           ?.label,
       });
-    });
+    }).catch(() => { });
   }, [user_id]);
 
   const handleFormSubmit = async (values) => {
@@ -125,7 +126,7 @@ const AccountSettings = () => {
       .put(`${Vendor_Update}${user_id}`, vendorEditData, authTOKEN)
       .then((data) => {
         console.log("VenderUpdatedRes", data);
-      });
+      }).catch(() => { });
   };
 
   const {

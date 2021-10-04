@@ -84,7 +84,7 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
         } else {
           closeSignupDialog()
         }
-      });
+      }).catch(() => { });
     }
 
 

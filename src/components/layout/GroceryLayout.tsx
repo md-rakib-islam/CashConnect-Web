@@ -23,7 +23,7 @@ const GroceryLayout: React.FC<Props> = ({
       const data = res?.general_settings[0]
       setTitle(data.title)
     }
-    )
+    ).catch(() => { })
   }, [])
 
   return (

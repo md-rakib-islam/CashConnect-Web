@@ -23,7 +23,7 @@ const Section13: React.FC = () => {
   useEffect(() => {
     axios.get(`${Product_Discount}`).then(res => {
       setProductData(res.data.products)
-    })
+    }).catch(() => { })
   }, [])
 
   useEffect(() => {

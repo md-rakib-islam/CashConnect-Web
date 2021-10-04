@@ -15,7 +15,7 @@ const Section11: React.FC = () => {
     fetch(`${Product_For_You}`).then(res => res.json()).then(res => {
       console.log("Product_For_YouRes", res.products)
       setProductList(res.products)
-    })
+    }).catch(() => { })
   }, [])
 
   return (

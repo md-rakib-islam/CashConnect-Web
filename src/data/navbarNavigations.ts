@@ -27,7 +27,7 @@ const navbarNavigations = [
   },
   {
     title: "Shop Now",
-    url: "/shop",
+    url: "/",
   },
   {
     title: "Sell",
@@ -44,11 +44,11 @@ const navbarNavigations = [
   },
   {
     title: "Get A Loan",
-    url: "/getalone",
+    url: "/",
   },
   {
     title: "Contact Us",
-    url: "/contact",
+    url: "/",
   },
   
   // {

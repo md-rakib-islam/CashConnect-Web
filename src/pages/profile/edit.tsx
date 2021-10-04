@@ -26,8 +26,8 @@ import {
 } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
-import { GetServerSideProps } from "next";
 import Link from "next/link";
+import router from "next/router";
 import React, { useEffect, useState } from "react";
 import * as yup from "yup";
 
@@ -35,15 +35,16 @@ type Iimage = any;
 type TIMG = any;
 
 const ProfileEditor = ({
-  countries = [],
-  thanas = [],
-  branches = [],
-  cities = [],
-  customer_types = [],
-  roles = [],
 }) => {
   const [previewImage, setPreviewImage] = useState<Iimage>();
   const [image, setImage] = useState<TIMG>("");
+
+  const [roles, setRoles] = useState([]);
+  const [thanas, setThanas] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [countries, setCountries] = useState([]);
+  const [branches, setBranches] = useState([]);
+  const [customer_types, setCustomer_types] = useState([]);
 
   const genders = [
     { label: "Male", value: "male" },
@@ -79,10 +80,15 @@ const ProfileEditor = ({
 
     const [customerEditData] = useJsonToFormData(data);
 
+    console.log("customerEditData", customerEditData)
+    console.log("data", data)
+
+
     axios
       .put(`${Customer_Update}${user_id}`, customerEditData, authTOKEN)
       .then((data) => {
         console.log("updatedRes", data);
+        router.push("/profile")
       });
   };
 
@@ -95,21 +101,58 @@ const ProfileEditor = ({
 
       for (let key in data) {
         setFieldValue(`${key}`, data[key]);
+        // setFieldValue(`${key}`, _.isNull(data[key]) ? "" : data[key]);
       }
       setFieldValue("gender", {
         value: data.gender,
         label: genders.find((gender: any) => gender?.value == data.gender)
           ?.label,
       });
-    });
+    }).catch(() => { });
   }, [user_id]);
+
+  useEffect(() => {
+    fetch(`${Role_All}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setRoles(data.roles);
+      });
+
+    fetch(`${City_All}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setCities(data.cities);
+      });
+
+    fetch(`${Thana_All}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setThanas(data.thanas);
+      });
+
+    fetch(`${Country_All}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setCountries(data.countries);
+      });
+
+    fetch(`${Branch_All}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setBranches(data.branches);
+      });
+
+    fetch(`${Customer_type_All}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setCustomer_types(data.customer_types);
+      });
+  }, []);
 
   const {
     values,
     errors,
     touched,
-    // dirty,
-    // isValid,
     handleChange,
     handleBlur,
     handleSubmit,
@@ -472,46 +515,47 @@ ProfileEditor.layout = DashboardLayout;
 
 export default ProfileEditor;
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const [
-    countriesRes,
-    thanasRes,
-    branchesRes,
-    citiesRes,
-    customer_typesRes,
-    rolesRes,
-  ]: any = await Promise.all([
-    fetch(`${Country_All}`),
-    fetch(`${Thana_All}`),
-    fetch(`${Branch_All}`),
-    fetch(`${City_All}`),
-    fetch(`${Customer_type_All}`),
-    fetch(`${Role_All}`),
-  ]);
-  const [
-    countriesData,
-    thanasData,
-    branchesData,
-    citiesData,
-    customer_typesData,
-    rolesData,
-  ] = await Promise.all([
-    countriesRes.json(),
-    thanasRes.json(),
-    branchesRes.json(),
-    citiesRes.json(),
-    customer_typesRes.json(),
-    rolesRes.json(),
-  ]);
+// export const getServerSideProps: GetServerSideProps = async () => {
 
-  return {
-    props: {
-      countries: countriesData.countries,
-      thanas: thanasData.thanas,
-      branches: branchesData.branches,
-      cities: citiesData.cities,
-      customer_types: customer_typesData.customer_types,
-      roles: rolesData.roles,
-    }, // will be passed to the page component as props
-  };
-};
+//   const [
+//     countriesRes,
+//     thanasRes,
+//     branchesRes,
+//     citiesRes,
+//     customer_typesRes,
+//     rolesRes,
+//   ]: any = await Promise.all([
+//     fetch(`${Country_All}`),
+//     fetch(`${Thana_All}`),
+//     fetch(`${Branch_All}`),
+//     fetch(`${City_All}`),
+//     fetch(`${Customer_type_All}`),
+//     fetch(`${Role_All}`),
+//   ]);
+//   const [
+//     countriesData,
+//     thanasData,
+//     branchesData,
+//     citiesData,
+//     customer_typesData,
+//     rolesData,
+//   ] = await Promise.all([
+//     countriesRes.json(),
+//     thanasRes.json(),
+//     branchesRes.json(),
+//     citiesRes.json(),
+//     customer_typesRes.json(),
+//     rolesRes.json(),
+//   ]);
+
+//   return {
+//     props: {
+//       countries: countriesData.countries,
+//       thanas: thanasData.thanas,
+//       branches: branchesData.branches,
+//       cities: citiesData.cities,
+//       customer_types: customer_typesData.customer_types,
+//       roles: rolesData.roles,
+//     }, // will be passed to the page component as props
+//   };
+// };

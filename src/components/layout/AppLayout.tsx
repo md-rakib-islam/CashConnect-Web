@@ -25,7 +25,7 @@ const AppLayout: React.FC<Props> = ({
       const data = res?.general_settings[0]
       setTitle(data.title)
     }
-    )
+    ).catch(() => { })
   }, [])
 
 

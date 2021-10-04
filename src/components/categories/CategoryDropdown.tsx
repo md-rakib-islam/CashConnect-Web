@@ -31,7 +31,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
       .then((data) => {
         console.log("category", data.categories);
         setNavigationData(data.categories);
-      });
+      }).catch(() => { });
   }, []);
 
   console.log("formatedCategory", navigationData);

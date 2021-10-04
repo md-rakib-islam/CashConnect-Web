@@ -69,7 +69,8 @@ const CheckoutForm = () => {
           .then((res) => {
             console.log("shipingRes", res);
             router.push("/payment");
-          });
+          })
+          .catch(() => { })
       } else if (shippingId) {
         const authTOKEN = {
           headers: {
@@ -82,7 +83,7 @@ const CheckoutForm = () => {
           .then((res) => {
             console.log("shppingDeleteRes", res);
             router.push("/payment");
-          });
+          }).catch(() => { })
       } else {
         router.push("/payment");
       }
@@ -116,25 +117,25 @@ const CheckoutForm = () => {
           setFieldValue(`${key}`, data[key]);
         }
       }
-    });
+    }).catch(() => { })
 
     fetch(`${City_All}`)
       .then((res) => res.json())
       .then((data) => {
         setCities(data.cities);
-      });
+      }).catch(() => { });
 
     fetch(`${Thana_All}`)
       .then((res) => res.json())
       .then((data) => {
         setThanas(data.thanas);
-      });
+      }).catch(() => { });
 
     fetch(`${Country_All}`)
       .then((res) => res.json())
       .then((data) => {
         setCountries(data.countries);
-      });
+      }).catch(() => { });
   }, []);
 
   if (sameAsProfile) {

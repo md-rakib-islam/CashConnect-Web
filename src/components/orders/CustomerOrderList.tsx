@@ -35,7 +35,7 @@ const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
         });
         setorderList(Orders);
         console.log("Orders", Orders);
-      });
+      }).catch(() => { });
   }, [user_id]);
 
   console.log("ordersList", ordersList);

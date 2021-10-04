@@ -19,7 +19,7 @@ const Section5: React.FC = () => {
     axios.get(`${Product_Arrival}`).then(res => {
       console.log("Product_ArrivalRes", res)
       setProductData(res.data.products)
-    })
+    }).catch(() => { })
   }, [])
 
   useEffect(() => {

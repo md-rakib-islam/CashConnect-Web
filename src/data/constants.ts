@@ -1,6 +1,6 @@
 //http://192.168.0.172:8001
 //base url
-export const BASE_URL = "http://api.cashconnectbd.com";
+export const BASE_URL = "http://192.168.0.172:8001";
 
 //not found image
 export const notFoundImg = "/assets/images/products/notFoundImg.png";
@@ -9,7 +9,7 @@ export const notFoundImg = "/assets/images/products/notFoundImg.png";
 export const loadingImg = "/assets/images/products/loadingProduct.png";
 
 //login
-export const LOGIN_URL = `${BASE_URL}/users/api/v1/users/login/`;
+export const LOGIN_URL = `${BASE_URL}/user/api/v1/user/login/`;
 
 //category by id
 export const Category_By_Id = "/category/api/v1/category/";
@@ -83,7 +83,7 @@ export const Customer_Order_Confirm = `${BASE_URL}/customerorder/api/v1/customer
 export const Customer_Order_Pending_Details = `${BASE_URL}/customerorder/api/v1/customerorder/get_a_customer_order_pending_detail/`;
 
 //shipping address
-export const Shipping_Adress_By_Order_Id = `${BASE_URL}/shippingaddress/api/v1/shippingaddress/`;
+export const Shipping_Adress_By_Order_Id = `${BASE_URL}/shippingaddress/api/v1/shippingaddress_using_order_id/`;
 
 export const Shipping_Address_Delete = `${BASE_URL}/shippingaddress/api/v1/shippingaddress/delete/`;
 

@@ -109,7 +109,8 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
             type: "CHANGE_CART_QUANTITY",
             payload: Math.random(),
           });
-        });
+        }).catch(() => { });
+
       } else {
         localStorage.setItem("backAfterLogin", `product/${id}`);
         router.push({
@@ -125,7 +126,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
         .then((res) => {
           console.log("increaseRes", res);
           setGetChartquantity(Math.random())
-        });
+        }).catch(() => { });
     }
 
     //romove
@@ -139,7 +140,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
             type: "CHANGE_CART_QUANTITY",
             payload: Math.random(),
           });
-        });
+        }).catch(() => { });
     }
 
     //decrease

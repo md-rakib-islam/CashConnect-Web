@@ -66,19 +66,21 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                 type: "CHANGE_CART_QUANTITY",
                 payload: Math.random(),
               });
-            });
+            }).catch(() => { });
+
         } else if (action == "increase") {
           axios
             .put(`${Customer_Increase_Quantity}${order_Id}/${item_id}`, orderData)
             .then(() => {
               setReloadCart(Math.random());
-            });
+            }).catch(() => { });
+
         } else if (action == "decrease") {
           axios
             .put(`${Customer_decrease_Quantity}${order_Id}/${item_id}`, orderData)
             .then(() => {
               setReloadCart(Math.random());
-            });
+            }).catch(() => { });
         }
 
       }
@@ -105,7 +107,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
     axios.get(`${Customer_Order_Pending_Details}${order_Id}`).then((res) => {
       setCartProductList(res.data.order.order_items);
       console.log("miniCartLisdt", res.data.order.order_items);
-    });
+    }).catch(() => { });
   }, [reloadCart]);
 
   return (

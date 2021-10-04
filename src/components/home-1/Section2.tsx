@@ -19,7 +19,7 @@ const Section2: React.FC = () => {
     axios.get(`${Product_Flash_Deals}`).then(res => {
       console.log("Product_Flash_DealsRes", res.data.products)
       setProductData(res.data.products)
-    })
+    }).catch(() => { })
   }, [])
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const Section2: React.FC = () => {
     <CategorySectionCreator
       iconName="light"
       title="Flash Deals"
-      seeMoreLink="product/search/flashDealsAll"
+      seeMoreLink="product/search/flash_deals_all"
     >
       <Box mt="-0.25rem" mb="-0.25rem">
         <Carousel totalSlides={formattedProductData?.length} visibleSlides={visibleSlides}>

@@ -33,7 +33,7 @@ const Topbar: React.FC = () => {
       setLogo(data?.logo)
       setPhone(data?.phone)
       setEmail(data?.email)
-    })
+    }).catch(() => { })
   }, [])
 
   return (

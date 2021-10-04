@@ -15,7 +15,7 @@ const Section10: React.FC = () => {
     axios.get(`${Category_Wth_Name_Img}`).then(res => {
       console.log("Category_Wth_Name_ImgRes", res)
       setCategories(res.data.categories)
-    })
+    }).catch(() => { })
   }, [])
 
   return (

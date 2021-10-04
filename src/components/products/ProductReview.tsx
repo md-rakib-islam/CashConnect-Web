@@ -48,7 +48,7 @@ const ProductReview: React.FC<ProductReviewProps> = ({ productId, setReviews }) 
       console.log("ReviewAllRes", res)
       setCommentList(res?.data)
       setReviews(res?.data?.length)
-    })
+    }).catch(() => { })
   }, [reloadreviews, query])
 
   const {
@@ -165,7 +165,7 @@ const initialValues = {
 
 const reviewSchema = yup.object().shape({
   rating: yup.number().required("required"),
-  comment: yup.string().required("required"),
+  // comment: yup.string().required("required"),
 });
 
 export default ProductReview;

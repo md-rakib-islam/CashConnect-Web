@@ -7,7 +7,7 @@ import {
 } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
-import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { Fragment, useEffect, useState } from "react";
 import Box from "../components/Box";
 import Button from "../components/buttons/Button";
@@ -30,6 +30,8 @@ const Cart = () => {
   const [cartProductList, setCartProductList] = useState<CartItem[]>([]);
   const [reloadCart, setReloadCart] = useState(0);
   const [openLogin, setOpenLogin] = useState(false)
+
+  const router = useRouter()
 
   const { order_Id, authTOKEN, isLogin } = useUserInf()
 
@@ -59,10 +61,11 @@ const Cart = () => {
         .post(`${Customer_Order_Comment}${order_Id}`, comment, authTOKEN)
         .then((res) => {
           console.log("comentRes", res);
-        });
+          router.push("/checkout")
+        }).catch(() => { });
     }
     else {
-
+      setOpenLogin(true)
     }
   };
 
@@ -71,7 +74,7 @@ const Cart = () => {
       console.log("CorderDetailsRes", res);
       setCartProductList(res.data.order?.order_items);
       setFieldValue("comment", res.data.order?.comment);
-    });
+    }).catch(() => { });
   }, [reloadCart]);
 
   const runReloadCart = () => {
@@ -156,16 +159,16 @@ const Cart = () => {
 
             <Divider mb="1rem" />
 
-            <Link href="/checkout">
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={addComment}
-                fullwidth
-              >
-                Checkout Now
-              </Button>
-            </Link>
+
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={addComment}
+              fullwidth
+            >
+              Checkout Now
+            </Button>
+
           </Card1>
         </Grid>
       </Grid>

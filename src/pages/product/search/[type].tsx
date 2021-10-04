@@ -20,7 +20,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import useWindowSize from "../../../hooks/useWindowSize";
 
 const ProductSearchResult = ({ productLists, totalProduct }) => {
-  const [categoryName, setcategoryName] = useState("Unknown");
+  const [searchingFor, setSearchingFor] = useState("Unknown");
   const [totalProducts, setTotalProducts] = useState(totalProduct);
   const [productList, setProductList] = useState(productLists)
 
@@ -45,16 +45,41 @@ const ProductSearchResult = ({ productLists, totalProduct }) => {
   );
 
   useEffect(() => {
-    if (id) {
-      fetch(`${BASE_URL}${Category_By_Id}${id}`)
-        .then((res) => res.json())
-        .then((data) => {
-          console.log("categoryName", data.name);
-          setcategoryName(data.name);
-        })
-        .catch(() => {
-          setcategoryName("Not Found");
-        });
+    const type = router.query.type
+    if (type === "productByCategory") {
+      if (id) {
+        fetch(`${BASE_URL}${Category_By_Id}${id}`)
+          .then((res) => res.json())
+          .then((data) => {
+            console.log("searchingFor", data.name);
+            setSearchingFor(data.name);
+          })
+          .catch(() => {
+            setSearchingFor("Not Found");
+          });
+      }
+    }
+    else if (type === "search_by_product_name") {
+      const searchKey = router.query.searchKey
+      setSearchingFor(searchKey)
+    }
+    else if (type === "flash_deals_all") {
+      setSearchingFor("Flash Deals")
+    }
+    else if (type === "top_ratings_all") {
+
+    }
+    else if (type === "search_by_product_name") {
+
+    }
+    else if (type === "search_by_product_name") {
+
+    }
+    else if (type === "search_by_product_name") {
+
+    }
+    else if (type === "search_by_product_name") {
+
     }
   }, [id]);
 
@@ -79,7 +104,7 @@ const ProductSearchResult = ({ productLists, totalProduct }) => {
         as={Card}
       >
         <div>
-          <H5>Searching for “ {categoryName} ”</H5>
+          <H5>Searching for “ {searchingFor} ”</H5>
           <Paragraph color="text.muted">{totalProducts} results found</Paragraph>
         </div>
         <FlexBox alignItems="center" flexWrap="wrap">
@@ -173,7 +198,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
     var totalProduct: number = await json.total_elements
   }
 
-  else if (params.type === "productSearch") {
+  else if (params.type === "search_by_product_name") {
     try {
 
       const res = await axios.get(`${Product_Search}`, { params: { name: query.searchKey, category } })
@@ -215,7 +240,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
       var totalProduct = 0
     }
   }
-  else if (params.type === "flashDealsAll") {
+  else if (params.type === "flash_deals_all") {
     try {
       const res = await axios.get(`${Product_Flash_Deals}`)
       var data: any[] = await res.data.products
@@ -226,7 +251,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
       var totalProduct = 0
     }
   }
-  else if (params.type === "topRatingsAll") {
+  else if (params.type === "top_ratings_all") {
     try {
       const res = await axios.get(`${Product_Top_Rated}`)
       var data: any[] = await res.data.products

@@ -23,7 +23,7 @@ const Checkout = () => {
       setShippingPrice(order.shipping_price);
       setTaxPrice(order.tax_price);
       setDiscountAmount(order.discount_amount);
-    });
+    }).catch(() => { });
   }, []);
 
   return (
