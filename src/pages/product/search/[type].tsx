@@ -20,7 +20,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import useWindowSize from "../../../hooks/useWindowSize";
 
 const ProductSearchResult = ({ productLists, totalProduct }) => {
-  const [searchingFor, setSearchingFor] = useState("Unknown");
+  const [searchingFor, setSearchingFor] = useState("");
   const [totalProducts, setTotalProducts] = useState(totalProduct);
   const [productList, setProductList] = useState(productLists)
 
@@ -60,26 +60,26 @@ const ProductSearchResult = ({ productLists, totalProduct }) => {
       }
     }
     else if (type === "search_by_product_name") {
-      const searchKey = router.query.searchKey
+      const searchKey: any = router.query.searchKey
       setSearchingFor(searchKey)
     }
     else if (type === "flash_deals_all") {
       setSearchingFor("Flash Deals")
     }
     else if (type === "top_ratings_all") {
-
+      setSearchingFor("Top Ratings")
+    }
+    else if (type === "new_arrivals_all") {
+      setSearchingFor("New Arrivals")
+    }
+    else if (type === "big_discounts_all") {
+      setSearchingFor("Big Discounts")
+    }
+    else if (type === "more_for_you_all") {
+      setSearchingFor("More For You")
     }
     else if (type === "search_by_product_name") {
-
-    }
-    else if (type === "search_by_product_name") {
-
-    }
-    else if (type === "search_by_product_name") {
-
-    }
-    else if (type === "search_by_product_name") {
-
+      setSearchingFor("Top Ratings")
     }
   }, [id]);
 
@@ -191,7 +191,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
 
   const category = query.categoryId
 
-  if (params.type === "productByCategory") {
+  if ((params.type === "productByCategory") || (params.type === "search_for")) {
     const res = await fetch(`${BASE_URL}${ProductByCategoryId}${category}`)
     var json = await res.json()
     var data: any[] = await json.products
@@ -262,7 +262,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
       var totalProduct = 0
     }
   }
-  else if (params.type === "newArrivalsAll") {
+  else if (params.type === "new_arrivals_all") {
     try {
       const res = await axios.get(`${Product_Arrival}`)
       var data: any[] = await res.data.products
@@ -273,7 +273,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
       var totalProduct = 0
     }
   }
-  else if (params.type === "bigDiscountsAll") {
+  else if (params.type === "big_discounts_all") {
     try {
       const res = await axios.get(`${Product_Discount}`)
       var data: any[] = await res.data.products
@@ -284,7 +284,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
       var totalProduct = 0
     }
   }
-  else if (params.type === "moreForYouAll") {
+  else if (params.type === "more_for_you_all") {
     try {
       const res = await axios.get(`${Product_For_You}`)
       var data: any[] = await res.data.products

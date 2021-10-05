@@ -9,8 +9,7 @@ import {
   Customer_decrease_Quantity,
   Customer_Increase_Quantity,
   Customer_Order_Pending_Details,
-  Customer_Order_Remove_Item,
-  notFoundImg
+  Customer_Order_Remove_Item
 } from "@data/constants";
 // import { CartItem } from "@reducer/cartReducer";
 import axios from "axios";
@@ -181,11 +180,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                 <Link href={`/product/${item?.product?.id}`}>
                   <a>
                     <Avatar
-                      src={
-                        item?.product?.thumbnail
-                          ? `${BASE_URL}${item?.product?.thumbnail}`
-                          : notFoundImg
-                      }
+                      src={`${BASE_URL}${item?.product?.thumbnail}`}
                       mx="1rem"
                       alt={item.product?.name}
                       size={76}

@@ -5,26 +5,15 @@ import FlexBox from "@component/FlexBox";
 import HoverBox from "@component/HoverBox";
 import LazyImage from "@component/LazyImage";
 import { H4 } from "@component/Typography";
-import useFormattedProductData from "@customHook/useFormattedProductData";
-import { Product_Discount } from "@data/constants";
 import useWindowSize from "@hook/useWindowSize";
-import axios from "axios";
+import _ from "lodash";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import CategorySectionCreator from "../CategorySectionCreator";
 
-const Section13: React.FC = () => {
+const Section13 = ({ bigDiscountList }) => {
   const [visibleSlides, setVisibleSlides] = useState(6);
   const width = useWindowSize();
-
-  const [productData, setProductData] = useState([]);
-  const [formattedProductData] = useFormattedProductData(productData);
-
-  useEffect(() => {
-    axios.get(`${Product_Discount}`).then(res => {
-      setProductData(res.data.products)
-    }).catch(() => { })
-  }, [])
 
   useEffect(() => {
     if (width < 370) setVisibleSlides(1);
@@ -34,16 +23,16 @@ const Section13: React.FC = () => {
   }, [width]);
 
 
-  console.log("bigDiscount", formattedProductData)
-  return (
+  console.log("bigDiscount", bigDiscountList)
+  const big_discount_list = (
     <CategorySectionCreator
       iconName="gift"
       title="Big Discounts"
-      seeMoreLink="product/search/bigDiscountsAll"
+      seeMoreLink="product/search/big_discounts_all"
     >
       <Box my="-0.25rem">
-        <Carousel totalSlides={formattedProductData?.length} visibleSlides={visibleSlides}>
-          {formattedProductData?.map((item) => (
+        <Carousel totalSlides={bigDiscountList?.length} visibleSlides={visibleSlides}>
+          {bigDiscountList?.map((item) => (
             <Box py="0.25rem" key={item.id}>
               <Card p="1rem">
                 <Link href={`/product/${item.id}`}>
@@ -85,6 +74,10 @@ const Section13: React.FC = () => {
       </Box>
     </CategorySectionCreator>
   );
+
+  const returnableData = _.isEmpty(bigDiscountList) ? null : big_discount_list
+
+  return returnableData
 };
 
 export default Section13;

@@ -7,8 +7,7 @@ import {
   BASE_URL,
   Customer_decrease_Quantity,
   Customer_Increase_Quantity,
-  Customer_Order_Remove_Item,
-  notFoundImg
+  Customer_Order_Remove_Item
 } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
@@ -106,9 +105,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
       <LoginPopup open={openLogin} closeLoginDialog={closeLoginTab} />
       <StyledProductCard7 {...props}>
         <Image
-          src={
-            product.thumbnail ? `${BASE_URL}${product.thumbnail}` : notFoundImg
-          }
+          src={`${BASE_URL}${product.thumbnail}`}
           size={140}
           display="block"
           alt={product.name}

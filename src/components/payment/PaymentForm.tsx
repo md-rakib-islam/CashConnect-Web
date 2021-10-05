@@ -169,6 +169,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
       } else if (paymentMethod === "cash") {
         var confirmData: any = {
           user_id,
+          pay_amount,
           payment_method: paymentMethod,
         };
       }
@@ -205,28 +206,29 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
     setPaymentMethod(name);
   };
 
+
   if (paymentMethod === "card") {
     var checkoutSchema: any = yup.object().shape({
-      card_number: yup.string().required("required"),
-      card_holder: yup.string().required("required"),
-      expiry_date: yup.date().required("required"),
-      cvc_code: yup.string().required("required"),
+      card_number: yup.string().required("required").nullable("required"),
+      card_holder: yup.string().required("required").nullable("required"),
+      expiry_date: yup.date().required("required").nullable("required"),
+      cvc_code: yup.string().required("required").nullable("required"),
     });
   } else if (paymentMethod === "paypal") {
     var checkoutSchema: any = yup.object().shape({
-      email: yup.string().required("required"),
+      email: yup.string().required("required").nullable("required"),
     });
   } else if (paymentMethod === "bkash") {
     var checkoutSchema: any = yup.object().shape({
-      bkash: yup.string().required("required"),
+      bkash: yup.string().required("required").nullable("required"),
     });
   } else if (paymentMethod === "rocket") {
     var checkoutSchema: any = yup.object().shape({
-      rocket: yup.string().required("required"),
+      rocket: yup.string().required("required").nullable("required"),
     });
   } else if (paymentMethod === "nagad") {
     var checkoutSchema: any = yup.object().shape({
-      rocket: yup.string().required("nagad"),
+      rocket: yup.string().required("nagad").nullable("required"),
     });
   }
   else {

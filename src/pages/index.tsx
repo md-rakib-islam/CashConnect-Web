@@ -1,4 +1,8 @@
 import Section13 from "@component/home-1/Section13";
+import useFormattedProductData from "@customHook/useFormattedProductData";
+import { Category_Top_All, Category_With_Product_Brand, Product_Arrival, Product_Discount, Product_Flash_Deals, Product_For_You, Product_Top_Rated } from "@data/constants";
+import axios from "axios";
+import { GetServerSideProps } from "next";
 import Section1 from "../components/home-1/Section1";
 import Section10 from "../components/home-1/Section10";
 import Section11 from "../components/home-1/Section11";
@@ -10,21 +14,30 @@ import Section5 from "../components/home-1/Section5";
 import Section7 from "../components/home-1/Section7";
 import AppLayout from "../components/layout/AppLayout";
 
-const IndexPage = () => {
+const IndexPage = ({ flashDealsList,
+  topCategoryList,
+  topRatedList,
+  featuredBrandList,
+  newArrivalList,
+  bigDiscountList,
+  categoriesList,
+  moreForYouList,
+  categoryWithProductBrandList
+}) => {
   return (
     <main>
       <Section1 />
-      <Section2 />
-      <Section3 />
-      <Section4 />
-      <Section5 />
-      <Section13 />
+      <Section2 flashDealsList={flashDealsList} />
+      <Section3 topCategoryList={topCategoryList} />
+      <Section4 topRatedList={topRatedList} featuredBrandList={featuredBrandList} />
+      <Section5 newArrivalList={newArrivalList} />
+      <Section13 bigDiscountList={bigDiscountList} />
       {/* <Section6 /> */}
-      <Section7 />
+      <Section7 categoryWithProductBrandList={categoryWithProductBrandList} />
       {/* <Section8 /> */}
       {/* <Section9 /> */}
-      <Section10 />
-      <Section11 />
+      <Section10 categoriesList={categoriesList} />
+      <Section11 moreForYouList={moreForYouList} />
       <Section12 />
     </main>
   );
@@ -33,3 +46,92 @@ const IndexPage = () => {
 IndexPage.layout = AppLayout;
 
 export default IndexPage;
+
+export const getServerSideProps: GetServerSideProps = async () => {
+
+  try {
+    var flashDealsRes = await axios.get(`${Product_Flash_Deals}`)
+    var flashDealsLists: any[] = await flashDealsRes.data.products
+    var [flashDealsList] = await useFormattedProductData(flashDealsLists);
+  } catch (err) {
+    var flashDealsList = []
+  }
+
+  try {
+    var topCategoryRes = await axios.get(`${Category_Top_All}`)
+    var topCategoryList: any[] = await topCategoryRes.data.categories
+  } catch (err) {
+    var topCategoryList = []
+  }
+
+  try {
+    var topRatedRes = await axios.get(`${Product_Top_Rated}`)
+    var topRatedLists: any[] = await topRatedRes.data.products
+    var [topRatedList] = useFormattedProductData(topRatedLists, "TopRated")
+  } catch (err) {
+    var topRatedList = []
+  }
+
+  try {
+    var featuredBrandsRes = await axios.get(`${Product_Top_Rated}`)
+    var featuredBrandLists: any[] = await featuredBrandsRes.data.products
+    var [featuredBrandList] = useFormattedProductData(featuredBrandLists, "FeaturedBrands")
+  } catch (err) {
+    var featuredBrandList = []
+  }
+
+  try {
+    var newArrivalRes = await axios.get(`${Product_Arrival}`)
+    var newArrivalLists: any[] = await newArrivalRes.data.products
+    var [newArrivalList] = useFormattedProductData(newArrivalLists, "Arrivals")
+  } catch (err) {
+    var newArrivalList = []
+  }
+
+  try {
+    var bigDiscountRes = await axios.get(`${Product_Discount}`)
+    var bigDiscountLists: any[] = await bigDiscountRes.data.products
+    var [bigDiscountList] = useFormattedProductData(bigDiscountLists)
+  } catch (err) {
+    var bigDiscountList = []
+  }
+
+  try {
+    var categoriesRes = await axios.get(`${Category_Top_All}`)
+    var categoriesList: any[] = await categoriesRes.data.categories
+  } catch (err) {
+    var categoriesList = []
+  }
+
+  try {
+    var moreForYouRes = await axios.get(`${Product_For_You}`)
+    var moreForYouLists: any[] = await moreForYouRes.data.products
+    var [moreForYouList] = useFormattedProductData(moreForYouLists)
+  } catch (err) {
+    var moreForYouList = []
+  }
+
+  try {
+    var categoryWithProductBrandRes = await axios.get(`${Category_With_Product_Brand}`)
+    var categoryWithProductBrandList: any[] = await categoryWithProductBrandRes.data.categories_with_products_and_brands
+    console.log("categories_with_products_and_brands", categoryWithProductBrandList)
+  } catch (err) {
+    var categoryWithProductBrandList = []
+  }
+
+
+
+  return {
+    props: {
+      flashDealsList,
+      topCategoryList,
+      topRatedList,
+      featuredBrandList,
+      newArrivalList,
+      bigDiscountList,
+      categoriesList,
+      moreForYouList,
+      categoryWithProductBrandList,
+    }
+  }
+}

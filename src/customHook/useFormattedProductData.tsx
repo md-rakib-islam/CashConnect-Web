@@ -24,7 +24,7 @@ function useFormattedProductData(productData, type?: string) {
                 category: data?.category,
                 brand: data?.brand,
                 rating: data?.rating,
-                reviewCount: data?.numReviews,
+                reviewCount: data?.num_reviews,
             }
         }
         )

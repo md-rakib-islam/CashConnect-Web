@@ -9,7 +9,7 @@ import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import TableRow from "@component/TableRow";
 import Typography, { H3, H5, Small } from "@component/Typography";
 import useUserInf from "@customHook/useUserInf";
-import { BASE_URL, Customer_By_Id, loadingImg } from "@data/constants";
+import { BASE_URL, Customer_By_Id } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -53,7 +53,7 @@ const Profile = () => {
         <Grid container spacing={6}>
           <Grid item lg={6} md={6} sm={12} xs={12}>
             <FlexBox as={Card} p="14px 32px" height="100%" alignItems="center">
-              <Avatar src={preViewImg || loadingImg} size={64} />
+              <Avatar src={preViewImg} size={64} />
               <Box ml="12px" flex="1 1 0">
                 <FlexBox
                   flexWrap="wrap"

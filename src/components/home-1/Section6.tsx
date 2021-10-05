@@ -69,7 +69,7 @@ const Section6: React.FC<Section6Props> = ({ data }) => {
         </Hidden>
 
         <Box flex="1 1 0" minWidth="0px">
-          <CategorySectionHeader title={data?.category?.name} seeMoreLink="#" />
+          <CategorySectionHeader title={data?.category?.name} categoryId={data?.category?.id} />
           <Grid container spacing={6}>
             {productList.map((item, ind) => (
               <Grid item lg={4} sm={6} xs={12} key={ind}>

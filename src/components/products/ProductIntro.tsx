@@ -6,8 +6,7 @@ import {
   Customer_Increase_Quantity,
   Customer_Order_Create,
   Customer_Order_Item_By_Product_Id,
-  Customer_Order_Remove_Item,
-  loadingImg
+  Customer_Order_Remove_Item
 } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
@@ -309,7 +308,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
 ProductIntro.defaultProps = {
   imgUrl: [
-    loadingImg,
+    "",
     "/assets/images/products/hiclipart.com (16).png",
     "/assets/images/products/hiclipart.com (18).png",
   ],

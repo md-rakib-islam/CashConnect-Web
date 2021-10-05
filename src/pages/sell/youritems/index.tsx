@@ -10,7 +10,6 @@ import Radio from "@component/radio/Radio";
 import TextField from "@component/text-field/TextField";
 import Typography from "@component/Typography";
 import useJsonToFormData from "@customHook/useJsonToFormData";
-import useUserInf from "@customHook/useUserInf";
 import { Purshase_Create } from "@data/constants";
 import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
@@ -74,22 +73,16 @@ function onlineSell() {
 
     const [PurchaseDataToFormData] = useJsonToFormData(purchaseData);
 
-    const { isLogin, authTOKEN } = useUserInf()
+    axios
+      .post(`${Purshase_Create}`, PurchaseDataToFormData)
+      .then((res) => {
+        console.log("purchaserequestRes", res);
+        router.push("/sell/youritems/success")
+      }).catch(() => { });
 
-    if (isLogin) {
+    console.log("purchaseData", purchaseData);
 
-      axios
-        .post(`${Purshase_Create}`, PurchaseDataToFormData, authTOKEN)
-        .then((res) => {
-          console.log("purchaserequestRes", res);
-        }).catch(() => { });
 
-      console.log("purchaseData", purchaseData);
-    }
-    else {
-      router.push("/login")
-      localStorage.setItem("backAfterLogin", "/sell/youritems");
-    }
   };
 
   const handleContactTypeChange = ({ target: { name } }) => {
@@ -120,7 +113,7 @@ function onlineSell() {
 
   //remove specific item
   const removeItem = (id) => {
-    let NewItems = items;
+    let NewItems = [...items];
     NewItems.splice(id, 1);
     setItems(NewItems);
 
@@ -136,7 +129,7 @@ function onlineSell() {
     setFieldValue(`item_price${id}`, "");
 
     items.map((data, idx) => {
-      if ((idx) => id) {
+      if (idx >= id) {
         setFieldValue(`item_name${idx}`, values[`item_name${idx + 1}`]);
         setFieldValue(`item_price${idx}`, values[`item_price${idx + 1}`]);
         if (items.length - 1 == idx) {
@@ -166,18 +159,18 @@ function onlineSell() {
   items.map((itm, id) => {
     itemShema = {
       ...itemShema,
-      [`item_name${id}`]: yup.string().required("required"),
-      [`item_price${id}`]: yup.number().required("required"),
-      [`item_image${id}`]: yup.string().required("required"),
+      [`item_name${id}`]: yup.string().required("required").nullable("required"),
+      [`item_price${id}`]: yup.number().required("required").nullable("required"),
+      [`item_image${id}`]: yup.string().required("required").nullable("required"),
     };
   });
 
   var checkoutSchema = yup.object().shape({
     ...itemShema,
-    first_name: yup.string().required("required"),
-    last_name: yup.string().required("required"),
-    contact_no: yup.string().required("required"),
-    email: yup.string().email("invalid email").required("required"),
+    first_name: yup.string().required("required").nullable("required"),
+    last_name: yup.string().required("required").nullable("required"),
+    contact_no: yup.string().required("required").nullable("required"),
+    email: yup.string().email("invalid email").required("required").nullable("required"),
   });
 
   const {

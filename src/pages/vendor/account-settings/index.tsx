@@ -15,9 +15,7 @@ import {
   BASE_URL,
   Branch_All,
   City_All,
-  Country_All,
-  loadingImg,
-  Role_All,
+  Country_All, Role_All,
   Thana_All,
   Vendor_By_Id,
   Vendor_Update
@@ -52,31 +50,31 @@ const AccountSettings = () => {
       .then((res) => res.json())
       .then((data) => {
         setRoles(data.roles);
-      });
+      }).catch(() => { });
 
     fetch(`${City_All}`)
       .then((res) => res.json())
       .then((data) => {
         setCities(data.cities);
-      });
+      }).catch(() => { });
 
     fetch(`${Thana_All}`)
       .then((res) => res.json())
       .then((data) => {
         setThanas(data.thanas);
-      });
+      }).catch(() => { });
 
     fetch(`${Country_All}`)
       .then((res) => res.json())
       .then((data) => {
         setCountries(data.countries);
-      });
+      }).catch(() => { });
 
     fetch(`${Branch_All}`)
       .then((res) => res.json())
       .then((data) => {
         setBranches(data.branches);
-      });
+      }).catch(() => { });
   }, []);
 
   useEffect(() => {
@@ -169,7 +167,7 @@ const AccountSettings = () => {
             left="24px"
           >
             <Avatar
-              src={previewImage || loadingImg}
+              src={previewImage}
               size={80}
               border="4px solid"
               borderColor="gray.100"

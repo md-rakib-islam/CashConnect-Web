@@ -2,12 +2,10 @@ import LazyImage from "@component/LazyImage";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import {
-  BASE_URL,
   Customer_decrease_Quantity,
   Customer_Increase_Quantity,
   Customer_Order_Create,
-  Customer_Order_Item_By_Product_Id, Customer_Order_Remove_Item, loadingImg,
-  notFoundImg
+  Customer_Order_Item_By_Product_Id, Customer_Order_Remove_Item
 } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
@@ -210,13 +208,11 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
         <Link href={`/product/${id}`}>
           <a>
             <LazyImage
-              src={imgUrl != `${BASE_URL}${null}` ? imgUrl : notFoundImg}
+              src={imgUrl}
               width="100%"
               height="auto"
               layout="responsive"
-              loader={() =>
-                imgUrl != `${BASE_URL}${null}` ? imgUrl : notFoundImg
-              }
+              loader={() => imgUrl}
               alt={title}
             />
           </a>
@@ -331,7 +327,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 ProductCard1.defaultProps = {
   id: "324321",
   title: "KSUS ROG Strix G15",
-  imgUrl: loadingImg,
+  imgUrl: "",
   off: 0,
   price: 450,
   rating: 0,

@@ -19,9 +19,7 @@ import {
   Country_All,
   Customer_By_Id,
   Customer_type_All,
-  Customer_Update,
-  loadingImg,
-  Role_All,
+  Customer_Update, Role_All,
   Thana_All
 } from "@data/constants";
 import axios from "axios";
@@ -116,37 +114,37 @@ const ProfileEditor = ({
       .then((res) => res.json())
       .then((data) => {
         setRoles(data.roles);
-      });
+      }).catch(() => { });
 
     fetch(`${City_All}`)
       .then((res) => res.json())
       .then((data) => {
         setCities(data.cities);
-      });
+      }).catch(() => { });
 
     fetch(`${Thana_All}`)
       .then((res) => res.json())
       .then((data) => {
         setThanas(data.thanas);
-      });
+      }).catch(() => { });
 
     fetch(`${Country_All}`)
       .then((res) => res.json())
       .then((data) => {
         setCountries(data.countries);
-      });
+      }).catch(() => { });
 
     fetch(`${Branch_All}`)
       .then((res) => res.json())
       .then((data) => {
         setBranches(data.branches);
-      });
+      }).catch(() => { });
 
     fetch(`${Customer_type_All}`)
       .then((res) => res.json())
       .then((data) => {
         setCustomer_types(data.customer_types);
-      });
+      }).catch(() => { });
   }, []);
 
   const {
@@ -180,7 +178,7 @@ const ProfileEditor = ({
       <Card1>
         <FlexBox alignItems="flex-end" mb="22px">
           <Avatar
-            src={previewImage || loadingImg}
+            src={previewImage}
             size={64}
           // loader={() => previewImage}
           />
@@ -503,12 +501,12 @@ const initialValues = {
 };
 
 const checkoutSchema = yup.object().shape({
-  first_name: yup.string().required("required"),
-  last_name: yup.string().required("required"),
-  email: yup.string().email("invalid email").required("required"),
-  date_of_birth: yup.date().required("invalid date"),
-  primary_phone: yup.string().required("primary_phone required"),
-  secondary_phone: yup.string().required("secondary_phone required"),
+  first_name: yup.string().required("required").nullable("required"),
+  last_name: yup.string().required("required").nullable("required"),
+  email: yup.string().email("invalid email").required("required").nullable("required"),
+  date_of_birth: yup.date().required("invalid date").nullable("required"),
+  primary_phone: yup.string().required("primary_phone required").nullable("required"),
+  secondary_phone: yup.string().required("secondary_phone required").nullable("required"),
 });
 
 ProfileEditor.layout = DashboardLayout;

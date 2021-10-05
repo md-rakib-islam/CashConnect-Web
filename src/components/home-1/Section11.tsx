@@ -1,28 +1,17 @@
-import useFormattedProductData from "@customHook/useFormattedProductData";
-import { Product_For_You } from "@data/constants";
-import React, { useEffect, useState } from "react";
+import _ from "lodash";
+import React from "react";
 import CategorySectionHeader from "../CategorySectionHeader";
 import Container from "../Container";
 import Grid from "../grid/Grid";
 import ProductCard1 from "../product-cards/ProductCard1";
 
-const Section11: React.FC = () => {
+const Section11 = ({ moreForYouList }) => {
 
-  const [productList, setProductList] = useState([])
-  const [productForYouList] = useFormattedProductData(productList.slice(0, 12));
-
-  useEffect(() => {
-    fetch(`${Product_For_You}`).then(res => res.json()).then(res => {
-      console.log("Product_For_YouRes", res.products)
-      setProductList(res.products)
-    }).catch(() => { })
-  }, [])
-
-  return (
+  const moreForYouLists = (
     <Container mb="70px">
-      <CategorySectionHeader title="More For You" seeMoreLink="product/search/moreForYouAll" />
+      <CategorySectionHeader title="More For You" seeMoreLink="product/search/more_for_you_all" />
       <Grid container spacing={6}>
-        {productForYouList.map((item, ind) => (
+        {moreForYouList.map((item, ind) => (
           <Grid item lg={3} md={4} sm={6} xs={12} key={ind}>
             <ProductCard1 off={0} hoverEffect {...item} />
           </Grid>
@@ -30,6 +19,10 @@ const Section11: React.FC = () => {
       </Grid>
     </Container>
   );
+
+  const returnableData = _.isEmpty(moreForYouList) ? null : moreForYouLists
+
+  return returnableData
 };
 
 export default Section11;

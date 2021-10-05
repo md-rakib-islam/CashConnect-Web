@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 import FlexBox from "./FlexBox";
 import Icon from "./icon/Icon";
@@ -8,13 +9,17 @@ export interface CategorySectionHeaderProps {
   title?: string;
   seeMoreLink?: string;
   iconName?: string;
+  categoryId?: any;
 }
 
 const CategorySectionHeader: React.FC<CategorySectionHeaderProps> = ({
   title,
   seeMoreLink,
   iconName,
+  categoryId
 }) => {
+  const router = useRouter()
+
   return (
     <FlexBox justifyContent="space-between" alignItems="center" mb="1.5rem">
       <FlexBox alignItems="center">
@@ -40,6 +45,19 @@ const CategorySectionHeader: React.FC<CategorySectionHeaderProps> = ({
           </a>
         </Link>
       )}
+      {categoryId && (<a onClick={() => {
+        router.push({
+          pathname: '/product/search/search_for',
+          query: { categoryId: categoryId },
+        })
+      }}>
+        <FlexBox alignItems="center" ml="0.5rem" color="text.muted">
+          <SemiSpan mr="0.5rem">View all</SemiSpan>
+          <Icon size="12px" defaultcolor="currentColor">
+            right-arrow
+          </Icon>
+        </FlexBox>
+      </a>)}
     </FlexBox>
   );
 };

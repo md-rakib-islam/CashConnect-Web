@@ -142,15 +142,15 @@ const CheckoutForm = () => {
     var checkoutSchema: any = yup.object().shape({});
   } else {
     var checkoutSchema: any = yup.object().shape({
-      company: yup.string().required("company is required"),
-      name: yup.string().required("name is required"),
-      email: yup.string().required("email is required"),
-      phone: yup.string().required("phone is required"),
-      zip_code: yup.string().required("zip_code is required"),
-      country_id: yup.object().required("country is required"),
-      city_id: yup.object().required("city is required"),
-      thana_id: yup.object().required("thana is required"),
-      street_address: yup.string().required("address is required"),
+      company: yup.string().required("company is required").nullable("required"),
+      name: yup.string().required("name is required").nullable("required"),
+      email: yup.string().required("email is required").nullable("required"),
+      phone: yup.string().required("phone is required").nullable("required"),
+      zip_code: yup.string().required("zip_code is required").nullable("required"),
+      country_id: yup.object().required("country is required").nullable("required"),
+      city_id: yup.object().required("city is required").nullable("required"),
+      thana_id: yup.object().required("thana is required").nullable("required"),
+      street_address: yup.string().required("address is required").nullable("required"),
     });
   }
 

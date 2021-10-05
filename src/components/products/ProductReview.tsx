@@ -1,5 +1,5 @@
 import useUserInf from "@customHook/useUserInf";
-import { Review_Bt_Product_Id, Review_Create } from "@data/constants";
+import { Review_By_Product_Id, Review_Create } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
@@ -32,8 +32,8 @@ const ProductReview: React.FC<ProductReviewProps> = ({ productId, setReviews }) 
 
     const reviewData = {
       ...values,
-      user_id,
-      product_id: productId,
+      user: user_id,
+      product: productId,
     }
     console.log("reviewData", reviewData)
     axios.post(`${Review_Create}`, reviewData, authTOKEN).then(res => {
@@ -44,7 +44,7 @@ const ProductReview: React.FC<ProductReviewProps> = ({ productId, setReviews }) 
   };
 
   useEffect(() => {
-    axios.get(`${Review_Bt_Product_Id}${productId}`).then(res => {
+    axios.get(`${Review_By_Product_Id}${productId}`).then(res => {
       console.log("ReviewAllRes", res)
       setCommentList(res?.data)
       setReviews(res?.data?.length)
@@ -105,14 +105,14 @@ const ProductReview: React.FC<ProductReviewProps> = ({ productId, setReviews }) 
           </FlexBox>
 
           <TextArea
-            name="comment"
+            name="review"
             placeholder="Write a review here..."
             fullwidth
             rows={8}
             onBlur={handleBlur}
             onChange={handleChange}
-            value={values.comment || ""}
-            errorText={touched.comment && errors.comment}
+            value={values.review || ""}
+            errorText={touched.review && errors.review}
           />
         </Box>
 
@@ -136,7 +136,7 @@ const ProductReview: React.FC<ProductReviewProps> = ({ productId, setReviews }) 
 //     imgUrl: "/assets/images/faces/7.png",
 //     rating: 4.7,
 //     date: "2021-02-14",
-//     comment:
+//     review:
 //       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius massa id ut mattis. Facilisis vitae gravida egestas ac account.",
 //   },
 //   {
@@ -144,7 +144,7 @@ const ProductReview: React.FC<ProductReviewProps> = ({ productId, setReviews }) 
 //     imgUrl: "/assets/images/faces/6.png",
 //     rating: 4.7,
 //     date: "2019-08-10",
-//     comment:
+//     review:
 //       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius massa id ut mattis. Facilisis vitae gravida egestas ac account.",
 //   },
 //   {
@@ -152,14 +152,14 @@ const ProductReview: React.FC<ProductReviewProps> = ({ productId, setReviews }) 
 //     imgUrl: "/assets/images/faces/8.png",
 //     rating: 4.7,
 //     date: "2021-02-05",
-//     comment:
+//     review:
 //       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius massa id ut mattis. Facilisis vitae gravida egestas ac account.",
 //   },
 // ];
 
 const initialValues = {
   rating: "",
-  comment: "",
+  review: "",
   date: new Date().toISOString(),
 };
 

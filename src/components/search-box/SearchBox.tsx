@@ -169,7 +169,7 @@ const dummySearchResult = [
 ];
 
 var checkoutSchema: any = yup.object().shape({
-  search: yup.string().required("")
+  search: yup.string().required("").nullable("required")
 })
 
 export default SearchBox;

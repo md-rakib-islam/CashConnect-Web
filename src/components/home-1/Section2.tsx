@@ -1,26 +1,18 @@
 import Box from "@component/Box";
-import useFormattedProductData from "@customHook/useFormattedProductData";
-import { Product_Flash_Deals } from "@data/constants";
-import axios from "axios";
+import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import useWindowSize from "../../hooks/useWindowSize";
 import Carousel from "../carousel/Carousel";
 import CategorySectionCreator from "../CategorySectionCreator";
 import ProductCard1 from "../product-cards/ProductCard1";
 
-const Section2: React.FC = () => {
+interface Section2Props {
+  flashDealsList: any[]
+}
+
+const Section2: React.FC<Section2Props> = ({ flashDealsList }) => {
   const [visibleSlides, setVisibleSlides] = useState(5);
   const width = useWindowSize();
-
-  const [productData, setProductData] = useState([]);
-  const [formattedProductData] = useFormattedProductData(productData);
-
-  useEffect(() => {
-    axios.get(`${Product_Flash_Deals}`).then(res => {
-      console.log("Product_Flash_DealsRes", res.data.products)
-      setProductData(res.data.products)
-    }).catch(() => { })
-  }, [])
 
   useEffect(() => {
     if (width < 500) setVisibleSlides(1);
@@ -29,15 +21,15 @@ const Section2: React.FC = () => {
     else setVisibleSlides(5);
   }, [width]);
 
-  return (
+  const product_list = (
     <CategorySectionCreator
       iconName="light"
       title="Flash Deals"
       seeMoreLink="product/search/flash_deals_all"
     >
       <Box mt="-0.25rem" mb="-0.25rem">
-        <Carousel totalSlides={formattedProductData?.length} visibleSlides={visibleSlides}>
-          {formattedProductData?.map((item) => (
+        <Carousel totalSlides={flashDealsList?.length} visibleSlides={visibleSlides}>
+          {flashDealsList?.map((item) => (
             <Box py="0.25rem" key={item.id}>
               <ProductCard1
                 id={item.id}
@@ -55,6 +47,11 @@ const Section2: React.FC = () => {
       </Box>
     </CategorySectionCreator>
   );
+
+  const returnableData = _.isEmpty(flashDealsList) ? null : product_list
+
+  return returnableData
+
 };
 
 export default Section2;

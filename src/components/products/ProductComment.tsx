@@ -12,7 +12,7 @@ export interface ProductCommentProps {
   imgUrl: string;
   rating: number;
   created_at: string;
-  comment: string;
+  review: string;
   user: number | string;
 }
 
@@ -20,7 +20,7 @@ const ProductComment: React.FC<ProductCommentProps> = ({
 
   rating,
   created_at,
-  comment,
+  review,
   user,
 }) => {
   const [userName, setUserName] = useState("")
@@ -48,7 +48,7 @@ const ProductComment: React.FC<ProductCommentProps> = ({
         </Box>
       </FlexBox>
 
-      <Paragraph color="gray.700">{comment}</Paragraph>
+      <Paragraph color="gray.700">{review}</Paragraph>
     </Box>
   );
 };

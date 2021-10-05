@@ -1,24 +1,15 @@
 import Card from "@component/Card";
 import Carousel from "@component/carousel/Carousel";
-import { BASE_URL, Category_Top_All } from "@data/constants";
+import { BASE_URL } from "@data/constants";
 import useWindowSize from "@hook/useWindowSize";
-import Link from "next/link";
+import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import CategorySectionCreator from "../CategorySectionCreator";
 import ProductCard6 from "../product-cards/ProductCard6";
 
-const Section3: React.FC = () => {
+const Section3 = ({ topCategoryList }) => {
   const [visibleSlides, setVisibleSlides] = useState(6);
   const width = useWindowSize();
-
-  const [topCategorys, setTopCategorys] = useState([])
-
-  useEffect(() => {
-    fetch(`${Category_Top_All}`).then(res => res.json()).then(res => {
-      console.log("Category_Top_AllRes", res.categories)
-      setTopCategorys(res.categories)
-    }).catch(() => { })
-  }, [])
 
   useEffect(() => {
     if (width < 650) setVisibleSlides(2);
@@ -26,30 +17,34 @@ const Section3: React.FC = () => {
     else setVisibleSlides(6);
   }, [width]);
 
-  console.log("topCategorys", topCategorys)
-  return (
+  console.log("topCategorys", topCategoryList)
+  const category_list = (
     <CategorySectionCreator
       iconName="categories"
       title="Top Categories"
-      seeMoreLink="#"
+      seeMoreLink="/product/search/view_all/top_category"
     >
-      <Carousel totalSlides={topCategorys.length} visibleSlides={visibleSlides}>
-        {topCategorys.map((item, ind) => (
-          <Link href={`product/search/${item?.id}`} key={ind}>
-            <a>
-              <Card p="1rem">
-                <ProductCard6
-                  title={item?.name}
-                  subtitle={"3k orders in this week"}
-                  imgUrl={`${BASE_URL}${item?.image}`}
-                />
-              </Card>
-            </a>
-          </Link>
+      <Carousel totalSlides={topCategoryList.length} visibleSlides={visibleSlides}>
+        {topCategoryList.map((item, ind) => (
+          // <Link href={`product/search/${item?.id}`} key={ind}>
+          <a>
+            <Card p="1rem">
+              <ProductCard6
+                title={item?.name}
+                subtitle={"3k orders in this week"}
+                imgUrl={`${BASE_URL}${item?.image}`}
+              />
+            </Card>
+          </a>
+          // </Link>
         ))}
       </Carousel>
     </CategorySectionCreator>
   );
+
+  const returnableData = _.isEmpty(topCategoryList) ? null : category_list
+
+  return returnableData
 };
 
 export default Section3;

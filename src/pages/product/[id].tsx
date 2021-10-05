@@ -36,7 +36,7 @@ const ProductDetails = ({ id, title, price, imgUrl, brand, rating, initialReview
         id={id}
         brand={brand}
         rating={rating}
-        reviewCount={reviewsQuantity}
+        reviewCount={initialReviewsQuantity}
       />
 
       <FlexBox
@@ -66,7 +66,7 @@ const ProductDetails = ({ id, title, price, imgUrl, brand, rating, initialReview
           borderBottom={selectedOption === "review" && "2px solid"}
           borderColor="primary.main"
         >
-          Review {reviewsQuantity}
+          Review {initialReviewsQuantity}
         </H5>
       </FlexBox>
 
@@ -116,7 +116,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       imgUrl: `${BASE_URL}${data?.thumbnail}`,
       brand: data?.brand,
       fullDes: data?.full_desc,
-      initialReviewsQuantity: data?.numReviews,
+      initialReviewsQuantity: data?.num_reviews,
       rating: data?.rating,
       relatedProduct
     },
