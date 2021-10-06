@@ -47,41 +47,45 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
       const { user_id, order_Id, isLogin } = useUserInf()
 
       if (isLogin) {
-        const item_id = product?.id;
-        const orderData = {
-          product_id: product?.product?.id,
-          quantity: 1,
-          price: product?.price,
-          branch_id: 1,
-          user_id: user_id,
-        };
+        const { user_id, order_Id, isLogin } = useUserInf()
+        if (order_Id) {
 
-        if (action == "remove") {
-          axios
-            .delete(`${Customer_Order_Remove_Item}${order_Id}/${item_id}`)
-            .then(() => {
-              setReloadCart(Math.random());
-              dispatch({
-                type: "CHANGE_CART_QUANTITY",
-                payload: Math.random(),
-              });
-            }).catch(() => { });
+          const item_id = product?.id;
+          const orderData = {
+            product_id: product?.product?.id,
+            quantity: 1,
+            price: product?.price,
+            branch_id: 1,
+            user_id: user_id,
+          };
 
-        } else if (action == "increase") {
-          axios
-            .put(`${Customer_Increase_Quantity}${order_Id}/${item_id}`, orderData)
-            .then(() => {
-              setReloadCart(Math.random());
-            }).catch(() => { });
+          if (action == "remove") {
+            axios
+              .delete(`${Customer_Order_Remove_Item}${order_Id}/${item_id}`)
+              .then(() => {
+                setReloadCart(Math.random());
+                dispatch({
+                  type: "CHANGE_CART_QUANTITY",
+                  payload: Math.random(),
+                });
+              }).catch(() => { });
 
-        } else if (action == "decrease") {
-          axios
-            .put(`${Customer_decrease_Quantity}${order_Id}/${item_id}`, orderData)
-            .then(() => {
-              setReloadCart(Math.random());
-            }).catch(() => { });
+          } else if (action == "increase") {
+            axios
+              .put(`${Customer_Increase_Quantity}${order_Id}/${item_id}`, orderData)
+              .then(() => {
+                setReloadCart(Math.random());
+              }).catch(() => { });
+
+          } else if (action == "decrease") {
+            axios
+              .put(`${Customer_decrease_Quantity}${order_Id}/${item_id}`, orderData)
+              .then(() => {
+                setReloadCart(Math.random());
+              }).catch(() => { });
+          }
+
         }
-
       }
       else {
         setOpenLogin(true)
@@ -103,10 +107,12 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
   useEffect(() => {
     const { order_Id } = useUserInf()
 
-    axios.get(`${Customer_Order_Pending_Details}${order_Id}`).then((res) => {
-      setCartProductList(res.data.order.order_items);
-      console.log("miniCartLisdt", res.data.order.order_items);
-    }).catch(() => { });
+    if (order_Id) {
+      axios.get(`${Customer_Order_Pending_Details}${order_Id}`).then((res) => {
+        setCartProductList(res.data.order.order_items);
+        console.log("miniCartLisdt", res.data.order.order_items);
+      }).catch(() => { });
+    }
   }, [reloadCart]);
 
   return (

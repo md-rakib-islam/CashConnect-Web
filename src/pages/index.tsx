@@ -1,6 +1,6 @@
 import Section13 from "@component/home-1/Section13";
 import useFormattedProductData from "@customHook/useFormattedProductData";
-import { Category_Top_All, Category_With_Product_Brand, Product_Arrival, Product_Discount, Product_Flash_Deals, Product_For_You, Product_Top_Rated } from "@data/constants";
+import { Brand_Featured, Category_Top_All, Category_With_Product_Brand, Category_Wth_Name_Img, Product_Arrival, Product_Discount, Product_Flash_Deals, Product_For_You, Product_Top_Rated } from "@data/constants";
 import axios from "axios";
 import { GetServerSideProps } from "next";
 import Section1 from "../components/home-1/Section1";
@@ -50,7 +50,7 @@ export default IndexPage;
 export const getServerSideProps: GetServerSideProps = async () => {
 
   try {
-    var flashDealsRes = await axios.get(`${Product_Flash_Deals}`)
+    var flashDealsRes = await axios.get(`${Product_Flash_Deals}?page=${1}&size=${6}`)
     var flashDealsLists: any[] = await flashDealsRes.data.products
     var [flashDealsList] = await useFormattedProductData(flashDealsLists);
   } catch (err) {
@@ -58,14 +58,14 @@ export const getServerSideProps: GetServerSideProps = async () => {
   }
 
   try {
-    var topCategoryRes = await axios.get(`${Category_Top_All}`)
+    var topCategoryRes = await axios.get(`${Category_Top_All}?page=${1}&size=${6}`)
     var topCategoryList: any[] = await topCategoryRes.data.categories
   } catch (err) {
     var topCategoryList = []
   }
 
   try {
-    var topRatedRes = await axios.get(`${Product_Top_Rated}`)
+    var topRatedRes = await axios.get(`${Product_Top_Rated}?page=${1}&size=${4}`)
     var topRatedLists: any[] = await topRatedRes.data.products
     var [topRatedList] = useFormattedProductData(topRatedLists, "TopRated")
   } catch (err) {
@@ -73,15 +73,16 @@ export const getServerSideProps: GetServerSideProps = async () => {
   }
 
   try {
-    var featuredBrandsRes = await axios.get(`${Product_Top_Rated}`)
-    var featuredBrandLists: any[] = await featuredBrandsRes.data.products
+    const res = await axios.get(`${Brand_Featured}?page=${1}&size=${2}`)
+    var featuredBrandLists: any[] = await res
     var [featuredBrandList] = useFormattedProductData(featuredBrandLists, "FeaturedBrands")
+
   } catch (err) {
     var featuredBrandList = []
   }
 
   try {
-    var newArrivalRes = await axios.get(`${Product_Arrival}`)
+    var newArrivalRes = await axios.get(`${Product_Arrival}?page=${1}&size=${6}`)
     var newArrivalLists: any[] = await newArrivalRes.data.products
     var [newArrivalList] = useFormattedProductData(newArrivalLists, "Arrivals")
   } catch (err) {
@@ -89,7 +90,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   }
 
   try {
-    var bigDiscountRes = await axios.get(`${Product_Discount}`)
+    var bigDiscountRes = await axios.get(`${Product_Discount}?page=${1}&size=${6}`)
     var bigDiscountLists: any[] = await bigDiscountRes.data.products
     var [bigDiscountList] = useFormattedProductData(bigDiscountLists)
   } catch (err) {
@@ -97,14 +98,14 @@ export const getServerSideProps: GetServerSideProps = async () => {
   }
 
   try {
-    var categoriesRes = await axios.get(`${Category_Top_All}`)
+    var categoriesRes = await axios.get(`${Category_Wth_Name_Img}?page=${1}&size=${12}`)
     var categoriesList: any[] = await categoriesRes.data.categories
   } catch (err) {
     var categoriesList = []
   }
 
   try {
-    var moreForYouRes = await axios.get(`${Product_For_You}`)
+    var moreForYouRes = await axios.get(`${Product_For_You}?page=${1}&size=${12}`)
     var moreForYouLists: any[] = await moreForYouRes.data.products
     var [moreForYouList] = useFormattedProductData(moreForYouLists)
   } catch (err) {

@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import React from "react";
 import ReactPaginate from "react-paginate";
 import { SpaceProps } from "styled-system";
@@ -19,8 +20,14 @@ const Pagination: React.FC<PaginationProps> = ({
   onChange,
   ...props
 }) => {
+  const router = useRouter()
   const handlePageChange = async (page) => {
     if (onChange) onChange(page.selected);
+    const query = router.query
+    router.push({
+      pathname: `${router.pathname}`,
+      query: { ...query, page: page.selected + 1 },
+    })
   };
 
   return (

@@ -126,76 +126,78 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
 
     if (isLogin) {
 
-      const pay_amount = Subtotal;
+      if (order_Id) {
+        const pay_amount = Subtotal;
 
-      if (paymentMethod === "card") {
-        var confirmData: any = {
-          user_id,
-          pay_amount,
-          payment_method: paymentMethod,
-          card_number: values.card_number,
-          card_holder: values.card_holder,
-          cvc_code: values.cvc_code,
-          expiry_date: values.expiry_date,
-        };
-      } else if (paymentMethod === "paypal") {
-        var confirmData: any = {
-          user_id,
-          pay_amount,
-          payment_method: paymentMethod,
-          email: values.email,
-        };
-      } else if (paymentMethod === "bkash") {
-        var confirmData: any = {
-          user_id,
-          pay_amount,
-          payment_method: paymentMethod,
-          bkash: values.bkash,
-        };
-      } else if (paymentMethod === "rocket") {
-        var confirmData: any = {
-          user_id,
-          pay_amount,
-          payment_method: paymentMethod,
-          rocket: values.rocket,
-        };
-      } else if (paymentMethod === "nagad") {
-        var confirmData: any = {
-          user_id,
-          pay_amount,
-          payment_method: paymentMethod,
-          nagad: values.nagad,
-        };
-      } else if (paymentMethod === "cash") {
-        var confirmData: any = {
-          user_id,
-          pay_amount,
-          payment_method: paymentMethod,
-        };
+        if (paymentMethod === "card") {
+          var confirmData: any = {
+            user_id,
+            pay_amount,
+            payment_method: paymentMethod,
+            card_number: values.card_number,
+            card_holder: values.card_holder,
+            cvc_code: values.cvc_code,
+            expiry_date: values.expiry_date,
+          };
+        } else if (paymentMethod === "paypal") {
+          var confirmData: any = {
+            user_id,
+            pay_amount,
+            payment_method: paymentMethod,
+            email: values.email,
+          };
+        } else if (paymentMethod === "bkash") {
+          var confirmData: any = {
+            user_id,
+            pay_amount,
+            payment_method: paymentMethod,
+            bkash: values.bkash,
+          };
+        } else if (paymentMethod === "rocket") {
+          var confirmData: any = {
+            user_id,
+            pay_amount,
+            payment_method: paymentMethod,
+            rocket: values.rocket,
+          };
+        } else if (paymentMethod === "nagad") {
+          var confirmData: any = {
+            user_id,
+            pay_amount,
+            payment_method: paymentMethod,
+            nagad: values.nagad,
+          };
+        } else if (paymentMethod === "cash") {
+          var confirmData: any = {
+            user_id,
+            pay_amount,
+            payment_method: paymentMethod,
+          };
+        }
+
+        console.log("confirmData", confirmData);
+        axios
+          .post(`${Customer_Order_Confirm}${order_Id}`, confirmData, authTOKEN)
+          .then((res) => {
+            const user_type = localStorage.getItem("userType")
+            console.log("confirmOrderRes", res);
+            confirmedOrderRes.current = true;
+            for (let key in useKeys) {
+              localStorage.removeItem(`${key}`);
+            }
+            dispatch({
+              type: "CHANGE_CART_QUANTITY",
+              payload: Math.random(),
+            });
+
+            if (user_type == 3) {
+              router.push("/orders")
+            }
+            else if (user_type == 2) {
+              router.push("/vendor/orders")
+            }
+          }).catch(() => { });
       }
-
-      console.log("confirmData", confirmData);
-      axios
-        .post(`${Customer_Order_Confirm}${order_Id}`, confirmData, authTOKEN)
-        .then((res) => {
-          const user_type = localStorage.getItem("userType")
-          console.log("confirmOrderRes", res);
-          confirmedOrderRes.current = true;
-          for (let key in useKeys) {
-            localStorage.removeItem(`${key}`);
-          }
-          dispatch({
-            type: "CHANGE_CART_QUANTITY",
-            payload: Math.random(),
-          });
-
-          if (user_type == 3) {
-            router.push("/orders")
-          }
-          else if (user_type == 2) {
-            router.push("/vendor/orders")
-          }
-        }).catch(() => { });
     }
     else {
       setOpenLogin(true)

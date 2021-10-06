@@ -1,5 +1,7 @@
 import LoginPopup from "@component/LoginPopup";
+import Select from "@component/Select";
 import { Customer_Create, Vendor_Create } from "@data/constants";
+import { country_codes } from "@data/country_code";
 import axios from "axios";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
@@ -62,6 +64,7 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
   const handleFormSubmit = async (values) => {
     const data = {
       ...values,
+      number: `${values.country_code.value}${values.number}`,
       user_type,
     };
 
@@ -91,7 +94,7 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
     console.log("saveData", data);
   };
 
-  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue } =
     useFormik({
       onSubmit: handleFormSubmit,
       initialValues,
@@ -189,17 +192,45 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             errorText={touched.email && errors.email}
           />
 
-          <TextField
-            mb="0.75rem"
-            name="number"
-            placeholder="Obtional"
-            label="Phone Number"
-            fullwidth
-            onBlur={handleBlur}
-            onChange={handleChange}
-            value={values.number || ""}
-            errorText={touched.number && errors.number}
-          />
+          <div style={{ display: "flex" }}>
+            <Select
+              mb="1rem"
+              mt="1rem"
+              label="Country"
+              width="40%"
+              placeholder="Select Country"
+              getOptionLabelBy="label"
+              getOptionValueBy="value"
+              options={country_codes}
+              value={values.country_code || null}
+              onChange={(value) => {
+                setFieldValue("country_code", value);
+              }}
+              errorText={touched.country_code && errors.country_code}
+            />
+            <button style={{
+              marginRight: "-2px",
+              background: "inherit",
+              border: "1px solid #dbdbdb",
+              height: "40px",
+              marginTop: "43px",
+              width: "fit-content",
+              padding: "5px"
+            }}
+            >{values.country_code.value}</button>
+            <TextField
+              mb="0.75rem"
+              mt="1rem"
+              name="number"
+              placeholder="Obtional"
+              label="Phone Number"
+              fullwidth
+              onBlur={handleBlur}
+              onChange={handleChange}
+              value={`${values.number || ""}`}
+              errorText={touched.number && errors.number}
+            />
+          </div>
 
           <TextField
             mb="0.75rem"
@@ -340,6 +371,11 @@ const initialValues = {
   email: "",
   password: "",
   re_password: "",
+  country_code: {
+    code: "BD",
+    label: "Bangladesh",
+    value: "880"
+  },
   agreement: false,
 };
 
@@ -348,6 +384,7 @@ const formSchema = yup.object().shape({
   last_name: yup.string().required("${path} is required"),
   email: yup.string().email("invalid email").required("${path} is required"),
   password: yup.string().required("${path} is required"),
+  country_code: yup.object().required("requred"),
   re_password: yup
     .string()
     .oneOf([yup.ref("password"), null], "Passwords must match")
@@ -363,3 +400,4 @@ const formSchema = yup.object().shape({
 });
 
 export default Signup;
+

@@ -15,7 +15,7 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from "next/router";
 import React from "react";
 
-const ViewAll = ({ topCategoryLists, CategoryLists, featuredBrandLists, type }) => {
+const ViewAll = ({ topCategoryLists, CategoryLists, featuredBrandLists, type, totalPage, totalProduct }) => {
 
     const width = useWindowSize();
     const isTablet = width < 1025;
@@ -89,8 +89,8 @@ const ViewAll = ({ topCategoryLists, CategoryLists, featuredBrandLists, type }) 
                 </Grid>
             </Card>)}
             <div style={{ marginTop: "40px", width: "100%", display: "flex", justifyContent: "space-between" }}>
-                <SemiSpan>Showing 1-10 of {100} Products</SemiSpan>
-                <Pagination pageCount={10} /></div>
+                <SemiSpan>Showing 1-10 of {totalProduct} Products</SemiSpan>
+                <Pagination pageCount={totalPage} /></div>
         </Box>
     );
 };
@@ -107,12 +107,16 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
 
     if (params.type === "top_category") {
         try {
-            const res = await axios.get(`${Category_Top_All}`)
+            const res = await axios.get(`${Category_Top_All}?page=${query.page || 1}&size=${query.size || 30}`)
             var topCategoryLists: any[] = await res.data.categories
+            var totalPage: number = await res.data.total_pages
+            var totalProduct: number = await res.data.total_elements
             var type = "top_category"
 
         } catch (error) {
             var topCategoryLists = []
+            var totalProduct = 0
+            var totalPage = 0
             var type = "top_category"
         }
     } else {
@@ -121,12 +125,16 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
 
     if (params.type === "categories") {
         try {
-            const res = await axios.get(`${Category_Wth_Name_Img}`)
+            const res = await axios.get(`${Category_Wth_Name_Img}?page=${query.page || 1}&size=${query.size || 30}`)
             var CategoryLists: any[] = await res.data.categories
+            var totalPage: number = await res.data.total_pages
+            var totalProduct: number = await res.data.total_elements
             var type = "categories"
 
         } catch (error) {
             var CategoryLists = []
+            var totalProduct = 0
+            var totalPage = 0
             var type = "categories"
         }
     } else {
@@ -135,12 +143,17 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
 
     if (params.type === "featured_brands") {
         try {
-            const res = await axios.get(`${Brand_Featured}`)
+            const res = await axios.get(`${Brand_Featured}?page=${query.page || 1}&size=${query.size || 16}`)
             var featuredBrandLists: any[] = await res.data
+            var totalPage: number = await res.data.total_pages
+            var totalProduct: number = await res.data.total_elements
             var type = "featured_brands"
+            console.log("", res.data)
 
         } catch (error) {
             var featuredBrandLists = []
+            var totalProduct = 0
+            var totalPage = 0
             var type = "featured_brands"
         }
     } else {
@@ -152,6 +165,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
             topCategoryLists,
             CategoryLists,
             featuredBrandLists,
+            totalProduct,
+            totalPage,
             type,
         },
     }

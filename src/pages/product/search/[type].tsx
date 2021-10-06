@@ -12,14 +12,14 @@ import ProductFilterCard from "@component/products/ProductFilterCard";
 import Select from "@component/Select";
 import Sidenav from "@component/sidenav/Sidenav";
 import { H5, Paragraph } from "@component/Typography";
-import { BASE_URL, Category_By_Id, ProductByCategoryId, Product_Arrival, Product_Discount, Product_Filter, Product_Flash_Deals, Product_For_You, Product_Search, Product_Top_Rated } from "@data/constants";
+import { BASE_URL, Category_By_Id, Product_Arrival, product_by_categoryId, Product_Discount, Product_Filter, Product_Flash_Deals, Product_For_You, Product_Search, Product_Top_Rated } from "@data/constants";
 import axios from "axios";
 import { GetServerSideProps } from 'next';
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
 import useWindowSize from "../../../hooks/useWindowSize";
 
-const ProductSearchResult = ({ productLists, totalProduct }) => {
+const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
   const [searchingFor, setSearchingFor] = useState("");
   const [totalProducts, setTotalProducts] = useState(totalProduct);
   const [productList, setProductList] = useState(productLists)
@@ -46,7 +46,7 @@ const ProductSearchResult = ({ productLists, totalProduct }) => {
 
   useEffect(() => {
     const type = router.query.type
-    if (type === "productByCategory") {
+    if (type === "product_by_category") {
       if (id) {
         fetch(`${BASE_URL}${Category_By_Id}${id}`)
           .then((res) => res.json())
@@ -164,9 +164,9 @@ const ProductSearchResult = ({ productLists, totalProduct }) => {
 
         <Grid item lg={9} xs={12}>
           {view === "grid" ? (
-            <ProductCard1List productList={productList} />
+            <ProductCard1List productList={productList} totalPage={totalPage} totalProduct={totalProduct} />
           ) : (
-            <ProductCard9List productList={productList} />
+            <ProductCard9List productList={productList} totalPage={totalPage} totalProduct={totalProduct} />
           )}
         </Grid>
       </Grid>
@@ -191,23 +191,35 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
 
   const category = query.categoryId
 
-  if ((params.type === "productByCategory") || (params.type === "search_for")) {
-    const res = await fetch(`${BASE_URL}${ProductByCategoryId}${category}`)
-    var json = await res.json()
-    var data: any[] = await json.products
-    var totalProduct: number = await json.total_elements
+  if ((params.type === "product_by_category") || (params.type === "search_for")) {
+
+    try {
+      const res = await fetch(`${BASE_URL}${product_by_categoryId}${category}?page=${query.page || 1}&size=${query.size || 1}`)
+      var json = await res.json()
+      var data: any[] = await json.products
+      var totalProduct: number = await json.total_elements
+      var totalPage: number = await json.total_pages
+      console.log("categoryUrl", `${BASE_URL}${product_by_categoryId}${category}?page=${query.page || 1}&size=${query.size || 1}`)
+    }
+    catch (err) {
+      var data = []
+      var totalProduct = 0
+      var totalPage = 0
+    }
   }
 
   else if (params.type === "search_by_product_name") {
     try {
 
-      const res = await axios.get(`${Product_Search}`, { params: { name: query.searchKey, category } })
+      const res = await axios.get(`${Product_Search}?page=${query.page || 1}&size=${query.size || 1}`, { params: { name: query.searchKey, category } })
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
+      var totalPage: number = await res.data.total_pages
     }
     catch (err) {
       var data = []
       var totalProduct = 0
+      var totalPage = 0
     }
   }
   else if (params.type === "filter") {
@@ -231,74 +243,88 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
         params: params
       };
 
-      const res = await axios.get(`${Product_Filter}`, request)
+      const res = await axios.get(`${Product_Filter}?page=${query.page || 1}&size=${query.size || 1}`, request)
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
+      var totalPage: number = await res.data.total_pages
+
     }
     catch (err) {
       var data = []
       var totalProduct = 0
+      var totalPage = 0
     }
   }
   else if (params.type === "flash_deals_all") {
     try {
-      const res = await axios.get(`${Product_Flash_Deals}`)
+      const res = await axios.get(`${Product_Flash_Deals}?page=${query.page || 1}&size=${query.size || 1}`)
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
+      var totalPage: number = await res.data.total_pages
 
     } catch (error) {
       var data = []
       var totalProduct = 0
+      var totalPage = 0
     }
   }
   else if (params.type === "top_ratings_all") {
     try {
-      const res = await axios.get(`${Product_Top_Rated}`)
+      const res = await axios.get(`${Product_Top_Rated}?page=${query.page || 1}&size=${query.size || 1}`)
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
+      var totalPage: number = await res.data.total_pages
 
     } catch (error) {
       var data = []
       var totalProduct = 0
+      var totalPage = 0
     }
   }
   else if (params.type === "new_arrivals_all") {
     try {
-      const res = await axios.get(`${Product_Arrival}`)
+      const res = await axios.get(`${Product_Arrival}?page=${query.page || 1}&size=${query.size || 1}`)
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
+      var totalPage: number = await res.data.total_pages
 
     } catch (error) {
       var data = []
       var totalProduct = 0
+      var totalPage = 0
     }
   }
   else if (params.type === "big_discounts_all") {
     try {
-      const res = await axios.get(`${Product_Discount}`)
+      const res = await axios.get(`${Product_Discount}?page=${query.page || 1}&size=${query.size || 1}`)
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
+      var totalPage: number = await res.data.total_pages
 
     } catch (error) {
       var data = []
       var totalProduct = 0
+      var totalPage = 0
     }
   }
   else if (params.type === "more_for_you_all") {
     try {
-      const res = await axios.get(`${Product_For_You}`)
+      const res = await axios.get(`${Product_For_You}?page=${query.page || 1}&size=${query.size || 1}`)
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
+      var totalPage: number = await res.data.total_pages
 
     } catch (error) {
       var data = []
       var totalProduct = 0
+      var totalPage = 0
     }
   }
 
   else {
     var data = []
     var totalProduct = 0
+    var totalPage = 0
   }
 
   if (!data) {
@@ -311,6 +337,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
     props: {
       productLists: data,
       totalProduct,
+      totalPage,
     },
   }
 }

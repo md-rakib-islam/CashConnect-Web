@@ -53,16 +53,18 @@ const Cart = () => {
     console.log("comment", values.comment);
 
     if (isLogin) {
-      const comment = {
-        comment: values.comment,
-      };
-      console.log("commentData", comment);
-      axios
-        .post(`${Customer_Order_Comment}${order_Id}`, comment, authTOKEN)
-        .then((res) => {
-          console.log("comentRes", res);
-          router.push("/checkout")
-        }).catch(() => { });
+      if (order_Id) {
+        const comment = {
+          comment: values.comment,
+        };
+        console.log("commentData", comment);
+        axios
+          .post(`${Customer_Order_Comment}${order_Id}`, comment, authTOKEN)
+          .then((res) => {
+            console.log("comentRes", res);
+            router.push("/checkout")
+          }).catch(() => { });
+      }
     }
     else {
       setOpenLogin(true)

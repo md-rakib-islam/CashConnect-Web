@@ -102,22 +102,24 @@ const CheckoutForm = () => {
 
   useEffect(() => {
     const { order_Id } = useUserInf()
-    axios.get(`${Shipping_Adress_By_Order_Id}${order_Id}`).then((res) => {
-      console.log("shippingDetailsRes", res);
-      const { data } = res;
-      setShippingId(data.id);
-      for (let key in data) {
-        if (key == "country") {
-          setFieldValue(`country_id`, data[key]);
-        } else if (key == "city") {
-          setFieldValue(`city_id`, data[key]);
-        } else if (key == "thana") {
-          setFieldValue(`thana_id`, data[key]);
-        } else {
-          setFieldValue(`${key}`, data[key]);
+    if (order_Id) {
+      axios.get(`${Shipping_Adress_By_Order_Id}${order_Id}`).then((res) => {
+        console.log("shippingDetailsRes", res);
+        const { data } = res;
+        setShippingId(data.id);
+        for (let key in data) {
+          if (key == "country") {
+            setFieldValue(`country_id`, data[key]);
+          } else if (key == "city") {
+            setFieldValue(`city_id`, data[key]);
+          } else if (key == "thana") {
+            setFieldValue(`thana_id`, data[key]);
+          } else {
+            setFieldValue(`${key}`, data[key]);
+          }
         }
-      }
-    }).catch(() => { })
+      }).catch(() => { })
+    }
 
     fetch(`${City_All}`)
       .then((res) => res.json())

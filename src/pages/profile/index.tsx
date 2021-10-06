@@ -130,9 +130,9 @@ const Profile = () => {
         </FlexBox>
         <FlexBox flexDirection="column" p="0.5rem">
           <Small color="text.muted" mb="4px" textAlign="left">
-            {phone}
+            phone
           </Small>
-          <span>+1983649392983</span>
+          <span>{phone}</span>
         </FlexBox>
         <FlexBox flexDirection="column" p="0.5rem">
           <Small color="text.muted" mb="4px">

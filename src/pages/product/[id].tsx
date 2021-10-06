@@ -6,7 +6,7 @@ import ProductIntro from "@component/products/ProductIntro";
 import ProductReview from "@component/products/ProductReview";
 import RelatedProducts from "@component/products/RelatedProducts";
 import { H5 } from "@component/Typography";
-import { BASE_URL, ProductByCategoryId, Product_by_id } from "@data/constants";
+import { BASE_URL, product_by_categoryId, Product_by_id } from "@data/constants";
 import axios from "axios";
 import { GetServerSideProps } from "next";
 import React, { useState } from "react";
@@ -99,7 +99,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   }
 
   try {
-    const relatedProductRes = await fetch(`${BASE_URL}${ProductByCategoryId}${data.category}`)
+    const relatedProductRes = await fetch(`${BASE_URL}${product_by_categoryId}${data.category}`)
     var relatedProductjson = await relatedProductRes.json()
     var relatedProduct: any[] = await relatedProductjson.products
   }

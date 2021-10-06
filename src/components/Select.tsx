@@ -13,7 +13,7 @@ type SelectOption = {
 
 interface SelectProps
   extends InputHTMLAttributes<HTMLInputElement>,
-    SpaceProps {
+  SpaceProps {
   options: SelectOption[];
   value?: any;
   defaultValue?: any;
@@ -21,6 +21,7 @@ interface SelectProps
   errorText?: any;
   getOptionLabelBy?: string;
   getOptionValueBy?: string;
+  width?: string;
 }
 
 const Select: React.FC<SelectProps> = ({
@@ -31,6 +32,7 @@ const Select: React.FC<SelectProps> = ({
   getOptionLabelBy,
   getOptionValueBy,
   value,
+  width,
   ...props
 }) => {
   // extract spacing props
@@ -41,7 +43,7 @@ const Select: React.FC<SelectProps> = ({
   }
 
   return (
-    <Box {...spacingProps}>
+    <Box width={width || null} justifyContent="flex-start" {...spacingProps}>
       {label && (
         <Typography fontSize="0.875rem" mb="6px">
           {label}
@@ -72,9 +74,9 @@ const Select: React.FC<SelectProps> = ({
         value={
           typeof value != "object"
             ? {
-                id: value,
-                name: options.find((option: any) => option?.id == value)?.name,
-              }
+              id: value,
+              name: options.find((option: any) => option?.id == value)?.name,
+            }
             : value
         }
         styles={customStyles}

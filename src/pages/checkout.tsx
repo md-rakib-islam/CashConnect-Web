@@ -16,14 +16,16 @@ const Checkout = () => {
   useEffect(() => {
     const { order_Id } = useUserInf()
 
-    axios.get(`${Customer_Order_Pending_Details}${order_Id}`).then((res) => {
-      console.log("orderDetailsRes", res);
-      const { order } = res.data;
-      setSubtotal(order.net_amount);
-      setShippingPrice(order.shipping_price);
-      setTaxPrice(order.tax_price);
-      setDiscountAmount(order.discount_amount);
-    }).catch(() => { });
+    if (order_Id) {
+      axios.get(`${Customer_Order_Pending_Details}${order_Id}`).then((res) => {
+        console.log("orderDetailsRes", res);
+        const { order } = res.data;
+        setSubtotal(order.net_amount);
+        setShippingPrice(order.shipping_price);
+        setTaxPrice(order.tax_price);
+        setDiscountAmount(order.discount_amount);
+      }).catch(() => { });
+    }
   }, []);
 
   return (

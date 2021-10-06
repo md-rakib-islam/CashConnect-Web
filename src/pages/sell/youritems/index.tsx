@@ -7,10 +7,12 @@ import Hidden from "@component/hidden/Hidden";
 import Icon from "@component/icon/Icon";
 import NavbarLayout from "@component/layout/NavbarLayout";
 import Radio from "@component/radio/Radio";
+import Select from "@component/Select";
 import TextField from "@component/text-field/TextField";
 import Typography from "@component/Typography";
 import useJsonToFormData from "@customHook/useJsonToFormData";
 import { Purshase_Create } from "@data/constants";
+import { country_codes } from "@data/country_code";
 import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
 import { useFormik } from "formik";
@@ -51,7 +53,7 @@ function onlineSell() {
     let purchaseData = {
       first_name: values.first_name,
       last_name: values.last_name,
-      contact_no: values.contact_no,
+      contact_no: `+${values.country_code.value}${values.contact_no}`,
       email: values.email,
       street_address: values.street_address,
       contact_type: contact_type,
@@ -245,20 +247,51 @@ function onlineSell() {
             </Grid>
 
             <Grid item md={6} xs={12}>
-              <TextField
-                name="contact_no"
-                label="Contact Number"
-                fullwidth
-                boxShadow
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.contact_no || ""}
-                errorText={touched.contact_no && errors.contact_no}
-              />
+
+              <div style={{ display: "flex" }}>
+                <Select
+                  mb="1rem"
+                  mt="1rem"
+                  label="Country"
+                  width="40%"
+                  placeholder="Select Country"
+                  getOptionLabelBy="label"
+                  getOptionValueBy="value"
+                  options={country_codes}
+                  value={values.country_code || null}
+                  onChange={(value) => {
+                    setFieldValue("country_code", value);
+                  }}
+                  errorText={touched.country_code && errors.country_code}
+                />
+                <button style={{
+                  marginRight: "-2px",
+                  background: "white",
+                  border: "1px solid #dbdbdb",
+                  height: "40px",
+                  marginTop: "43px",
+                  width: "fit-content",
+                  padding: "8px"
+                }}
+                >{"+" + values.country_code.value}</button>
+                <TextField
+                  mt="1rem"
+                  name="contact_no"
+                  label="Contact Number"
+                  fullwidth
+                  boxShadow
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.contact_no || ""}
+                  errorText={touched.contact_no && errors.contact_no}
+                />
+              </div>
+
             </Grid>
 
             <Grid item md={6} xs={12}>
               <TextField
+                mt="1rem"
                 name="email"
                 type="email"
                 label="Email Address"
@@ -640,6 +673,11 @@ const initialValues = {
   last_name: "",
   contact_no: "",
   email: "",
+  country_code: {
+    code: "BD",
+    label: "Bangladesh",
+    value: "880"
+  },
 };
 
 onlineSell.layout = NavbarLayout;

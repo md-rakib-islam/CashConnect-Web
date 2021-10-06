@@ -22,6 +22,7 @@ import {
   Customer_Update, Role_All,
   Thana_All
 } from "@data/constants";
+import { country_codes } from "@data/country_code";
 import axios from "axios";
 import { useFormik } from "formik";
 import Link from "next/link";
@@ -55,6 +56,8 @@ const ProfileEditor = ({
   const handleFormSubmit = (values) => {
     const data = {
       ...values,
+      primary_phone: `+${values.country_code.value}${values.primary_phone}`,
+      secondary_phone: `+${values.country_code_2.value}${values.secondary_phone}`,
       image: image,
       gender:
         typeof values.gender != "object"
@@ -303,27 +306,85 @@ const ProfileEditor = ({
               </Grid>
 
               <Grid item md={6} xs={12}>
-                <TextField
-                  name="primary_phone"
-                  label="Primary Phone"
-                  fullwidth
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.primary_phone || ""}
-                  errorText={touched.primary_phone && errors.primary_phone}
-                />
+
+                <div style={{ display: "flex" }}>
+                  <Select
+                    mb="1rem"
+                    mt="1rem"
+                    label="Country"
+                    width="40%"
+                    placeholder="Select Country"
+                    getOptionLabelBy="label"
+                    getOptionValueBy="value"
+                    options={country_codes}
+                    value={values.country_code || null}
+                    onChange={(value) => {
+                      setFieldValue("country_code", value);
+                    }}
+                    errorText={touched.country_code && errors.country_code}
+                  />
+                  <button style={{
+                    marginRight: "-2px",
+                    background: "inherit",
+                    border: "1px solid #dbdbdb",
+                    height: "40px",
+                    marginTop: "43px",
+                    width: "fit-content",
+                    padding: "5px"
+                  }}
+                  >{"+" + values.country_code.value}</button>
+                  <TextField
+                    mt="1rem"
+                    name="primary_phone"
+                    label="Primary Phone"
+                    fullwidth
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.primary_phone || ""}
+                    errorText={touched.primary_phone && errors.primary_phone}
+                  />
+                </div>
               </Grid>
 
               <Grid item md={6} xs={12}>
-                <TextField
-                  name="secondary_phone"
-                  label="Secondary Phone"
-                  fullwidth
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.secondary_phone || ""}
-                  errorText={touched.secondary_phone && errors.secondary_phone}
-                />
+
+                <div style={{ display: "flex" }}>
+                  <Select
+                    mb="1rem"
+                    mt="1rem"
+                    label="Country"
+                    width="40%"
+                    placeholder="Select Country"
+                    getOptionLabelBy="label"
+                    getOptionValueBy="value"
+                    options={country_codes}
+                    value={values.country_code_2 || null}
+                    onChange={(value) => {
+                      setFieldValue("country_code_2", value);
+                    }}
+                    errorText={touched.country_code_2 && errors.country_code_2}
+                  />
+                  <button style={{
+                    marginRight: "-2px",
+                    background: "inherit",
+                    border: "1px solid #dbdbdb",
+                    height: "40px",
+                    marginTop: "43px",
+                    width: "fit-content",
+                    padding: "5px"
+                  }}
+                  >{"+" + values.country_code_2.value}</button>
+                  <TextField
+                    mt="1rem"
+                    name="secondary_phone"
+                    label="Secondary Phone"
+                    fullwidth
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.secondary_phone || ""}
+                    errorText={touched.secondary_phone && errors.secondary_phone}
+                  />
+                </div>
               </Grid>
 
               <Grid item md={6} xs={12}>
@@ -491,6 +552,7 @@ const ProfileEditor = ({
   );
 };
 
+
 const initialValues = {
   first_name: "",
   last_name: "",
@@ -498,6 +560,16 @@ const initialValues = {
   date_of_birth: "",
   primary_phone: "",
   secondary_phone: "",
+  country_code: {
+    code: "BD",
+    label: "Bangladesh",
+    value: "880"
+  },
+  country_code_2: {
+    code: "BD",
+    label: "Bangladesh",
+    value: "880"
+  },
 };
 
 const checkoutSchema = yup.object().shape({

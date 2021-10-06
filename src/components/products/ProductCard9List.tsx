@@ -7,9 +7,11 @@ import { SemiSpan } from "../Typography";
 
 export interface ProductCard9ListProps {
   productList?: any;
+  totalPage?: number;
+  totalProduct?: number;
 }
 
-const ProductCard9List: React.FC<ProductCard9ListProps> = ({ productList }) => {
+const ProductCard9List: React.FC<ProductCard9ListProps> = ({ productList, totalPage, totalProduct }) => {
   const [productData, setProductData] = useState([]);
   const [formattedProductData] = useFormattedProductData(productData);
 
@@ -29,8 +31,8 @@ const ProductCard9List: React.FC<ProductCard9ListProps> = ({ productList }) => {
         alignItems="center"
         mt="32px"
       >
-        <SemiSpan>Showing 1-10 of {productList?.length} Products</SemiSpan>
-        <Pagination pageCount={10} />
+        <SemiSpan>Showing 1-10 of {totalProduct} Products</SemiSpan>
+        <Pagination pageCount={totalPage} />
       </FlexBox>
     </div>
   );

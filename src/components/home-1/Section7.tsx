@@ -1,26 +1,18 @@
-import { Category_With_Product_Brand } from "@data/constants";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Section6 from "./Section6";
 
 type fetchedDataType = any
+interface Section7Props {
+  categoryWithProductBrandList: any
+}
 
 
-const Section7: React.FC = () => {
-  const [fetchedData, setfetchedData] = useState<fetchedDataType>(null)
+const Section7: React.FC<Section7Props> = ({ categoryWithProductBrandList }) => {
 
-  useEffect(() => {
-    axios.get(`${Category_With_Product_Brand}`).then(res => {
-      console.log("Category_With_Product_BrandRes", res.data.categories_with_products_and_brands)
-      setfetchedData(res.data.categories_with_products_and_brands)
-    }).catch(() => { })
-  }, [])
-
-  console.log("fetchedData", fetchedData)
   return (
     <>
       {
-        fetchedData ? (fetchedData?.map((data, key) => (
+        categoryWithProductBrandList ? (categoryWithProductBrandList?.map((data, key) => (
           <Section6 data={data} key={key}></Section6>
         ))
         )

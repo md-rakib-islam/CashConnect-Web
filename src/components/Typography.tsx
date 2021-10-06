@@ -117,11 +117,13 @@ export const Tiny2: React.FC<CustomProps> = (props) => {
   useEffect(() => {
     const { order_Id } = useUserInf()
 
-    fetch(`${Customer_Order_Pending_Details}${order_Id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setProductQuantity(data?.order?.order_items?.length);
-      }).catch(() => { });
+    if (order_Id) {
+      fetch(`${Customer_Order_Pending_Details}${order_Id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setProductQuantity(data?.order?.order_items?.length);
+        }).catch(() => { });
+    }
   }, [cartCanged]);
 
   return (

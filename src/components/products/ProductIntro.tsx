@@ -64,14 +64,16 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
     const { order_Id } = useUserInf()
 
     if (id) {
-      axios
-        .get(`${Customer_Order_Item_By_Product_Id}${order_Id}/${id}`)
-        .then((item) => {
-          console.log("item", item.data.order_item);
-          setItemId(item.data.order_item.id);
-          setCartQuantity(item.data.order_item.quantity);
-        })
-        .catch(() => setCartQuantity(0));
+      if (order_Id) {
+        axios
+          .get(`${Customer_Order_Item_By_Product_Id}${order_Id}/${id}`)
+          .then((item) => {
+            console.log("item", item.data.order_item);
+            setItemId(item.data.order_item.id);
+            setCartQuantity(item.data.order_item.quantity);
+          })
+          .catch(() => setCartQuantity(0));
+      }
     }
   }, [getItemId, id,]);
 
