@@ -6,9 +6,10 @@ import Box from "./Box";
 import Typography from "./Typography";
 
 type SelectOption = {
-  label: any;
-  value: any;
-  name?: any;
+  label?: number | string;
+  value?: string | number;
+  name?: string | number;
+  id?: number;
 };
 
 interface SelectProps

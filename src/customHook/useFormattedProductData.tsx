@@ -21,10 +21,10 @@ function useFormattedProductData(productData, type?: string) {
                 price: Number(data?.unit_price),
                 title: data?.name,
                 imgUrl: `${BASE_URL}${data?.thumbnail || data?.image}`,
-                category: data?.category,
-                brand: data?.brand,
-                rating: data?.rating,
-                reviewCount: data?.num_reviews,
+                category: data?.category || null,
+                brand: data?.brand || null,
+                rating: data?.rating || null,
+                reviewCount: data?.num_reviews || null,
             }
         }
         )

@@ -17,7 +17,7 @@ export const Branch_All = `${BASE_URL}/branch/api/v1/branch/all/`;
 //brand api
 export const Brand_By_Id = "/brand/api/v1/brand/";
 
-export const Brand_Featured = `${BASE_URL}/brand/api/v1/featured_brand/all/`
+export const Brand_Featured = `${BASE_URL}/brand/api/v1/brand/featured_brand/all/`
 
 export const Brand_All = `${BASE_URL}/brand/api/v1/brand/all/`
 

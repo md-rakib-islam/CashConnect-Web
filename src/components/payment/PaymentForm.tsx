@@ -179,6 +179,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
         axios
           .post(`${Customer_Order_Confirm}${order_Id}`, confirmData, authTOKEN)
           .then((res) => {
+
             const user_type = localStorage.getItem("userType")
             console.log("confirmOrderRes", res);
             confirmedOrderRes.current = true;
@@ -190,12 +191,14 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
               payload: Math.random(),
             });
 
+
             if (user_type == 3) {
               router.push("/orders")
             }
             else if (user_type == 2) {
               router.push("/vendor/orders")
             }
+
           }).catch(() => { });
       }
     }
@@ -230,7 +233,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
     });
   } else if (paymentMethod === "nagad") {
     var checkoutSchema: any = yup.object().shape({
-      rocket: yup.string().required("nagad").nullable("required"),
+      nagad: yup.string().required("required").nullable("required"),
     });
   }
   else {
@@ -513,7 +516,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
               variant="contained"
               color="primary"
               type="submit"
-              onClick={() => handleFormSubmit(values)}
+              // onClick={() => handleFormSubmit(values)}
               fullwidth
             >
               Confirm

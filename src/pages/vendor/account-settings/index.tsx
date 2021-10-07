@@ -10,6 +10,7 @@ import VendorDashboardLayout from "@component/layout/VendorDashboardLayout";
 import Select from "@component/Select";
 import TextField from "@component/text-field/TextField";
 import useJsonToFormData from "@customHook/useJsonToFormData";
+import useRemoveCountryCode from "@customHook/useRemoveCountryCode";
 import useUserInf from "@customHook/useUserInf";
 import {
   BASE_URL,
@@ -37,6 +38,9 @@ const AccountSettings = () => {
   const [cities, setCities] = useState([]);
   const [countries, setCountries] = useState([]);
   const [branches, setBranches] = useState([]);
+
+  const [phoneNoPrimary, setphoneNoPrimary] = useState("")
+  const [phoneNoSecondary, setphoneNoSecondary] = useState("")
 
   const genders = [
     { label: "Male", value: "male" },
@@ -79,6 +83,16 @@ const AccountSettings = () => {
   }, []);
 
   useEffect(() => {
+    if (phoneNoPrimary && phoneNoSecondary) {
+      const [primaryPhone, secondaryPhone] = useRemoveCountryCode(phoneNoPrimary, phoneNoSecondary)
+      setFieldValue(`primary_phone`, primaryPhone);
+      setFieldValue(`secondary_phone`, secondaryPhone);
+      console.log("primaryPhone", primaryPhone)
+      console.log("secondaryPhone", secondaryPhone)
+    }
+  }, [phoneNoPrimary, phoneNoSecondary])
+
+  useEffect(() => {
     axios.get(`${Vendor_By_Id}${user_id}`, authTOKEN).then((datas) => {
       console.log("VendorEditDetails", datas.data);
       const { data } = datas;
@@ -86,8 +100,16 @@ const AccountSettings = () => {
       setPreviewImage(`${BASE_URL}${data.image}`);
 
       for (let key in data) {
-        setFieldValue(`${key}`, data[key]);
-        // setFieldValue(`${key}`, _.isNull(data[key]) ? "" : data[key]);
+        if (key == "primary_phone") {
+          setphoneNoPrimary(data["primary_phone"])
+        }
+        else if (key == "secondary_phone") {
+          setphoneNoSecondary(data["secondary_phone"])
+        }
+        else {
+          setFieldValue(`${key}`, data[key]);
+
+        }
       }
 
       setFieldValue("gender", {
@@ -102,8 +124,8 @@ const AccountSettings = () => {
     // const user_id = state.auth.user?.id;
     const data = {
       ...values,
-      primary_phone: `+${values.country_code.value}${values.primary_phone}`,
-      secondary_phone: `+${values.country_code_2.value}${values.secondary_phone}`,
+      primary_phone: `${values.country_code.value}${values.primary_phone}`,
+      secondary_phone: `${values.country_code_2.value}${values.secondary_phone}`,
       image: image,
       gender:
         typeof values.gender != "object"
@@ -352,7 +374,7 @@ const AccountSettings = () => {
                     width: "fit-content",
                     padding: "5px"
                   }}
-                  >{"+" + values.country_code.value}</button>
+                  >{values.country_code.value}</button>
                   <TextField
                     mt="1rem"
                     name="primary_phone"
@@ -393,7 +415,7 @@ const AccountSettings = () => {
                     width: "fit-content",
                     padding: "5px"
                   }}
-                  >{"+" + values.country_code_2.value}</button>
+                  >{values.country_code_2.value}</button>
                   <TextField
                     mt="1rem"
                     name="secondary_phone"
@@ -590,12 +612,12 @@ const initialValues = {
   country_code: {
     code: "BD",
     label: "Bangladesh",
-    value: "880"
+    value: "+880"
   },
   country_code_2: {
     code: "BD",
     label: "Bangladesh",
-    value: "880"
+    value: "+880"
   },
 };
 

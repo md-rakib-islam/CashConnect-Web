@@ -374,7 +374,7 @@ const initialValues = {
   country_code: {
     code: "BD",
     label: "Bangladesh",
-    value: "880"
+    value: "+880"
   },
   agreement: false,
 };

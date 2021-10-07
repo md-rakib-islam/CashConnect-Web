@@ -53,7 +53,7 @@ function onlineSell() {
     let purchaseData = {
       first_name: values.first_name,
       last_name: values.last_name,
-      contact_no: `+${values.country_code.value}${values.contact_no}`,
+      contact_no: `${values.country_code.value}${values.contact_no}`,
       email: values.email,
       street_address: values.street_address,
       contact_type: contact_type,
@@ -273,7 +273,7 @@ function onlineSell() {
                   width: "fit-content",
                   padding: "8px"
                 }}
-                >{"+" + values.country_code.value}</button>
+                >{values.country_code.value}</button>
                 <TextField
                   mt="1rem"
                   name="contact_no"
@@ -676,7 +676,7 @@ const initialValues = {
   country_code: {
     code: "BD",
     label: "Bangladesh",
-    value: "880"
+    value: "+880"
   },
 };
 

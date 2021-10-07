@@ -128,7 +128,7 @@ export const Tiny2: React.FC<CustomProps> = (props) => {
 
   return (
     <Typography as="span" fontSize="10px" {...props}>
-      {productQuantity}
+      {productQuantity || 0}
     </Typography>
   );
 };

@@ -32,7 +32,7 @@ const Section6: React.FC<Section6Props> = ({ data }) => {
       <FlexBox>
         <Hidden down={768} mr="1.75rem">
           <Box shadow={6} borderRadius={10} padding="1.25rem" bg="white">
-            {data?.brands?.slice(0.9)?.map((brand, ind) => (
+            {data?.brands?.map((brand, ind) => (
               <StyledProductCategory
                 key={brand?.id}
                 id={brand?.id}

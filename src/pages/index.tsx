@@ -74,7 +74,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
   try {
     const res = await axios.get(`${Brand_Featured}?page=${1}&size=${2}`)
-    var featuredBrandLists: any[] = await res
+    var featuredBrandLists: any[] = await res.data.brands
     var [featuredBrandList] = useFormattedProductData(featuredBrandLists, "FeaturedBrands")
 
   } catch (err) {

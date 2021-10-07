@@ -74,6 +74,7 @@ const Pagination: React.FC<PaginationProps> = ({
         subContainerClassName="pages pagination"
         activeClassName="active"
         disabledClassName="disabled"
+        forcePage={router.query.page ? (router.query.page - 1) : 0}
       />
     </StyledPagination>
   );

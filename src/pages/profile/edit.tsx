@@ -11,6 +11,7 @@ import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import Select from "@component/Select";
 import TextField from "@component/text-field/TextField";
 import useJsonToFormData from "@customHook/useJsonToFormData";
+import useRemoveCountryCode from "@customHook/useRemoveCountryCode";
 import useUserInf from "@customHook/useUserInf";
 import {
   BASE_URL,
@@ -45,6 +46,10 @@ const ProfileEditor = ({
   const [branches, setBranches] = useState([]);
   const [customer_types, setCustomer_types] = useState([]);
 
+  const [phoneNoPrimary, setphoneNoPrimary] = useState("")
+  const [phoneNoSecondary, setphoneNoSecondary] = useState("")
+
+
   const genders = [
     { label: "Male", value: "male" },
     { label: "Female", value: "female" },
@@ -56,8 +61,8 @@ const ProfileEditor = ({
   const handleFormSubmit = (values) => {
     const data = {
       ...values,
-      primary_phone: `+${values.country_code.value}${values.primary_phone}`,
-      secondary_phone: `+${values.country_code_2.value}${values.secondary_phone}`,
+      primary_phone: `${values.country_code.value}${values.primary_phone}`,
+      secondary_phone: `${values.country_code_2.value}${values.secondary_phone}`,
       image: image,
       gender:
         typeof values.gender != "object"
@@ -94,6 +99,15 @@ const ProfileEditor = ({
   };
 
   useEffect(() => {
+    if (phoneNoPrimary && phoneNoSecondary) {
+      const [primaryPhone, secondaryPhone] = useRemoveCountryCode(phoneNoPrimary, phoneNoSecondary)
+      setFieldValue(`primary_phone`, primaryPhone);
+      setFieldValue(`secondary_phone`, secondaryPhone);
+    }
+  }, [phoneNoPrimary, phoneNoSecondary])
+
+
+  useEffect(() => {
     axios.get(`${Customer_By_Id}${user_id}`, authTOKEN).then((datas) => {
       console.log("EditDetails", datas.data);
       const { data } = datas;
@@ -101,8 +115,18 @@ const ProfileEditor = ({
       setPreviewImage(`${BASE_URL}${data.image}`);
 
       for (let key in data) {
-        setFieldValue(`${key}`, data[key]);
+
         // setFieldValue(`${key}`, _.isNull(data[key]) ? "" : data[key]);
+        if (key == "primary_phone") {
+          setphoneNoPrimary(data["primary_phone"])
+        }
+        else if (key == "secondary_phone") {
+          setphoneNoSecondary(data["secondary_phone"])
+        }
+        else {
+          setFieldValue(`${key}`, data[key]);
+
+        }
       }
       setFieldValue("gender", {
         value: data.gender,
@@ -332,7 +356,7 @@ const ProfileEditor = ({
                     width: "fit-content",
                     padding: "5px"
                   }}
-                  >{"+" + values.country_code.value}</button>
+                  >{values.country_code.value}</button>
                   <TextField
                     mt="1rem"
                     name="primary_phone"
@@ -373,7 +397,7 @@ const ProfileEditor = ({
                     width: "fit-content",
                     padding: "5px"
                   }}
-                  >{"+" + values.country_code_2.value}</button>
+                  >{values.country_code_2.value}</button>
                   <TextField
                     mt="1rem"
                     name="secondary_phone"
@@ -563,12 +587,12 @@ const initialValues = {
   country_code: {
     code: "BD",
     label: "Bangladesh",
-    value: "880"
+    value: "+880"
   },
   country_code_2: {
     code: "BD",
     label: "Bangladesh",
-    value: "880"
+    value: "+880"
   },
 };
 

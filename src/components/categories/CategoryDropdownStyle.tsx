@@ -16,4 +16,7 @@ export const StyledCategoryDropdown = styled.div<CategoryDropdownProps>`
   box-shadow: ${getTheme("shadows.regular")};
   transition: all 250ms ease-in-out;
   z-index: 98;
+  max-height: 520px;
+  overflow-y: auto;
+  overflow-x: hidden;
 `;
