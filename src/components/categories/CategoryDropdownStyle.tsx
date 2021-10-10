@@ -17,6 +17,4 @@ export const StyledCategoryDropdown = styled.div<CategoryDropdownProps>`
   transition: all 250ms ease-in-out;
   z-index: 98;
   max-height: 520px;
-  overflow-y: auto;
-  overflow-x: hidden;
 `;

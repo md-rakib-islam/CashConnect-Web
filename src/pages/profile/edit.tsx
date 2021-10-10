@@ -10,8 +10,8 @@ import DashboardLayout from "@component/layout/CustomerDashboardLayout";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import Select from "@component/Select";
 import TextField from "@component/text-field/TextField";
+import { useAppContext } from "@context/app/AppContext";
 import useJsonToFormData from "@customHook/useJsonToFormData";
-import useRemoveCountryCode from "@customHook/useRemoveCountryCode";
 import useUserInf from "@customHook/useUserInf";
 import {
   BASE_URL,
@@ -46,10 +46,6 @@ const ProfileEditor = ({
   const [branches, setBranches] = useState([]);
   const [customer_types, setCustomer_types] = useState([]);
 
-  const [phoneNoPrimary, setphoneNoPrimary] = useState("")
-  const [phoneNoSecondary, setphoneNoSecondary] = useState("")
-
-
   const genders = [
     { label: "Male", value: "male" },
     { label: "Female", value: "female" },
@@ -58,11 +54,13 @@ const ProfileEditor = ({
 
   const { user_id, authTOKEN } = useUserInf()
 
+  const { dispatch } = useAppContext()
+
   const handleFormSubmit = (values) => {
     const data = {
       ...values,
-      primary_phone: `${values.country_code.value}${values.primary_phone}`,
-      secondary_phone: `${values.country_code_2.value}${values.secondary_phone}`,
+      primary_phone: `${values.primary_phone}`,
+      secondary_phone: `${values.secondary_phone}`,
       image: image,
       gender:
         typeof values.gender != "object"
@@ -94,17 +92,26 @@ const ProfileEditor = ({
       .put(`${Customer_Update}${user_id}`, customerEditData, authTOKEN)
       .then((data) => {
         console.log("updatedRes", data);
-        router.push("/profile")
-      });
+        router.push("/profile");
+        dispatch({
+          type: "CHANGE_ALERT",
+          payload: {
+            alerType: "success",
+            alertValue: "update sussess...",
+            alertChanged: Math.random()
+          }
+        })
+      }).catch(() => {
+        dispatch({
+          type: "CHANGE_ALERT",
+          payload: {
+            alerType: "error",
+            alertValue: "someting went wrong",
+            alertChanged: Math.random()
+          }
+        })
+      })
   };
-
-  useEffect(() => {
-    if (phoneNoPrimary && phoneNoSecondary) {
-      const [primaryPhone, secondaryPhone] = useRemoveCountryCode(phoneNoPrimary, phoneNoSecondary)
-      setFieldValue(`primary_phone`, primaryPhone);
-      setFieldValue(`secondary_phone`, secondaryPhone);
-    }
-  }, [phoneNoPrimary, phoneNoSecondary])
 
 
   useEffect(() => {
@@ -117,16 +124,7 @@ const ProfileEditor = ({
       for (let key in data) {
 
         // setFieldValue(`${key}`, _.isNull(data[key]) ? "" : data[key]);
-        if (key == "primary_phone") {
-          setphoneNoPrimary(data["primary_phone"])
-        }
-        else if (key == "secondary_phone") {
-          setphoneNoSecondary(data["secondary_phone"])
-        }
-        else {
-          setFieldValue(`${key}`, data[key]);
-
-        }
+        setFieldValue(`${key}`, data[key]);
       }
       setFieldValue("gender", {
         value: data.gender,
@@ -187,6 +185,18 @@ const ProfileEditor = ({
     validationSchema: checkoutSchema,
     onSubmit: handleFormSubmit,
   });
+
+  const CustomOption = ({ innerProps, isDisabled, data }) => {
+
+    return !isDisabled ? (
+      <div {...innerProps}
+        style={{ cursor: "pointer", width: "180px" }}
+      ><img src={`https://flagcdn.com/w20/${data.code.toLowerCase()}.png`}></img>
+        {' ' + data.label}
+      </div>
+    ) : null;
+  }
+
 
   return (
     <div>
@@ -341,22 +351,14 @@ const ProfileEditor = ({
                     getOptionLabelBy="label"
                     getOptionValueBy="value"
                     options={country_codes}
+                    components={{ Option: CustomOption }}
                     value={values.country_code || null}
                     onChange={(value) => {
                       setFieldValue("country_code", value);
+                      setFieldValue("primary_phone", `${value.value}`);
                     }}
                     errorText={touched.country_code && errors.country_code}
                   />
-                  <button style={{
-                    marginRight: "-2px",
-                    background: "inherit",
-                    border: "1px solid #dbdbdb",
-                    height: "40px",
-                    marginTop: "43px",
-                    width: "fit-content",
-                    padding: "5px"
-                  }}
-                  >{values.country_code.value}</button>
                   <TextField
                     mt="1rem"
                     name="primary_phone"
@@ -382,22 +384,14 @@ const ProfileEditor = ({
                     getOptionLabelBy="label"
                     getOptionValueBy="value"
                     options={country_codes}
+                    components={{ Option: CustomOption }}
                     value={values.country_code_2 || null}
                     onChange={(value) => {
                       setFieldValue("country_code_2", value);
+                      setFieldValue("secondary_phone", `${value.value}`);
                     }}
                     errorText={touched.country_code_2 && errors.country_code_2}
                   />
-                  <button style={{
-                    marginRight: "-2px",
-                    background: "inherit",
-                    border: "1px solid #dbdbdb",
-                    height: "40px",
-                    marginTop: "43px",
-                    width: "fit-content",
-                    padding: "5px"
-                  }}
-                  >{values.country_code_2.value}</button>
                   <TextField
                     mt="1rem"
                     name="secondary_phone"
@@ -582,8 +576,8 @@ const initialValues = {
   last_name: "",
   email: "",
   date_of_birth: "",
-  primary_phone: "",
-  secondary_phone: "",
+  primary_phone: "+880",
+  secondary_phone: "+880",
   country_code: {
     code: "BD",
     label: "Bangladesh",
@@ -608,48 +602,3 @@ const checkoutSchema = yup.object().shape({
 ProfileEditor.layout = DashboardLayout;
 
 export default ProfileEditor;
-
-// export const getServerSideProps: GetServerSideProps = async () => {
-
-//   const [
-//     countriesRes,
-//     thanasRes,
-//     branchesRes,
-//     citiesRes,
-//     customer_typesRes,
-//     rolesRes,
-//   ]: any = await Promise.all([
-//     fetch(`${Country_All}`),
-//     fetch(`${Thana_All}`),
-//     fetch(`${Branch_All}`),
-//     fetch(`${City_All}`),
-//     fetch(`${Customer_type_All}`),
-//     fetch(`${Role_All}`),
-//   ]);
-//   const [
-//     countriesData,
-//     thanasData,
-//     branchesData,
-//     citiesData,
-//     customer_typesData,
-//     rolesData,
-//   ] = await Promise.all([
-//     countriesRes.json(),
-//     thanasRes.json(),
-//     branchesRes.json(),
-//     citiesRes.json(),
-//     customer_typesRes.json(),
-//     rolesRes.json(),
-//   ]);
-
-//   return {
-//     props: {
-//       countries: countriesData.countries,
-//       thanas: thanasData.thanas,
-//       branches: branchesData.branches,
-//       cities: citiesData.cities,
-//       customer_types: customer_typesData.customer_types,
-//       roles: rolesData.roles,
-//     }, // will be passed to the page component as props
-//   };
-// };

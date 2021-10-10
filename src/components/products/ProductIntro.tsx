@@ -137,7 +137,16 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
           .then((res) => {
             console.log("increaseRes", res);
             setGetItemId(Math.random());
-          }).catch(() => { });
+          }).catch(() => {
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alerType: "error",
+                alertValue: "something went wrong",
+                alertChanged: Math.random()
+              }
+            })
+          });
       }
 
       //remove
@@ -151,7 +160,15 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               type: "CHANGE_CART_QUANTITY",
               payload: Math.random(),
             });
-          }).catch(() => { });
+          }).catch(() => {
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alerType: "error",
+                alertValue: "something went wrong"
+              }
+            })
+          });
       }
 
       //decrease quantity
@@ -161,7 +178,15 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
           .then((res) => {
             console.log("decreaseRes", res);
             setGetItemId(Math.random());
-          }).catch(() => { });
+          }).catch(() => {
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alerType: "error",
+                alertValue: "something went wrong"
+              }
+            })
+          });
       }
 
     }

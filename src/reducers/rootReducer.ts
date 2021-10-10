@@ -1,9 +1,10 @@
+import { alertActionType, alertInitialState, alertReducer } from "./alertReducer";
 import {
   authInitialState,
   authReducer,
   loginActionType,
   registerActionType,
-  userActionType,
+  userActionType
 } from "./authReducer";
 import { cartActionType, cartInitialState, cartReducer } from "./cartReducer";
 import combineReducers from "./combineReducers";
@@ -15,13 +16,18 @@ import {
   dataInitialState,
   dataReducer,
   rolesActionType,
-  thanasActionType,
+  thanasActionType
 } from "./dataReducer";
 import {
   layoutActionType,
   layoutInitialState,
-  layoutReducer,
+  layoutReducer
 } from "./layoutReducer";
+
+
+
+
+
 // import {
 //   productDetailsActionType,
 //   productDetailsInitialState,
@@ -42,7 +48,8 @@ export type rootActionType =
   | citiesActionType
   | countryActionType
   | branchActionType
-  | customer_typeActionType;
+  | customer_typeActionType
+  | alertActionType
 
 export const initialState = {
   layout: layoutInitialState,
@@ -50,6 +57,7 @@ export const initialState = {
   cart: cartInitialState,
   auth: authInitialState,
   data: dataInitialState,
+  alert: alertInitialState,
 };
 
 export const rootReducer = combineReducers({
@@ -58,4 +66,5 @@ export const rootReducer = combineReducers({
   cart: cartReducer,
   auth: authReducer,
   data: dataReducer,
+  alert: alertReducer,
 });

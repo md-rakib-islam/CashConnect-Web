@@ -9,8 +9,8 @@ import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import VendorDashboardLayout from "@component/layout/VendorDashboardLayout";
 import Select from "@component/Select";
 import TextField from "@component/text-field/TextField";
+import { useAppContext } from "@context/app/AppContext";
 import useJsonToFormData from "@customHook/useJsonToFormData";
-import useRemoveCountryCode from "@customHook/useRemoveCountryCode";
 import useUserInf from "@customHook/useUserInf";
 import {
   BASE_URL,
@@ -39,8 +39,9 @@ const AccountSettings = () => {
   const [countries, setCountries] = useState([]);
   const [branches, setBranches] = useState([]);
 
-  const [phoneNoPrimary, setphoneNoPrimary] = useState("")
-  const [phoneNoSecondary, setphoneNoSecondary] = useState("")
+  const [updated, setUpdated] = useState(0)
+
+  const { dispatch } = useAppContext()
 
   const genders = [
     { label: "Male", value: "male" },
@@ -82,15 +83,6 @@ const AccountSettings = () => {
       }).catch(() => { });
   }, []);
 
-  useEffect(() => {
-    if (phoneNoPrimary && phoneNoSecondary) {
-      const [primaryPhone, secondaryPhone] = useRemoveCountryCode(phoneNoPrimary, phoneNoSecondary)
-      setFieldValue(`primary_phone`, primaryPhone);
-      setFieldValue(`secondary_phone`, secondaryPhone);
-      console.log("primaryPhone", primaryPhone)
-      console.log("secondaryPhone", secondaryPhone)
-    }
-  }, [phoneNoPrimary, phoneNoSecondary])
 
   useEffect(() => {
     axios.get(`${Vendor_By_Id}${user_id}`, authTOKEN).then((datas) => {
@@ -100,16 +92,8 @@ const AccountSettings = () => {
       setPreviewImage(`${BASE_URL}${data.image}`);
 
       for (let key in data) {
-        if (key == "primary_phone") {
-          setphoneNoPrimary(data["primary_phone"])
-        }
-        else if (key == "secondary_phone") {
-          setphoneNoSecondary(data["secondary_phone"])
-        }
-        else {
-          setFieldValue(`${key}`, data[key]);
 
-        }
+        setFieldValue(`${key}`, data[key]);
       }
 
       setFieldValue("gender", {
@@ -118,14 +102,14 @@ const AccountSettings = () => {
           ?.label,
       });
     }).catch(() => { });
-  }, [user_id]);
+  }, [user_id, updated]);
 
   const handleFormSubmit = async (values) => {
     // const user_id = state.auth.user?.id;
     const data = {
       ...values,
-      primary_phone: `${values.country_code.value}${values.primary_phone}`,
-      secondary_phone: `${values.country_code_2.value}${values.secondary_phone}`,
+      primary_phone: `$${values.primary_phone}`,
+      secondary_phone: `$${values.secondary_phone}`,
       image: image,
       gender:
         typeof values.gender != "object"
@@ -149,7 +133,28 @@ const AccountSettings = () => {
       .put(`${Vendor_Update}${user_id}`, vendorEditData, authTOKEN)
       .then((data) => {
         console.log("VenderUpdatedRes", data);
-      }).catch(() => { });
+
+        dispatch({
+          type: "CHANGE_ALERT",
+          payload: {
+            alerType: "success",
+            alertValue: "update sussess...",
+            alertChanged: Math.random()
+          }
+        })
+
+        setUpdated(Math.random())
+
+      }).catch(() => {
+        dispatch({
+          type: "CHANGE_ALERT",
+          payload: {
+            alerType: "error",
+            alertValue: "someting went wrong",
+            alertChanged: Math.random()
+          }
+        })
+      });
   };
 
   const {
@@ -167,6 +172,18 @@ const AccountSettings = () => {
     validationSchema: accountSchema,
     onSubmit: handleFormSubmit,
   });
+
+  const CustomOption = ({ innerProps, isDisabled, data }) => {
+
+    return !isDisabled ? (
+      <div {...innerProps}
+        style={{ cursor: "pointer", width: "180px" }}
+      ><img src={`https://flagcdn.com/w20/${data.code.toLowerCase()}.png`}></img>
+        {' ' + data.label}
+      </div>
+    ) : null;
+  }
+
 
   return (
     <div>
@@ -359,22 +376,14 @@ const AccountSettings = () => {
                     getOptionLabelBy="label"
                     getOptionValueBy="value"
                     options={country_codes}
+                    components={{ Option: CustomOption }}
                     value={values.country_code || null}
                     onChange={(value) => {
                       setFieldValue("country_code", value);
+                      setFieldValue("primary_phone", `${value.value}`);
                     }}
                     errorText={touched.country_code && errors.country_code}
                   />
-                  <button style={{
-                    marginRight: "-2px",
-                    background: "inherit",
-                    border: "1px solid #dbdbdb",
-                    height: "40px",
-                    marginTop: "43px",
-                    width: "fit-content",
-                    padding: "5px"
-                  }}
-                  >{values.country_code.value}</button>
                   <TextField
                     mt="1rem"
                     name="primary_phone"
@@ -400,22 +409,14 @@ const AccountSettings = () => {
                     getOptionLabelBy="label"
                     getOptionValueBy="value"
                     options={country_codes}
+                    components={{ Option: CustomOption }}
                     value={values.country_code_2 || null}
                     onChange={(value) => {
                       setFieldValue("country_code_2", value);
+                      setFieldValue("secondary_phone", `${value.value}`);
                     }}
                     errorText={touched.country_code_2 && errors.country_code_2}
                   />
-                  <button style={{
-                    marginRight: "-2px",
-                    background: "inherit",
-                    border: "1px solid #dbdbdb",
-                    height: "40px",
-                    marginTop: "43px",
-                    width: "fit-content",
-                    padding: "5px"
-                  }}
-                  >{values.country_code_2.value}</button>
                   <TextField
                     mt="1rem"
                     name="secondary_phone"
@@ -428,6 +429,7 @@ const AccountSettings = () => {
                   />
                 </div>
               </Grid>
+
 
               <Grid item md={6} xs={12}>
                 <TextField
@@ -598,7 +600,7 @@ const AccountSettings = () => {
           </Button>
         </form>
       </Card1>
-    </div>
+    </div >
   );
 };
 
@@ -607,8 +609,8 @@ const initialValues = {
   last_name: "",
   email: "",
   date_of_birth: "",
-  primary_phone: "",
-  secondary_phone: "",
+  primary_phone: "+880",
+  secondary_phone: "+880",
   country_code: {
     code: "BD",
     label: "Bangladesh",

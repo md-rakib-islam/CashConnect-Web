@@ -28,6 +28,7 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
 
   const [openSignup, setOpenSignup] = useState(false)
 
+
   const closeSignupTab = () => {
     setOpenSignup(false)
   }
@@ -63,6 +64,15 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
             success: true,
             error: [],
           },
+        });
+
+        dispatch({
+          type: "CHANGE_ALERT",
+          payload: {
+            alertValue: "login success...",
+            alerType: "success",
+            alertChanged: Math.random(),
+          }
         });
 
         if (user.user_type == 3) {
@@ -105,6 +115,15 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
             success: false,
             error: errors,
           },
+        });
+
+        dispatch({
+          type: "CHANGE_ALERT",
+          payload: {
+            alertValue: "something went wrong",
+            alerType: "error",
+            alertChanged: Math.random(),
+          }
         });
         if (type != "popup") {
           router.push("/login");

@@ -191,6 +191,14 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
               payload: Math.random(),
             });
 
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alertValue: "your order has been success...",
+                alerType: "success",
+                alertChanged: Math.random(),
+              }
+            });
 
             if (user_type == 3) {
               router.push("/orders")

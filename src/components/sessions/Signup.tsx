@@ -1,5 +1,6 @@
 import LoginPopup from "@component/LoginPopup";
 import Select from "@component/Select";
+import { useAppContext } from "@context/app/AppContext";
 import { Customer_Create, Vendor_Create } from "@data/constants";
 import { country_codes } from "@data/country_code";
 import axios from "axios";
@@ -31,6 +32,8 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
   const [openLogin, setOpenLogin] = useState(false)
 
   const router = useRouter();
+
+  const { dispatch } = useAppContext()
 
   const closeLoginTab = () => {
     setOpenLogin(false)
@@ -64,7 +67,7 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
   const handleFormSubmit = async (values) => {
     const data = {
       ...values,
-      number: `${values.country_code.value}${values.number}`,
+      number: `${values.number}`,
       user_type,
     };
 
@@ -84,10 +87,35 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
         console.log("createdVendorRes", data);
         if (type == "SignupPage") {
           router.push("/login");
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: "sugnup success...",
+              alerType: "success",
+              alertChanged: Math.random(),
+            }
+          });
         } else {
           closeSignupDialog()
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: "sugnup success...",
+              alerType: "success",
+              alertChanged: Math.random(),
+            }
+          });
         }
-      }).catch(() => { });
+      }).catch(() => {
+        dispatch({
+          type: "CHANGE_ALERT",
+          payload: {
+            alertValue: "someting went wrong",
+            alerType: "error",
+            alertChanged: Math.random(),
+          }
+        });
+      });
     }
 
 
@@ -100,6 +128,18 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
       initialValues,
       validationSchema: formSchema,
     });
+
+  const CustomOption = ({ innerProps, isDisabled, data }) => {
+
+    console.log(`https://flagcdn.com/w20/${data.code.toLowerCase()}.png`)
+    return !isDisabled ? (
+      <div {...innerProps}
+        style={{ cursor: "pointer", width: "180px" }}
+      ><img src={`https://flagcdn.com/w20/${data.code.toLowerCase()}.png`}></img>
+        {' ' + data.label}
+      </div>
+    ) : null;
+  }
 
   return (
     <>
@@ -202,27 +242,19 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
               getOptionLabelBy="label"
               getOptionValueBy="value"
               options={country_codes}
+              components={{ Option: CustomOption }}
               value={values.country_code || null}
               onChange={(value) => {
                 setFieldValue("country_code", value);
+                setFieldValue("number", `${value.value}`);
               }}
               errorText={touched.country_code && errors.country_code}
             />
-            <button style={{
-              marginRight: "-2px",
-              background: "inherit",
-              border: "1px solid #dbdbdb",
-              height: "40px",
-              marginTop: "43px",
-              width: "fit-content",
-              padding: "5px"
-            }}
-            >{values.country_code.value}</button>
             <TextField
               mb="0.75rem"
               mt="1rem"
               name="number"
-              placeholder="Obtional"
+              // placeholder="Obtional"
               label="Phone Number"
               fullwidth
               onBlur={handleBlur}
@@ -368,6 +400,7 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
 const initialValues = {
   first_name: "",
   last_name: "",
+  number: "+880",
   email: "",
   password: "",
   re_password: "",
@@ -380,10 +413,11 @@ const initialValues = {
 };
 
 const formSchema = yup.object().shape({
-  first_name: yup.string().required("${path} is required"),
-  last_name: yup.string().required("${path} is required"),
-  email: yup.string().email("invalid email").required("${path} is required"),
-  password: yup.string().required("${path} is required"),
+  first_name: yup.string().required("first name is required"),
+  last_name: yup.string().required("last name is required"),
+  number: yup.string().required("phone number is required"),
+  email: yup.string().email("invalid email").required("email is required"),
+  password: yup.string().required("password is required"),
   country_code: yup.object().required("requred"),
   re_password: yup
     .string()

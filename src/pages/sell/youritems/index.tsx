@@ -53,7 +53,7 @@ function onlineSell() {
     let purchaseData = {
       first_name: values.first_name,
       last_name: values.last_name,
-      contact_no: `${values.country_code.value}${values.contact_no}`,
+      contact_no: `${values.contact_no}`,
       email: values.email,
       street_address: values.street_address,
       contact_type: contact_type,
@@ -191,7 +191,19 @@ function onlineSell() {
     onSubmit: handleFormSubmit,
   });
 
-  console.log("imagesssss", images);
+
+  const CustomOption = ({ innerProps, isDisabled, data }) => {
+
+    return !isDisabled ? (
+      <div {...innerProps}
+        style={{ cursor: "pointer", width: "180px" }}
+      ><img src={`https://flagcdn.com/w20/${data.code.toLowerCase()}.png`}></img>
+        {' ' + data.label}
+      </div>
+    ) : null;
+  }
+
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -251,29 +263,21 @@ function onlineSell() {
               <div style={{ display: "flex" }}>
                 <Select
                   mb="1rem"
-                  mt="1rem"
+                  mt="1.03rem"
                   label="Country"
                   width="40%"
                   placeholder="Select Country"
                   getOptionLabelBy="label"
                   getOptionValueBy="value"
                   options={country_codes}
+                  components={{ Option: CustomOption }}
                   value={values.country_code || null}
                   onChange={(value) => {
                     setFieldValue("country_code", value);
+                    setFieldValue("contact_no", `${value.value}`);
                   }}
                   errorText={touched.country_code && errors.country_code}
                 />
-                <button style={{
-                  marginRight: "-2px",
-                  background: "white",
-                  border: "1px solid #dbdbdb",
-                  height: "40px",
-                  marginTop: "43px",
-                  width: "fit-content",
-                  padding: "8px"
-                }}
-                >{values.country_code.value}</button>
                 <TextField
                   mt="1rem"
                   name="contact_no"
