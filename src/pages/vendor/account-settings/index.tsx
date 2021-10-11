@@ -108,8 +108,8 @@ const AccountSettings = () => {
     // const user_id = state.auth.user?.id;
     const data = {
       ...values,
-      primary_phone: `$${values.primary_phone}`,
-      secondary_phone: `$${values.secondary_phone}`,
+      primary_phone: `${values.primary_phone}`,
+      secondary_phone: `${values.secondary_phone}`,
       image: image,
       gender:
         typeof values.gender != "object"
@@ -129,6 +129,8 @@ const AccountSettings = () => {
 
     const [vendorEditData] = useJsonToFormData(data);
 
+    console.log("data", data)
+
     axios
       .put(`${Vendor_Update}${user_id}`, vendorEditData, authTOKEN)
       .then((data) => {
@@ -139,6 +141,7 @@ const AccountSettings = () => {
           payload: {
             alerType: "success",
             alertValue: "update sussess...",
+            alertShow: true,
             alertChanged: Math.random()
           }
         })
@@ -151,6 +154,7 @@ const AccountSettings = () => {
           payload: {
             alerType: "error",
             alertValue: "someting went wrong",
+            alertShow: true,
             alertChanged: Math.random()
           }
         })

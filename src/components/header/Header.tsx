@@ -1,6 +1,5 @@
 import IconButton from "@component/buttons/IconButton";
 import Image from "@component/Image";
-import Notification from "@component/notification/notification";
 import Signup from "@component/sessions/Signup";
 import { BASE_URL, Site_Setting_All } from "@data/constants";
 import Link from "next/link";
@@ -41,8 +40,6 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
       <IconButton bg="gray.200" p="12px">
         <Icon size="20px">bag</Icon>
       </IconButton>
-
-      <Notification />
 
       {
         <FlexBox

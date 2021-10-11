@@ -6,7 +6,7 @@ import Icon from "../icon/Icon";
 import Typography from "../Typography";
 import {
   DashboardNavigationWrapper,
-  StyledDashboardNav,
+  StyledDashboardNav
 } from "./DashboardStyle";
 
 const CustomerDashboardNavigation = () => {
@@ -35,7 +35,7 @@ const CustomerDashboardNavigation = () => {
                 </Box>
                 <span>{item.title}</span>
               </FlexBox>
-              <span>{item.count}</span>
+              {/* <span>{item.count}</span> */}
             </StyledDashboardNav>
           ))}
         </Fragment>

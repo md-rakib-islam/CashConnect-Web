@@ -1,3 +1,4 @@
+import Alert from "@component/alert/alert";
 import SignupPopup from "@component/SignupPopup";
 import { useAppContext } from "@context/app/AppContext";
 import { useFormik } from "formik";
@@ -71,6 +72,7 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
           payload: {
             alertValue: "login success...",
             alerType: "success",
+            alertShow: true,
             alertChanged: Math.random(),
           }
         });
@@ -122,6 +124,7 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
           payload: {
             alertValue: "something went wrong",
             alerType: "error",
+            alertShow: true,
             alertChanged: Math.random(),
           }
         });
@@ -146,6 +149,7 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
       <SignupPopup open={openSignup} closeSignupDialog={closeSignupTab} />
       <StyledSessionCard mx="auto" my="2rem" boxShadow="large">
         <form className="content" onSubmit={handleSubmit}>
+          {type === "loginPage" && (<Alert onLogin />)}
           <H3 textAlign="center" mb="0.5rem">
             Welcome To Ecommerce
           </H3>

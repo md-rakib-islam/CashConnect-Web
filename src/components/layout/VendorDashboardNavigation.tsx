@@ -5,7 +5,7 @@ import FlexBox from "../FlexBox";
 import Icon from "../icon/Icon";
 import {
   DashboardNavigationWrapper,
-  StyledDashboardNav,
+  StyledDashboardNav
 } from "./DashboardStyle";
 
 const VendorDashboardNavigation = () => {
@@ -29,7 +29,7 @@ const VendorDashboardNavigation = () => {
             </Box>
             <span>{item.title}</span>
           </FlexBox>
-          <span>{item.count}</span>
+          {/* <span>{item.count}</span> */}
         </StyledDashboardNav>
       ))}
     </DashboardNavigationWrapper>

@@ -1,3 +1,4 @@
+import Alert from "@component/alert/alert";
 import LoginPopup from "@component/LoginPopup";
 import Select from "@component/Select";
 import { useAppContext } from "@context/app/AppContext";
@@ -64,10 +65,21 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
     setUser_type(2);
   };
 
+  const useCheckValidation = () => {
+    // resetForm({ email: '', artist: '', album: '', genre: '' })
+    // setFieldError("username", "bhjbhjbhjbhjbjbhbj");
+    // setErrors({ email: "Is already taken" })
+    setStatus({ primary_phone: 'Unable to login with the provided credentials.' });
+    console.log("setFieldError", setStatus)
+  }
+
   const handleFormSubmit = async (values) => {
+
+    console.log(action)
+
     const data = {
       ...values,
-      number: `${values.number}`,
+      primary_phone: `${values.primary_phone}`,
       user_type,
     };
 
@@ -76,10 +88,38 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
         console.log("createdCustomerRes", data);
         if (type == "SignupPage") {
           router.push("/login");
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: "sugnup success...",
+              alerType: "success",
+              alertShow: true,
+              alertChanged: Math.random(),
+            }
+          });
         } else {
           closeSignupDialog()
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: "sugnup success...",
+              alerType: "success",
+              alertShow: true,
+              alertChanged: Math.random(),
+            }
+          });
         }
-      });
+      }).catch(() => {
+        dispatch({
+          type: "CHANGE_ALERT",
+          payload: {
+            alertValue: "someting went wrong",
+            alerType: "error",
+            alertShow: true,
+            alertChanged: Math.random(),
+          }
+        });
+      })
     }
 
     else if (user_type == 2) {
@@ -92,6 +132,7 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             payload: {
               alertValue: "sugnup success...",
               alerType: "success",
+              alertShow: true,
               alertChanged: Math.random(),
             }
           });
@@ -102,6 +143,7 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             payload: {
               alertValue: "sugnup success...",
               alerType: "success",
+              alertShow: true,
               alertChanged: Math.random(),
             }
           });
@@ -112,6 +154,7 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
           payload: {
             alertValue: "someting went wrong",
             alerType: "error",
+            alertShow: true,
             alertChanged: Math.random(),
           }
         });
@@ -122,7 +165,7 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
     console.log("saveData", data);
   };
 
-  const { values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue } =
+  const { resetForm, setErrors, setStatus, values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue, setFieldError } =
     useFormik({
       onSubmit: handleFormSubmit,
       initialValues,
@@ -146,7 +189,8 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
       <LoginPopup open={openLogin} closeLoginDialog={closeLoginTab} />
 
       <StyledSessionCard mx="auto" my="2rem" boxShadow="large">
-        <H3 textAlign="center" mb="0.5rem">
+        {type === "SignupPage" && (<Alert onSignup />)}
+        <H3 textAlign="center" mb="0.5rem" mt="2.5rem">
           Create Your Account
         </H3>
         <H5
@@ -221,6 +265,17 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
 
           <TextField
             mb="0.75rem"
+            name="username"
+            label="User Name"
+            fullwidth
+            onBlur={handleBlur}
+            onChange={handleChange}
+            value={values.username || ""}
+            errorText={touched.username && errors.nusernameame}
+          />
+
+          <TextField
+            mb="0.75rem"
             name="email"
             placeholder="exmple@mail.com"
             label="Email"
@@ -246,21 +301,21 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
               value={values.country_code || null}
               onChange={(value) => {
                 setFieldValue("country_code", value);
-                setFieldValue("number", `${value.value}`);
+                setFieldValue("primary_phone", `${value.value}`);
               }}
               errorText={touched.country_code && errors.country_code}
             />
             <TextField
               mb="0.75rem"
               mt="1rem"
-              name="number"
+              name="primary_phone"
               // placeholder="Obtional"
               label="Phone Number"
               fullwidth
               onBlur={handleBlur}
               onChange={handleChange}
-              value={`${values.number || ""}`}
-              errorText={touched.number && errors.number}
+              value={`${values.primary_phone || ""}`}
+              errorText={touched.primary_phone && errors.primary_phone}
             />
           </div>
 
@@ -363,11 +418,12 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             color="white"
             cursor="pointer"
             mb="0.75rem"
+            onClick={useCheckValidation}
           >
             <Icon variant="small" defaultcolor="auto" mr="0.5rem">
               facebook-filled-white
             </Icon>
-            <Small fontWeight="600">Continue with Facebook</Small>
+            <Small fontWeight="600" >Continue with Facebook</Small>
           </FlexBox>
 
           <FlexBox
@@ -400,7 +456,8 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
 const initialValues = {
   first_name: "",
   last_name: "",
-  number: "+880",
+  username: "",
+  primary_phone: "+880",
   email: "",
   password: "",
   re_password: "",
@@ -415,7 +472,8 @@ const initialValues = {
 const formSchema = yup.object().shape({
   first_name: yup.string().required("first name is required"),
   last_name: yup.string().required("last name is required"),
-  number: yup.string().required("phone number is required"),
+  username: yup.string().required("user name is required"),
+  primary_phone: yup.string().required("phone number is required"),
   email: yup.string().email("invalid email").required("email is required"),
   password: yup.string().required("password is required"),
   country_code: yup.object().required("requred"),

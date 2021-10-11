@@ -5,36 +5,18 @@ import Grid from "@component/grid/Grid";
 import NavbarLayout from "@component/layout/NavbarLayout";
 import LazyImage from "@component/LazyImage";
 import Pagination from "@component/pagination/Pagination";
+import PaginationRow from "@component/pagination/paginationRow";
+import ShowingItemNumber from "@component/pagination/ShowingItemNumber";
 import ProductCard5 from "@component/product-cards/ProductCard5";
 import ProductCard6 from "@component/product-cards/ProductCard6";
-import Select from "@component/Select";
 import Typography, { SemiSpan } from "@component/Typography";
 import useFormattedProductData from "@customHook/useFormattedProductData";
 import { BASE_URL, Brand_Featured, Category_Top_All, Category_Wth_Name_Img } from "@data/constants";
-import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
-import { useFormik } from "formik";
 import { GetServerSideProps } from 'next';
-import { useRouter } from "next/router";
-import React, { useEffect } from "react";
-import * as yup from "yup";
+import React from "react";
 
 const ViewAll = ({ topCategoryLists, CategoryLists, featuredBrandLists, type, totalPage, totalProduct }) => {
-
-    const width = useWindowSize();
-    const isTablet = width < 1025;
-
-    const router = useRouter();
-
-    useEffect(() => {
-        if (router.query.size) {
-            setFieldValue("productPerPage", router.query.size);
-        }
-    }, [router.query.size])
-
-    var id = router.query.categoryId;
-
-    const handleFormSubmit = () => { }
 
     if (type === "top_category") {
         var product_per_page_options = [
@@ -42,7 +24,6 @@ const ViewAll = ({ topCategoryLists, CategoryLists, featuredBrandLists, type, to
             { id: 60, name: 60 },
             { id: 90, name: 90 },
         ]
-        var productPerPage = { id: 30, name: 30 }
     }
     if (type === "categories") {
         var product_per_page_options = [
@@ -50,7 +31,6 @@ const ViewAll = ({ topCategoryLists, CategoryLists, featuredBrandLists, type, to
             { id: 60, name: 60 },
             { id: 90, name: 90 },
         ]
-        var productPerPage = { id: 30, name: 30 }
     }
     if (type === "featured_brands") {
         var product_per_page_options = [
@@ -58,23 +38,8 @@ const ViewAll = ({ topCategoryLists, CategoryLists, featuredBrandLists, type, to
             { id: 32, name: 32 },
             { id: 48, name: 48 },
         ]
-        var productPerPage = { id: 16, name: 16 }
     }
 
-    const initialValues = {
-        productPerPage
-    }
-
-    const {
-        values,
-        errors,
-        touched,
-        setFieldValue,
-    } = useFormik({
-        initialValues: initialValues,
-        validationSchema: checkoutSchema,
-        onSubmit: handleFormSubmit,
-    });
 
     return (
         <Box pt="20px" pb="80px">
@@ -144,26 +109,9 @@ const ViewAll = ({ topCategoryLists, CategoryLists, featuredBrandLists, type, to
                 alignItems="center"
                 mt="32px"
             >
-                <SemiSpan>Showing 1-10 of {totalProduct} Products</SemiSpan>
+                <SemiSpan>Showing <ShowingItemNumber initialNumber={product_per_page_options[0].id} totalItem={totalProduct} /> of {totalProduct} {type === "featured_brands" ? "Brands" : "Categories"}</SemiSpan>
                 <Pagination pageCount={totalPage} />
-                <div style={{ display: "flex", width: "fit-contect", flexWrap: "nowrap", alignItems: "center" }}>
-                    <SemiSpan>product per page</SemiSpan>
-                    <Select
-                        width="80px"
-                        ml="1rem"
-                        options={product_per_page_options}
-                        value={values.productPerPage || ""}
-                        onChange={(productPerPage) => {
-                            setFieldValue("productPerPage", productPerPage);
-                            const query = router.query
-                            router.push({
-                                pathname: `${router.pathname}`,
-                                query: { ...query, size: productPerPage.id },
-                            })
-                        }}
-                        errorText={touched.productPerPage && errors.productPerPage}
-                    />
-                </div>
+                <PaginationRow product_per_page_option={product_per_page_options} name={type === "featured_brands" ? "brand" : "category"} />
             </FlexBox>
         </Box>
     );
@@ -173,8 +121,6 @@ ViewAll.layout = NavbarLayout;
 
 export default ViewAll;
 
-
-const checkoutSchema = yup.object().shape({})
 
 
 export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {

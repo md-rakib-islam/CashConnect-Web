@@ -1,25 +1,39 @@
+import PaginationRow from "@component/pagination/paginationRow";
+import ShowingItemNumber from "@component/pagination/ShowingItemNumber";
 import useUserInf from "@customHook/useUserInf";
 import { orders_By_Customer_Id } from "@data/constants";
 import axios from "axios";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import FlexBox from "../FlexBox";
 import Hidden from "../hidden/Hidden";
 import DashboardPageHeader from "../layout/DashboardPageHeader";
 import Pagination from "../pagination/Pagination";
 import TableRow from "../TableRow";
-import { H5 } from "../Typography";
+import { H5, SemiSpan } from "../Typography";
 import OrderRow from "./OrderRow";
 
 export interface CustomerOrderListProps { }
 
 const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
   const [ordersList, setorderList] = useState([]);
+  const [totalOrder, setTotalOrder] = useState(0)
 
   const { user_id, authTOKEN } = useUserInf()
 
+  const router = useRouter()
+
+  const { size, page } = router.query
+
+  const product_per_page_options = [
+    { id: 10, name: 10 },
+    { id: 30, name: 30 },
+    { id: 50, name: 50 },
+  ]
+
   useEffect(() => {
     axios
-      .get(`${orders_By_Customer_Id}${user_id}`, authTOKEN)
+      .get(`${orders_By_Customer_Id}${user_id}?size=${size || 10}&page=${page || 1}`, authTOKEN)
       .then((orders: any) => {
         console.log("orderRes", orders);
         let Orders = [];
@@ -70,13 +84,17 @@ const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
         <OrderRow item={item} key={ind} />
       ))}
 
-      <FlexBox justifyContent="center" mt="2.5rem">
-        <Pagination
-          pageCount={5}
-          onChange={(data) => {
-            console.log(data.selected);
-          }}
-        />
+      <FlexBox
+        flexWrap="wrap"
+        justifyContent="space-between"
+        alignItems="center"
+        mt="32px"
+      >
+        <SemiSpan>Showing <ShowingItemNumber initialNumber={10} totalItem={totalOrder} /> of {totalOrder} Orders</SemiSpan>
+
+        <Pagination pageCount={totalOrder} />
+
+        <PaginationRow product_per_page_option={product_per_page_options} name="Order" />
       </FlexBox>
     </div>
   );

@@ -5,14 +5,15 @@ import Container from "@component/Container";
 import Navbar from "@component/navbar/Navbar";
 import React, { Fragment } from "react";
 
-const Section1: React.FC = () => {
+const Section1 = ({ sliderList }) => {
+
   return (
     <Fragment>
       <Navbar navListOpen={true} />
       <Box bg="gray.white" mb="3.75rem">
         <Container pb="2rem">
           <Carousel
-            totalSlides={5}
+            totalSlides={sliderList?.length}
             visibleSlides={1}
             infinite={true}
             autoPlay={true}
@@ -20,11 +21,7 @@ const Section1: React.FC = () => {
             showArrow={false}
             spacing="0px"
           >
-            <CarouselCard1 />
-            <CarouselCard1 />
-            <CarouselCard1 />
-            <CarouselCard1 />
-            <CarouselCard1 />
+            {sliderList.map((data) => <CarouselCard1 title={data.title} details={data.details} link={data.link} image={data.image} />)}
           </Carousel>
         </Container>
       </Box>

@@ -120,8 +120,19 @@ export const Shipping_Adress_By_Order_Id = `${BASE_URL}/shippingaddress/api/v1/s
 
 export const Shipping_Address_Delete = `${BASE_URL}/shippingaddress/api/v1/shippingaddress/delete/`;
 
+//slider
+export const Slider_All = `${BASE_URL}/homepage_slider/api/v1/homepage_slider/all/`
+
 //user api
 export const User_By_Id = `${BASE_URL}/users/api/v1/users/`
+
+export const Check_Mail = `${BASE_URL}/user/api/v1/user/check_email/`
+
+export const Check_Primary_Phone = `${BASE_URL}/user/api/v1/user/check_primary_phone/`
+
+export const Check_Secondary_Phone = `${BASE_URL}/user/api/v1/user/check_secondary_phone/`
+
+export const Check_User_Name = `${BASE_URL}/user/api/v1/user/check_username/`
 
 //thana api
 export const Thana_All = `${BASE_URL}/thana/api/v1/thana/all/`;

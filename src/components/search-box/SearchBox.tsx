@@ -1,3 +1,4 @@
+import Alert from "@component/alert/alert";
 import Card from "@component/Card";
 import { Span } from "@component/Typography";
 import { Category_All } from "@data/constants";
@@ -102,6 +103,8 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
             value={values.search || ""}
             errorText={touched.search && errors.search}
           />
+
+          <Alert />
           <Menu
             className="category-dropdown"
             direction="right"

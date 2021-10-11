@@ -196,6 +196,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
               payload: {
                 alertValue: "your order has been success...",
                 alerType: "success",
+                alertShow: true,
                 alertChanged: Math.random(),
               }
             });

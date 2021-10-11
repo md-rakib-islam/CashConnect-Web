@@ -1,10 +1,7 @@
-import Select from "@component/Select";
+import PaginationRow from "@component/pagination/paginationRow";
+import ShowingItemNumber from "@component/pagination/ShowingItemNumber";
 import useFormattedProductData from "@customHook/useFormattedProductData";
-import { product_per_page_options } from "@data/data";
-import { useFormik } from "formik";
-import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import * as yup from "yup";
 import FlexBox from "../FlexBox";
 import Grid from "../grid/Grid";
 import Pagination from "../pagination/Pagination";
@@ -25,28 +22,6 @@ const ProductCard1List: React.FC<ProductCard1ListProps> = ({ productList, totalP
     setProductData(productList);
   }, [productList]);
 
-  const router = useRouter()
-
-  useEffect(() => {
-    if (router.query.size) {
-      setFieldValue("productPerPage", router.query.size);
-    }
-  }, [router.query.size])
-
-
-  const handleFormSubmit = () => { }
-
-  const {
-    values,
-    errors,
-    touched,
-    setFieldValue,
-  } = useFormik({
-    initialValues: initialValues,
-    validationSchema: checkoutSchema,
-    onSubmit: handleFormSubmit,
-  });
-
   return (
     <div>
       <Grid container spacing={6}>
@@ -63,28 +38,11 @@ const ProductCard1List: React.FC<ProductCard1ListProps> = ({ productList, totalP
         alignItems="center"
         mt="32px"
       >
-        <SemiSpan>Showing 1-10 of {totalProduct} Products</SemiSpan>
+        <SemiSpan>Showing <ShowingItemNumber initialNumber={9} totalItem={totalProduct} /> of {totalProduct} Products</SemiSpan>
 
         <Pagination pageCount={totalPage} />
 
-        <div style={{ display: "flex", width: "fit-contect", flexWrap: "nowrap", alignItems: "center" }}>
-          <SemiSpan>product per page</SemiSpan>
-          <Select
-            width="80px"
-            ml="1rem"
-            options={product_per_page_options}
-            value={values.productPerPage || ""}
-            onChange={(productPerPage) => {
-              setFieldValue("productPerPage", productPerPage);
-              const query = router.query
-              router.push({
-                pathname: `${router.pathname}`,
-                query: { ...query, size: productPerPage.id },
-              })
-            }}
-            errorText={touched.productPerPage && errors.productPerPage}
-          />
-        </div>
+        <PaginationRow />
       </FlexBox>
     </div>
   );
@@ -92,8 +50,3 @@ const ProductCard1List: React.FC<ProductCard1ListProps> = ({ productList, totalP
 
 export default ProductCard1List;
 
-const initialValues = {
-  productPerPage: { id: 9, name: 9 },
-}
-
-const checkoutSchema = yup.object().shape({})

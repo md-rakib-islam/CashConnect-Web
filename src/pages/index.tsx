@@ -1,6 +1,6 @@
 import Section13 from "@component/home-1/Section13";
 import useFormattedProductData from "@customHook/useFormattedProductData";
-import { Brand_Featured, Category_Top_All, Category_With_Product_Brand, Category_Wth_Name_Img, Product_Arrival, Product_Discount, Product_Flash_Deals, Product_For_You, Product_Top_Rated } from "@data/constants";
+import { Brand_Featured, Category_Top_All, Category_With_Product_Brand, Category_Wth_Name_Img, Product_Arrival, Product_Discount, Product_Flash_Deals, Product_For_You, Product_Top_Rated, Slider_All } from "@data/constants";
 import axios from "axios";
 import { GetServerSideProps } from "next";
 import Section1 from "../components/home-1/Section1";
@@ -14,7 +14,9 @@ import Section5 from "../components/home-1/Section5";
 import Section7 from "../components/home-1/Section7";
 import AppLayout from "../components/layout/AppLayout";
 
-const IndexPage = ({ flashDealsList,
+const IndexPage = ({
+  sliderList,
+  flashDealsList,
   topCategoryList,
   topRatedList,
   featuredBrandList,
@@ -26,7 +28,7 @@ const IndexPage = ({ flashDealsList,
 }) => {
   return (
     <main>
-      <Section1 />
+      <Section1 sliderList={sliderList} />
       <Section2 flashDealsList={flashDealsList} />
       <Section3 topCategoryList={topCategoryList} />
       <Section4 topRatedList={topRatedList} featuredBrandList={featuredBrandList} />
@@ -48,6 +50,15 @@ IndexPage.layout = AppLayout;
 export default IndexPage;
 
 export const getServerSideProps: GetServerSideProps = async () => {
+
+  try {
+    var sliderRes = await axios.get(`${Slider_All}`)
+    var sliderList: any[] = await sliderRes.data.homepage_sliders
+    await sliderList.sort(function (a, b) { return a.serial_number - b.serial_number });
+
+  } catch (err) {
+    var sliderList = []
+  }
 
   try {
     var flashDealsRes = await axios.get(`${Product_Flash_Deals}?page=${1}&size=${6}`)
@@ -115,15 +126,14 @@ export const getServerSideProps: GetServerSideProps = async () => {
   try {
     var categoryWithProductBrandRes = await axios.get(`${Category_With_Product_Brand}`)
     var categoryWithProductBrandList: any[] = await categoryWithProductBrandRes.data.categories_with_products_and_brands
-    console.log("categories_with_products_and_brands", categoryWithProductBrandList)
   } catch (err) {
     var categoryWithProductBrandList = []
   }
 
 
-
   return {
     props: {
+      sliderList,
       flashDealsList,
       topCategoryList,
       topRatedList,

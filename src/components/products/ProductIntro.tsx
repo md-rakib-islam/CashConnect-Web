@@ -143,6 +143,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               payload: {
                 alerType: "error",
                 alertValue: "something went wrong",
+                alertShow: true,
                 alertChanged: Math.random()
               }
             })
@@ -165,7 +166,9 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               type: "CHANGE_ALERT",
               payload: {
                 alerType: "error",
-                alertValue: "something went wrong"
+                alertValue: "something went wrong",
+                alertShow: true,
+                alertChanged: Math.random()
               }
             })
           });
@@ -183,7 +186,9 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               type: "CHANGE_ALERT",
               payload: {
                 alerType: "error",
-                alertValue: "something went wrong"
+                alertValue: "something went wrong",
+                alertShow: true,
+                alertChanged: Math.random()
               }
             })
           });
