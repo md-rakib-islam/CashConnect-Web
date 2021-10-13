@@ -70,6 +70,7 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
 
     const { userNameExist, isValid, emailExist, primaryPhoneExist } = await useCheckValidation({ username: values.username, email: values.email, primaryPhone: values.primary_phone })
 
+    console.log("isValid", isValid)
     if (isValid) {
       const data = {
         ...values,
@@ -424,7 +425,6 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             color="white"
             cursor="pointer"
             mb="0.75rem"
-            onClick={useCheckValidation}
           >
             <Icon variant="small" defaultcolor="auto" mr="0.5rem">
               facebook-filled-white

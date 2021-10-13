@@ -9,7 +9,7 @@ function ShowingItemNumber({ initialNumber = 9, totalItem }) {
 
     return (
         <>
-            {(page * size) - size + 1}-{(page * size) > totalItem ? totalItem : (page * size)}
+            {((page * size) - size + 1) > totalItem ? 1 : ((page * size) - size + 1)}-{(page * size) > totalItem ? totalItem : (page * size)}
         </>
     )
 }

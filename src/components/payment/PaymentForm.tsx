@@ -201,6 +201,8 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
               }
             });
 
+            localStorage.removeItem("OrderId")
+
             if (user_type == 3) {
               router.push("/orders")
             }

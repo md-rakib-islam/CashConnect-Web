@@ -18,6 +18,7 @@ export interface CustomerOrderListProps { }
 const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
   const [ordersList, setorderList] = useState([]);
   const [totalOrder, setTotalOrder] = useState(0)
+  const [totalPage, setTotalPage] = useState(0)
 
   const { user_id, authTOKEN } = useUserInf()
 
@@ -37,7 +38,7 @@ const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
       .then((orders: any) => {
         console.log("orderRes", orders);
         let Orders = [];
-        orders?.data?.map((order) => {
+        orders?.data?.orders?.map((order) => {
           let Order: any = {};
           Order.order_no = order.order_no;
           Order.order_status = order.order_status;
@@ -48,9 +49,11 @@ const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
           Orders.push(Order);
         });
         setorderList(Orders);
-        console.log("Orders", Orders);
+        setTotalOrder(orders?.data?.total_elements);
+        setTotalPage(orders?.data?.total_pages);
+        console.log("Orders", orders?.data?.orders);
       }).catch(() => { });
-  }, [user_id]);
+  }, [user_id, size, page]);
 
   console.log("ordersList", ordersList);
   return (
@@ -80,7 +83,7 @@ const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
         </TableRow>
       </Hidden>
 
-      {ordersList.map((item, ind) => (
+      {ordersList?.map((item, ind) => (
         <OrderRow item={item} key={ind} />
       ))}
 
@@ -92,7 +95,7 @@ const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
       >
         <SemiSpan>Showing <ShowingItemNumber initialNumber={10} totalItem={totalOrder} /> of {totalOrder} Orders</SemiSpan>
 
-        <Pagination pageCount={totalOrder} />
+        <Pagination pageCount={totalPage} />
 
         <PaginationRow product_per_page_option={product_per_page_options} name="Order" />
       </FlexBox>

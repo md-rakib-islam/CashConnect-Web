@@ -3,6 +3,7 @@ import {
   authInitialState,
   authReducer,
   loginActionType,
+  logoutActionType,
   registerActionType,
   userActionType
 } from "./authReducer";
@@ -42,6 +43,7 @@ export type rootActionType =
   | cartActionType
   | userActionType
   | loginActionType
+  | logoutActionType
   | registerActionType
   | rolesActionType
   | thanasActionType

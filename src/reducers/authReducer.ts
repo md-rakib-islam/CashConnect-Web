@@ -9,6 +9,10 @@ export const authInitialState = {
     success: false,
     errors: [],
   },
+  logout: {
+    success: false,
+    errors: [],
+  },
   register: {
     success: false,
     errors: [],
@@ -27,6 +31,11 @@ export type LoginItem = {
   error?: any[];
 };
 
+export type LogoutItem = {
+  success: boolean;
+  error?: any[];
+};
+
 export type RegisterItem = {
   success: boolean;
   error?: any[];
@@ -40,12 +49,18 @@ export type loginStateType = {
   login: LoginItem;
 };
 
+export type logoutStateType = {
+  login: LoginItem;
+};
+
 export type registerStateType = {
   register: RegisterItem;
 };
 
+
 export const actionType = {
   chageLogin: "CHANGE_LOGIN_DETAILS",
+  chageLogout: "CHANGE_LOGOUT_DETAILS",
   chageUser: "CHANGE_USER_DETAILS",
   chageRegister: "CHANGE_REGISTER_DETAILS",
 };
@@ -58,6 +73,11 @@ export type userActionType = {
 export type loginActionType = {
   type: "CHANGE_LOGIN_DETAILS";
   payload: LoginItem;
+};
+
+export type logoutActionType = {
+  type: "CHANGE_LOGOUT_DETAILS";
+  payload: LogoutItem;
 };
 
 export type registerActionType = {
@@ -74,6 +94,12 @@ export const authReducer: React.Reducer<userStateType, userActionType> = (
       return {
         ...state,
         login: action.payload,
+      };
+
+    case actionType.chageLogout:
+      return {
+        ...state,
+        logout: action.payload,
       };
 
     case actionType.chageUser:

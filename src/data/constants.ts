@@ -119,13 +119,17 @@ export const Slider_All = `${BASE_URL}/homepage_slider/api/v1/homepage_slider/al
 //user api
 export const User_By_Id = `${BASE_URL}/users/api/v1/users/`
 
-export const Check_Email = `${BASE_URL}/user/api/v1/user/check_email/`
+export const Check_Email = `${BASE_URL}/user/api/v1/user/check_email_when_create/`
+export const Check_Email_When_Update = `${BASE_URL}/user/api/v1/user/check_email_when_update/`
 
-export const Check_Primary_Phone = `${BASE_URL}/user/api/v1/user/check_primary_phone/`
+export const Check_Primary_Phone = `${BASE_URL}/user/api/v1/user/check_primary_phone_when_create/`
+export const Check_Primary_Phone_When_Update = `${BASE_URL}/user/api/v1/user/check_primary_phone_when_update/`
 
-export const Check_Secondary_Phone = `${BASE_URL}/user/api/v1/user/check_secondary_phone/`
+export const Check_Secondary_Phone = `${BASE_URL}/user/api/v1/user/check_secondary_phone_when_create/`
+export const Check_Secondary_Phone_When_Update = `${BASE_URL}/user/api/v1/user/check_secondary_phone_when_update/`
 
-export const Check_User_Name = `${BASE_URL}/user/api/v1/user/check_username/`
+export const Check_User_Name = `${BASE_URL}/user/api/v1/user/check_username_when_create/`
+export const Check_User_Name_When_Update = `${BASE_URL}/user/api/v1/user/check_username_when_update/`
 
 //thana api
 export const Thana_All = `${BASE_URL}/thana/api/v1/thana/all/`;

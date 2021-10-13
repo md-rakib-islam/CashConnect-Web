@@ -68,6 +68,14 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
         });
 
         dispatch({
+          type: "CHANGE_LOGOUT_DETAILS",
+          payload: {
+            success: false,
+            error: [],
+          },
+        });
+
+        dispatch({
           type: "CHANGE_ALERT",
           payload: {
             alertValue: "login success...",
@@ -135,7 +143,6 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
     );
   };
 
-  console.log("auth", state.auth);
 
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({

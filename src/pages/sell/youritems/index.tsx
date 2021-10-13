@@ -10,6 +10,8 @@ import Radio from "@component/radio/Radio";
 import Select from "@component/Select";
 import TextField from "@component/text-field/TextField";
 import Typography from "@component/Typography";
+import { useAppContext } from "@context/app/AppContext";
+import useCheckValidation from "@customHook/useCheckValidation";
 import useJsonToFormData from "@customHook/useJsonToFormData";
 import { Purshase_Create } from "@data/constants";
 import { country_codes } from "@data/country_code";
@@ -34,6 +36,8 @@ function onlineSell() {
 
   const width = useWindowSize();
 
+  const { dispatch } = useAppContext()
+
   const router = useRouter()
 
   useEffect(() => {
@@ -48,41 +52,62 @@ function onlineSell() {
   }, [images]);
 
   //submit purchase data
-  const handleFormSubmit = (values) => {
-    console.log("values", values);
-    let purchaseData = {
-      first_name: values.first_name,
-      last_name: values.last_name,
-      contact_no: `${values.contact_no}`,
-      email: values.email,
-      street_address: values.street_address,
-      contact_type: contact_type,
-      is_subscribed: isSubscribe,
-      items: [],
-    };
+  const handleFormSubmit = async (values) => {
 
-    let Items = [];
-    items.map((itm, id) => {
-      let Item = {
-        item_name: values[`item_name${id}`],
-        item_price: values[`item_price${id}`],
-        item_quantity: 1,
-        images: images[id],
+    const { isValid, emailExist, primaryPhoneExist } = await useCheckValidation({ email: values.email, primaryPhone: values.contact_no })
+
+    if (isValid) {
+      let purchaseData = {
+        first_name: values.first_name,
+        last_name: values.last_name,
+        contact_no: `${values.contact_no}`,
+        email: values.email,
+        street_address: values.street_address,
+        contact_type: contact_type,
+        is_subscribed: isSubscribe,
+        items: [],
       };
-      Items.push(Item);
-    });
-    purchaseData.items = Items;
 
-    const [PurchaseDataToFormData] = useJsonToFormData(purchaseData);
+      let Items = [];
+      items.map((itm, id) => {
+        let Item = {
+          item_name: values[`item_name${id}`],
+          item_price: values[`item_price${id}`],
+          item_quantity: 1,
+          images: images[id],
+        };
+        Items.push(Item);
+      });
+      purchaseData.items = Items;
 
-    axios
-      .post(`${Purshase_Create}`, PurchaseDataToFormData)
-      .then((res) => {
-        console.log("purchaserequestRes", res);
-        router.push("/sell/youritems/success")
-      }).catch(() => { });
+      const [PurchaseDataToFormData] = useJsonToFormData(purchaseData);
 
-    console.log("purchaseData", purchaseData);
+      axios
+        .post(`${Purshase_Create}`, PurchaseDataToFormData)
+        .then((res) => {
+          console.log("purchaserequestRes", res);
+          router.push("/sell/youritems/success")
+        }).catch(() => {
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: "someting went wrong",
+              alerType: "error",
+              alertShow: true,
+              alertChanged: Math.random()
+            }
+          })
+        });
+
+      console.log("purchaseData", purchaseData);
+    }
+    else {
+      setErrors({
+        ...errors,
+        email: emailExist ? "email already exist" : "",
+        contact_no: primaryPhoneExist ? "contact no already exist" : "",
+      })
+    }
 
 
   };
@@ -179,8 +204,7 @@ function onlineSell() {
     values,
     errors,
     touched,
-    // dirty,
-    // isValid,
+    setErrors,
     handleChange,
     handleBlur,
     handleSubmit,
@@ -675,7 +699,7 @@ function onlineSell() {
 const initialValues = {
   first_name: "",
   last_name: "",
-  contact_no: "",
+  contact_no: "+880",
   email: "",
   country_code: {
     code: "BD",

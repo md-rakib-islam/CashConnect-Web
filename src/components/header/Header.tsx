@@ -1,10 +1,13 @@
 import IconButton from "@component/buttons/IconButton";
 import Image from "@component/Image";
 import Menu from "@component/Menu";
+import MenuItem from "@component/MenuItem";
 import Signup from "@component/sessions/Signup";
+import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import { BASE_URL, Site_Setting_All } from "@data/constants";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Box from "../Box";
@@ -16,7 +19,7 @@ import MiniCart from "../mini-cart/MiniCart";
 import SearchBox from "../search-box/SearchBox";
 import Login from "../sessions/Login";
 import Sidenav from "../sidenav/Sidenav";
-import { Tiny2 } from "../Typography";
+import Typography, { Tiny2 } from "../Typography";
 import StyledHeader from "./HeaderStyle";
 import UserLoginDialog from "./UserLoginDialog";
 import UserRegisterDialog from "./UserRegisterDialog";
@@ -30,6 +33,9 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
   const [open, setOpen] = useState(false);
   const toggleSidenav = () => setOpen(!open);
   const [logo, setLogo] = useState("")
+  const [reRender, setReRender] = useState(0)
+
+  const { state, dispatch } = useAppContext()
 
   useEffect(() => {
     fetch(`${Site_Setting_All}`).then(res => res.json()).then(res => {
@@ -37,6 +43,49 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
       setLogo(res.general_settings[0].logo)
     }).catch(() => { })
   }, [])
+
+
+  const handleLogout = () => {
+
+    localStorage.removeItem("UserId")
+    localStorage.removeItem("jwt_access_token")
+    localStorage.removeItem("OrderId")
+    localStorage.removeItem("userType")
+
+    dispatch({
+      type: "CHANGE_ALERT",
+      payload: {
+        alertValue: "logout success",
+        alerType: "success",
+        alertShow: true,
+        alertChanged: Math.random()
+      }
+    })
+  }
+
+  const Router = useRouter()
+
+  const { isLogin } = useUserInf()
+
+  const goToFrofile = () => {
+    const user_type: string = localStorage.getItem("userType")
+    if (user_type == "2") {
+      Router.push("/vendor/dashboard")
+    }
+    else {
+      Router.push("/profile")
+    }
+  }
+
+  try {
+    var userID: string = localStorage.getItem("UserId")
+  }
+  catch (err) {
+    var userID = ""
+  }
+  useEffect(() => {
+    setReRender(Math.random())
+  }, [userID])
 
   const cartHandle = (
     <FlexBox ml="20px" alignItems="flex-start">
@@ -61,23 +110,6 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
       }
     </FlexBox>
   );
-
-  const { isLogin } = useUserInf()
-
-  const languageList = [
-    {
-      title: 'EN',
-      imgUrl: '/assets/images/flags/usa.png',
-    },
-    {
-      title: 'BN',
-      imgUrl: '/assets/images/flags/bd.png',
-    },
-    {
-      title: 'HN',
-      imgUrl: '/assets/images/flags/in.png',
-    },
-  ];
 
 
   return (
@@ -125,23 +157,54 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
           </UserLoginDialog>
           ) : (
             <>
-              <IconButton ml="1rem" bg="gray.200" p="8px">
-                <Icon size="22px" onClick={() => { localStorage.removeItem("UserId") }}>logout</Icon>
-              </IconButton>
 
-              <IconButton ml="1rem" bg="gray.200" p="8px">
-                <Link href={`/profile`}>
-                  <Icon size="28px">settingsAccount</Icon>
-                </Link>
-              </IconButton>
+              <Menu
+                direction="left"
+                handler={
+                  <IconButton ml="1rem" bg="gray.200" p="8px">
+                    <Icon size="25px">settingsAccount</Icon>
+                  </IconButton>
+                }
+              >
+                <MenuItem p="2px">
+                  <div style={{
+                    fontSize: "20px", display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flexStart",
+                    cursor: "pointer",
+                  }}
+                    onClick={() => goToFrofile()}
+                  >
+                    <Icon size="30px" ml="5px">user</Icon>
+                    <Typography fontWeight="600" fontSize="16px" ml="5px">Profile</Typography>
+                  </div>
+                </MenuItem>
+
+                <MenuItem p="2px">
+                  <div style={{
+                    fontSize: "20px", display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flexStart",
+                    cursor: "pointer",
+                  }}
+                    onClick={() => handleLogout()}
+                  >
+                    <Icon size="23px" ml="8px">logout</Icon>
+                    <Typography fontWeight="600" fontSize="16px" ml="10px">Logout</Typography>
+                  </div>
+                </MenuItem>
+
+              </Menu>
+
+
             </>
           )
           }
 
           <UserRegisterDialog
             handle={
-              <IconButton ml="1rem" bg="gray.200" p="13px">
-                <Icon size="18px">register</Icon>
+              <IconButton ml="1rem" bg="gray.200" p="8px">
+                <Icon size="25px">register</Icon>
               </IconButton>
             }
           >
@@ -162,7 +225,7 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
           </Sidenav>
         </FlexBox>
       </Container>
-    </StyledHeader>
+    </StyledHeader >
   );
 };
 
