@@ -1,6 +1,8 @@
 import { Chip } from "@component/Chip";
 import { useAppContext } from "@context/app/AppContext";
-import React from "react";
+import useUserInf from "@customHook/useUserInf";
+import { Customer_Order_Pending_Details } from "@data/constants";
+import React, { useEffect, useState } from "react";
 import useWindowSize from "../../hooks/useWindowSize";
 import Icon from "../icon/Icon";
 import NavLink from "../nav-link/NavLink";
@@ -8,10 +10,23 @@ import StyledMobileNavigationBar from "./MobileNavigationBar.style";
 
 const MobileNavigationBar: React.FC = () => {
   const width = useWindowSize();
+
+
+  const [productQuantity, setProductQuantity] = useState(0);
   const { state } = useAppContext();
-  // const { cartList } = state.cart;
-  const cartQuantity = state.cart.chartQuantity;
-  // const cartList = [];
+  const cartCanged = state.cart.chartQuantity;
+
+  useEffect(() => {
+    const { order_Id } = useUserInf()
+
+    if (order_Id) {
+      fetch(`${Customer_Order_Pending_Details}${order_Id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setProductQuantity(data?.order?.order_items?.length);
+        }).catch(() => { });
+    }
+  }, [cartCanged]);
 
   return (
     width <= 900 && (
@@ -23,7 +38,7 @@ const MobileNavigationBar: React.FC = () => {
             </Icon>
             {item.title}
 
-            {item.title === "Cart" && !!cartQuantity && (
+            {item.title === "Cart" && !!productQuantity && (
               <Chip
                 bg="primary.main"
                 position="absolute"
@@ -33,7 +48,7 @@ const MobileNavigationBar: React.FC = () => {
                 top="4px"
                 left="calc(50% + 8px)"
               >
-                {cartQuantity}
+                {productQuantity || 0}
               </Chip>
             )}
           </NavLink>

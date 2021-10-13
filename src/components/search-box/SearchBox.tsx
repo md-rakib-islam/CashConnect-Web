@@ -1,10 +1,9 @@
 import Alert from "@component/alert/alert";
 import Card from "@component/Card";
 import { Span } from "@component/Typography";
-import { Category_All } from "@data/constants";
+import { Category_All, Product_Search } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
-import { debounce } from "lodash";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
@@ -41,17 +40,18 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
     setCategoryId(cat.id);
   };
 
-  const search = debounce((e) => {
-    const value = e.target?.value;
-
-    if (!value) setResultList([]);
-    else setResultList(dummySearchResult);
-  }, 200);
 
   const hanldeSearch = useCallback((event) => {
     event.persist();
-    search(event);
   }, []);
+
+  const handleAutoComplete = (e) => {
+    const value = e.target?.value;
+    axios.get(`${Product_Search}?page=${1}&size=${10}`, { params: { name: value || "", category: categoryId } }).then(res => {
+      console.log("res", res.data.products)
+      setResultList(res.data.products);
+    }).catch(() => { setResultList([]) })
+  }
 
   const handleDocumentClick = () => {
     setResultList([]);
@@ -98,6 +98,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
             onChange={(e) => {
               handleChange(e);
               hanldeSearch(e);
+              handleAutoComplete(e);
             }
             }
             value={values.search || ""}
@@ -136,9 +137,14 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
             zIndex={99}
           >
             {resultList.map((item) => (
-              <Link href={`/product/search/${item}`} key={item}>
-                <MenuItem key={item}>
-                  <Span fontSize="14px">{item}</Span>
+              <Link href={
+                {
+                  pathname: '/product/search/search_by_product_name',
+                  query: { categoryId: categoryId, searchKey: values.search },
+                }
+              }>
+                <MenuItem key={item?.id}>
+                  <Span fontSize="14px">{item?.name}</Span>
                 </MenuItem>
               </Link>
             ))}

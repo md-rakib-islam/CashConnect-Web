@@ -11,6 +11,7 @@ import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import Select from "@component/Select";
 import TextField from "@component/text-field/TextField";
 import { useAppContext } from "@context/app/AppContext";
+import useCheckValidation from "@customHook/useCheckValidation";
 import useJsonToFormData from "@customHook/useJsonToFormData";
 import useUserInf from "@customHook/useUserInf";
 import {
@@ -56,63 +57,73 @@ const ProfileEditor = ({
 
   const { dispatch } = useAppContext()
 
-  const handleFormSubmit = (values) => {
-    const data = {
-      ...values,
-      primary_phone: `${values.primary_phone}`,
-      secondary_phone: `${values.secondary_phone}`,
-      image: image,
-      gender:
-        typeof values.gender != "object"
-          ? values?.gender
-          : values?.gender?.value,
-      role: typeof values.role != "object" ? values?.role : values?.role?.id,
-      thana:
-        typeof values.thana != "object" ? values?.thana : values?.thana?.id,
-      city: typeof values.city != "object" ? values?.city : values?.city?.id,
-      country:
-        typeof values.country != "object"
-          ? values?.country
-          : values?.country?.id,
-      branch:
-        typeof values.branch != "object" ? values?.branch : values?.branch?.id,
-      cusotmer_type:
-        typeof values.cusotmer_type != "object"
-          ? values?.cusotmer_type
-          : values?.cusotmer_type?.id,
-    };
+  const handleFormSubmit = async (values) => {
 
-    const [customerEditData] = useJsonToFormData(data);
+    const { isValid, userNameExist, emailExist, primaryPhoneExist, SecondaryPhoneExist } = await useCheckValidation({ username: values.username, email: values.email, primaryPhone: values.primary_phone, secondaryPhone: values.secondary_phone, userId: user_id })
 
-    console.log("customerEditData", customerEditData)
-    console.log("data", data)
+    if (isValid) {
+      const data = {
+        ...values,
+        primary_phone: `${values.primary_phone}`,
+        secondary_phone: `${values.secondary_phone}`,
+        image: image,
+        gender:
+          typeof values.gender != "object"
+            ? values?.gender
+            : values?.gender?.value,
+        role: typeof values.role != "object" ? values?.role : values?.role?.id,
+        thana:
+          typeof values.thana != "object" ? values?.thana : values?.thana?.id,
+        city: typeof values.city != "object" ? values?.city : values?.city?.id,
+        country:
+          typeof values.country != "object"
+            ? values?.country
+            : values?.country?.id,
+        branch:
+          typeof values.branch != "object" ? values?.branch : values?.branch?.id,
+        cusotmer_type:
+          typeof values.cusotmer_type != "object"
+            ? values?.cusotmer_type
+            : values?.cusotmer_type?.id,
+      };
 
+      const [customerEditData] = useJsonToFormData(data);
 
-    axios
-      .put(`${Customer_Update}${user_id}`, customerEditData, authTOKEN)
-      .then((data) => {
-        console.log("updatedRes", data);
-        router.push("/profile");
-        dispatch({
-          type: "CHANGE_ALERT",
-          payload: {
-            alerType: "success",
-            alertValue: "update sussess...",
-            alertShow: true,
-            alertChanged: Math.random()
-          }
+      axios
+        .put(`${Customer_Update}${user_id}`, customerEditData, authTOKEN)
+        .then((data) => {
+          console.log("updatedRes", data);
+          router.push("/profile");
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alerType: "success",
+              alertValue: "update sussess...",
+              alertShow: true,
+              alertChanged: Math.random()
+            }
+          })
+        }).catch(() => {
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alerType: "error",
+              alertValue: "someting went wrong",
+              alertShow: true,
+              alertChanged: Math.random()
+            }
+          })
         })
-      }).catch(() => {
-        dispatch({
-          type: "CHANGE_ALERT",
-          payload: {
-            alerType: "error",
-            alertValue: "someting went wrong",
-            alertShow: true,
-            alertChanged: Math.random()
-          }
-        })
+    }
+    else {
+      setErrors({
+        ...errors,
+        username: userNameExist ? "user name already exist" : "",
+        email: emailExist ? "email already exist" : "",
+        primary_phone: primaryPhoneExist ? "primary phone already exist" : "",
+        secondary_phone: SecondaryPhoneExist ? "secondary phone already exist" : "",
       })
+    }
   };
 
 
@@ -182,6 +193,7 @@ const ProfileEditor = ({
     handleBlur,
     handleSubmit,
     setFieldValue,
+    setErrors,
   } = useFormik({
     initialValues: initialValues,
     validationSchema: checkoutSchema,
@@ -295,7 +307,7 @@ const ProfileEditor = ({
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.username || ""}
-                  errorText={touched.username && errors.nusernameame}
+                  errorText={touched.username && errors.username}
                 />
               </Grid>
 

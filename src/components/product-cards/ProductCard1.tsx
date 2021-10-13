@@ -10,7 +10,7 @@ import {
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { Fragment, useCallback, useLayoutEffect, useState } from "react";
+import React, { Fragment, useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { CSSProperties } from "styled-components";
 import Box from "../Box";
 import Button from "../buttons/Button";
@@ -70,9 +70,41 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
   const [getItemId, setGetItemId] = useState(0);
   const [getChartquantity, setGetChartquantity] = useState(0)
 
+  const { state } = useAppContext();
+  const cartCanged = state.cart.chartQuantity;
+
   const toggleDialog = useCallback(() => {
     setOpen((open) => !open);
   }, []);
+
+  useLayoutEffect(() => {
+    const { order_Id } = useUserInf()
+
+    if (id) {
+      axios
+        .get(`${Customer_Order_Item_By_Product_Id}${order_Id}/${id}`)
+        .then((item) => {
+          setItemId(item?.data?.order_item?.id);
+          setCartQuantity(item?.data?.order_item?.quantity);
+        })
+        .catch(() => setCartQuantity(0));
+    }
+  }, [getItemId, id, getChartquantity]);
+
+  useEffect(() => {
+    if (id) {
+      if (state.cart.prductId == id) {
+        const { order_Id } = useUserInf()
+        axios
+          .get(`${Customer_Order_Item_By_Product_Id}${order_Id}/${id}`)
+          .then((item) => {
+            setItemId(item?.data?.order_item?.id);
+            setCartQuantity(item?.data?.order_item?.quantity);
+          })
+          .catch(() => { setCartQuantity(0) });
+      }
+    }
+  }, [cartCanged])
 
   const handleCartAmountChange = (amount, action) => {
     const { user_id, order_Id } = useUserInf()
@@ -105,7 +137,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
           setGetItemId(Math.random());
           dispatch({
             type: "CHANGE_CART_QUANTITY",
-            payload: Math.random(),
+            payload: { chartQuantity: Math.random() },
           });
         }).catch(() => { });
 
@@ -136,7 +168,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
           setGetChartquantity(Math.random())
           dispatch({
             type: "CHANGE_CART_QUANTITY",
-            payload: Math.random(),
+            payload: { chartQuantity: Math.random() },
           });
         }).catch(() => { });
     }
@@ -152,22 +184,6 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
     }
   };
 
-
-  useLayoutEffect(() => {
-    const { order_Id } = useUserInf()
-
-    if (id) {
-      axios
-        .get(`${Customer_Order_Item_By_Product_Id}${order_Id}/${id}`)
-        .then((item) => {
-          setItemId(item?.data?.order_item?.id);
-          setCartQuantity(item?.data?.order_item?.quantity);
-        })
-        .catch(() => setCartQuantity(0));
-    }
-  }, [getItemId, id, getChartquantity]);
-
-  // console.log("produtId", id)
 
   return (
     <StyledProductCard1 {...props}>

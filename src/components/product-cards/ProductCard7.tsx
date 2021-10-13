@@ -69,7 +69,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
               runReloadCart();
               dispatch({
                 type: "CHANGE_CART_QUANTITY",
-                payload: Math.random(),
+                payload: { chartQuantity: Math.random() },
               });
             }).catch(() => { });
 

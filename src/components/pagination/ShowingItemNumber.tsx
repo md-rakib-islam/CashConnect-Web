@@ -5,11 +5,11 @@ import React from 'react'
 function ShowingItemNumber({ initialNumber = 9, totalItem }) {
 
     const router = useRouter()
-    const { size, page } = router.query
+    const { size = initialNumber, page = 1 }: any = router.query
 
     return (
         <>
-            {(page && size) ? ((page * size) > totalItem ? totalItem : (page * size)) : 1}-{(page && size) ? (((page * size) + (initialNumber)) > totalItem ? totalItem : ((page * size) + (initialNumber))) : initialNumber > totalItem ? totalItem : initialNumber}
+            {(page * size) - size + 1}-{(page * size) > totalItem ? totalItem : (page * size)}
         </>
     )
 }

@@ -4,13 +4,6 @@
 //base url
 export const BASE_URL = "http://192.168.0.172:8001";
 
-// //not found image
-// export const notFoundImg = "/assets/images/products/notFoundImg.png";
-
-// //loding image
-// export const loadingImg = "/assets/images/products/loadingProduct.png";
-
-
 //branch api
 export const Branch_All = `${BASE_URL}/branch/api/v1/branch/all/`;
 
@@ -126,7 +119,7 @@ export const Slider_All = `${BASE_URL}/homepage_slider/api/v1/homepage_slider/al
 //user api
 export const User_By_Id = `${BASE_URL}/users/api/v1/users/`
 
-export const Check_Mail = `${BASE_URL}/user/api/v1/user/check_email/`
+export const Check_Email = `${BASE_URL}/user/api/v1/user/check_email/`
 
 export const Check_Primary_Phone = `${BASE_URL}/user/api/v1/user/check_primary_phone/`
 

@@ -149,9 +149,9 @@ const CheckoutForm = () => {
       email: yup.string().required("email is required").nullable("required"),
       phone: yup.string().required("phone is required").nullable("required"),
       zip_code: yup.string().required("zip_code is required").nullable("required"),
-      country_id: yup.object().required("country is required").nullable("required"),
-      city_id: yup.object().required("city is required").nullable("required"),
-      thana_id: yup.object().required("thana is required").nullable("required"),
+      country_id: yup.string().required("country is required").nullable("required"),
+      city_id: yup.string().required("city is required").nullable("required"),
+      thana_id: yup.string().required("thana is required").nullable("required"),
       street_address: yup.string().required("address is required").nullable("required"),
     });
   }
@@ -216,7 +216,7 @@ const CheckoutForm = () => {
                   options={countries}
                   value={values.country_id || ""}
                   onChange={(country_id) => {
-                    setFieldValue("country_id", country_id);
+                    setFieldValue("country_id", country_id?.id);
                   }}
                   errorText={touched.country_id && errors.country_id}
                 />
@@ -270,7 +270,7 @@ const CheckoutForm = () => {
                   options={cities}
                   value={values.city_id || ""}
                   onChange={(city_id) => {
-                    setFieldValue("city_id", city_id);
+                    setFieldValue("city_id", city_id?.id);
                   }}
                   errorText={touched.city_id && errors.city_id}
                 />
@@ -281,7 +281,7 @@ const CheckoutForm = () => {
                   options={thanas}
                   value={values.thana_id || ""}
                   onChange={(thana_id) => {
-                    setFieldValue("thana_id", thana_id);
+                    setFieldValue("thana_id", thana_id?.id);
                   }}
                   errorText={touched.thana_id && errors.thana_id}
                 />

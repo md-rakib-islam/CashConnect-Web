@@ -188,7 +188,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
             }
             dispatch({
               type: "CHANGE_CART_QUANTITY",
-              payload: Math.random(),
+              payload: { chartQuantity: Math.random() },
             });
 
             dispatch({
@@ -223,10 +223,10 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
 
   if (paymentMethod === "card") {
     var checkoutSchema: any = yup.object().shape({
-      card_number: yup.string().required("required").nullable("required"),
       card_holder: yup.string().required("required").nullable("required"),
       expiry_date: yup.date().required("required").nullable("required"),
       cvc_code: yup.string().required("required").nullable("required"),
+      card_number: yup.string().required("required").nullable("required"),
     });
   } else if (paymentMethod === "paypal") {
     var checkoutSchema: any = yup.object().shape({

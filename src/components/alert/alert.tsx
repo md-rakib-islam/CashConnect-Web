@@ -42,7 +42,7 @@ function Alert({ onLogin = false, onSignup = false }) {
                     left: 0,
                     width: "100%",
                     textAlign: "center",
-                    zIndex: 2,
+                    zIndex: showAlert ? 1 : -1,
                     opacity: showAlert ? 1 : 0,
                     transitionProperty: "all",
                     transitionDuration: "1s",

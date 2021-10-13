@@ -54,6 +54,9 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   const [getItemId, setGetItemId] = useState(0);
   const [openLogin, setOpenLogin] = useState(false)
 
+  const { state } = useAppContext();
+  const cartCanged = state.cart.chartQuantity;
+
   const closeLoginTab = () => {
     setOpenLogin(false)
   }
@@ -75,7 +78,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
           .catch(() => setCartQuantity(0));
       }
     }
-  }, [getItemId, id,]);
+  }, [getItemId, id, cartCanged]);
 
   useEffect(() => {
     if (typeof brand == "number") {
@@ -125,7 +128,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
           setGetItemId(Math.random());
           dispatch({
             type: "CHANGE_CART_QUANTITY",
-            payload: Math.random(),
+            payload: { chartQuantity: Math.random(), prductId: id || routerId },
           });
         }).catch(() => { });
       }
@@ -137,6 +140,10 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
           .then((res) => {
             console.log("increaseRes", res);
             setGetItemId(Math.random());
+            dispatch({
+              type: "CHANGE_CART_QUANTITY",
+              payload: { chartQuantity: Math.random(), prductId: id || routerId },
+            });
           }).catch(() => {
             dispatch({
               type: "CHANGE_ALERT",
@@ -159,7 +166,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
             setGetItemId(Math.random());
             dispatch({
               type: "CHANGE_CART_QUANTITY",
-              payload: Math.random(),
+              payload: { chartQuantity: Math.random(), prductId: id || routerId },
             });
           }).catch(() => {
             dispatch({
@@ -181,6 +188,10 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
           .then((res) => {
             console.log("decreaseRes", res);
             setGetItemId(Math.random());
+            dispatch({
+              type: "CHANGE_CART_QUANTITY",
+              payload: { chartQuantity: Math.random(), prductId: id || routerId },
+            });
           }).catch(() => {
             dispatch({
               type: "CHANGE_ALERT",

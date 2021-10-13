@@ -1,9 +1,12 @@
 import IconButton from "@component/buttons/IconButton";
 import Image from "@component/Image";
+import Menu from "@component/Menu";
 import Signup from "@component/sessions/Signup";
+import useUserInf from "@customHook/useUserInf";
 import { BASE_URL, Site_Setting_All } from "@data/constants";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import styled from "styled-components";
 import Box from "../Box";
 import Categories from "../categories/Categories";
 import Container from "../Container";
@@ -59,6 +62,24 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
     </FlexBox>
   );
 
+  const { isLogin } = useUserInf()
+
+  const languageList = [
+    {
+      title: 'EN',
+      imgUrl: '/assets/images/flags/usa.png',
+    },
+    {
+      title: 'BN',
+      imgUrl: '/assets/images/flags/bd.png',
+    },
+    {
+      title: 'HN',
+      imgUrl: '/assets/images/flags/in.png',
+    },
+  ];
+
+
   return (
     <StyledHeader className={className}>
       <Container
@@ -91,7 +112,7 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
         </FlexBox>
 
         <FlexBox className="header-right" alignItems="center">
-          <UserLoginDialog
+          {!isLogin ? (<UserLoginDialog
             handle={
               <IconButton ml="1rem" bg="gray.200" p="8px">
                 <Icon size="28px">user</Icon>
@@ -102,6 +123,20 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
               <Login />
             </Box>
           </UserLoginDialog>
+          ) : (
+            <>
+              <IconButton ml="1rem" bg="gray.200" p="8px">
+                <Icon size="22px" onClick={() => { localStorage.removeItem("UserId") }}>logout</Icon>
+              </IconButton>
+
+              <IconButton ml="1rem" bg="gray.200" p="8px">
+                <Link href={`/profile`}>
+                  <Icon size="28px">settingsAccount</Icon>
+                </Link>
+              </IconButton>
+            </>
+          )
+          }
 
           <UserRegisterDialog
             handle={
@@ -132,3 +167,6 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
 };
 
 export default Header;
+
+export const CustomMenu = styled(Menu)`
+`;

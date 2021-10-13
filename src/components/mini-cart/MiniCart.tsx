@@ -47,7 +47,6 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
       const { user_id, order_Id, isLogin } = useUserInf()
 
       if (isLogin) {
-        const { user_id, order_Id, isLogin } = useUserInf()
         if (order_Id) {
 
           const item_id = product?.id;
@@ -66,7 +65,10 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                 setReloadCart(Math.random());
                 dispatch({
                   type: "CHANGE_CART_QUANTITY",
-                  payload: Math.random(),
+                  payload: {
+                    chartQuantity: Math.random(),
+                    prductId: product?.product?.id,
+                  },
                 });
               }).catch(() => { });
 
@@ -75,6 +77,10 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
               .put(`${Customer_Increase_Quantity}${order_Id}/${item_id}`, orderData)
               .then(() => {
                 setReloadCart(Math.random());
+                dispatch({
+                  type: "CHANGE_CART_QUANTITY",
+                  payload: { chartQuantity: Math.random(), prductId: product?.product?.id, },
+                });
               }).catch(() => { });
 
           } else if (action == "decrease") {
@@ -82,6 +88,10 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
               .put(`${Customer_decrease_Quantity}${order_Id}/${item_id}`, orderData)
               .then(() => {
                 setReloadCart(Math.random());
+                dispatch({
+                  type: "CHANGE_CART_QUANTITY",
+                  payload: { chartQuantity: Math.random(), prductId: product?.product?.id, },
+                });
               }).catch(() => { });
           }
 

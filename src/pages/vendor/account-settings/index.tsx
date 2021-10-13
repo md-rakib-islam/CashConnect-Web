@@ -10,6 +10,7 @@ import VendorDashboardLayout from "@component/layout/VendorDashboardLayout";
 import Select from "@component/Select";
 import TextField from "@component/text-field/TextField";
 import { useAppContext } from "@context/app/AppContext";
+import useCheckValidation from "@customHook/useCheckValidation";
 import useJsonToFormData from "@customHook/useJsonToFormData";
 import useUserInf from "@customHook/useUserInf";
 import {
@@ -105,68 +106,82 @@ const AccountSettings = () => {
   }, [user_id, updated]);
 
   const handleFormSubmit = async (values) => {
-    // const user_id = state.auth.user?.id;
-    const data = {
-      ...values,
-      primary_phone: `${values.primary_phone}`,
-      secondary_phone: `${values.secondary_phone}`,
-      image: image,
-      gender:
-        typeof values.gender != "object"
-          ? values?.gender
-          : values?.gender?.value,
-      role: typeof values.role != "object" ? values?.role : values?.role?.id,
-      thana:
-        typeof values.thana != "object" ? values?.thana : values?.thana?.id,
-      city: typeof values.city != "object" ? values?.city : values?.city?.id,
-      country:
-        typeof values.country != "object"
-          ? values?.country
-          : values?.country?.id,
-      branch:
-        typeof values.branch != "object" ? values?.branch : values?.branch?.id,
-    };
 
-    const [vendorEditData] = useJsonToFormData(data);
+    const { isValid, userNameExist, emailExist, primaryPhoneExist, SecondaryPhoneExist } = await useCheckValidation({ username: values.username, email: values.email, primaryPhone: values.primary_phone, secondaryPhone: values.secondary_phone, userId: user_id })
 
-    console.log("data", data)
+    if (isValid) {
 
-    axios
-      .put(`${Vendor_Update}${user_id}`, vendorEditData, authTOKEN)
-      .then((data) => {
-        console.log("VenderUpdatedRes", data);
+      const data = {
+        ...values,
+        primary_phone: `${values.primary_phone}`,
+        secondary_phone: `${values.secondary_phone}`,
+        image: image,
+        gender:
+          typeof values.gender != "object"
+            ? values?.gender
+            : values?.gender?.value,
+        role: typeof values.role != "object" ? values?.role : values?.role?.id,
+        thana:
+          typeof values.thana != "object" ? values?.thana : values?.thana?.id,
+        city: typeof values.city != "object" ? values?.city : values?.city?.id,
+        country:
+          typeof values.country != "object"
+            ? values?.country
+            : values?.country?.id,
+        branch:
+          typeof values.branch != "object" ? values?.branch : values?.branch?.id,
+      };
 
-        dispatch({
-          type: "CHANGE_ALERT",
-          payload: {
-            alerType: "success",
-            alertValue: "update sussess...",
-            alertShow: true,
-            alertChanged: Math.random()
-          }
-        })
+      const [vendorEditData] = useJsonToFormData(data);
 
-        setUpdated(Math.random())
+      console.log("data", data)
 
-      }).catch(() => {
-        dispatch({
-          type: "CHANGE_ALERT",
-          payload: {
-            alerType: "error",
-            alertValue: "someting went wrong",
-            alertShow: true,
-            alertChanged: Math.random()
-          }
-        })
-      });
+      axios
+        .put(`${Vendor_Update}${user_id}`, vendorEditData, authTOKEN)
+        .then((data) => {
+          console.log("VenderUpdatedRes", data);
+
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alerType: "success",
+              alertValue: "update sussess...",
+              alertShow: true,
+              alertChanged: Math.random()
+            }
+          })
+
+          setUpdated(Math.random())
+
+        }).catch(() => {
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alerType: "error",
+              alertValue: "someting went wrong",
+              alertShow: true,
+              alertChanged: Math.random()
+            }
+          })
+        });
+    }
+
+    else {
+      setErrors({
+        ...errors,
+        username: userNameExist ? "user name already exist" : "",
+        email: emailExist ? "email already exist" : "",
+        primary_phone: primaryPhoneExist ? "primary phone already exist" : "",
+        secondary_phone: SecondaryPhoneExist ? "secondary phone already exist" : "",
+      })
+    }
   };
 
   const {
     values,
     errors,
     touched,
-    // dirty,
-    // isValid,
+    setErrors,
     handleChange,
     handleBlur,
     handleSubmit,
@@ -322,7 +337,7 @@ const AccountSettings = () => {
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.username || ""}
-                  errorText={touched.username && errors.nusernameame}
+                  errorText={touched.username && errors.username}
                 />
               </Grid>
 

@@ -2,6 +2,7 @@ import Alert from "@component/alert/alert";
 import LoginPopup from "@component/LoginPopup";
 import Select from "@component/Select";
 import { useAppContext } from "@context/app/AppContext";
+import useCheckValidation from "@customHook/useCheckValidation";
 import { Customer_Create, Vendor_Create } from "@data/constants";
 import { country_codes } from "@data/country_code";
 import axios from "axios";
@@ -65,112 +66,116 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
     setUser_type(2);
   };
 
-  const useCheckValidation = () => {
-    // resetForm({ email: '', artist: '', album: '', genre: '' })
-    // setFieldError("username", "bhjbhjbhjbhjbjbhbj");
-    // setErrors({ email: "Is already taken" })
-    setStatus({ primary_phone: 'Unable to login with the provided credentials.' });
-    console.log("setFieldError", setStatus)
-  }
-
   const handleFormSubmit = async (values) => {
 
-    console.log(action)
+    const { userNameExist, isValid, emailExist, primaryPhoneExist } = await useCheckValidation({ username: values.username, email: values.email, primaryPhone: values.primary_phone })
 
-    const data = {
-      ...values,
-      primary_phone: `${values.primary_phone}`,
-      user_type,
-    };
+    if (isValid) {
+      const data = {
+        ...values,
+        primary_phone: `${values.primary_phone}`,
+        user_type,
+      };
 
-    if (user_type == 3) {
-      axios.post(`${Customer_Create}`, data).then((data) => {
-        console.log("createdCustomerRes", data);
-        if (type == "SignupPage") {
-          router.push("/login");
-          dispatch({
-            type: "CHANGE_ALERT",
-            payload: {
-              alertValue: "sugnup success...",
-              alerType: "success",
-              alertShow: true,
-              alertChanged: Math.random(),
-            }
-          });
-        } else {
-          closeSignupDialog()
-          dispatch({
-            type: "CHANGE_ALERT",
-            payload: {
-              alertValue: "sugnup success...",
-              alerType: "success",
-              alertShow: true,
-              alertChanged: Math.random(),
-            }
-          });
-        }
-      }).catch(() => {
-        dispatch({
-          type: "CHANGE_ALERT",
-          payload: {
-            alertValue: "someting went wrong",
-            alerType: "error",
-            alertShow: true,
-            alertChanged: Math.random(),
+      if (user_type == 3) {
+        axios.post(`${Customer_Create}`, data).then((data) => {
+          console.log("createdCustomerRes", data);
+          if (type == "SignupPage") {
+            router.push("/login");
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alertValue: "sugnup success...",
+                alerType: "success",
+                alertShow: true,
+                alertChanged: Math.random(),
+              }
+            });
+          } else {
+            closeSignupDialog()
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alertValue: "sugnup success...",
+                alerType: "success",
+                alertShow: true,
+                alertChanged: Math.random(),
+              }
+            });
           }
+        }).catch(() => {
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: "someting went wrong",
+              alerType: "error",
+              alertShow: true,
+              alertChanged: Math.random(),
+            }
+          });
+        })
+      }
+
+      else if (user_type == 2) {
+        axios.post(`${Vendor_Create}`, data).then((data) => {
+          console.log("createdVendorRes", data);
+          if (type == "SignupPage") {
+            router.push("/login");
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alertValue: "sugnup success...",
+                alerType: "success",
+                alertShow: true,
+                alertChanged: Math.random(),
+              }
+            });
+          } else {
+            closeSignupDialog()
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alertValue: "sugnup success...",
+                alerType: "success",
+                alertShow: true,
+                alertChanged: Math.random(),
+              }
+            });
+          }
+        }).catch(() => {
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: "someting went wrong",
+              alerType: "error",
+              alertShow: true,
+              alertChanged: Math.random(),
+            }
+          });
         });
-      })
+      }
     }
-
-    else if (user_type == 2) {
-      axios.post(`${Vendor_Create}`, data).then((data) => {
-        console.log("createdVendorRes", data);
-        if (type == "SignupPage") {
-          router.push("/login");
-          dispatch({
-            type: "CHANGE_ALERT",
-            payload: {
-              alertValue: "sugnup success...",
-              alerType: "success",
-              alertShow: true,
-              alertChanged: Math.random(),
-            }
-          });
-        } else {
-          closeSignupDialog()
-          dispatch({
-            type: "CHANGE_ALERT",
-            payload: {
-              alertValue: "sugnup success...",
-              alerType: "success",
-              alertShow: true,
-              alertChanged: Math.random(),
-            }
-          });
-        }
-      }).catch(() => {
-        dispatch({
-          type: "CHANGE_ALERT",
-          payload: {
-            alertValue: "someting went wrong",
-            alerType: "error",
-            alertShow: true,
-            alertChanged: Math.random(),
-          }
-        });
-      });
+    else {
+      setErrors({
+        ...errors,
+        username: userNameExist ? "user name already exist" : "",
+        email: emailExist ? "email already exist" : "",
+        primary_phone: primaryPhoneExist ? "phone no already exist" : "",
+      })
     }
 
 
     console.log("saveData", data);
   };
 
-  const { resetForm, setErrors, setStatus, values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue, setFieldError } =
+
+  const { setErrors, values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue, setFieldError } =
     useFormik({
       onSubmit: handleFormSubmit,
       initialValues,
       validationSchema: formSchema,
     });
+
 
   const CustomOption = ({ innerProps, isDisabled, data }) => {
 
@@ -183,6 +188,7 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
       </div>
     ) : null;
   }
+
 
   return (
     <>
@@ -271,7 +277,7 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             onBlur={handleBlur}
             onChange={handleChange}
             value={values.username || ""}
-            errorText={touched.username && errors.nusernameame}
+            errorText={touched.username && errors.username}
           />
 
           <TextField
