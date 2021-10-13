@@ -11,6 +11,7 @@ import Grid from "../grid/Grid";
 import Hidden from "../hidden/Hidden";
 import StyledProductCategory from "./ProductCategoryStyle";
 
+
 export interface Section6Props {
   data?: any;
 }
@@ -32,7 +33,7 @@ const Section6: React.FC<Section6Props> = ({ data }) => {
       <FlexBox>
         <Hidden down={768} mr="1.75rem">
           <Box shadow={6} borderRadius={10} padding="1.25rem" bg="white">
-            {data?.brands?.map((brand, ind) => (
+            {data?.brands?.map((brand) => (
               <StyledProductCategory
                 key={brand?.id}
                 id={brand?.id}
@@ -82,7 +83,5 @@ const Section6: React.FC<Section6Props> = ({ data }) => {
     </Container>
   );
 };
-
-const brandList = ["zerrari", "fesla", "btw", "boyota", "gini", "lord"];
 
 export default Section6;

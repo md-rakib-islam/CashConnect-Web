@@ -10,9 +10,9 @@ export interface ProductCard6Props {
   subtitle: string;
 }
 
+
 const ProductCard6: React.FC<ProductCard6Props> = ({
   title,
-  subtitle,
   imgUrl,
 }) => {
   return (
@@ -30,20 +30,6 @@ const ProductCard6: React.FC<ProductCard6Props> = ({
       >
         {title}
       </Chip>
-
-      {/* <Chip
-        bg="gray.300"
-        position="absolute"
-        color="gray.800"
-        fontWeight="600"
-        fontSize="10px"
-        p="4px 10px"
-        top="0.875rem"
-        right="0.875rem"
-        zIndex={2}
-      >
-        {subtitle}
-      </Chip> */}
 
       <HoverBox height="120px" borderRadius={8}>
         <LazyImage src={imgUrl} layout="fill" objectFit="cover" loader={() => imgUrl} />

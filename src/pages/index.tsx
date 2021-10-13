@@ -34,10 +34,7 @@ const IndexPage = ({
       <Section4 topRatedList={topRatedList} featuredBrandList={featuredBrandList} />
       <Section5 newArrivalList={newArrivalList} />
       <Section13 bigDiscountList={bigDiscountList} />
-      {/* <Section6 /> */}
       <Section7 categoryWithProductBrandList={categoryWithProductBrandList} />
-      {/* <Section8 /> */}
-      {/* <Section9 /> */}
       <Section10 categoriesList={categoriesList} />
       <Section11 moreForYouList={moreForYouList} />
       <Section12 />

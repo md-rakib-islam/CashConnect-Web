@@ -22,7 +22,8 @@ interface SelectProps
   errorText?: any;
   getOptionLabelBy?: string;
   getOptionValueBy?: string;
-  width?: string;
+  width?: string
+  components?: any;
 }
 
 const Select: React.FC<SelectProps> = ({

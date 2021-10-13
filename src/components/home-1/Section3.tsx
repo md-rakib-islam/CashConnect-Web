@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import CategorySectionCreator from "../CategorySectionCreator";
 import ProductCard6 from "../product-cards/ProductCard6";
 
+
 const Section3 = ({ topCategoryList }) => {
   const [visibleSlides, setVisibleSlides] = useState(6);
   const width = useWindowSize();
@@ -25,8 +26,7 @@ const Section3 = ({ topCategoryList }) => {
       seeMoreLink="/product/search/view_all/top_category"
     >
       <Carousel totalSlides={topCategoryList.length} visibleSlides={visibleSlides}>
-        {topCategoryList.map((item, ind) => (
-          // <Link href={`product/search/${item?.id}`} key={ind}>
+        {topCategoryList.map((item) => (
           <a>
             <Card p="1rem">
               <ProductCard6
@@ -36,7 +36,6 @@ const Section3 = ({ topCategoryList }) => {
               />
             </Card>
           </a>
-          // </Link>
         ))}
       </Carousel>
     </CategorySectionCreator>

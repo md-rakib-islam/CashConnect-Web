@@ -17,6 +17,7 @@ import Rating from "../rating/Rating";
 import { H5, SemiSpan } from "../Typography";
 import { StyledProductCard9 } from "./ProductCardStyle";
 
+
 export interface ProductCard9Props {
   className?: string;
   style?: CSSProperties;
@@ -33,17 +34,6 @@ export interface ProductCard9Props {
   }>;
   [key: string]: unknown;
   reviewCount?: string | number;
-  // className?: string;
-  // style?: CSSProperties;
-  // imgUrl: string;
-  // title: string;
-  // price: number;
-  // off: number;
-  // rating?: number;
-  // subcategories?: Array<{
-  //   title: string;
-  //   url: string;
-  // }>;
 }
 
 const ProductCard9: React.FC<ProductCard9Props> = ({
@@ -212,9 +202,6 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
             <Icon className="favorite-icon outlined-icon" variant="small">
               heart
             </Icon>
-            {/* <Icon className="favorite-icon" color="primary" variant="small">
-              heart-filled
-            </Icon> */}
 
             <FlexBox
               className="add-cart"

@@ -130,32 +130,6 @@ const ProductReview: React.FC<ProductReviewProps> = ({ productId, setReviews }) 
   );
 };
 
-// const commentList = [
-//   {
-//     name: "Jannie Schumm",
-//     imgUrl: "/assets/images/faces/7.png",
-//     rating: 4.7,
-//     date: "2021-02-14",
-//     review:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius massa id ut mattis. Facilisis vitae gravida egestas ac account.",
-//   },
-//   {
-//     name: "Joe Kenan",
-//     imgUrl: "/assets/images/faces/6.png",
-//     rating: 4.7,
-//     date: "2019-08-10",
-//     review:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius massa id ut mattis. Facilisis vitae gravida egestas ac account.",
-//   },
-//   {
-//     name: "Jenifer Tulio",
-//     imgUrl: "/assets/images/faces/8.png",
-//     rating: 4.7,
-//     date: "2021-02-05",
-//     review:
-//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Varius massa id ut mattis. Facilisis vitae gravida egestas ac account.",
-//   },
-// ];
 
 const initialValues = {
   rating: "",
@@ -165,7 +139,6 @@ const initialValues = {
 
 const reviewSchema = yup.object().shape({
   rating: yup.number().required("required"),
-  // comment: yup.string().required("required"),
 });
 
 export default ProductReview;

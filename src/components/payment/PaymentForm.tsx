@@ -82,7 +82,6 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
     for (let key in useKeys) {
       var value = localStorage.getItem(`${key}`);
       setFieldValue(`${key}`, value);
-      // setFieldValue(`${key}`, _.isNull(value) ? "" : value);
     }
     const payment_Method = localStorage.getItem("payment_mathod");
     setPaymentMethod(payment_Method);
@@ -547,9 +546,9 @@ const initialValues = {
   expiry_date: "",
   cvc_code: "",
   email: "",
-  bkash: "",
-  rocket: "",
-  nagad: "",
+  bkash: "+880",
+  rocket: "+880",
+  nagad: "+880",
 };
 
 export default PaymentForm;

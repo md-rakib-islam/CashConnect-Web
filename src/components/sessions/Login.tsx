@@ -25,7 +25,7 @@ interface LoginProps {
 const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const router = useRouter();
-  const { state, dispatch } = useAppContext();
+  const { dispatch } = useAppContext();
 
   const [openSignup, setOpenSignup] = useState(false)
 

@@ -7,7 +7,6 @@ export interface ProductDescriptionProps {
 }
 
 const ProductDescription: React.FC<ProductDescriptionProps> = ({ fullDes }) => {
-  // const { state } = useAppContext();
   return (
     <Box>
       <H3 mb="1rem">Specification:</H3>

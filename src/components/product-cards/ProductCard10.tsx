@@ -13,6 +13,7 @@ import ProductIntro from "../products/ProductIntro";
 import { H3, SemiSpan } from "../Typography";
 import { StyledProductCard1 } from "./ProductCardStyle";
 
+
 export interface ProductCard10Props {
   className?: string;
   style?: CSSProperties;
@@ -25,17 +26,6 @@ export interface ProductCard10Props {
     title: string;
     url: string;
   }>;
-  // className?: string;
-  // style?: CSSProperties;
-  // imgUrl: string;
-  // title: string;
-  // price: number;
-  // off: number;
-  // rating?: number;
-  // subcategories?: Array<{
-  //   title: string;
-  //   url: string;
-  // }>;
 }
 
 const ProductCard10: React.FC<ProductCard10Props> = ({
@@ -94,9 +84,7 @@ const ProductCard10: React.FC<ProductCard10Props> = ({
           <Icon className="favorite-icon outlined-icon" variant="small">
             heart
           </Icon>
-          {/* <Icon className="favorite-icon" color="primary" variant="small">
-              heart-filled
-            </Icon> */}
+
         </FlexBox>
 
         <Link href="/product/34324321">
@@ -209,7 +197,6 @@ const ProductCard10: React.FC<ProductCard10Props> = ({
 };
 
 ProductCard10.defaultProps = {
-  // title: "KSUS ROG Strix G15",
   title: "KSUS ROG Strix G15 ASUS ROG Strix G15 ASUS ROG Strix G15",
   imgUrl: "/assets/images/products/macbook.png",
   off: 50,

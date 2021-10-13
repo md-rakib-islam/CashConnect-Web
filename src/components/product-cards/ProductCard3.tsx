@@ -25,7 +25,6 @@ const ProductCard3: React.FC<ProductCard3Props> = ({ ...props }) => {
           </div>
 
           <div className="icon-holder">
-            {/* <Icon className="favorite-icon outlined-icon">heart</Icon> */}
             <Icon className="favorite-icon" color="primary" variant="small">
               heart-filled
             </Icon>

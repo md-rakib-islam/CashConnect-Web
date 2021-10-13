@@ -1,4 +1,4 @@
-import PaginationRow from "@component/pagination/paginationRow";
+import PaginationRow from "@component/pagination/PaginationRow";
 import ShowingItemNumber from "@component/pagination/ShowingItemNumber";
 import React, { useEffect, useState } from "react";
 import useFormattedProductData from "../../customHook/useFormattedProductData";
@@ -6,6 +6,7 @@ import FlexBox from "../FlexBox";
 import Pagination from "../pagination/Pagination";
 import ProductCard9 from "../product-cards/ProductCard9";
 import { SemiSpan } from "../Typography";
+
 
 export interface ProductCard9ListProps {
   productList?: any;

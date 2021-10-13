@@ -31,7 +31,7 @@ function onlineSell() {
   const [items, setItems] = useState([{}]);
   const [contact_type, setContact_type] = useState("email");
   const [isSubscribe, setIsSubscribe] = useState(false);
-  const [reRender, setReRender] = useState(0);
+  const [_reRender, setReRender] = useState(0);
   const [previewImage, setPreviewImage] = useState<Iimage>([[]]);
   const [images, setImages] = useState<TIMG>([[]]);
 
@@ -70,7 +70,7 @@ function onlineSell() {
       };
 
       let Items = [];
-      items.map((itm, id) => {
+      items.map((_itm, id) => {
         let Item = {
           item_name: values[`item_name${id}`],
           item_price: values[`item_price${id}`],
@@ -156,7 +156,7 @@ function onlineSell() {
     setFieldValue(`item_name${id}`, "");
     setFieldValue(`item_price${id}`, "");
 
-    items.map((data, idx) => {
+    items.map((_data, idx) => {
       if (idx >= id) {
         setFieldValue(`item_name${idx}`, values[`item_name${idx + 1}`]);
         setFieldValue(`item_price${idx}`, values[`item_price${idx + 1}`]);
@@ -184,7 +184,7 @@ function onlineSell() {
 
   //validation for item
   var itemShema = {};
-  items.map((itm, id) => {
+  items.map((_itm, id) => {
     itemShema = {
       ...itemShema,
       [`item_name${id}`]: yup.string().required("required").nullable(requred),
@@ -410,7 +410,7 @@ function onlineSell() {
               quote.
             </Typography>
           </Box>
-          {items.map((item, idx) => {
+          {items.map((_item, idx) => {
             return (
               <>
                 <Box

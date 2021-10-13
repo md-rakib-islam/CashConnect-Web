@@ -25,6 +25,7 @@ import {
   Thana_All
 } from "@data/constants";
 import { country_codes } from "@data/country_code";
+import { requred } from "@data/data";
 import axios from "axios";
 import { useFormik } from "formik";
 import Link from "next/link";
@@ -367,7 +368,7 @@ const ProfileEditor = ({
                     options={country_codes}
                     components={{ Option: CustomOption }}
                     value={values.country_code || null}
-                    onChange={(value) => {
+                    onChange={(value: any) => {
                       setFieldValue("country_code", value);
                       setFieldValue("primary_phone", `${value.value}`);
                     }}
@@ -400,7 +401,7 @@ const ProfileEditor = ({
                     options={country_codes}
                     components={{ Option: CustomOption }}
                     value={values.country_code_2 || null}
-                    onChange={(value) => {
+                    onChange={(value: any) => {
                       setFieldValue("country_code_2", value);
                       setFieldValue("secondary_phone", `${value.value}`);
                     }}

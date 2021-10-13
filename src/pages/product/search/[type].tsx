@@ -32,11 +32,6 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
 
   var id = router.query.categoryId;
 
-  const setFilteredProduct = (products, totalProduct) => {
-    setProductList(products)
-    setTotalProducts(totalProduct)
-  }
-
   const toggleView = useCallback(
     (v) => () => {
       setView(v);
@@ -60,8 +55,8 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
       }
     }
     else if (type === "search_by_product_name") {
-      const searchKey: any = router.query.searchKey
-      setSearchingFor(searchKey)
+      const search_key: any = router.query.search_key
+      setSearchingFor(search_key)
     }
     else if (type === "flash_deals_all") {
       setSearchingFor("Flash Deals")
@@ -92,7 +87,6 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
   console.log("product_list", productList)
   console.log("router.query", router.query)
   return (
-    // <AppContext.Provider value="sakib">
     <Box pt="20px">
       <FlexBox
         p="1.25rem"
@@ -151,7 +145,7 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
                 </IconButton>
               }
             >
-              <ProductFilterCard setFilteredProduct={setFilteredProduct} />
+              <ProductFilterCard  />
             </Sidenav>
           )}
         </FlexBox>
@@ -159,7 +153,7 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
 
       <Grid container spacing={6}>
         <Hidden as={Grid} item lg={3} xs={12} down={1024}>
-          <ProductFilterCard setFilteredProduct={setFilteredProduct} />
+          <ProductFilterCard />
         </Hidden>
 
         <Grid item lg={9} xs={12}>
@@ -171,7 +165,6 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
         </Grid>
       </Grid>
     </Box>
-    // </AppContext.Provider>
   );
 };
 
@@ -189,7 +182,7 @@ export default ProductSearchResult;
 
 export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
 
-  const category = query.categoryId
+  const category: any = query.categoryId
 
   if ((params.type === "product_by_category") || (params.type === "search_for")) {
 
@@ -211,7 +204,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   else if (params.type === "search_by_product_name") {
     try {
 
-      const res = await axios.get(`${Product_Search}?page=${query.page || 1}&size=${query.size || 9}`, { params: { name: query.searchKey, category } })
+      const res = await axios.get(`${Product_Search}?page=${query.page || 1}&size=${query.size || 9}`, { params: { name: query.search_key, category } })
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
       var totalPage: number = await res.data.total_pages
@@ -224,13 +217,20 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   }
   else if (params.type === "filter") {
     try {
-      const brandIds = JSON.parse(query.brand)
-      const ratingIds = JSON.parse(query.rating)
+      const brand: any = query.brand
+      const rating: any = query.rating
 
-      var params = new URLSearchParams();
+      const brandIds = JSON.parse(brand)
+      const ratingIds = JSON.parse(rating)
+
+      let params = new URLSearchParams();
+
+      const minPrice: any = query.min_price
+      const maxPrice: any = query.max_price
+
       params.append("category", category);
-      params.append("min_price", query.min_price);
-      params.append("max_price", query.max_price);
+      params.append("min_price", minPrice);
+      params.append("max_price", maxPrice);
       brandIds.map((brand) => {
         params.append("brand", brand);
       })

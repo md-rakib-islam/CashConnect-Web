@@ -165,12 +165,10 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
       })
     }
 
-
-    console.log("saveData", data);
   };
 
 
-  const { setErrors, values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue, setFieldError } =
+  const { setErrors, values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue } =
     useFormik({
       onSubmit: handleFormSubmit,
       initialValues,
@@ -306,7 +304,7 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
               options={country_codes}
               components={{ Option: CustomOption }}
               value={values.country_code || null}
-              onChange={(value) => {
+              onChange={(value: any) => {
                 setFieldValue("country_code", value);
                 setFieldValue("primary_phone", `${value.value}`);
               }}

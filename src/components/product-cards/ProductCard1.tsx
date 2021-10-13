@@ -35,17 +35,6 @@ export interface ProductCard1Props extends CardProps {
   id?: string | number;
   brand?: string | number;
   reviewCount?: string | number;
-  // className?: string;
-  // style?: CSSProperties;
-  // imgUrl: string;
-  // title: string;
-  // price: number;
-  // off: number;
-  // rating?: number;
-  // subcategories?: Array<{
-  //   title: string;
-  //   url: string;
-  // }>;
 }
 
 const ProductCard1: React.FC<ProductCard1Props> = ({
@@ -216,9 +205,6 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
           <Icon className="favorite-icon outlined-icon" variant="small">
             heart
           </Icon>
-          {/* <Icon className="favorite-icon" color="primary" variant="small">
-              heart-filled
-            </Icon> */}
         </FlexBox>
 
         <Link href={`/product/${id}`}>
@@ -275,7 +261,6 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
             }
             width="30px"
           >
-            {/* <div className="add-cart"> */}
             <Button
               variant="outlined"
               color="primary"

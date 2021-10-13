@@ -24,6 +24,7 @@ import StyledHeader from "./HeaderStyle";
 import UserLoginDialog from "./UserLoginDialog";
 import UserRegisterDialog from "./UserRegisterDialog";
 
+
 type HeaderProps = {
   isFixed?: boolean;
   className?: string;
@@ -33,9 +34,9 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
   const [open, setOpen] = useState(false);
   const toggleSidenav = () => setOpen(!open);
   const [logo, setLogo] = useState("")
-  const [reRender, setReRender] = useState(0)
+  const [_reRender, setReRender] = useState(0)
 
-  const { state, dispatch } = useAppContext()
+  const { dispatch } = useAppContext()
 
   useEffect(() => {
     fetch(`${Site_Setting_All}`).then(res => res.json()).then(res => {

@@ -41,7 +41,7 @@ function PaginationRow({ product_per_page_option = product_per_page_options, nam
                 ml="1rem"
                 options={product_per_page_option}
                 value={values.productPerPage || ""}
-                onChange={(productPerPage) => {
+                onChange={(productPerPage: any) => {
                     setFieldValue("productPerPage", productPerPage);
                     const query = router.query
                     router.push({

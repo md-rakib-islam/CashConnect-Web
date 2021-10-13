@@ -27,12 +27,14 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
 
   const router = useRouter()
 
+  useEffect(() => {
+      setFieldValue("search", router.query?.search_key || "")
+  }, [router.query?.search_key])
+
   const handleFormSubmit = (values) => {
-    console.log("values", values)
-    // router.push(`/product/search/${categoryId}/${values.search}`)
     router.push({
       pathname: '/product/search/search_by_product_name',
-      query: { categoryId: categoryId, searchKey: values.search },
+      query: { categoryId: categoryId, search_key: values.search },
     })
   }
 
@@ -50,13 +52,17 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
     const value = e.target?.value;
     axios.get(`${Product_Search}?page=${1}&size=${10}`, { params: { name: value || "", category: categoryId } }).then(res => {
       console.log("res", res.data.products)
-      setResultList(res.data.products);
+      setResultList(res?.data?.products);
     }).catch(() => { setResultList([]) })
   }
 
   const handleDocumentClick = () => {
     setResultList([]);
   };
+
+  const handeleSearch = (value) => {
+    setFieldValue("search", value)
+  }
 
   useEffect(() => {
     axios.get(`${Category_All}`).then(res => {
@@ -78,6 +84,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
     touched,
     handleChange,
     handleSubmit,
+    setFieldValue
   } = useFormik({
     initialValues: initialValues,
     validationSchema: checkoutSchema,
@@ -123,9 +130,6 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
               </MenuItem>
             ))}
           </Menu>
-          {/* <Box className="menu-button" ml="14px" cursor="pointer">
-          <Icon color="primary">menu</Icon>
-        </Box> */}
         </StyledSearchBox>
 
         {!!resultList.length && (
@@ -141,10 +145,10 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
               <Link href={
                 {
                   pathname: '/product/search/search_by_product_name',
-                  query: { categoryId: categoryId, searchKey: values.search },
+                  query: { categoryId: categoryId, search_key: item?.name },
                 }
               }>
-                <MenuItem key={item?.id}>
+                <MenuItem key={item?.id} onClick={() => handeleSearch(item?.name)}>
                   <Span fontSize="14px">{item?.name}</Span>
                 </MenuItem>
               </Link>
@@ -155,17 +159,6 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
     </Box>
   );
 };
-
-// const categories = [
-//   "All Categories",
-//   "Car",
-//   "Clothes",
-//   "Electronics",
-//   "Laptop",
-//   "Desktop",
-//   "Camera",
-//   "Toys",
-// ];
 
 const initialValues = {
   search: "",

@@ -16,11 +16,8 @@ import Rating from "../rating/Rating";
 import TextField from "../text-field/TextField";
 import { H5, H6, Paragraph, SemiSpan } from "../Typography";
 
-interface ProductFilterProps {
-  setFilteredProduct: (products: any[], totalProduct: number | string) => void
-}
 
-const ProductFilterCard: React.FC<ProductFilterProps> = ({ setFilteredProduct }) => {
+const ProductFilterCard = () => {
   const [brandlist, setBrandlist] = useState([])
   const [brandIds, setBrandIds] = useState({})
   const [ratingIds, setRatingIds] = useState({})

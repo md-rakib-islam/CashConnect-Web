@@ -5,7 +5,7 @@ import Grid from "@component/grid/Grid";
 import NavbarLayout from "@component/layout/NavbarLayout";
 import LazyImage from "@component/LazyImage";
 import Pagination from "@component/pagination/Pagination";
-import PaginationRow from "@component/pagination/paginationRow";
+import PaginationRow from "@component/pagination/PaginationRow";
 import ShowingItemNumber from "@component/pagination/ShowingItemNumber";
 import ProductCard5 from "@component/product-cards/ProductCard5";
 import ProductCard6 from "@component/product-cards/ProductCard6";
@@ -45,7 +45,7 @@ const ViewAll = ({ topCategoryLists, CategoryLists, featuredBrandLists, type, to
         <Box pt="20px" pb="80px">
 
             {type === "top_category" && (<div style={{ display: "flex", flexWrap: "wrap", justifyContent: "flex-start" }}>
-                {topCategoryLists.map((item, ind) => (
+                {topCategoryLists.map((item) => (
                     // <Link href={`product/search/${item?.id}`} key={ind}>
                     <div style={{ flexBasis: "150px", flexGrow: 1, maxWidth: "200px", margin: "10px" }}>
                         <Card p="1rem">
@@ -124,9 +124,6 @@ export default ViewAll;
 
 
 export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
-
-    // const category = query.categoryId
-
 
     if (params.type === "top_category") {
         try {

@@ -1,20 +1,11 @@
 import Card from "@component/Card";
-import useWindowSize from "@hook/useWindowSize";
 import _ from "lodash";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import CategorySectionCreator from "../CategorySectionCreator";
 import Grid from "../grid/Grid";
 import ProductCard2 from "../product-cards/ProductCard2";
 
 const Section5 = ({ newArrivalList }) => {
-  const [visibleSlides, setVisibleSlides] = useState(6);
-  const width = useWindowSize();
-
-  useEffect(() => {
-    if (width < 650) setVisibleSlides(6);
-    else if (width < 950) setVisibleSlides(6);
-    else setVisibleSlides(6);
-  }, [width]);
 
   const new_arrival_list = (
     <CategorySectionCreator

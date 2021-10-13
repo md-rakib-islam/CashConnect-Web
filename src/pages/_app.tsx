@@ -17,7 +17,6 @@ NProgress.configure({ showSpinner: false });
 const App = ({ Component, pageProps }: any) => {
   let Layout = Component.layout || Fragment;
 
-  console.log("render app");
   return (
     <ThemeProvider theme={theme}>
       <Head>

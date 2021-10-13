@@ -11,7 +11,6 @@ import {
   Customer_Order_Pending_Details,
   Customer_Order_Remove_Item
 } from "@data/constants";
-// import { CartItem } from "@reducer/cartReducer";
 import axios from "axios";
 import Link from "next/link";
 import React, { Fragment, useCallback, useEffect, useState } from "react";

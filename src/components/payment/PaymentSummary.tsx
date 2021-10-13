@@ -26,7 +26,6 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
             {Subtotal ? `$${Subtotal}` : `_`}
           </Typography>
           <Typography fontWeight="600" fontSize="14px" lineHeight="1">
-            {/* 00 */}
           </Typography>
         </FlexBox>
       </FlexBox>
@@ -45,7 +44,6 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
             {Tax ? `$${Tax}` : `_`}
           </Typography>
           <Typography fontWeight="600" fontSize="14px" lineHeight="1">
-            {/* 00 */}
           </Typography>
         </FlexBox>
       </FlexBox>

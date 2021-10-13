@@ -2,7 +2,12 @@ import { BASE_URL, Site_Setting_All } from "@data/constants";
 import Document, { Head, Html, Main, NextScript } from "next/document";
 import { ServerStyleSheet } from "styled-components";
 
-export default class extends Document {
+interface propsType {
+  favicon?: any
+}
+
+export default class extends Document<propsType> {
+
   static async getInitialProps(ctx) {
     const sheet = new ServerStyleSheet();
     const originalRenderPage = ctx.renderPage;

@@ -1,4 +1,4 @@
-import PaginationRow from "@component/pagination/paginationRow";
+import PaginationRow from "@component/pagination/PaginationRow";
 import ShowingItemNumber from "@component/pagination/ShowingItemNumber";
 import useUserInf from "@customHook/useUserInf";
 import { orders_By_Customer_Id } from "@data/constants";
