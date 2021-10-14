@@ -1,11 +1,9 @@
 import { Category_All_With_Child } from "@data/constants";
-//import navigations from "@data/navigations";
 import React, { useEffect, useState } from "react";
 import useFormattedCategoryData from "../../customHook/useFormattedCategoryData";
 import CategoryMenuItem from "./category-menu-item/CategoryMenuItem";
 import { StyledCategoryDropdown } from "./CategoryDropdownStyle";
 import MegaMenu1 from "./mega-menu/MegaMenu1";
-import MegaMenu2 from "./mega-menu/MegaMenu2";
 
 export interface CategoryDropdownProps {
   open: boolean;
@@ -18,7 +16,6 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
 }) => {
   const megaMenu = {
     MegaMenu1,
-    MegaMenu2,
   };
 
   const [navigationData, setNavigationData] = useState([]);

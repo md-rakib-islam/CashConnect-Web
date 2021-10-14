@@ -55,25 +55,6 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
     return jwtService.signInWithEmailAndPassword(email, password).then(
       (user) => {
         console.log("user", user);
-        dispatch({
-          type: "CHANGE_USER_DETAILS",
-          payload: user,
-        });
-        dispatch({
-          type: "CHANGE_LOGIN_DETAILS",
-          payload: {
-            success: true,
-            error: [],
-          },
-        });
-
-        dispatch({
-          type: "CHANGE_LOGOUT_DETAILS",
-          payload: {
-            success: false,
-            error: [],
-          },
-        });
 
         dispatch({
           type: "CHANGE_ALERT",
@@ -117,16 +98,8 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
           }
         }
       },
-      (errors) => {
+      (_errors) => {
         console.log("login failed");
-        dispatch({
-          type: "CHANGE_LOGIN_DETAILS",
-          payload: {
-            success: false,
-            error: errors,
-          },
-        });
-
         dispatch({
           type: "CHANGE_ALERT",
           payload: {

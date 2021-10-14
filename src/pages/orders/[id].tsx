@@ -120,7 +120,7 @@ const OrderDetails = () => {
         </TableRow>
 
         <Box py="0.5rem">
-          {productDatabase.slice(179, 182).map((item) => (
+          {productDatabase.slice(1, 10).map((item) => (
             <FlexBox
               px="1rem"
               py="0.5rem"
