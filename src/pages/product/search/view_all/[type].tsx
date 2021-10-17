@@ -105,7 +105,7 @@ const ViewAll = ({ topCategoryLists, CategoryLists, featuredBrandLists, type, to
             </Card>)}
             <FlexBox
                 flexWrap="wrap"
-                justifyContent="space-between"
+                justifyContent="space-around"
                 alignItems="center"
                 mt="32px"
             >

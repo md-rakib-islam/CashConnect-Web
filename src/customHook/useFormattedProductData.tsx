@@ -15,8 +15,14 @@ function useFormattedProductData(productData, type?: string) {
             else if (type == "FeaturedBrands") {
                 productUrl = { productUrl: `/product/${data?.id}` };
             }
+
+            let oldPrice = {}
+            if (type == "bigdiscount") {
+                oldPrice = { oldPrice: data?.old_price };
+            }
             return {
                 ...productUrl,
+                ...oldPrice,
                 id: data?.id,
                 price: Number(data?.unit_price),
                 title: data?.name,

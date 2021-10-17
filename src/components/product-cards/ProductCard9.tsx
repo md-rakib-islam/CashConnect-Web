@@ -1,7 +1,12 @@
 import { Chip } from "@component/Chip";
 import Image from "@component/Image";
+import { useAppContext } from "@context/app/AppContext";
+import useUserInf from "@customHook/useUserInf";
+import { Customer_decrease_Quantity, Customer_Increase_Quantity, Customer_Order_Create, Customer_Order_Item_By_Product_Id, Customer_Order_Remove_Item } from "@data/constants";
+import axios from "axios";
 import Link from "next/link";
-import React, { Fragment, useCallback, useState } from "react";
+import { useRouter } from "next/router";
+import React, { Fragment, useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { CSSProperties } from "styled-components";
 import Box from "../Box";
 import Button from "../buttons/Button";
@@ -48,21 +53,133 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
   reviewCount,
   ...props
 }) => {
-  const [cartAmount, setCartAmount] = useState(0);
+
   const [open, setOpen] = useState(false);
+
+  const router = useRouter();
+
+  const { state, dispatch } = useAppContext();
+
+  const [cartQuantity, setCartQuantity] = useState(0);
+  const [itemId, setItemId] = useState(0);
+  const [getItemId, setGetItemId] = useState(0);
+  const [getChartquantity, setGetChartquantity] = useState(0)
+
+  const cartCanged = state.cart.chartQuantity;
 
   const toggleDialog = useCallback(() => {
     setOpen((open) => !open);
   }, []);
 
-  const handleCartAmountChange = useCallback(
-    (amount) => () => {
-      console.log(amount);
 
-      if (amount >= 0) setCartAmount(amount);
-    },
-    []
-  );
+  useLayoutEffect(() => {
+    const { order_Id } = useUserInf()
+
+    if (id) {
+      if (id) {
+        axios
+          .get(`${Customer_Order_Item_By_Product_Id}${order_Id}/${id}`)
+          .then((item) => {
+            setItemId(item?.data?.order_item?.id);
+            setCartQuantity(item?.data?.order_item?.quantity);
+          })
+          .catch(() => setCartQuantity(0));
+      }
+    }
+  }, [getItemId, id, getChartquantity]);
+
+  useEffect(() => {
+    if (id) {
+      if (state.cart.prductId == id) {
+        const { order_Id } = useUserInf()
+        axios
+          .get(`${Customer_Order_Item_By_Product_Id}${order_Id}/${id}`)
+          .then((item) => {
+            setItemId(item?.data?.order_item?.id);
+            setCartQuantity(item?.data?.order_item?.quantity);
+          })
+          .catch(() => { setCartQuantity(0) });
+      }
+    }
+  }, [cartCanged])
+
+  const handleCartAmountChange = (amount, action) => {
+    const { user_id, order_Id } = useUserInf()
+
+    const dateObj: any = new Date();
+    const currentDate =
+      dateObj.getFullYear() +
+      "-" +
+      (dateObj.getMonth() + 1).toString().padStart(2, 0) +
+      "-" +
+      dateObj.getDate().toString().padStart(2, 0);
+
+    const orderData = {
+      product_id: id,
+      quantity: 1,
+      price: price,
+      order_date: currentDate,
+      branch_id: 1,
+      user_id: user_id,
+    };
+
+    //add to cart
+    if ((action == "increase") && (amount == 1)) {
+      if (user_id) {
+        console.log("orderData", orderData);
+        axios.post(`${Customer_Order_Create}`, orderData).then((res) => {
+          console.log("orderRes", res);
+
+          localStorage.setItem("OrderId", res.data.order_details.id);
+          setGetItemId(Math.random());
+          dispatch({
+            type: "CHANGE_CART_QUANTITY",
+            payload: { chartQuantity: Math.random() },
+          });
+        }).catch(() => { });
+
+      } else {
+        localStorage.setItem("backAfterLogin", `product/${id}`);
+        router.push({
+          pathname: "/login",
+        });
+      }
+    }
+
+    //increase
+    else if (action == "increase") {
+      axios
+        .put(`${Customer_Increase_Quantity}${order_Id}/${itemId}`, orderData)
+        .then((res) => {
+          console.log("increaseRes", res);
+          setGetChartquantity(Math.random())
+        }).catch(() => { });
+    }
+
+    //romove
+    else if (amount == 0 && action == "decrease") {
+      axios
+        .delete(`${Customer_Order_Remove_Item}${order_Id}/${itemId}`)
+        .then((res) => {
+          console.log("removeRes", res);
+          setGetChartquantity(Math.random())
+          dispatch({
+            type: "CHANGE_CART_QUANTITY",
+            payload: { chartQuantity: Math.random() },
+          });
+        }).catch(() => { });
+    }
+
+    //decrease
+    else if (action == "decrease") {
+      axios
+        .put(`${Customer_decrease_Quantity}${order_Id}/${itemId}`, orderData)
+        .then((res) => {
+          console.log("decreaseRes", res);
+          setGetChartquantity(Math.random())
+        });
+    }
+  };
 
   return (
     <StyledProductCard9 overflow="hidden" width="100%" {...props}>
@@ -161,15 +278,15 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
                     padding="5px"
                     size="none"
                     borderColor="primary.light"
-                    onClick={handleCartAmountChange(cartAmount + 1)}
+                    onClick={() => handleCartAmountChange(cartQuantity + 1, "increase")}
                   >
                     <Icon variant="small">plus</Icon>
                   </Button>
 
-                  {!!cartAmount && (
+                  {!!cartQuantity && (
                     <Fragment>
                       <H5 fontWeight="600" fontSize="15px" mx="0.75rem">
-                        {cartAmount}
+                        {cartQuantity}
                       </H5>
                       <Button
                         variant="outlined"
@@ -177,7 +294,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
                         padding="5px"
                         size="none"
                         borderColor="primary.light"
-                        onClick={handleCartAmountChange(cartAmount - 1)}
+                        onClick={() => handleCartAmountChange(cartQuantity - 1, "decrease")}
                       >
                         <Icon variant="small">minus</Icon>
                       </Button>
@@ -206,7 +323,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
             <FlexBox
               className="add-cart"
               alignItems="center"
-              flexDirection={!!!cartAmount ? "column" : "column-reverse"}
+              flexDirection={!!!cartQuantity ? "column" : "column-reverse"}
             >
               <Button
                 variant="outlined"
@@ -214,14 +331,14 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
                 padding="5px"
                 size="none"
                 borderColor="primary.light"
-                onClick={handleCartAmountChange(cartAmount + 1)}
+                onClick={() => handleCartAmountChange(cartQuantity + 1, "increase")}
               >
                 <Icon variant="small">plus</Icon>
               </Button>
-              {!!cartAmount && (
+              {!!cartQuantity && (
                 <Fragment>
                   <H5 fontWeight="600" fontSize="15px" m="0.5rem">
-                    {cartAmount}
+                    {cartQuantity}
                   </H5>
                   <Button
                     variant="outlined"
@@ -229,7 +346,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
                     padding="5px"
                     size="none"
                     borderColor="primary.light"
-                    onClick={handleCartAmountChange(cartAmount - 1)}
+                    onClick={() => handleCartAmountChange(cartQuantity - 1, "decrease")}
                   >
                     <Icon variant="small">minus</Icon>
                   </Button>

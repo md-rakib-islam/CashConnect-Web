@@ -7,6 +7,7 @@ import CategorySectionHeader from "../CategorySectionHeader";
 import Container from "../Container";
 import Grid from "../grid/Grid";
 import Typography from "../Typography";
+import Link  from "next/link"
 
 const Section10 = ({ categoriesList }) => {
 
@@ -22,7 +23,7 @@ const Section10 = ({ categoriesList }) => {
       <Grid container spacing={6}>
         {categoriesList?.map((item, ind) => (
           <Grid item lg={2} md={3} sm={4} xs={12} key={ind}>
-            {/* <Link href="/"> */}
+            <Link href={`product/search/product_by_category?categoryId=${item?.id}`} key={item?.id}>
             <a>
               <Card
                 display="flex"
@@ -46,7 +47,7 @@ const Section10 = ({ categoriesList }) => {
                 </Typography>
               </Card>
             </a>
-            {/* </Link> */}
+          </Link>
           </Grid>
         ))}
       </Grid>

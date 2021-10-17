@@ -12,7 +12,7 @@ import ProductFilterCard from "@component/products/ProductFilterCard";
 import Select from "@component/Select";
 import Sidenav from "@component/sidenav/Sidenav";
 import { H5, Paragraph } from "@component/Typography";
-import { BASE_URL, Category_By_Id, Product_Arrival, product_by_categoryId, Product_Discount, Product_Filter, Product_Flash_Deals, Product_For_You, Product_Search, Product_Top_Rated } from "@data/constants";
+import { BASE_URL, Category_By_Id, Product_Arrival, Product_By_BrandId, product_by_categoryId, Product_Discount, Product_Filter, Product_Flash_Deals, Product_For_You, Product_Search, Product_Top_Rated } from "@data/constants";
 import axios from "axios";
 import { GetServerSideProps } from 'next';
 import { useRouter } from "next/router";
@@ -38,6 +38,7 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
     },
     []
   );
+
 
   useEffect(() => {
     const type = router.query.type
@@ -320,6 +321,21 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
       var totalPage = 0
     }
   }
+  else if (params.type === "product_by_brand") {
+    try {
+      const res = await axios.get(`${Product_By_BrandId}${query.brandId}?page=${query.page || 1}&size=${query.size || 9}`)
+      var data: any[] = await res.data.products
+      var totalProduct: number = await res.data.total_elements
+      var totalPage: number = await res.data.total_pages
+
+    } catch (error) {
+      var data = []
+      var totalProduct = 0
+      var totalPage = 0
+    }
+  }
+
+
 
   else {
     var data = []

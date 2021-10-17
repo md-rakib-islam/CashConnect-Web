@@ -6,7 +6,8 @@ import {
   Customer_Increase_Quantity,
   Customer_Order_Create,
   Customer_Order_Item_By_Product_Id,
-  Customer_Order_Remove_Item
+  Customer_Order_Remove_Item,
+  Multiple_Image_By_Id
 } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
@@ -53,6 +54,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   const [itemId, setItemId] = useState(0);
   const [getItemId, setGetItemId] = useState(0);
   const [openLogin, setOpenLogin] = useState(false)
+  const [multipleUmg, setMultipleUmg] = useState(imgUrl)
 
   const { state } = useAppContext();
   const cartCanged = state.cart.chartQuantity;
@@ -61,7 +63,18 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
     setOpenLogin(false)
   }
 
-  console.log("brand", brand)
+  useEffect(() => {
+    axios.get(`${Multiple_Image_By_Id}${id}`).then(res => {
+      console.log("multipleImage", res.data?.product_images)
+      let images = []
+
+      res.data?.product_images?.map(data => {
+        images.push(data?.image)
+      })
+
+      setMultipleUmg(images)
+    }).catch(() => {})
+  }, [])
 
   useEffect(() => {
     const { order_Id } = useUserInf()
@@ -229,10 +242,10 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                     smallImage: {
                       alt: 'Wristwatch by Ted Baker London',
                       isFluidWidth: true,
-                      src: imgUrl[selectedImage],
+                      src: multipleUmg[selectedImage],
                     },
                     largeImage: {
-                      src: imgUrl[selectedImage],
+                      src: multipleUmg[selectedImage],
                       width: 1000,
                       height: 1000,
                       style: { background: "black" }
@@ -243,7 +256,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
               </FlexBox>
               <FlexBox overflow="auto">
-                {imgUrl.map((url, ind) => (
+                {multipleUmg.map((url, ind) => (
                   <Box
                     size={70}
                     minWidth={70}
@@ -256,7 +269,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                     border="1px solid"
                     key={ind}
                     ml={ind === 0 && "auto"}
-                    mr={ind === imgUrl.length - 1 ? "auto" : "10px"}
+                    mr={ind === multipleUmg.length - 1 ? "auto" : "10px"}
                     borderColor={
                       selectedImage === ind ? "primary.main" : "gray.400"
                     }

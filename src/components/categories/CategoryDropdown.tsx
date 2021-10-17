@@ -1,4 +1,5 @@
 import { Category_All_With_Child } from "@data/constants";
+import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import useFormattedCategoryData from "../../customHook/useFormattedCategoryData";
 import CategoryMenuItem from "./category-menu-item/CategoryMenuItem";
@@ -34,7 +35,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
   console.log("formatedCategory", navigationData);
   return (
     <StyledCategoryDropdown open={open} position={position}>
-      {formattedCategoryData?.map((item) => {
+      {formattedCategoryData?.map((item, index) => {
         let MegaMenu = megaMenu[item.menuComponent];
 
         return (
@@ -45,7 +46,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
             caret={!!item.menuData}
             key={item.title}
           >
-            <MegaMenu data={item.menuData || {}} />
+            {!_.isEmpty(item.menuData?.categories) && (<MegaMenu data={item.menuData} index={index}/>)}
           </CategoryMenuItem>
         );
       })}

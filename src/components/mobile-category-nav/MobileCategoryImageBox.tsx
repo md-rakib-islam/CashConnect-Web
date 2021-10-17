@@ -15,6 +15,7 @@ const MobileCategoryImageBox: React.FC<MobileCategoryImageBoxProps> = ({
   imgUrl,
   icon,
 }) => {
+ 
   return (
     <FlexBox flexDirection="column" alignItems="center" justifyContent="center">
       {imgUrl ? (
@@ -24,9 +25,10 @@ const MobileCategoryImageBox: React.FC<MobileCategoryImageBoxProps> = ({
           width="100%"
           height="100%"
           objectFit="cover"
+          loader={() => `${imgUrl}`}
         />
       ) : (
-        icon && <Icon size="48px">{icon}</Icon>
+        icon && <Icon size="48px" src={icon}></Icon>
       )}
       <Typography
         className="ellipsis"

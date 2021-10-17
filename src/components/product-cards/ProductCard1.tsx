@@ -70,13 +70,15 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
     const { order_Id } = useUserInf()
 
     if (id) {
-      axios
-        .get(`${Customer_Order_Item_By_Product_Id}${order_Id}/${id}`)
-        .then((item) => {
-          setItemId(item?.data?.order_item?.id);
-          setCartQuantity(item?.data?.order_item?.quantity);
-        })
-        .catch(() => setCartQuantity(0));
+      if (id) {
+        axios
+          .get(`${Customer_Order_Item_By_Product_Id}${order_Id}/${id}`)
+          .then((item) => {
+            setItemId(item?.data?.order_item?.id);
+            setCartQuantity(item?.data?.order_item?.quantity);
+          })
+          .catch(() => setCartQuantity(0));
+      }
     }
   }, [getItemId, id, getChartquantity]);
 

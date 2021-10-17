@@ -9,14 +9,33 @@ import MobileCategoryImageBox from "@component/mobile-category-nav/MobileCategor
 import { MobileCategoryNavStyle } from "@component/mobile-category-nav/MobileCategoryNavStyle";
 import MobileNavigationBar from "@component/mobile-navigation/MobileNavigationBar";
 import Typography from "@component/Typography";
-import navigations from "@data/navigations";
 import Link from "next/link";
 import React, { Fragment, useEffect, useState } from "react";
+import useFormattedCategoryData from "@customHook/useFormattedCategoryData"
+import { BASE_URL, Category_All_With_Child, Category_Top_All } from "@data/constants";
+import axios from "axios";
+import { isTomorrow } from "date-fns";
 
 const MobileCategoryNav = () => {
   const [category, setCategory] = useState(null);
   const [suggestedList, setSuggestedList] = useState([]);
   const [subCategoryList, setSubCategoryList] = useState([]);
+
+
+  const [navigationData, setNavigationData] = useState([]);
+  const [formattedCategoryData] =
+    useFormattedCategoryData(navigationData);
+
+  useEffect(() => {
+    fetch(`${Category_All_With_Child}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("category", data.categories);
+        setNavigationData(data.categories);
+      }).catch(() => { });
+  }, []);
+
+  console.log("mobileCategory",navigationData)
 
   const handleCategoryClick = (cat) => () => {
     let menuData = cat.menuData;
@@ -27,23 +46,23 @@ const MobileCategoryNav = () => {
   };
 
   useEffect(() => {
-    setSuggestedList(suggestion);
+    axios.get(`${Category_Top_All}?page=${1}&size=${6}`).then(res => {
+      setSuggestedList(res.data?.categories);
+    }).catch(() => {})
   }, []);
 
   return (
     <MobileCategoryNavStyle>
       <Header className="header" />
       <div className="main-category-holder">
-        {navigations.map((item) => (
+        {formattedCategoryData.map((item) => (
           <Box
             className="main-category-box"
             borderLeft={`${category?.href === item.href ? "3" : "0"}px solid`}
             onClick={handleCategoryClick(item)}
             key={item.title}
           >
-            <Icon size="28px" mb="0.5rem">
-              {item.icon}
-            </Icon>
+            <Icon size="28px" mb="0.5rem" src={item.icon}></Icon>
             <Typography
               className="ellipsis"
               textAlign="center"
@@ -63,9 +82,9 @@ const MobileCategoryNav = () => {
           <Grid container spacing={3}>
             {suggestedList.map((item, ind) => (
               <Grid item lg={1} md={2} sm={3} xs={4} key={ind}>
-                <Link href="/product/search/423423">
+                <Link href={`/product/search/product_by_category?categoryId=${item.id}`}>
                   <a>
-                    <MobileCategoryImageBox {...item} />
+                    <MobileCategoryImageBox title={item?.name} imgUrl={`${BASE_URL}${item?.image}`} />
                   </a>
                 </Link>
               </Grid>
@@ -87,7 +106,7 @@ const MobileCategoryNav = () => {
                   <Grid container spacing={3}>
                     {item.subCategories?.map((item, ind) => (
                       <Grid item lg={1} md={2} sm={3} xs={4} key={ind}>
-                        <Link href="/product/search/423423">
+                        <Link href={item?.href}>
                           <a>
                             <MobileCategoryImageBox {...item} />
                           </a>
@@ -104,7 +123,7 @@ const MobileCategoryNav = () => {
             <Grid container spacing={3}>
               {subCategoryList.map((item, ind) => (
                 <Grid item lg={1} md={2} sm={3} xs={4} key={ind}>
-                  <Link href="/product/search/423423">
+                  <Link href={item?.href}>
                     <a>
                       <MobileCategoryImageBox {...item} />
                     </a>
@@ -120,47 +139,5 @@ const MobileCategoryNav = () => {
   );
 };
 
-const suggestion = [
-  {
-    title: "Belt",
-    href: "/belt",
-    imgUrl: "/assets/images/products/categories/belt.png",
-  },
-  {
-    title: "Hat",
-    href: "/Hat",
-    imgUrl: "/assets/images/products/categories/hat.png",
-  },
-  {
-    title: "Watches",
-    href: "/Watches",
-    imgUrl: "/assets/images/products/categories/watch.png",
-  },
-  {
-    title: "Sunglasses",
-    href: "/Sunglasses",
-    imgUrl: "/assets/images/products/categories/sunglass.png",
-  },
-  {
-    title: "Sneakers",
-    href: "/Sneakers",
-    imgUrl: "/assets/images/products/categories/sneaker.png",
-  },
-  {
-    title: "Sandals",
-    href: "/Sandals",
-    imgUrl: "/assets/images/products/categories/sandal.png",
-  },
-  {
-    title: "Formal",
-    href: "/Formal",
-    imgUrl: "/assets/images/products/categories/shirt.png",
-  },
-  {
-    title: "Casual",
-    href: "/Casual",
-    imgUrl: "/assets/images/products/categories/t-shirt.png",
-  },
-];
 
 export default MobileCategoryNav;

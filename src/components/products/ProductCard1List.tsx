@@ -35,7 +35,7 @@ const ProductCard1List: React.FC<ProductCard1ListProps> = ({ productList, totalP
 
       <FlexBox
         flexWrap="wrap"
-        justifyContent="space-between"
+        justifyContent="space-around"
         alignItems="center"
         mt="32px"
       >

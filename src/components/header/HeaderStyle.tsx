@@ -1,12 +1,11 @@
 import styled from "styled-components";
 import { layoutConstant } from "utils/constants";
-import { getTheme } from "../../utils/utils";
 
 const StyledHeader = styled.header`
   position: relative;
   z-index: 1;
   height: ${layoutConstant.headerHeight};
-  background: ${getTheme("colors.body.paper")};
+  background: rgb(247 111 133);
 
   .logo {
     img {

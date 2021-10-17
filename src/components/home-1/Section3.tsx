@@ -6,6 +6,7 @@ import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import CategorySectionCreator from "../CategorySectionCreator";
 import ProductCard6 from "../product-cards/ProductCard6";
+import Link from "next/link";
 
 
 const Section3 = ({ topCategoryList }) => {
@@ -27,6 +28,7 @@ const Section3 = ({ topCategoryList }) => {
     >
       <Carousel totalSlides={topCategoryList.length} visibleSlides={visibleSlides}>
         {topCategoryList.map((item) => (
+          <Link href={`product/search/product_by_category?categoryId=${item?.id}`} key={item?.id}>
           <a>
             <Card p="1rem">
               <ProductCard6
@@ -36,6 +38,7 @@ const Section3 = ({ topCategoryList }) => {
               />
             </Card>
           </a>
+          </Link>
         ))}
       </Carousel>
     </CategorySectionCreator>

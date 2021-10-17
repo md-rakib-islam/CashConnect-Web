@@ -35,14 +35,19 @@ interface MegaMenu {
 interface MegaMenuProps {
   data: MegaMenu;
   minWidth?: string;
+  index: number;
 }
 
 const MegaMenu1: React.FC<MegaMenuProps> = ({
   data: { categories, rightImage, bottomImage },
   minWidth,
+  index,
 }) => {
+
+  console.log("index", index)
+  
   return categories ? (
-    <StyledMegaMenu1 className="mega-menu">
+    <StyledMegaMenu1 className="mega-menu" index={index}>
       <Card ml="1rem" minWidth={minWidth} boxShadow="regular">
         <FlexBox px="1.25rem" py="0.875rem">
           <Box flex="1 1 0">

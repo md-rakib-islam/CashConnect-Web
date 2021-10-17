@@ -94,6 +94,10 @@ export const Product_For_You = `${BASE_URL}/product/api/v1/product/more_for_you/
 
 export const Product_Filter = `${BASE_URL}/product/api/v1/product/filter/`
 
+export const Product_By_BrandId = `${BASE_URL}/product/api/v1/product_using_brand/`
+
+export const Multiple_Image_By_Id = `${BASE_URL}/productimage/api/v1/productimage/all_productimage_by_product_id/`
+
 //purchase api
 export const Purshase_Create = `${BASE_URL}/purchase_request/api/v1/purchase_request/create_seller_purchase_request/`;
 

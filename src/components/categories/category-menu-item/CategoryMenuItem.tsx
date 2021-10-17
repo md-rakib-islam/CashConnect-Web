@@ -21,7 +21,7 @@ const CategoryMenuItem: React.FC<CategoryMenuItemProps> = ({
     <StyledCategoryMenuItem>
       <Link href={href}>
         <div className="category-dropdown-link">
-          {icon && <Icon variant="small">{icon}</Icon>}
+          {icon && <Icon variant="small" src={icon}></Icon>}
           <span className="title">{title}</span>
           {caret && <Icon variant="small">chevron-right</Icon>}
         </div>

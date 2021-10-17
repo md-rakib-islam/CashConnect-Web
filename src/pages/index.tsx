@@ -100,7 +100,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   try {
     var bigDiscountRes = await axios.get(`${Product_Discount}?page=${1}&size=${6}`)
     var bigDiscountLists: any[] = await bigDiscountRes.data.products
-    var [bigDiscountList] = useFormattedProductData(bigDiscountLists)
+    var [bigDiscountList] = useFormattedProductData(bigDiscountLists, "bigdiscount")
   } catch (err) {
     var bigDiscountList = []
   }

@@ -47,11 +47,11 @@ const Section4 = ({ topRatedList, featuredBrandList }) => {
                 <Grid container spacing={4}>
                   {featuredBrandList.map((item, key) => (
                     <Grid item sm={6} xs={12} key={key}>
-                      {/* <Link href={item.productUrl}> */}
-                      <a>
-                        <ProductCard5 {...item} />
-                      </a>
-                      {/* </Link> */}
+                      <Link href={`product/search/product_by_brand?brandId=${item?.id}`} key={item?.id}>
+                        <a>
+                          <ProductCard5 {...item} />
+                        </a>
+                      </Link>
                     </Grid>
                   ))}
                 </Grid>
