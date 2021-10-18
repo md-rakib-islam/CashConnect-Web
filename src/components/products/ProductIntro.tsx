@@ -22,6 +22,7 @@ import Grid from "../grid/Grid";
 import Icon from "../icon/Icon";
 import Rating from "../rating/Rating";
 import { H1, H2, H3, H6, SemiSpan } from "../Typography";
+import _ from "lodash"
 
 export interface ProductIntroProps {
   imgUrl?: string[];
@@ -69,10 +70,11 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       let images = []
 
       res.data?.product_images?.map(data => {
-        images.push(data?.image)
+        if(data?.image){
+          images.push(`${BASE_URL}${data?.image}`)
+        }
       })
-
-      setMultipleUmg(images)
+      !_.isEmpty(images) && setMultipleUmg(images)
     }).catch(() => {})
   }, [])
 
@@ -223,11 +225,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       setOpenLogin(true)
     }
   };
-
-
-  // console.log("productId", id);
-  const { isLogin } = useUserInf()
-  console.log("Login", isLogin)
 
   return (
     <>
