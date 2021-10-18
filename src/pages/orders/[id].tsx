@@ -2,6 +2,7 @@ import Avatar from "@component/avatar/Avatar";
 import Box from "@component/Box";
 import Button from "@component/buttons/Button";
 import Card from "@component/Card";
+import Currency from "@component/Currency";
 import Divider from "@component/Divider";
 import FlexBox from "@component/FlexBox";
 import Grid from "@component/grid/Grid";
@@ -133,7 +134,7 @@ const OrderDetails = () => {
                 <Box ml="20px">
                   <H6 my="0px">{item?.title}</H6>
                   <Typography fontSize="14px" color="text.muted">
-                    ${item?.price} x 1
+                    <Currency>{item?.price}</Currency> x 1
                   </Typography>
                 </Box>
               </FlexBox>
@@ -176,7 +177,7 @@ const OrderDetails = () => {
               <Typography fontSize="14px" color="text.hint">
                 Subtotal:
               </Typography>
-              <H6 my="0px">$335</H6>
+              <H6 my="0px"><Currency>{335}</Currency></H6>
             </FlexBox>
             <FlexBox
               justifyContent="space-between"
@@ -186,7 +187,7 @@ const OrderDetails = () => {
               <Typography fontSize="14px" color="text.hint">
                 Shipping fee:
               </Typography>
-              <H6 my="0px">$10</H6>
+              <H6 my="0px"><Currency>{10}</Currency></H6>
             </FlexBox>
             <FlexBox
               justifyContent="space-between"
@@ -196,7 +197,7 @@ const OrderDetails = () => {
               <Typography fontSize="14px" color="text.hint">
                 Discount:
               </Typography>
-              <H6 my="0px">-$30</H6>
+              <H6 my="0px">-<Currency>{30}</Currency></H6>
             </FlexBox>
 
             <Divider mb="0.5rem" />
@@ -207,7 +208,7 @@ const OrderDetails = () => {
               mb="1rem"
             >
               <H6 my="0px">Total</H6>
-              <H6 my="0px">$315</H6>
+              <H6 my="0px"><Currency>{315}</Currency></H6>
             </FlexBox>
             <Typography fontSize="14px">Paid by Credit/Debit Card</Typography>
           </Card>

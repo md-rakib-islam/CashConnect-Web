@@ -2,6 +2,7 @@ import Avatar from "@component/avatar/Avatar";
 import Box from "@component/Box";
 import Button from "@component/buttons/Button";
 import Card from "@component/Card";
+import Currency from "@component/Currency";
 import FlexBox from "@component/FlexBox";
 import Grid from "@component/grid/Grid";
 import DashboardLayout from "@component/layout/CustomerDashboardLayout";
@@ -67,7 +68,7 @@ const Profile = () => {
                         Balance:
                       </Typography>
                       <Typography ml="4px" fontSize="14px" color="primary.main">
-                        $500
+                        <Currency>{500}</Currency>
                       </Typography>
                     </FlexBox>
                   </div>

@@ -1,3 +1,4 @@
+import Currency from "@component/Currency";
 import LoginPopup from "@component/LoginPopup";
 import TextArea from "@component/textarea/TextArea";
 import useUserInf from "@customHook/useUserInf";
@@ -127,7 +128,7 @@ const Cart = () => {
               <Typography color="gray.600">Total:</Typography>
               <FlexBox alignItems="flex-end">
                 <Typography fontSize="18px" fontWeight="600" lineHeight="1">
-                  ${getTotalPrice().toFixed(2)}
+                  <Currency>{getTotalPrice().toFixed(2)}</Currency>
                 </Typography>
                 <Typography fontWeight="600" fontSize="14px" lineHeight="1">
                   00

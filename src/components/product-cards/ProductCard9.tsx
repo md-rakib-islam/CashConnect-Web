@@ -1,4 +1,5 @@
 import { Chip } from "@component/Chip";
+import Currency from "@component/Currency";
 import Image from "@component/Image";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
@@ -251,11 +252,11 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
 
             <FlexBox mt="0.5rem" mb="1rem" alignItems="center">
               <H5 fontWeight={600} color="primary.main" mr="0.5rem">
-                ${(price - ((price * off) / 100))}
+                <Currency>{(price - ((price * off) / 100))}</Currency>
               </H5>
               {off && (
                 <SemiSpan fontWeight="600">
-                  <del>${price?.toFixed(2)}</del>
+                  <del><Currency>{price?.toFixed(2)}</Currency></del>
                 </SemiSpan>
               )}
             </FlexBox>

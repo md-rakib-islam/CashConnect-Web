@@ -1,4 +1,5 @@
 import Box from "@component/Box";
+import Currency from "@component/Currency";
 import HoverBox from "@component/HoverBox";
 import LazyImage from "@component/LazyImage";
 import { H4, Small } from "@component/Typography";
@@ -61,7 +62,7 @@ const ProductCard4: React.FC<ProductCard4Props> = ({
         textAlign="center"
         color="primary.main"
       >
-        ${Number(price).toFixed(2)}
+        <Currency>{Number(price).toFixed(2)}</Currency>
       </H4>
     </Box>
   );

@@ -2,7 +2,6 @@ import { Chip } from "@component/Chip";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import { Customer_Order_Pending_Details } from "@data/constants";
-import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import useWindowSize from "../../hooks/useWindowSize";
 import Icon from "../icon/Icon";

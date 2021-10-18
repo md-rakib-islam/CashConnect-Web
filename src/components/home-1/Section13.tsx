@@ -1,6 +1,7 @@
 import Box from "@component/Box";
 import Card from "@component/Card";
 import Carousel from "@component/carousel/Carousel";
+import Currency from "@component/Currency";
 import FlexBox from "@component/FlexBox";
 import HoverBox from "@component/HoverBox";
 import LazyImage from "@component/LazyImage";
@@ -58,11 +59,11 @@ const Section13 = ({ bigDiscountList }) => {
                         color="primary.main"
                         mr="0.5rem"
                       >
-                        ${Math.ceil(item.price).toLocaleString()}
+                        <Currency>{Math.ceil(item.price).toLocaleString()}</Currency>
                       </H4>
 
                       <H4 fontWeight="600" fontSize="14px" color="text.muted">
-                        <del>${Math.ceil(item.oldPrice).toLocaleString()}</del>
+                        <del><Currency>{Math.ceil(item.oldPrice).toLocaleString()}</Currency></del>
                       </H4>
                     </FlexBox>
                   </a>

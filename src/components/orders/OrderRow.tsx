@@ -1,3 +1,4 @@
+import Currency from "@component/Currency";
 import { order_Status_All } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
@@ -87,7 +88,7 @@ const OrderRow: React.FC<OrderRowProps> = ({ item }) => {
           {item?.paid_at?.slice(0, 10)}
         </Typography>
         <Typography m="6px" textAlign="left">
-          ${Number(item.net_amount).toFixed(2)}
+          <Currency>{Number(item.net_amount).toFixed(2)}</Currency>
         </Typography>
 
         <Hidden flex="0 0 0 !important" down={769}>

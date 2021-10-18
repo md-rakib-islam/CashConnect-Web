@@ -3,6 +3,7 @@ import Box from "@component/Box";
 import Button from "@component/buttons/Button";
 import IconButton from "@component/buttons/IconButton";
 import Card from "@component/Card";
+import Currency from "@component/Currency";
 import Divider from "@component/Divider";
 import FlexBox from "@component/FlexBox";
 import Grid from "@component/grid/Grid";
@@ -82,7 +83,7 @@ const OrderDetails = () => {
                   <H6 my="0px">Nike React Phantom Run Flyknit 2</H6>
                   <FlexBox alignItems="center">
                     <Typography fontSize="14px" color="text.muted">
-                      $145 x
+                      <Currency>{145}</Currency> x
                     </Typography>
                     <Box maxWidth="60px" ml="8px" mt="0.25rem">
                       <TextField defaultValue={3} type="number" fullwidth />
@@ -144,7 +145,7 @@ const OrderDetails = () => {
               <Typography fontSize="14px" color="text.hint">
                 Subtotal:
               </Typography>
-              <H6 my="0px">$335</H6>
+              <H6 my="0px"><Currency>{335}</Currency></H6>
             </FlexBox>
             <FlexBox
               justifyContent="space-between"
@@ -160,7 +161,7 @@ const OrderDetails = () => {
                 ml="8px"
                 mt="0.25rem"
               >
-                <Typography mr="0.5rem">$</Typography>
+                <Typography mr="0.5rem"><Currency>00</Currency></Typography>
                 <TextField defaultValue={10} type="number" fullwidth />
               </FlexBox>
             </FlexBox>
@@ -178,7 +179,7 @@ const OrderDetails = () => {
                 ml="8px"
                 mt="0.25rem"
               >
-                <Typography mr="0.5rem">-$</Typography>
+                <Typography mr="0.5rem">-<Currency>00</Currency></Typography>
                 <TextField defaultValue={30} type="number" fullwidth />
               </FlexBox>
             </FlexBox>
@@ -191,7 +192,7 @@ const OrderDetails = () => {
               mb="1rem"
             >
               <H6 my="0px">Total</H6>
-              <H6 my="0px">$315</H6>
+              <H6 my="0px"><Currency>{315}</Currency></H6>
             </FlexBox>
             <Typography fontSize="14px">Paid by Credit/Debit Card</Typography>
           </Card>

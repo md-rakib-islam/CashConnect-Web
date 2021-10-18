@@ -1,3 +1,4 @@
+import Currency from "@component/Currency";
 import LoginPopup from "@component/LoginPopup";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
@@ -22,7 +23,6 @@ import Grid from "../grid/Grid";
 import Icon from "../icon/Icon";
 import Rating from "../rating/Rating";
 import { H1, H2, H3, H6, SemiSpan } from "../Typography";
-import _ from "lodash"
 
 export interface ProductIntroProps {
   imgUrl?: string[];
@@ -69,13 +69,15 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       console.log("multipleImage", res.data?.product_images)
       let images = []
 
+      images.push(imgUrl)
+
       res.data?.product_images?.map(data => {
-        if(data?.image){
+        if (data?.image) {
           images.push(`${BASE_URL}${data?.image}`)
         }
       })
-      !_.isEmpty(images) && setMultipleUmg(images)
-    }).catch(() => {})
+      setMultipleUmg(images)
+    }).catch(() => { })
   }, [])
 
   useEffect(() => {
@@ -297,7 +299,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
             <Box mb="24px">
               <H2 color="primary.main" mb="4px" lineHeight="1">
-                ${Number(price).toFixed(2)}
+                <Currency>{price}</Currency>
               </H2>
               <SemiSpan color="inherit">Stock Available</SemiSpan>
             </Box>

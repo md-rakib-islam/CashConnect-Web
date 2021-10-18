@@ -8,13 +8,13 @@ import Icon from "@component/icon/Icon";
 import MobileCategoryImageBox from "@component/mobile-category-nav/MobileCategoryImageBox";
 import { MobileCategoryNavStyle } from "@component/mobile-category-nav/MobileCategoryNavStyle";
 import MobileNavigationBar from "@component/mobile-navigation/MobileNavigationBar";
-import Typography from "@component/Typography";
-import Link from "next/link";
-import React, { Fragment, useEffect, useState } from "react";
-import useFormattedCategoryData from "@customHook/useFormattedCategoryData"
+import Typography, { Paragraph } from "@component/Typography";
+import useFormattedCategoryData from "@customHook/useFormattedCategoryData";
 import { BASE_URL, Category_All_With_Child, Category_Top_All } from "@data/constants";
 import axios from "axios";
-import { isTomorrow } from "date-fns";
+import _ from "lodash";
+import Link from "next/link";
+import React, { Fragment, useEffect, useState } from "react";
 
 const MobileCategoryNav = () => {
   const [category, setCategory] = useState(null);
@@ -35,7 +35,7 @@ const MobileCategoryNav = () => {
       }).catch(() => { });
   }, []);
 
-  console.log("mobileCategory",navigationData)
+  console.log("mobileCategory", navigationData)
 
   const handleCategoryClick = (cat) => () => {
     let menuData = cat.menuData;
@@ -48,7 +48,7 @@ const MobileCategoryNav = () => {
   useEffect(() => {
     axios.get(`${Category_Top_All}?page=${1}&size=${6}`).then(res => {
       setSuggestedList(res.data?.categories);
-    }).catch(() => {})
+    }).catch(() => { })
   }, []);
 
   return (
@@ -93,31 +93,45 @@ const MobileCategoryNav = () => {
         </Box>
 
         {category?.menuComponent === "MegaMenu1" ? (
-          subCategoryList.map((item, ind) => (
-            <Fragment key={ind}>
-              <Divider />
-              <Accordion>
-                <AccordionHeader px="0px" py="10px">
-                  <Typography fontWeight="600" fontSize="15px">
-                    {item.title}
-                  </Typography>
-                </AccordionHeader>
-                <Box mb="2rem" mt="0.5rem">
-                  <Grid container spacing={3}>
-                    {item.subCategories?.map((item, ind) => (
-                      <Grid item lg={1} md={2} sm={3} xs={4} key={ind}>
-                        <Link href={item?.href}>
-                          <a>
-                            <MobileCategoryImageBox {...item} />
-                          </a>
-                        </Link>
-                      </Grid>
-                    ))}
-                  </Grid>
-                </Box>
-              </Accordion>
-            </Fragment>
-          ))
+          subCategoryList.map((item, ind) => {
+            return !_.isEmpty(item.subCategories) ? (
+              <Fragment key={ind}>
+                <Divider />
+                <Accordion>
+                  <AccordionHeader px="0px" py="10px">
+                    <Typography fontWeight="600" fontSize="15px">
+                      {item.title}
+                    </Typography>
+                  </AccordionHeader>
+                  <Box mb="2rem" mt="0.5rem">
+                    <Grid container spacing={3}>
+                      {item.subCategories?.map((item, ind) => (
+                        <Grid item lg={1} md={2} sm={3} xs={4} key={ind}>
+                          <Link href={item?.href}>
+                            <a>
+                              <MobileCategoryImageBox {...item} />
+                            </a>
+                          </Link>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </Box>
+                </Accordion>
+              </Fragment>
+            ) : (
+              <Link href={item.href} key={ind}>
+                <Paragraph
+                  className="cursor-pointer"
+                  fontSize="14px"
+                  fontWeight="600"
+                  py="6px"
+                >
+                  {item.title}
+                </Paragraph>
+              </Link>
+            )
+
+          })
         ) : (
           <Box mb="2rem">
             <Grid container spacing={3}>

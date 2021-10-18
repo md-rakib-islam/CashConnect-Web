@@ -1,4 +1,5 @@
 import Avatar from "@component/avatar/Avatar";
+import Currency from "@component/Currency";
 import FlexBox from "@component/FlexBox";
 import LazyImage from "@component/LazyImage";
 import LoginPopup from "@component/LoginPopup";
@@ -212,7 +213,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                     </a>
                   </Link>
                   <Tiny color="text.muted" key={item.id}>
-                    ${Number(item.product?.unit_price).toFixed(2)} x{" "}
+                    <Currency>{Number(item.product?.unit_price).toFixed(2)}</Currency> x{" "}
                     {item.quantity}
                   </Tiny>
                   <Typography
@@ -221,7 +222,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                     color="primary.main"
                     mt="4px"
                   >
-                    ${(item.quantity * item.product?.unit_price).toFixed(2)}
+                    <Currency>{(item.quantity * item.product?.unit_price).toFixed(2)}</Currency>
                   </Typography>
                 </div>
 

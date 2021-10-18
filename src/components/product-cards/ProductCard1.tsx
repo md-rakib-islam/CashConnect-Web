@@ -1,3 +1,4 @@
+import Currency from "@component/Currency";
 import LazyImage from "@component/LazyImage";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
@@ -245,7 +246,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 
             <FlexBox alignItems="center" mt="10px">
               <SemiSpan pr="0.5rem" fontWeight="600" color="primary.main">
-                ${(price - (price * off) / 100).toFixed(2)}
+                <Currency>{(price - (price * off) / 100).toFixed(2)}</Currency>
               </SemiSpan>
               {!!off && (
                 <SemiSpan color="text.muted" fontWeight="600">

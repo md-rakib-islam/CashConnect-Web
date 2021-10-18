@@ -1,3 +1,4 @@
+import Currency from "@component/Currency";
 import HoverBox from "@component/HoverBox";
 import LazyImage from "@component/LazyImage";
 import { H4 } from "@component/Typography";
@@ -36,7 +37,7 @@ const ProductCard2: React.FC<ProductCard2Props> = ({
           {title}
         </H4>
         <H4 fontWeight="600" fontSize="14px" color="primary.main">
-          ${Math.ceil(price).toLocaleString()}
+          <Currency>{Math.ceil(price).toLocaleString()}</Currency>
         </H4>
       </a>
     </Link>

@@ -1,5 +1,6 @@
 import Avatar from "@component/avatar/Avatar";
 import IconButton from "@component/buttons/IconButton";
+import Currency from "@component/Currency";
 import FlexBox from "@component/FlexBox";
 import Hidden from "@component/hidden/Hidden";
 import Icon from "@component/icon/Icon";
@@ -59,10 +60,10 @@ const Products = () => {
               {item.stock.toString().padStart(2, "0")}
             </H5>
             <H5 m="6px" textAlign="left" fontWeight="400">
-              ${item.price.toFixed(2)}
+              <Currency>{item.price.toFixed(2)}</Currency>
             </H5>
             <H5 m="6px" textAlign="left" fontWeight="400">
-              ${item.price.toFixed(2)}
+              <Currency>{item.price.toFixed(2)}</Currency>
             </H5>
 
             <Hidden flex="0 0 0 !important" down={769}>

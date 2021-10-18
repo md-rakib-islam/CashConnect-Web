@@ -1,4 +1,5 @@
 import Box from "@component/Box";
+import Currency from "@component/Currency";
 import Image from "@component/Image";
 import LoginPopup from "@component/LoginPopup";
 import { useAppContext } from "@context/app/AppContext";
@@ -147,10 +148,10 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
           >
             <FlexBox flexWrap="wrap" alignItems="center">
               <Typography color="gray.600" mr="0.5rem">
-                ${Number(price).toFixed(2)} x {quantity}
+                <Currency>{Number(price).toFixed(2)}</Currency> x {quantity}
               </Typography>
               <Typography fontWeight={600} color="primary.main" mr="1rem">
-                ${(price * quantity).toFixed(2)}
+                <Currency>{(price * quantity).toFixed(2)}</Currency>
               </Typography>
             </FlexBox>
 
