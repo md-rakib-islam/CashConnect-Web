@@ -9,14 +9,11 @@ import { H5 } from "@component/Typography";
 import { BASE_URL, product_by_categoryId, Product_by_id } from "@data/constants";
 import axios from "axios";
 import { GetServerSideProps } from "next";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 const ProductDetails = ({ id, title, price, imgUrl, brand, rating, initialReviewsQuantity, fullDes, relatedProduct }) => {
 
-  const [reviewsQuantity, setreviewsQuantity] = useState(initialReviewsQuantity)
-
-  useEffect(() => {
-  }, [reviewsQuantity])
+  const [_reviewsQuantity, setreviewsQuantity] = useState(initialReviewsQuantity)
 
   const setNumOfReviews = (quantity = 0) => {
     setreviewsQuantity(quantity)

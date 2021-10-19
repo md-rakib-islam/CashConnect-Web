@@ -12,10 +12,12 @@ export const StyledCategoryDropdown = styled.div<CategoryDropdownProps>`
   border-radius: 4px;
   transform: ${({ open }) => (open ? "scaleY(1)" : "scaleY(0)")};
   transform-origin: top;
-  background-color: ${getTheme("colors.body.paper")};
+  // background-color: ${getTheme("colors.body.paper")};
   box-shadow: ${getTheme("shadows.regular")};
   transition: all 250ms ease-in-out;
   z-index: 98;
-  max-height: 520px;
-  // overflow: auto;
+  max-height: 450px;
+  width: ${({ increaseWidth }) => increaseWidth ? "1100px" : "fit-content"};
+  overflow: auto;
+  direction: rtl; 
 `;

@@ -10,6 +10,7 @@ import {
   Customer_Order_Remove_Item,
   Multiple_Image_By_Id
 } from "@data/constants";
+import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -46,7 +47,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   const [selectedImage, setSelectedImage] = useState(0);
   const [brandName, setbrandName] = useState(brand);
 
-  const { dispatch } = useAppContext();
+  const { state, dispatch } = useAppContext();
   const router = useRouter();
 
   var routerId = router.query?.id as string;
@@ -56,13 +57,29 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   const [getItemId, setGetItemId] = useState(0);
   const [openLogin, setOpenLogin] = useState(false)
   const [multipleUmg, setMultipleUmg] = useState(imgUrl)
+  const [stock, setStock] = useState(true)
+  const [_reRender, setreRender] = useState(0)
 
-  const { state } = useAppContext();
   const cartCanged = state.cart.chartQuantity;
+
+
+  const width = useWindowSize();
+  const isMobile = width < 769;
 
   const closeLoginTab = () => {
     setOpenLogin(false)
   }
+
+  useEffect(() => {
+    setTimeout(() => {
+      setStock(false)
+    }, 5000);
+  }, [])
+
+  useEffect(() => {
+    setMultipleUmg(imgUrl)
+    setreRender(Math.random())
+  }, [imgUrl])
 
   useEffect(() => {
     axios.get(`${Multiple_Image_By_Id}${id}`).then(res => {
@@ -78,7 +95,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       })
       setMultipleUmg(images)
     }).catch(() => { })
-  }, [])
+  }, [imgUrl])
 
   useEffect(() => {
     const { order_Id } = useUserInf()
@@ -224,7 +241,13 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
     }
     else {
-      setOpenLogin(true)
+      if (isMobile) {
+        localStorage.setItem("backAfterLogin", `/product/${id}`);
+        router.push("/login")
+      }
+      else {
+        setOpenLogin(true)
+      }
     }
   };
 
@@ -301,11 +324,17 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               <H2 color="primary.main" mb="4px" lineHeight="1">
                 <Currency>{price}</Currency>
               </H2>
-              <SemiSpan color="inherit">Stock Available</SemiSpan>
+              {stock ? (
+                <SemiSpan color="inherit">Stock Available</SemiSpan>
+              ) : (
+                <SemiSpan fontWeight="bold" ml="5px" color="primary.main">Out Of Stock</SemiSpan>
+              )}
+
             </Box>
 
             {!cartQuantity ? (
               <Button
+                disabled={!stock}
                 variant="contained"
                 size="small"
                 color="primary"
@@ -321,6 +350,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                   variant="outlined"
                   size="small"
                   color="primary"
+                  // disabled={!stock}
                   onClick={() =>
                     handleCartAmountChange(cartQuantity - 1, "decrease")
                   }
@@ -335,6 +365,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                   variant="outlined"
                   size="small"
                   color="primary"
+                  disabled={!stock}
                   onClick={() =>
                     handleCartAmountChange(cartQuantity + 1, "increase")
                   }

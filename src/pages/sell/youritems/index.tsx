@@ -11,7 +11,6 @@ import Select from "@component/Select";
 import TextField from "@component/text-field/TextField";
 import Typography from "@component/Typography";
 import { useAppContext } from "@context/app/AppContext";
-import useCheckValidation from "@customHook/useCheckValidation";
 import useJsonToFormData from "@customHook/useJsonToFormData";
 import { Purshase_Create } from "@data/constants";
 import { country_codes } from "@data/country_code";
@@ -34,7 +33,7 @@ function onlineSell() {
   const [_reRender, setReRender] = useState(0);
   const [previewImage, setPreviewImage] = useState<Iimage>([[]]);
   const [images, setImages] = useState<TIMG>([[]]);
-
+  const [loading, setLoading] = useState(false)
   const width = useWindowSize();
 
   const { dispatch } = useAppContext()
@@ -55,61 +54,53 @@ function onlineSell() {
   //submit purchase data
   const handleFormSubmit = async (values) => {
 
-    const { isValid, emailExist, primaryPhoneExist } = await useCheckValidation({ email: values.email, primaryPhone: values.contact_no })
+    let purchaseData = {
+      first_name: values.first_name,
+      last_name: values.last_name,
+      contact_no: `${values.contact_no}`,
+      email: values.email,
+      street_address: values.street_address,
+      contact_type: contact_type,
+      is_subscribed: isSubscribe,
+      items: [],
+    };
 
-    if (isValid) {
-      let purchaseData = {
-        first_name: values.first_name,
-        last_name: values.last_name,
-        contact_no: `${values.contact_no}`,
-        email: values.email,
-        street_address: values.street_address,
-        contact_type: contact_type,
-        is_subscribed: isSubscribe,
-        items: [],
+    let Items = [];
+    items.map((_itm, id) => {
+      let Item = {
+        item_name: values[`item_name${id}`],
+        item_price: values[`item_price${id}`],
+        item_quantity: 1,
+        images: images[id],
       };
+      Items.push(Item);
+    });
+    purchaseData.items = Items;
 
-      let Items = [];
-      items.map((_itm, id) => {
-        let Item = {
-          item_name: values[`item_name${id}`],
-          item_price: values[`item_price${id}`],
-          item_quantity: 1,
-          images: images[id],
-        };
-        Items.push(Item);
+    const [PurchaseDataToFormData] = useJsonToFormData(purchaseData);
+
+    setLoading(true)
+
+    axios
+      .post(`${Purshase_Create}`, PurchaseDataToFormData)
+      .then((res) => {
+        console.log("purchaserequestRes", res);
+        setLoading(false)
+        router.push("/sell/youritems/success")
+      }).catch(() => {
+        setLoading(false)
+        dispatch({
+          type: "CHANGE_ALERT",
+          payload: {
+            alertValue: "someting went wrong",
+            alerType: "error",
+            alertShow: true,
+            alertChanged: Math.random()
+          }
+        })
       });
-      purchaseData.items = Items;
 
-      const [PurchaseDataToFormData] = useJsonToFormData(purchaseData);
-
-      axios
-        .post(`${Purshase_Create}`, PurchaseDataToFormData)
-        .then((res) => {
-          console.log("purchaserequestRes", res);
-          router.push("/sell/youritems/success")
-        }).catch(() => {
-          dispatch({
-            type: "CHANGE_ALERT",
-            payload: {
-              alertValue: "someting went wrong",
-              alerType: "error",
-              alertShow: true,
-              alertChanged: Math.random()
-            }
-          })
-        });
-
-      console.log("purchaseData", purchaseData);
-    }
-    else {
-      setErrors({
-        ...errors,
-        email: emailExist ? "email already exist" : "",
-        contact_no: primaryPhoneExist ? "contact no already exist" : "",
-      })
-    }
-
+    console.log("purchaseData", purchaseData)
 
   };
 
@@ -205,7 +196,6 @@ function onlineSell() {
     values,
     errors,
     touched,
-    setErrors,
     handleChange,
     handleBlur,
     handleSubmit,
@@ -231,6 +221,28 @@ function onlineSell() {
 
   return (
     <>
+      {loading && (
+        <div style={{
+          position: 'fixed',
+          height: '100%',
+          width: '100%',
+          top: '0px',
+          left: '0px',
+          display: 'flex',
+          justifyContent: "center",
+          backgroundColor: " rgb(0 0 0 / 50%)",
+          alignItems: "center",
+          zIndex: 100,
+        }}>
+          <img style={{
+            height: "50px",
+            width: "50px",
+            marginTop: "100pz"
+          }}
+            src="/assets/images/gif/loading.gif" />
+        </div>
+      )}
+
       <form onSubmit={handleSubmit}>
         <Box
           mt="60px"

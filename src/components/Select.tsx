@@ -62,6 +62,7 @@ const Select: React.FC<SelectProps> = ({
         // isSearchable={isSearchable}
         // menuIsOpen={true}
         // name="color"
+
         options={options}
         getOptionLabel={
           getOptionLabelBy
@@ -103,7 +104,7 @@ const Select: React.FC<SelectProps> = ({
 };
 
 const customStyles = {
-  input: (styles) => ({ ...styles, height: 30 }),
+  input: (styles) => ({ ...styles, height: 30, boxShadow: "0px 0px 10px #ababab", }),
   option: (provided, state) => ({
     ...provided,
     color: "inherit",

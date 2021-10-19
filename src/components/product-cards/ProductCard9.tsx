@@ -65,6 +65,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
   const [itemId, setItemId] = useState(0);
   const [getItemId, setGetItemId] = useState(0);
   const [getChartquantity, setGetChartquantity] = useState(0)
+  const [stock, setStock] = useState(true)
 
   const cartCanged = state.cart.chartQuantity;
 
@@ -72,6 +73,12 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
     setOpen((open) => !open);
   }, []);
 
+
+  useEffect(() => {
+    setTimeout(() => {
+      setStock(false)
+    }, 5000);
+  }, [])
 
   useLayoutEffect(() => {
     const { order_Id } = useUserInf()
@@ -250,6 +257,8 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
               }}
             />
 
+            {stock || (<SemiSpan fontWeight="bold" color="primary.main" mt="5px">Out Of Stock</SemiSpan>)}
+
             <FlexBox mt="0.5rem" mb="1rem" alignItems="center">
               <H5 fontWeight={600} color="primary.main" mr="0.5rem">
                 <Currency>{(price - ((price * off) / 100))}</Currency>
@@ -332,6 +341,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
                 padding="5px"
                 size="none"
                 borderColor="primary.light"
+                disabled={!stock}
                 onClick={() => handleCartAmountChange(cartQuantity + 1, "increase")}
               >
                 <Icon variant="small">plus</Icon>
@@ -347,6 +357,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
                     padding="5px"
                     size="none"
                     borderColor="primary.light"
+                    //disabled={!stock}
                     onClick={() => handleCartAmountChange(cartQuantity - 1, "decrease")}
                   >
                     <Icon variant="small">minus</Icon>

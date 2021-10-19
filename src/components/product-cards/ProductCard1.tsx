@@ -59,9 +59,17 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
   const [itemId, setItemId] = useState(0);
   const [getItemId, setGetItemId] = useState(0);
   const [getChartquantity, setGetChartquantity] = useState(0)
+  const [stock, setStock] = useState(true)
 
   const { state } = useAppContext();
   const cartCanged = state.cart.chartQuantity;
+
+  useEffect(() => {
+    setTimeout(() => {
+      setStock(false)
+    }, 5000);
+  }, [])
+
 
   const toggleDialog = useCallback(() => {
     setOpen((open) => !open);
@@ -244,13 +252,15 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 
             <Rating value={rating || 0} outof={5} color="warn" readonly />
 
-            <FlexBox alignItems="center" mt="10px">
+            {stock || (<SemiSpan fontWeight="bold" color="primary.main" mt="2px">Out Of Stock</SemiSpan>)}
+
+            <FlexBox alignItems="center" mt={stock ? "10px" : "0px"}>
               <SemiSpan pr="0.5rem" fontWeight="600" color="primary.main">
                 <Currency>{(price - (price * off) / 100).toFixed(2)}</Currency>
               </SemiSpan>
               {!!off && (
                 <SemiSpan color="text.muted" fontWeight="600">
-                  <del>{price?.toFixed(2)}</del>
+                  <del><Currency>{price?.toFixed(2)}</Currency></del>
                 </SemiSpan>
               )}
             </FlexBox>
@@ -270,6 +280,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
               padding="3px"
               size="none"
               borderColor="primary.light"
+              disabled={!stock}
               onClick={() => handleCartAmountChange(cartQuantity + 1, "increase")}
             >
               <Icon variant="small">plus</Icon>
@@ -286,6 +297,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
                   padding="3px"
                   size="none"
                   borderColor="primary.light"
+                  // disabled={!stock}
                   onClick={() => handleCartAmountChange(cartQuantity - 1, "decrease")}
                 >
                   <Icon variant="small">minus</Icon>

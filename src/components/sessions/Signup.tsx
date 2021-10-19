@@ -18,7 +18,7 @@ import Divider from "../Divider";
 import FlexBox from "../FlexBox";
 import Icon from "../icon/Icon";
 import TextField from "../text-field/TextField";
-import { H3, H5, H6, SemiSpan, Small, Span } from "../Typography";
+import { H3, H5, H6, SemiSpan, Span } from "../Typography";
 import { StyledSessionCard } from "./SessionStyle";
 
 interface SignupProps {
@@ -414,7 +414,7 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             </FlexBox>
           </Box>
 
-          <FlexBox
+          {/* <FlexBox
             justifyContent="center"
             alignItems="center"
             bg="#3B5998"
@@ -444,11 +444,11 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
               google-1
             </Icon>
             <Small fontWeight="600">Continue with Google</Small>
-          </FlexBox>
+          </FlexBox> */}
         </form>
         <FlexBox justifyContent="center" bg="gray.200" py="19px">
           <SemiSpan>Already have account?</SemiSpan>
-          <H6 style={{ cursor: "pointer" }} onClick={gotologin} ml="0.5rem" borderBottom="1px solid" borderColor="gray.900">
+          <H6 style={{ cursor: "pointer" }} onClick={gotologin} ml="0.5rem" color="primary.main" borderBottom="1px solid #e94560" borderColor="primary.main">
             Log in
           </H6>
         </FlexBox>

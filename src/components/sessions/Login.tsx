@@ -2,7 +2,6 @@ import Alert from "@component/alert/alert";
 import SignupPopup from "@component/SignupPopup";
 import { useAppContext } from "@context/app/AppContext";
 import { useFormik } from "formik";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useCallback, useState } from "react";
 import * as yup from "yup";
@@ -14,7 +13,7 @@ import Divider from "../Divider";
 import FlexBox from "../FlexBox";
 import Icon from "../icon/Icon";
 import TextField from "../text-field/TextField";
-import { H3, H5, H6, SemiSpan, Small, Span } from "../Typography";
+import { H3, H5, H6, SemiSpan, Span } from "../Typography";
 import { StyledSessionCard } from "./SessionStyle";
 
 interface LoginProps {
@@ -202,7 +201,7 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
             </FlexBox>
           </Box>
 
-          <FlexBox
+          {/* <FlexBox
             justifyContent="center"
             alignItems="center"
             bg="#3B5998"
@@ -232,17 +231,17 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
               google-1
             </Icon>
             <Small fontWeight="600">Continue with Google</Small>
-          </FlexBox>
+          </FlexBox> */}
 
           <FlexBox justifyContent="center" mb="1.25rem">
             <SemiSpan>Don’t have account?</SemiSpan>
-            <H6 style={{ cursor: "pointer" }} onClick={gotosingup} ml="0.5rem" borderBottom="1px solid" borderColor="gray.900">
+            <H6 color="primary.main" style={{ cursor: "pointer" }} onClick={gotosingup} ml="0.5rem" borderColor="primary.main" borderBottom="1px solid #e94560">
               Sign Up
             </H6>
           </FlexBox>
         </form>
 
-        <FlexBox justifyContent="center" bg="gray.200" py="19px">
+        {/* <FlexBox justifyContent="center" bg="gray.200" py="19px">
           <SemiSpan>Forgot your password?</SemiSpan>
           <Link href="/">
             <a>
@@ -251,7 +250,7 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
               </H6>
             </a>
           </Link>
-        </FlexBox>
+        </FlexBox> */}
       </StyledSessionCard>
     </>
   );

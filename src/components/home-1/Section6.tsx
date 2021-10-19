@@ -73,7 +73,7 @@ const Section6: React.FC<Section6Props> = ({ data }) => {
           <CategorySectionHeader title={data?.category?.name} categoryId={data?.category?.id} />
           <Grid container spacing={6}>
             {productList.map((item, ind) => (
-              <Grid item lg={4} sm={6} xs={12} key={ind}>
+              <Grid item lg={3} sm={4} xs={12} key={ind}>
                 <ProductCard1 hoverEffect {...item} />
               </Grid>
             ))}
