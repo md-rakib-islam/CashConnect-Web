@@ -3,7 +3,7 @@ import LazyImage from "@component/LazyImage";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import {
-  Customer_decrease_Quantity,
+  Check_Stock, Customer_decrease_Quantity,
   Customer_Increase_Quantity,
   Customer_Order_Create,
   Customer_Order_Item_By_Product_Id, Customer_Order_Remove_Item
@@ -65,9 +65,11 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
   const cartCanged = state.cart.chartQuantity;
 
   useEffect(() => {
-    setTimeout(() => {
-      setStock(false)
-    }, 5000);
+    axios.get(`${Check_Stock}${id}`).then(res => {
+      if (!res.data.is_in_stock) {
+        setStock(false)
+      }
+    }).catch(() => { })
   }, [])
 
 

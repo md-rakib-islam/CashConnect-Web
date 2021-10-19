@@ -145,6 +145,10 @@ export const Vendor_Update = `${BASE_URL}/vendor/api/v1/vendor/update/`;
 
 export const Vendor_By_Id = `${BASE_URL}/vendor/api/v1/vendor/`;
 
+//stock
+
+export const Check_Stock = `${BASE_URL}/inventory/api/v1/inventory/check_by_product_id/`
+
 
 
 

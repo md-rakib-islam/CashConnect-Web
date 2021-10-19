@@ -3,7 +3,7 @@ import Currency from "@component/Currency";
 import Image from "@component/Image";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
-import { Customer_decrease_Quantity, Customer_Increase_Quantity, Customer_Order_Create, Customer_Order_Item_By_Product_Id, Customer_Order_Remove_Item } from "@data/constants";
+import { Check_Stock, Customer_decrease_Quantity, Customer_Increase_Quantity, Customer_Order_Create, Customer_Order_Item_By_Product_Id, Customer_Order_Remove_Item } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -75,9 +75,11 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
 
 
   useEffect(() => {
-    setTimeout(() => {
-      setStock(false)
-    }, 5000);
+    axios.get(`${Check_Stock}${id}`).then(res => {
+      if (!res.data.is_in_stock) {
+        setStock(false)
+      }
+    }).catch(() => { })
   }, [])
 
   useLayoutEffect(() => {

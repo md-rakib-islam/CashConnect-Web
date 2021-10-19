@@ -3,7 +3,7 @@ import LoginPopup from "@component/LoginPopup";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import {
-  BASE_URL, Brand_By_Id, Customer_decrease_Quantity,
+  BASE_URL, Brand_By_Id, Check_Stock, Customer_decrease_Quantity,
   Customer_Increase_Quantity,
   Customer_Order_Create,
   Customer_Order_Item_By_Product_Id,
@@ -71,9 +71,12 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   }
 
   useEffect(() => {
-    setTimeout(() => {
-      setStock(false)
-    }, 5000);
+    axios.get(`${Check_Stock}${id}`).then(res => {
+      console.log("res.data.is_in_stock", res.data.is_in_stock)
+      if (!res.data.is_in_stock) {
+        setStock(false)
+      }
+    }).catch(() => { console.log("errr") })
   }, [])
 
   useEffect(() => {
