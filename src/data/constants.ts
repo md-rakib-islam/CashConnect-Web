@@ -2,20 +2,20 @@
 //http://api.cashconnectbd.com
 
 //base url
-export const BASE_URL = "http://api.cashconnectbd.com";
+export const BASE_URL = "http://192.168.0.172:8001";
 
 //branch api
 export const Branch_All = `${BASE_URL}/branch/api/v1/branch/all/`;
 
 //brand api
-export const Brand_By_Id = "/brand/api/v1/brand/";
+export const Brand_By_Id = `${BASE_URL}/brand/api/v1/brand/`;
 
 export const Brand_Featured = `${BASE_URL}/brand/api/v1/brand/featured_brand/all/`
 
 export const Brand_All = `${BASE_URL}/brand/api/v1/brand/all/`
 
 //catogory api
-export const Category_By_Id = "/category/api/v1/category/";
+export const Category_By_Id = `${BASE_URL}/category/api/v1/category/`;
 
 export const Category_All = `${BASE_URL}/category/api/v1/category/all/`
 
@@ -76,9 +76,9 @@ export const order_Status_All = `${BASE_URL}/orderstatus/api/v1/orderstatus/all/
 export const Order_Details_By_Id = `${BASE_URL}/order/api/v1/order/`;
 
 //product api
-export const product_by_categoryId = "/product/api/v1/product_using_category/";
+export const product_by_categoryId = `${BASE_URL}/product/api/v1/product_using_category/`;
 
-export const Product_by_id = "/product/api/v1/product/";
+export const Product_by_id = `${BASE_URL}/product/api/v1/product/`;
 
 export const Product_Flash_Deals = `${BASE_URL}/product/api/v1/product_with_top_selling/all/`
 

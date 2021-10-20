@@ -1,4 +1,7 @@
 import Box from "@component/Box";
+import useFormattedProductData from "@customHook/useFormattedProductData";
+import { Product_Flash_Deals } from "@data/constants";
+import axios from "axios";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import useWindowSize from "../../hooks/useWindowSize";
@@ -11,15 +14,49 @@ interface Section2Props {
 }
 
 const Section2: React.FC<Section2Props> = ({ flashDealsList }) => {
-  const [visibleSlides, setVisibleSlides] = useState(5);
+  const [flashDealsListLists, setFlashDealsListLists] = useState(flashDealsList)
+  const [page, setPage] = useState(1)
+  const [pageEnd, setpageEnd] = useState(false)
+  const [visibleSlides, setVisibleSlides] = useState(6);
   const width = useWindowSize();
 
   useEffect(() => {
-    if (width < 500) setVisibleSlides(1);
-    else if (width < 650) setVisibleSlides(3);
-    else if (width < 950) setVisibleSlides(4);
+    if (width < 370) setVisibleSlides(1);
+    else if (width < 650) setVisibleSlides(4);
+    else if (width < 950) setVisibleSlides(6);
     else setVisibleSlides(6);
   }, [width]);
+
+  const getMoreItem = () => {
+
+    if (!pageEnd) {
+      console.log("hitGetMoreItem")
+      axios.get(`${Product_Flash_Deals}?page=${page + 1}&size=${6}`).then(res => {
+
+        if (res.data.total_pages > 1) {
+          const [flashDealsList] = useFormattedProductData(res.data.products)
+
+          const flashDealsListState = flashDealsListLists
+          var flashDealsListAll = flashDealsListState.concat(flashDealsList)
+          setFlashDealsListLists(flashDealsListAll)
+          console.log(flashDealsListAll)
+          setPage(page + 1)
+        }
+        if (res.data.total_pages == (page + 1)) {
+          setpageEnd(true)
+        }
+      }
+      )
+    }
+    else {
+      console.log("NoMreItem")
+    }
+  }
+
+  useEffect(() => {
+    getMoreItem()
+  }, [])
+
 
   const product_list = (
     <CategorySectionCreator
@@ -28,7 +65,7 @@ const Section2: React.FC<Section2Props> = ({ flashDealsList }) => {
       seeMoreLink="product/search/flash_deals_all"
     >
       <Box mt="-0.25rem" mb="-0.25rem">
-        <Carousel totalSlides={flashDealsList?.length} visibleSlides={visibleSlides}>
+        <Carousel totalSlides={flashDealsList?.length} visibleSlides={visibleSlides} step={visibleSlides} getMoreItem={getMoreItem}>
           {flashDealsList?.map((item) => (
             <Box py="0.25rem" key={item.id}>
               <ProductCard1

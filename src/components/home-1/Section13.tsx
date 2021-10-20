@@ -30,8 +30,8 @@ const Section13 = ({ bigDiscountList }) => {
   }, [width]);
 
   const getMoreItem = () => {
-    console.log("hitGetMore")
     if (!pageEnd) {
+      console.log("hitGetMoreItem")
       axios.get(`${Product_Discount}?page=${page + 1}&size=${6}`).then(res => {
 
         if (res.data.total_pages > 1) {
@@ -47,6 +47,9 @@ const Section13 = ({ bigDiscountList }) => {
         }
       }
       )
+    }
+    else {
+      console.log("NoMreItem")
     }
   }
 

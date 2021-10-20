@@ -12,7 +12,7 @@ import ProductFilterCard from "@component/products/ProductFilterCard";
 import Select from "@component/Select";
 import Sidenav from "@component/sidenav/Sidenav";
 import { H5, Paragraph } from "@component/Typography";
-import { BASE_URL, Category_By_Id, Product_Arrival, Product_By_BrandId, product_by_categoryId, Product_Discount, Product_Filter, Product_Flash_Deals, Product_For_You, Product_Search, Product_Top_Rated } from "@data/constants";
+import { Category_By_Id, Product_Arrival, Product_By_BrandId, product_by_categoryId, Product_Discount, Product_Filter, Product_Flash_Deals, Product_For_You, Product_Search, Product_Top_Rated } from "@data/constants";
 import axios from "axios";
 import { GetServerSideProps } from 'next';
 import { useRouter } from "next/router";
@@ -44,7 +44,7 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
     const type = router.query.type
     if (type === "product_by_category") {
       if (id) {
-        fetch(`${BASE_URL}${Category_By_Id}${id}`)
+        fetch(`${Category_By_Id}${id}`)
           .then((res) => res.json())
           .then((data) => {
             console.log("searchingFor", data.name);
@@ -146,7 +146,7 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
                 </IconButton>
               }
             >
-              <ProductFilterCard  />
+              <ProductFilterCard />
             </Sidenav>
           )}
         </FlexBox>
@@ -188,12 +188,12 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   if ((params.type === "product_by_category") || (params.type === "search_for")) {
 
     try {
-      const res = await fetch(`${BASE_URL}${product_by_categoryId}${category}?page=${query.page || 1}&size=${query.size || 9}`)
+      const res = await fetch(`${product_by_categoryId}${category}?page=${query.page || 1}&size=${query.size || 9}`)
       var json = await res.json()
       var data: any[] = await json.products
       var totalProduct: number = await json.total_elements
       var totalPage: number = await json.total_pages
-      console.log("categoryUrl", `${BASE_URL}${product_by_categoryId}${category}?page=${query.page || 1}&size=${query.size || 9}`)
+      console.log("categoryUrl", `${product_by_categoryId}${category}?page=${query.page || 1}&size=${query.size || 9}`)
     }
     catch (err) {
       var data = []

@@ -25,8 +25,8 @@ const Section3 = ({ topCategoryList }) => {
   }, [width]);
 
   const getMoreItem = () => {
-    console.log("hitGetMore")
     if (!pageEnd) {
+      console.log("hitGetMoreItem")
       axios.get(`${Category_Top_All}?page=${page + 1}&size=${6}`).then(res => {
 
         if (res.data.total_pages > 1) {
@@ -43,13 +43,16 @@ const Section3 = ({ topCategoryList }) => {
       }
       )
     }
+    else {
+      console.log("noMoreItem")
+    }
   }
 
   useEffect(() => {
     getMoreItem()
   }, [])
 
-  console.log("topCategorys", topCategoryList)
+  console.log("topCategorys", topCategoryLists)
   const category_list = (
     <CategorySectionCreator
       iconName="categories"

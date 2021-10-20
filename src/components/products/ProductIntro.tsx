@@ -119,7 +119,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
   useEffect(() => {
     if (typeof brand == "number") {
-      fetch(`${BASE_URL}${Brand_By_Id}${brand}`)
+      fetch(`${Brand_By_Id}${brand}`)
         .then((res) => res.json())
         .then((data) => {
           setbrandName(data.name);
