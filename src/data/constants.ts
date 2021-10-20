@@ -67,6 +67,8 @@ export const Customer_Order_Confirm = `${BASE_URL}/customerorder/api/v1/customer
 
 export const Customer_Order_Pending_Details = `${BASE_URL}/customerorder/api/v1/customerorder/get_a_customer_order_pending_detail/`;
 
+export const Customer_order_Details_For_Status = `${BASE_URL}/customerorder/api/v1/customerorder/get_a_customer_order_detail_with_order_orderitem_shipping/`
+
 //login
 export const LOGIN_URL = `${BASE_URL}/user/api/v1/user/login/`
 
@@ -98,6 +100,9 @@ export const Product_By_BrandId = `${BASE_URL}/product/api/v1/product_using_bran
 
 export const Multiple_Image_By_Id = `${BASE_URL}/productimage/api/v1/productimage/all_productimage_by_product_id/`
 
+export const Product_Color_By_Product_Id = `${BASE_URL}/productcolor/api/v1/productcolor/get_by_product_id/`
+
+export const Product_Size_By_Product_Id = `${BASE_URL}/productsize/api/v1/productsize/get_by_product_id/`
 //purchase api
 export const Purshase_Create = `${BASE_URL}/purchase_request/api/v1/purchase_request/create_seller_purchase_request/`;
 
@@ -121,7 +126,7 @@ export const Shipping_Address_Delete = `${BASE_URL}/shippingaddress/api/v1/shipp
 export const Slider_All = `${BASE_URL}/homepage_slider/api/v1/homepage_slider/all/`
 
 //user api
-export const User_By_Id = `${BASE_URL}/users/api/v1/users/`
+export const User_By_Id = `${BASE_URL}/user/api/v1/user/`
 
 export const Check_Email = `${BASE_URL}/user/api/v1/user/check_email_when_create/`
 export const Check_Email_When_Update = `${BASE_URL}/user/api/v1/user/check_email_when_update/`

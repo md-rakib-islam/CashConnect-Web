@@ -1,7 +1,7 @@
 import LoginPopup from "@component/LoginPopup";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
-import { Customer_Order_Confirm } from "@data/constants";
+import { Customer_Order_Confirm, User_By_Id } from "@data/constants";
 import { requred } from "@data/data";
 import axios from "axios";
 import { useFormik } from "formik";
@@ -34,6 +34,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [setInRef, setSetInRef] = useState(0);
   const [openLogin, setOpenLogin] = useState(false)
+  const [userName, setuserName] = useState("")
   const { dispatch } = useAppContext();
 
   const width = useWindowSize();
@@ -66,6 +67,16 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
   const closeLoginTab = () => {
     setOpenLogin(false)
   }
+
+  useEffect(() => {
+    const { user_id } = useUserInf()
+    // if (user_id) {
+    axios.get(`${User_By_Id}${user_id}`).then(res => {
+      console.log("resUseer", res)
+      setuserName(res?.data?.username)
+    }).catch(() => { })
+    // }
+  }, [])
 
   useLayoutEffect(() => {
     cardNumberRef.current = values.card_number;
@@ -132,6 +143,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
         if (paymentMethod === "card") {
           var confirmData: any = {
             user_id,
+            username: userName,
             pay_amount,
             payment_method: paymentMethod,
             card_number: values.card_number,
@@ -142,6 +154,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
         } else if (paymentMethod === "paypal") {
           var confirmData: any = {
             user_id,
+            username: userName,
             pay_amount,
             payment_method: paymentMethod,
             email: values.email,
@@ -149,6 +162,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
         } else if (paymentMethod === "bkash") {
           var confirmData: any = {
             user_id,
+            username: userName,
             pay_amount,
             payment_method: paymentMethod,
             bkash: values.bkash,
@@ -156,6 +170,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
         } else if (paymentMethod === "rocket") {
           var confirmData: any = {
             user_id,
+            username: userName,
             pay_amount,
             payment_method: paymentMethod,
             rocket: values.rocket,
@@ -163,6 +178,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
         } else if (paymentMethod === "nagad") {
           var confirmData: any = {
             user_id,
+            username: userName,
             pay_amount,
             payment_method: paymentMethod,
             nagad: values.nagad,
@@ -170,6 +186,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
         } else if (paymentMethod === "cash") {
           var confirmData: any = {
             user_id,
+            username: userName,
             pay_amount,
             payment_method: paymentMethod,
           };

@@ -11,11 +11,12 @@ import DashboardLayout from "@component/layout/CustomerDashboardLayout";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import TableRow from "@component/TableRow";
 import Typography, { H5, H6, Paragraph } from "@component/Typography";
-import { BASE_URL, Customer_Order_Pending_Details } from "@data/constants";
+import { Customer_order_Details_For_Status } from "@data/constants";
 import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
 import { useRouter } from "next/router";
 import React, { Fragment, useEffect, useState } from "react";
+import Item from "./Item";
 
 
 type OrderStatus = "packaging" | "shipping" | "delivering" | "complete";
@@ -45,18 +46,18 @@ const OrderDetails = () => {
 
   useEffect(() => {
     if (order_id) {
-      axios.get(`${Customer_Order_Pending_Details}${order_id}`).then((res) => {
+      axios.get(`${Customer_order_Details_For_Status}${order_id}`).then((res) => {
         console.log("CorderDetailsRes", res.data);
         setProductList(res.data.order?.order_items);
         setSubTotal(res.data.order?.net_amount);
         setTotal(res.data.order?.net_amount);
         setShippingFee(res.data.order?.shipping_price)
-        setDiscount(0)
+        setDiscount(res.data.order?.discount_amount)
         setPaid_by("Card")
         setOrderId(res.data.order?.id)
         setDeliveredOn(res.data.order?.delivered_at.slice(0, 10))
         setPlacedOn(res.data.order?.created_at.slice(0, 10))
-        setshippingAddress("Kelly Williams 777 Brockton Avenue, Abington MA 2351")
+        setshippingAddress(res.data.order?.shipping_address?.street_address)
       }).catch(() => { });
     }
   }, [order_id]);
@@ -156,41 +157,7 @@ const OrderDetails = () => {
         </TableRow>
 
         <Box py="0.5rem">
-          {productList.map((item) => (
-            <FlexBox
-              px="1rem"
-              py="0.5rem"
-              flexWrap="wrap"
-              alignItems="center"
-              key={item?.product?.id}
-            >
-              <FlexBox flex="2 2 260px" m="6px" alignItems="center">
-                <Avatar src={`${BASE_URL}${item?.product?.thumbnail}`} size={64} />
-                <Box ml="20px">
-                  <H6 my="0px">{item?.product?.name}</H6>
-                  <Typography fontSize="14px" color="text.muted" display="flex">
-                    <Currency>{item?.price}</Currency> x {item?.quantity}
-                  </Typography>
-                </Box>
-              </FlexBox>
-              <FlexBox flex="1 1 260px" m="6px" alignItems="center">
-                <Typography fontSize="14px" color="text.muted">
-                  Product properties: Black, L
-                </Typography>
-              </FlexBox>
-              <FlexBox flex="160px" m="6px" alignItems="center"
-                onClick={() => {
-                  router.push({
-                    pathname: `/product/${item?.product?.id}`,
-                    query: { review: "write" },
-                  })
-                }}>
-                <Button variant="text" color="primary">
-                  <Typography fontSize="14px">Write a Review</Typography>
-                </Button>
-              </FlexBox>
-            </FlexBox>
-          ))}
+          {productList.map((item) => <Item item={item}></Item>)}
         </Box>
       </Card>
 
