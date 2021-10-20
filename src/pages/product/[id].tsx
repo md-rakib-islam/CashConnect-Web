@@ -9,7 +9,8 @@ import { H5 } from "@component/Typography";
 import { BASE_URL, product_by_categoryId, Product_by_id } from "@data/constants";
 import axios from "axios";
 import { GetServerSideProps } from "next";
-import React, { useState } from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 
 const ProductDetails = ({ id, title, price, imgUrl, brand, rating, initialReviewsQuantity, fullDes, relatedProduct }) => {
 
@@ -20,6 +21,15 @@ const ProductDetails = ({ id, title, price, imgUrl, brand, rating, initialReview
   }
 
   const [selectedOption, setSelectedOption] = useState("description");
+
+  const router = useRouter()
+  const review = router.query?.review
+
+  useEffect(() => {
+    if (review) {
+      setSelectedOption("review")
+    }
+  }, [review])
 
   const handleOptionClick = (opt) => () => {
     setSelectedOption(opt);

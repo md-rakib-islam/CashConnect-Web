@@ -25,6 +25,8 @@ const ProductReview: React.FC<ProductReviewProps> = ({ productId, setReviews }) 
 
   const { query } = useRouter()
 
+  const review = query?.review
+
   const handleFormSubmit = async (values, { resetForm }) => {
     console.log(values);
 
@@ -113,6 +115,7 @@ const ProductReview: React.FC<ProductReviewProps> = ({ productId, setReviews }) 
             onChange={handleChange}
             value={values.review || ""}
             errorText={touched.review && errors.review}
+            autoFocus={review ? true : false}
           />
         </Box>
 

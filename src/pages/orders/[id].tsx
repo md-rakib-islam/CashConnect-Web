@@ -11,10 +11,12 @@ import DashboardLayout from "@component/layout/CustomerDashboardLayout";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import TableRow from "@component/TableRow";
 import Typography, { H5, H6, Paragraph } from "@component/Typography";
-import productDatabase from "@data/product-database";
+import { BASE_URL, Customer_Order_Pending_Details } from "@data/constants";
 import useWindowSize from "@hook/useWindowSize";
-import { format } from "date-fns";
-import React, { Fragment } from "react";
+import axios from "axios";
+import { useRouter } from "next/router";
+import React, { Fragment, useEffect, useState } from "react";
+
 
 type OrderStatus = "packaging" | "shipping" | "delivering" | "complete";
 
@@ -27,6 +29,39 @@ const OrderDetails = () => {
   const width = useWindowSize();
   const breakpoint = 350;
 
+  const [productList, setProductList] = useState([])
+  const [subTotal, setSubTotal] = useState(0)
+  const [shippingFee, setShippingFee] = useState(0)
+  const [discount, setDiscount] = useState(0)
+  const [total, setTotal] = useState(0)
+  const [paid_by, setPaid_by] = useState("Credit/Debit Card")
+  const [orderId, setOrderId] = useState(0)
+  const [DeliveredOn, setDeliveredOn] = useState("")
+  const [placedOn, setPlacedOn] = useState("")
+  const [shippingAddress, setshippingAddress] = useState("")
+
+  const router = useRouter()
+  const order_id = router.query?.id
+
+  useEffect(() => {
+    if (order_id) {
+      axios.get(`${Customer_Order_Pending_Details}${order_id}`).then((res) => {
+        console.log("CorderDetailsRes", res.data);
+        setProductList(res.data.order?.order_items);
+        setSubTotal(res.data.order?.net_amount);
+        setTotal(res.data.order?.net_amount);
+        setShippingFee(res.data.order?.shipping_price)
+        setDiscount(0)
+        setPaid_by("Card")
+        setOrderId(res.data.order?.id)
+        setDeliveredOn(res.data.order?.delivered_at.slice(0, 10))
+        setPlacedOn(res.data.order?.created_at.slice(0, 10))
+        setshippingAddress("Kelly Williams 777 Brockton Avenue, Abington MA 2351")
+      }).catch(() => { });
+    }
+  }, [order_id]);
+
+  console.log("productList", productList)
   return (
     <div>
       <DashboardPageHeader
@@ -100,14 +135,14 @@ const OrderDetails = () => {
             <Typography fontSize="14px" color="text.muted" mr="4px">
               Order ID:
             </Typography>
-            <Typography fontSize="14px">9001997718074513</Typography>
+            <Typography fontSize="14px">{orderId}</Typography>
           </FlexBox>
           <FlexBox className="pre" m="6px" alignItems="center">
             <Typography fontSize="14px" color="text.muted" mr="4px">
               Placed on:
             </Typography>
             <Typography fontSize="14px">
-              {format(new Date(), "dd MMM, yyyy")}
+              {placedOn}
             </Typography>
           </FlexBox>
           <FlexBox className="pre" m="6px" alignItems="center">
@@ -115,26 +150,26 @@ const OrderDetails = () => {
               Delivered on:
             </Typography>
             <Typography fontSize="14px">
-              {format(new Date(), "dd MMM, yyyy")}
+              {DeliveredOn}
             </Typography>
           </FlexBox>
         </TableRow>
 
         <Box py="0.5rem">
-          {productDatabase.slice(1, 10).map((item) => (
+          {productList.map((item) => (
             <FlexBox
               px="1rem"
               py="0.5rem"
               flexWrap="wrap"
               alignItems="center"
-              key={item.id}
+              key={item?.product?.id}
             >
               <FlexBox flex="2 2 260px" m="6px" alignItems="center">
-                <Avatar src={item?.imgUrl} size={64} />
+                <Avatar src={`${BASE_URL}${item?.product?.thumbnail}`} size={64} />
                 <Box ml="20px">
-                  <H6 my="0px">{item?.title}</H6>
-                  <Typography fontSize="14px" color="text.muted">
-                    <Currency>{item?.price}</Currency> x 1
+                  <H6 my="0px">{item?.product?.name}</H6>
+                  <Typography fontSize="14px" color="text.muted" display="flex">
+                    <Currency>{item?.price}</Currency> x {item?.quantity}
                   </Typography>
                 </Box>
               </FlexBox>
@@ -143,7 +178,13 @@ const OrderDetails = () => {
                   Product properties: Black, L
                 </Typography>
               </FlexBox>
-              <FlexBox flex="160px" m="6px" alignItems="center">
+              <FlexBox flex="160px" m="6px" alignItems="center"
+                onClick={() => {
+                  router.push({
+                    pathname: `/product/${item?.product?.id}`,
+                    query: { review: "write" },
+                  })
+                }}>
                 <Button variant="text" color="primary">
                   <Typography fontSize="14px">Write a Review</Typography>
                 </Button>
@@ -160,7 +201,7 @@ const OrderDetails = () => {
               Shipping Address
             </H5>
             <Paragraph fontSize="14px" my="0px">
-              Kelly Williams 777 Brockton Avenue, Abington MA 2351
+              {shippingAddress}
             </Paragraph>
           </Card>
         </Grid>
@@ -177,7 +218,7 @@ const OrderDetails = () => {
               <Typography fontSize="14px" color="text.hint">
                 Subtotal:
               </Typography>
-              <H6 my="0px"><Currency>{335}</Currency></H6>
+              <H6 my="0px">{subTotal ? (<Currency>{subTotal}</Currency>) : "-"}</H6>
             </FlexBox>
             <FlexBox
               justifyContent="space-between"
@@ -187,7 +228,7 @@ const OrderDetails = () => {
               <Typography fontSize="14px" color="text.hint">
                 Shipping fee:
               </Typography>
-              <H6 my="0px"><Currency>{10}</Currency></H6>
+              <H6 my="0px">{shippingFee ? (<Currency>{shippingFee}</Currency>) : "-"}</H6>
             </FlexBox>
             <FlexBox
               justifyContent="space-between"
@@ -197,7 +238,7 @@ const OrderDetails = () => {
               <Typography fontSize="14px" color="text.hint">
                 Discount:
               </Typography>
-              <H6 my="0px">-<Currency>{30}</Currency></H6>
+              <H6 my="0px">{discount ? (<Currency>{discount}</Currency>) : "-"}</H6>
             </FlexBox>
 
             <Divider mb="0.5rem" />
@@ -208,9 +249,9 @@ const OrderDetails = () => {
               mb="1rem"
             >
               <H6 my="0px">Total</H6>
-              <H6 my="0px"><Currency>{315}</Currency></H6>
+              <H6 my="0px">{total ? (<Currency>{total}</Currency>) : "-"}</H6>
             </FlexBox>
-            <Typography fontSize="14px">Paid by Credit/Debit Card</Typography>
+            <Typography fontSize="14px">Paid by {paid_by}</Typography>
           </Card>
         </Grid>
       </Grid>

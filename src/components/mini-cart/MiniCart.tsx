@@ -1,4 +1,4 @@
-import Avatar from "@component/avatar/Avatar";
+
 import Currency from "@component/Currency";
 import FlexBox from "@component/FlexBox";
 import LazyImage from "@component/LazyImage";
@@ -6,7 +6,6 @@ import LoginPopup from "@component/LoginPopup";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import {
-  BASE_URL,
   Customer_decrease_Quantity,
   Customer_Increase_Quantity,
   Customer_Order_Pending_Details,
@@ -18,7 +17,8 @@ import React, { Fragment, useCallback, useEffect, useState } from "react";
 import Button from "../buttons/Button";
 import Divider from "../Divider";
 import Icon from "../icon/Icon";
-import Typography, { H5, Paragraph, Tiny } from "../Typography";
+import Typography, { Paragraph } from "../Typography";
+import Item from "./Item";
 import { StyledMiniCart } from "./MiniCartStyle";
 
 type MiniCartProps = {
@@ -161,83 +161,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
               </Paragraph>
             </FlexBox>
           )}
-          {cartProductList.map((item: CartItem) => (
-            <Fragment key={item.id}>
-              <div className="cart-item">
-                <FlexBox alignItems="center" flexDirection="column">
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    padding="5px"
-                    size="none"
-                    borderColor="primary.light"
-                    borderRadius="300px"
-                    onClick={handleCartAmountChange(item, "increase")}
-                  >
-                    <Icon variant="small">plus</Icon>
-                  </Button>
-                  <Typography fontWeight={600} fontSize="15px" my="3px">
-                    {item.quantity}
-                  </Typography>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    padding="5px"
-                    size="none"
-                    borderColor="primary.light"
-                    borderRadius="300px"
-                    onClick={handleCartAmountChange(item, "decrease")}
-                    disabled={item.quantity === 1}
-                  >
-                    <Icon variant="small">minus</Icon>
-                  </Button>
-                </FlexBox>
-
-                <Link href={`/product/${item?.product?.id}`}>
-                  <a>
-                    <Avatar
-                      src={`${BASE_URL}${item?.product?.thumbnail}`}
-                      mx="1rem"
-                      alt={item.product?.name}
-                      size={76}
-                    />
-                  </a>
-                </Link>
-
-                <div className="product-details">
-                  <Link href={`/product/${item.id}`}>
-                    <a>
-                      <H5 className="title" fontSize="14px">
-                        {item.product?.name}
-                      </H5>
-                    </a>
-                  </Link>
-                  <Tiny color="text.muted" key={item.id}>
-                    <Currency>{Number(item.product?.unit_price).toFixed(2)}</Currency> x{" "}
-                    {item.quantity}
-                  </Tiny>
-                  <Typography
-                    fontWeight={600}
-                    fontSize="14px"
-                    color="primary.main"
-                    mt="4px"
-                  >
-                    <Currency>{(item.quantity * item.product?.unit_price).toFixed(2)}</Currency>
-                  </Typography>
-                </div>
-
-                <Icon
-                  className="clear-icon"
-                  size="1rem"
-                  ml="1.25rem"
-                  onClick={handleCartAmountChange(item, "remove")}
-                >
-                  close
-                </Icon>
-              </div>
-              <Divider />
-            </Fragment>
-          ))}
+          {cartProductList.map((item: CartItem) => <Item item={item} handleCartAmountChange={handleCartAmountChange} />)}
         </div>
 
         {!!cartProductList.length && (
@@ -249,8 +173,8 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                 m="1rem 1rem 0.75rem"
                 onClick={toggleSidenav}
               >
-                <Typography fontWeight={600}>
-                  Checkout Now (${getTotalPrice().toFixed(2)})
+                <Typography fontWeight={600} display="flex" textAlign="center">
+                  Checkout Now (<Currency>{getTotalPrice().toFixed(2)}</Currency>)
                 </Typography>
               </Button>
             </Link>

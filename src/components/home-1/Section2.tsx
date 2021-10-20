@@ -16,9 +16,9 @@ const Section2: React.FC<Section2Props> = ({ flashDealsList }) => {
 
   useEffect(() => {
     if (width < 500) setVisibleSlides(1);
-    else if (width < 650) setVisibleSlides(2);
-    else if (width < 950) setVisibleSlides(3);
-    else setVisibleSlides(5);
+    else if (width < 650) setVisibleSlides(3);
+    else if (width < 950) setVisibleSlides(4);
+    else setVisibleSlides(6);
   }, [width]);
 
   const product_list = (

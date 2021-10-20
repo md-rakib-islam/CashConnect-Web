@@ -35,8 +35,6 @@ const MegaMenu1: React.FC<MegaMenuProps> = ({
   index,
 }) => {
 
-  console.log("index", index)
-
   return categories ? (
     <StyledMegaMenu1 className="mega-menu" index={index}>
       <Card ml="1rem" minWidth={minWidth} boxShadow="regular">

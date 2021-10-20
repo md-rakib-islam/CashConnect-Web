@@ -6,19 +6,20 @@ import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import {
   BASE_URL,
+  Check_Stock,
   Customer_decrease_Quantity,
   Customer_Increase_Quantity,
   Customer_Order_Remove_Item
 } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { SpaceProps } from "styled-system";
 import Button from "../buttons/Button";
 import IconButton from "../buttons/IconButton";
 import FlexBox from "../FlexBox";
 import Icon from "../icon/Icon";
-import Typography from "../Typography";
+import Typography, { SemiSpan } from "../Typography";
 import { StyledProductCard7 } from "./ProductCardStyle";
 
 export interface ProductCard7Props {
@@ -40,6 +41,15 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
   const { dispatch } = useAppContext();
 
   const [openLogin, setOpenLogin] = useState(false)
+  const [stock, setStock] = useState(true)
+
+  useEffect(() => {
+    axios.get(`${Check_Stock}${product?.id}`).then(res => {
+      if (!res.data.is_in_stock) {
+        setStock(false)
+      }
+    }).catch(() => { })
+  }, [])
 
   const closeLoginTab = () => {
     setOpenLogin(false)
@@ -141,13 +151,16 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
             </IconButton>
           </Box>
 
+          {stock || (<SemiSpan fontWeight="bold" color="primary.main" ml="1px">Out Of Stock</SemiSpan>)}
+
           <FlexBox
             // width="100%"
             justifyContent="space-between"
             alignItems="flex-end"
           >
+
             <FlexBox flexWrap="wrap" alignItems="center">
-              <Typography color="gray.600" mr="0.5rem">
+              <Typography color="gray.600" mr="0.5rem" display="flex">
                 <Currency>{Number(price).toFixed(2)}</Currency> x {quantity}
               </Typography>
               <Typography fontWeight={600} color="primary.main" mr="1rem">
@@ -176,6 +189,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
                 padding="5px"
                 size="none"
                 borderColor="primary.light"
+                disabled={!stock}
                 onClick={handleCartAmountChange("increase")}
               >
                 <Icon variant="small">plus</Icon>
