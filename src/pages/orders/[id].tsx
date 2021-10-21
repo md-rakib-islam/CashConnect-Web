@@ -54,7 +54,7 @@ const OrderDetails = () => {
         setTotal(res.data.order?.net_amount);
         setShippingFee(res.data.order?.shipping_price)
         setDiscount(res.data.order?.discount_amount)
-        setPaid_by("Card")
+        setPaid_by(res.data.order?.payment_method)
         setOrderId(res.data.order?.id)
         setDeliveredOn(res.data.order?.delivered_at.slice(0, 10))
         setPlacedOn(res.data.order?.created_at.slice(0, 10))
@@ -63,9 +63,6 @@ const OrderDetails = () => {
     }
   }, [order_id]);
 
-  // useFormettedDate("2021-10-20T18:43:05Z")
-
-  console.log("productList", productList)
   return (
     <div>
       <DashboardPageHeader
@@ -128,7 +125,7 @@ const OrderDetails = () => {
             color="primary.main"
             textAlign="center"
           >
-            Estimated Delivery Date <b>{DeliveredOn && useFormettedDate(DeliveredOn, 4)}</b>
+            Estimated Delivery Date <b>{DeliveredOn && useFormettedDate(DeliveredOn, 3)}</b>
           </Typography>
         </FlexBox>
       </Card>

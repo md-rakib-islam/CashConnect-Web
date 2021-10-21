@@ -274,7 +274,9 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             label="User Name"
             fullwidth
             onBlur={handleBlur}
-            onChange={handleChange}
+            onChange={(e: any,) => {
+              setFieldValue("username", e.target.value.trim());
+            }}
             value={values.username || ""}
             errorText={touched.username && errors.username}
           />

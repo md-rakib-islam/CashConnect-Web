@@ -86,6 +86,12 @@ const CheckoutForm = () => {
             router.push("/payment");
           }).catch(() => { })
       } else {
+        axios
+          .post(
+            `${Customer_Order_Shipping_Address}${order_Id}`,
+            { same_as_profile: true },
+            authTOKEN
+          )
         router.push("/payment");
       }
     } else {

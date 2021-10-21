@@ -306,7 +306,9 @@ const ProfileEditor = ({
                   label="User Name"
                   fullwidth
                   onBlur={handleBlur}
-                  onChange={handleChange}
+                  onChange={(e: any,) => {
+                    setFieldValue("username", e.target.value.trim());
+                  }}
                   value={values.username || ""}
                   errorText={touched.username && errors.username}
                 />
