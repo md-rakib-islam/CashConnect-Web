@@ -11,6 +11,7 @@ import DashboardLayout from "@component/layout/CustomerDashboardLayout";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import TableRow from "@component/TableRow";
 import Typography, { H5, H6, Paragraph } from "@component/Typography";
+import useFormettedDate from "@customHook/useFormettedDate";
 import { Customer_order_Details_For_Status } from "@data/constants";
 import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
@@ -61,6 +62,8 @@ const OrderDetails = () => {
       }).catch(() => { });
     }
   }, [order_id]);
+
+  // useFormettedDate("2021-10-20T18:43:05Z")
 
   console.log("productList", productList)
   return (
@@ -125,7 +128,7 @@ const OrderDetails = () => {
             color="primary.main"
             textAlign="center"
           >
-            Estimated Delivery Date <b>4th October</b>
+            Estimated Delivery Date <b>{DeliveredOn && useFormettedDate(DeliveredOn, 4)}</b>
           </Typography>
         </FlexBox>
       </Card>
@@ -143,7 +146,7 @@ const OrderDetails = () => {
               Placed on:
             </Typography>
             <Typography fontSize="14px">
-              {placedOn}
+              {placedOn && useFormettedDate(placedOn)}
             </Typography>
           </FlexBox>
           <FlexBox className="pre" m="6px" alignItems="center">
@@ -151,7 +154,7 @@ const OrderDetails = () => {
               Delivered on:
             </Typography>
             <Typography fontSize="14px">
-              {DeliveredOn}
+              {DeliveredOn && useFormettedDate(DeliveredOn)}
             </Typography>
           </FlexBox>
         </TableRow>

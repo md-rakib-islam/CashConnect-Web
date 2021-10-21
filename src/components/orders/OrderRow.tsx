@@ -1,4 +1,5 @@
 import Currency from "@component/Currency";
+import useFormettedDate from "@customHook/useFormettedDate";
 import { order_Status_All } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
@@ -85,7 +86,7 @@ const OrderRow: React.FC<OrderRowProps> = ({ item }) => {
           </Chip>
         </Box>
         <Typography className="flex-grow pre" m="6px" textAlign="left">
-          {item?.paid_at?.slice(0, 10)}
+          {item?.paid_at && useFormettedDate(item?.paid_at)}
         </Typography>
         <Typography m="6px" textAlign="left">
           <Currency>{Number(item.net_amount).toFixed(2)}</Currency>

@@ -4,28 +4,27 @@ import Button from '@component/buttons/Button'
 import Currency from '@component/Currency'
 import FlexBox from '@component/FlexBox'
 import Typography, { H6 } from '@component/Typography'
-import { BASE_URL, Product_Color_By_Product_Id, Product_Size_By_Product_Id } from '@data/constants'
-import axios from 'axios'
+import { BASE_URL } from '@data/constants'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 
 function Item({ item }) {
 
-    const [color, setColor] = useState("_")
-    const [size, setSize] = useState("_")
+    const [color, _setColor] = useState("_")
+    const [size, _setSize] = useState("_")
 
     const router = useRouter()
 
     useEffect(() => {
-        axios.get(`${Product_Color_By_Product_Id}${item?.product?.id}`).then(res => {
-            console.log("color", res)
-            setColor(res?.data?.name)
-        }).catch(() => { })
+        // axios.get(`${Product_Color_By_Product_Id}${item?.product?.id}`).then(res => {
+        //     console.log("color", res)
+        //     setColor(res?.data?.name)
+        // }).catch(() => { })
 
-        axios.get(`${Product_Size_By_Product_Id}${item?.product?.id}`).then(res => {
-            console.log("size", res)
-            setSize(res?.data?.name)
-        }).catch(() => { })
+        // axios.get(`${Product_Size_By_Product_Id}${item?.product?.id}`).then(res => {
+        //     console.log("size", res)
+        //     setSize(res?.data?.name)
+        // }).catch(() => { })
 
     }, [])
 
