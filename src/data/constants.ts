@@ -106,6 +106,12 @@ export const Product_Size_By_Product_Id = `${BASE_URL}/productsize/api/v1/produc
 //purchase api
 export const Purshase_Create = `${BASE_URL}/purchase_request/api/v1/purchase_request/create_seller_purchase_request/`;
 
+export const Purchase_All_By_Vendor_id = `${BASE_URL}/purchase_request/api/v1/purchase_request/all/`
+
+export const Purchase_Items_By_Purchase_Id = `${BASE_URL}/purchase_req_item/api/v1/purchase_req_item/all/`
+
+
+
 //review_and_rating​ api
 export const Review_Create = `${BASE_URL}/review_and_rating/api/v1/review_and_rating/create/`
 

@@ -2,6 +2,7 @@ import { Chip } from "@component/Chip";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import { Customer_Order_Pending_Details } from "@data/constants";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import useWindowSize from "../../hooks/useWindowSize";
 import Icon from "../icon/Icon";
@@ -19,11 +20,9 @@ const MobileNavigationBar: React.FC = () => {
     const { order_Id } = useUserInf()
 
     if (order_Id) {
-      fetch(`${Customer_Order_Pending_Details}${order_Id}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setProductQuantity(data?.order?.order_items?.length);
-        }).catch(() => { });
+      axios.get(`${Customer_Order_Pending_Details}${order_Id}`).then((res) => {
+        setProductQuantity(res?.data?.order?.order_items?.length);
+      }).catch(() => { });
     }
   }, [cartCanged]);
 
@@ -39,7 +38,7 @@ const MobileNavigationBar: React.FC = () => {
     setReRender(Math.random())
   }, [userID])
 
-  const profileUrl = isLogin? (userID == "3")? "/profile" : "/vendor/dashboard" : "/login"
+  const profileUrl = isLogin ? (userID == "3") ? "/profile" : "/vendor/dashboard" : "/login"
 
   const list = [
     {
@@ -58,7 +57,7 @@ const MobileNavigationBar: React.FC = () => {
       href: "/cart",
     },
     {
-      title: isLogin? "Account": "login",
+      title: isLogin ? "Account" : "login",
       icon: "user-2",
       href: profileUrl,
     },

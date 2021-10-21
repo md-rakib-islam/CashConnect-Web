@@ -47,7 +47,7 @@ function Item({ item }) {
             </FlexBox>
             <FlexBox flex="1 1 260px" m="6px" alignItems="center">
                 <Typography fontSize="14px" color="text.muted">
-                    Product properties: {item?.product?.short_desc || "_"} {color || "_"}, {size || "_"}
+                    Product properties: {item?.product?.short_desc || "_"}, {color || "_"}, {size || "_"}
                 </Typography>
             </FlexBox>
             <FlexBox flex="160px" m="6px" alignItems="center"

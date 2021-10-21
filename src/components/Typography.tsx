@@ -1,6 +1,7 @@
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import { Customer_Order_Pending_Details } from "@data/constants";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled, { CSSProperties } from "styled-components";
 import {
@@ -118,10 +119,9 @@ export const Tiny2: React.FC<CustomProps> = (props) => {
     const { order_Id } = useUserInf()
 
     if (order_Id) {
-      fetch(`${Customer_Order_Pending_Details}${order_Id}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setProductQuantity(data?.order?.order_items?.length);
+      axios.get(`${Customer_Order_Pending_Details}${order_Id}`)
+        .then((res) => {
+          setProductQuantity(res?.data?.order?.order_items?.length);
         }).catch(() => { });
     }
   }, [cartCanged]);

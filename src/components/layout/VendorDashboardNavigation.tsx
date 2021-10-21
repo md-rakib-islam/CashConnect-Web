@@ -50,12 +50,12 @@ const linkList = [
   },
   {
     href: "/vendor/add-product",
-    title: "Add New Product",
+    title: "New Purchase",
     iconName: "upload",
   },
   {
-    href: "/vendor/orders",
-    title: "Orders",
+    href: "/vendor/purchases",
+    title: "Purchases",
     iconName: "shopping-cart",
     count: 40,
   },

@@ -56,13 +56,14 @@ const OrderDetails = () => {
         setDiscount(res.data.order?.discount_amount)
         setPaid_by(res.data.order?.payment_method)
         setOrderId(res.data.order?.id)
-        setDeliveredOn(res.data.order?.delivered_at.slice(0, 10))
-        setPlacedOn(res.data.order?.created_at.slice(0, 10))
+        setDeliveredOn(res.data.order?.delivered_at)
+        setPlacedOn(res.data.order?.created_at)
         setshippingAddress(res.data.order?.shipping_address?.street_address)
       }).catch(() => { });
     }
   }, [order_id]);
 
+  // console.log("productList", productList)
   return (
     <div>
       <DashboardPageHeader
@@ -125,7 +126,7 @@ const OrderDetails = () => {
             color="primary.main"
             textAlign="center"
           >
-            Estimated Delivery Date <b>{DeliveredOn && useFormettedDate(DeliveredOn, 3)}</b>
+            Estimated Delivery Date <b>{placedOn && useFormettedDate(placedOn, 3)}</b>
           </Typography>
         </FlexBox>
       </Card>
