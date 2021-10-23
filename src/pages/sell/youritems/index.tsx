@@ -258,13 +258,13 @@ function onlineSell() {
           <Grid container horizontal_spacing={6} vertical_spacing={4}>
             <Grid item md={12} xs={12}>
               <Box alignItems="center" display="flex" flexDirection="column">
-                <Typography fontSize="25px" fontWeight="700">
+                <Typography textAlign="center" fontSize="25px" fontWeight="700">
                   Your personal details
                 </Typography>
-                <Typography fontSize="16px" fontWeight="600" mt="12px">
+                <Typography textAlign="center" fontSize="16px" fontWeight="600" mt="12px">
                   This information is 100% secure with us.
                 </Typography>
-                <Typography fontSize="16px" fontWeight="600" mb="10px">
+                <Typography textAlign="center" fontSize="16px" fontWeight="600" mb="10px">
                   We will not spam you or share your details.
                 </Typography>
               </Box>
@@ -366,13 +366,13 @@ function onlineSell() {
             >
               <Grid item md={12} xs={12}>
                 <Box alignItems="center" display="flex" flexDirection="column">
-                  <Typography fontSize="25px" fontWeight="700" mt="40px">
+                  <Typography textAlign="center" fontSize="25px" fontWeight="700" mt="40px">
                     Which area do you live or work in?
                   </Typography>
-                  <Typography fontSize="16px" fontWeight="600" mt="12px">
+                  <Typography textAlign="center" fontSize="16px" fontWeight="600" mt="12px">
                     Let us find the branches closest to you.
                   </Typography>
-                  <Typography fontSize="16px" fontWeight="600" mb="15px">
+                  <Typography textAlign="center" fontSize="16px" fontWeight="600" mb="15px">
                     Select the area that is the most convenient for you.
                   </Typography>
                 </Box>
@@ -400,7 +400,7 @@ function onlineSell() {
 
         <Box
           pt="40px"
-          pb="120px"
+          pb="100px"
           mx={`${width < 950 || "100px"}`}
           boxShadow="0px -10px 10px 0px #ababab"
           justifyContent="center"
@@ -414,10 +414,10 @@ function onlineSell() {
             flexDirection="column"
             width="100%"
           >
-            <Typography fontSize="25px" fontWeight="700" mt="20px">
+            <Typography textAlign="center" fontSize="25px" fontWeight="700" mt="20px">
               Tell us about your items
             </Typography>
-            <Typography fontSize="16px" fontWeight="600" mt="12px">
+            <Typography textAlign="center" fontSize="16px" fontWeight="600" mt="12px">
               Provide as much detail as possible to help us give you an accurate
               quote.
             </Typography>
@@ -602,22 +602,22 @@ function onlineSell() {
           display="flex"
           flexDirection="column"
         >
-          <Typography fontSize="25px" fontWeight="700" mt="50px">
+          <Typography textAlign="center" fontSize="25px" fontWeight="700" mt="50px">
             How would you like us to contact you?
           </Typography>
-          <Typography fontSize="16px" fontWeight="600" mt="12px" mb="50px">
+          <Typography textAlign="center" fontSize="16px" fontWeight="600" mt="12px" mb="50px">
             Once an agent has valued your items, we will contact you with a
             quote and the next steps.
           </Typography>
 
-          <Box display="flex" justifyContent="space-evenly" width="50%">
+          <Box display="flex" justifyContent="space-evenly" width="50%" flexWrap="wrap">
             <Radio
               name="email"
               mb="1.5rem"
               color="secondary"
               checked={contact_type === "email"}
               label={
-                <Typography ml="6px" fontWeight="600" fontSize="18px">
+                <Typography textAlign="center" ml="6px" fontWeight="600" fontSize="18px">
                   Email
                 </Typography>
               }
@@ -629,7 +629,7 @@ function onlineSell() {
               color="secondary"
               checked={contact_type === "sms"}
               label={
-                <Typography ml="6px" fontWeight="600" fontSize="18px">
+                <Typography textAlign="center" ml="6px" fontWeight="600" fontSize="18px">
                   SMS
                 </Typography>
               }
@@ -642,7 +642,7 @@ function onlineSell() {
               color="secondary"
               checked={contact_type === "cell"}
               label={
-                <Typography ml="6px" fontWeight="600" fontSize="18px">
+                <Typography textAlign="center" ml="6px" fontWeight="600" fontSize="18px">
                   Cell
                 </Typography>
               }
@@ -660,19 +660,19 @@ function onlineSell() {
           display="flex"
           flexDirection="column"
         >
-          <Typography fontSize="25px" fontWeight="700" mt="50px">
+          <Typography textAlign="center" fontSize="25px" fontWeight="700" mt="50px">
             Get the latest information on Cash
           </Typography>
-          <Typography fontSize="25px" fontWeight="700">
+          <Typography textAlign="center" fontSize="25px" fontWeight="700">
             Crusaders deals, competitions and news
           </Typography>
-          <Typography fontSize="16px" fontWeight="600" mt="12px">
+          <Typography textAlign="center" fontSize="16px" fontWeight="600" mt="12px">
             Hear About New Products,
           </Typography>
-          <Typography fontSize="16px" fontWeight="600" mt="2px">
+          <Typography textAlign="center" fontSize="16px" fontWeight="600" mt="2px">
             Be Informed First About Promotions,
           </Typography>
-          <Typography fontSize="16px" fontWeight="600" mt="2px">
+          <Typography textAlign="center" fontSize="16px" fontWeight="600" mt="2px">
             Get Competition Info First
           </Typography>
         </Box>

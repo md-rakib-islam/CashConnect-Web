@@ -45,7 +45,7 @@ const CategorySectionHeader: React.FC<CategorySectionHeaderProps> = ({
           </a>
         </Link>
       )}
-      {categoryId && (<a onClick={() => {
+      {categoryId && (<a style={{ cursor: "pointer" }} onClick={() => {
         router.push({
           pathname: '/product/search/search_for',
           query: { categoryId: categoryId },

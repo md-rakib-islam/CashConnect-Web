@@ -36,59 +36,71 @@ const Products = () => {
       <DashboardPageHeader title="Products" iconName="delivery-box" />
 
       <Hidden down={769}>
-        <TableRow padding="0px 18px" mb="-0.125rem" boxShadow="none" bg="none">
-          <FlexBox my="0px" mx="6px" flex="2 2 0px !important">
-            <H5 ml="56px" color="text.muted" textAlign="left">
+        <TableRow padding="0px 0px" mb="-0.125rem" boxShadow="none" bg="none">
+
+          <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "flex-start", alignItems: "center", height: "36px", padding: "6px 0px" }}>
+            <H5 ml="70px" color="text.muted" textAlign="left">
               Name
             </H5>
-          </FlexBox>
-          <H5 color="text.muted" my="0px" mx="6px" textAlign="left">
-            Purchase#
-          </H5>
-          <H5 color="text.muted" my="0px" mx="6px" textAlign="center">
-            Date
-          </H5>
-          <H5 color="text.muted" my="0px" mx="6px" textAlign="center">
-            Stock
-          </H5>
-          <H5 color="text.muted" my="0px" mx="6px" textAlign="center">
-            Regular price
-          </H5>
-          <H5 color="text.muted" my="0px" mx="6px" textAlign="center">
-            Status
-          </H5>
+          </div>
+
+          <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "space-around" }}>
+            <H5 color="text.muted" my="0px" mx="6px" textAlign="left">
+              Purchase#
+            </H5>
+            <H5 color="text.muted" my="0px" mx="6px" textAlign="left">
+              Date
+            </H5>
+          </div>
+
+          <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "space-around" }}>
+            <H5 color="text.muted" my="0px" mx="6px" textAlign="center">
+              Stock
+            </H5>
+            <H5 color="text.muted" my="0px" mx="6px" textAlign="center">
+              Regular price
+            </H5>
+            <H5 color="text.muted" my="0px" mx="6px" textAlign="center">
+              Status
+            </H5>
+          </div>
         </TableRow>
       </Hidden>
 
       {productList.map((item) => (
-        <TableRow key={item?.id} as="a" href={item.href} my="1rem" padding="6px 18px">
-          <FlexBox alignItems="center" m="6px" flex="2 2 0px !important">
-            <Avatar src="/assets/images/products/imageshoes.png" size={36} />
-            <Typography textAlign="left" ml="20px">
+        <TableRow key={item?.id} as="a" href={item.href} my="1rem" padding="6px 0px">
+          <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "flex-start", alignItems: "center", height: "36px", padding: "6px 0px", flexBasis: "250px" }}>
+            <Avatar src="/assets/images/products/imageshoes.png" size={36} ml="20px" />
+            <Typography textAlign="center" ml="15px">
               {item?.name}
             </Typography>
-          </FlexBox>
-          <Typography textAlign="left" mx="6px">
-            {"100"}
-          </Typography>
-          <Typography textAlign="center" mx="6px">
-            {"10 oct. 2021"}
-          </Typography>
-          <H5
-            mx="6px"
-            textAlign="center"
-            fontWeight="600"
-            color={item.quantity < 6 ? "error.main" : "inherit"}
-          >
-            {item?.quantity?.toString()?.padStart(2, "0")}
-          </H5>
-          <H5 mx="6px" textAlign="center" fontWeight="400">
-            <Currency>{item.unit_price}</Currency>
-          </H5>
-          <Typography textAlign="center">
-            {/* {item?.name} */}
-            {"pending"}
-          </Typography>
+          </div>
+
+          <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "space-around", alignItems: "center", height: "36px", padding: "6px 0px", flexBasis: "250px" }}>
+            <Typography textAlign="left" mx="6px">
+              {"100"}
+            </Typography>
+            <Typography textAlign="center" mx="6px" flexWrap="nowrap">
+              {"10 oct. 2021"}
+            </Typography>
+          </div>
+          <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "space-around", alignItems: "center", height: "36px", padding: "6px 0px", flexBasis: "250px" }}>
+            <H5
+              mx="6px"
+              textAlign="center"
+              fontWeight="600"
+              color={item.quantity < 6 ? "error.main" : "inherit"}
+            >
+              {item?.quantity?.toString()?.padStart(2, "0")}
+            </H5>
+            <H5 mx="6px" textAlign="center" fontWeight="400">
+              <Currency>{item.unit_price}</Currency>
+            </H5>
+            <Typography textAlign="center">
+              {/* {item?.name} */}
+              {"pending"}
+            </Typography>
+          </div>
         </TableRow>
 
       ))}

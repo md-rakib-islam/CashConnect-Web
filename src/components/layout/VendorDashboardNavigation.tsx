@@ -49,7 +49,7 @@ const linkList = [
     count: 300,
   },
   {
-    href: "/vendor/add-product",
+    href: "/vendor/new-purchase",
     title: "New Purchase",
     iconName: "upload",
   },

@@ -2,7 +2,7 @@ import Section13 from "@component/home-1/Section13";
 import useFormattedProductData from "@customHook/useFormattedProductData";
 import { Brand_Featured, Category_Top_All, Category_With_Product_Brand, Category_Wth_Name_Img, Product_Arrival, Product_Discount, Product_Flash_Deals, Product_For_You, Product_Top_Rated, Slider_All } from "@data/constants";
 import axios from "axios";
-import { GetServerSideProps } from "next";
+import { GetStaticProps } from "next";
 import Section1 from "../components/home-1/Section1";
 import Section10 from "../components/home-1/Section10";
 import Section11 from "../components/home-1/Section11";
@@ -46,7 +46,7 @@ IndexPage.layout = AppLayout;
 
 export default IndexPage;
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
 
   try {
     var sliderRes = await axios.get(`${Slider_All}`)
@@ -140,6 +140,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
       categoriesList,
       moreForYouList,
       categoryWithProductBrandList,
-    }
+    },
+    revalidate: 10,
   }
 }

@@ -2,7 +2,7 @@
 //http://api.cashconnectbd.com
 
 //base url
-export const BASE_URL = "http://192.168.0.172:8001";
+export const BASE_URL = "http://api.cashconnectbd.com";
 
 //branch api
 export const Branch_All = `${BASE_URL}/branch/api/v1/branch/all/`;
@@ -69,7 +69,7 @@ export const Customer_Order_Pending_Details = `${BASE_URL}/customerorder/api/v1/
 
 export const Customer_order_Details_For_Status = `${BASE_URL}/customerorder/api/v1/customerorder/get_a_customer_order_detail_with_order_orderitem_shipping/`
 
-//login
+//login api
 export const LOGIN_URL = `${BASE_URL}/user/api/v1/user/login/`
 
 //order api
@@ -123,13 +123,16 @@ export const Role_All = `${BASE_URL}/roles/api/v1/roles/all/`;
 //site settings api
 export const Site_Setting_All = `${BASE_URL}/site_settings/api/v1/general_setting/all/`
 
-//shipping address
+//shipping address api
 export const Shipping_Adress_By_Order_Id = `${BASE_URL}/shippingaddress/api/v1/shippingaddress_using_order_id/`;
 
 export const Shipping_Address_Delete = `${BASE_URL}/shippingaddress/api/v1/shippingaddress/delete/`;
 
-//slider
+//slider api
 export const Slider_All = `${BASE_URL}/homepage_slider/api/v1/homepage_slider/all/`
+
+//stock api
+export const Check_Stock = `${BASE_URL}/inventory/api/v1/inventory/check_by_product_id/`
 
 //user api
 export const User_By_Id = `${BASE_URL}/user/api/v1/user/`
@@ -156,9 +159,6 @@ export const Vendor_Update = `${BASE_URL}/vendor/api/v1/vendor/update/`;
 
 export const Vendor_By_Id = `${BASE_URL}/vendor/api/v1/vendor/`;
 
-//stock
-
-export const Check_Stock = `${BASE_URL}/inventory/api/v1/inventory/check_by_product_id/`
 
 
 

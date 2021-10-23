@@ -1,13 +1,13 @@
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import VendorDashboardLayout from "@component/layout/VendorDashboardLayout";
-import VendorOrderList from "@component/orders/VendorOrderList";
+import VendorPurchaseList from "@component/orders/VendorPurchaseList";
 import React from "react";
 
 const Orders = () => {
   return (
     <div>
       <DashboardPageHeader title="Orders" iconName="bag_filled" />
-      <VendorOrderList />
+      <VendorPurchaseList />
     </div>
   );
 };
