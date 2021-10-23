@@ -141,6 +141,6 @@ export const getStaticProps: GetStaticProps = async () => {
       moreForYouList,
       categoryWithProductBrandList,
     },
-    revalidate: 10,
+    revalidate: 30,
   }
 }
