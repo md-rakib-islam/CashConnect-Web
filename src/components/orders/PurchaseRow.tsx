@@ -1,7 +1,7 @@
 
 import Currency from "@component/Currency";
 import useFormettedDate from "@customHook/useFormettedDate";
-import { order_Status_All } from "@data/constants";
+import { Purchase_Status_all } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -53,11 +53,8 @@ const PurchaseRow: React.FC<PurchaseRowProps> = ({ item }) => {
     }
 
     useEffect(() => {
-        axios.get(`${order_Status_All}`, authTOKEN).then((order_statuss) => {
-            console.log("purchase_status", order_statuss.data.orderstatuses);
-            console.log("ord_status", item.purchase_status);
-
-            setOrderStatus(order_statuss.data.orderstatuses);
+        axios.get(`${Purchase_Status_all}`, authTOKEN).then((order_statuss) => {
+            setOrderStatus(order_statuss?.data?.purchase_statuses);
         }).catch(() => { });
     }, []);
 

@@ -7,7 +7,7 @@ import Hidden from "@component/hidden/Hidden";
 import Icon from "@component/icon/Icon";
 import NavbarLayout from "@component/layout/NavbarLayout";
 import Radio from "@component/radio/Radio";
-import Select from "@component/Select";
+import  { CountryCodeSelect } from "@component/Select";
 import TextField from "@component/text-field/TextField";
 import Typography from "@component/Typography";
 import { useAppContext } from "@context/app/AppContext";
@@ -322,9 +322,9 @@ function onlineSell() {
 
             <Grid item md={6} xs={12}>
 
-              <div style={{ display: "flex" }}>
-                <Select
-                  mb="1rem"
+
+              <div style={{ display: "flex", alignItems: "flex-end" }}>
+                <CountryCodeSelect
                   mt="1.03rem"
                   label="Country"
                   width="40%"

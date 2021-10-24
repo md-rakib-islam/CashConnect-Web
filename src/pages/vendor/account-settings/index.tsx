@@ -7,7 +7,7 @@ import Hidden from "@component/hidden/Hidden";
 import Icon from "@component/icon/Icon";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import VendorDashboardLayout from "@component/layout/VendorDashboardLayout";
-import Select from "@component/Select";
+import Select, { CountryCodeSelect } from "@component/Select";
 import TextField from "@component/text-field/TextField";
 import { useAppContext } from "@context/app/AppContext";
 import useCheckValidation from "@customHook/useCheckValidation";
@@ -388,8 +388,8 @@ const AccountSettings = () => {
 
               <Grid item md={6} xs={12}>
 
-                <div style={{ display: "flex" }}>
-                  <Select
+                <div style={{ display: "flex", alignItems: "flex-end" }}>
+                  <CountryCodeSelect
                     mb="1rem"
                     mt="1rem"
                     label="Country"
@@ -408,6 +408,7 @@ const AccountSettings = () => {
                   />
                   <TextField
                     mt="1rem"
+                    mb="1rem"
                     name="primary_phone"
                     label="Primary Phone"
                     fullwidth
@@ -421,8 +422,8 @@ const AccountSettings = () => {
 
               <Grid item md={6} xs={12}>
 
-                <div style={{ display: "flex" }}>
-                  <Select
+                <div style={{ display: "flex", alignItems: "flex-end"  }}>
+                  <CountryCodeSelect
                     mb="1rem"
                     mt="1rem"
                     label="Country"
@@ -441,6 +442,7 @@ const AccountSettings = () => {
                   />
                   <TextField
                     mt="1rem"
+                    mb="1rem"
                     name="secondary_phone"
                     label="Secondary Phone"
                     fullwidth

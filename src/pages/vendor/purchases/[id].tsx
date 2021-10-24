@@ -25,7 +25,7 @@ const OrderDetails = () => {
   const [shippingFee, setShippingFee] = useState(0)
   const [discount, setDiscount] = useState(0)
   const [total, setTotal] = useState(0)
-  const [placedOn, _setPlacedOn] = useState("")
+  const [placedOn, setPlacedOn] = useState("")
   const [customerNote, setCustomerNote] = useState("")
   const [paymentMathod, setpaymentMathod] = useState("")
 
@@ -44,6 +44,8 @@ const OrderDetails = () => {
       setTotal(res?.data?.total_price)
       setShippingAddress(res?.data?.street_address)
       setCustomerNote(res?.data?.vendor_comment)
+      setCustomerNote(res?.data?.vendor_comment)
+      setPlacedOn(res?.data?.created_at)
 
       setShippingFee(0)
       setDiscount(0)
