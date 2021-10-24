@@ -1,6 +1,5 @@
 
 
-
 import Avatar from "@component/avatar/Avatar";
 import Box from "@component/Box";
 import Button from "@component/buttons/Button";
@@ -16,7 +15,8 @@ import TextField from "@component/text-field/TextField";
 import Typography from "@component/Typography";
 import { useAppContext } from "@context/app/AppContext";
 import useJsonToFormData from "@customHook/useJsonToFormData";
-import { Purshase_Create } from "@data/constants";
+import useUserInf from "@customHook/useUserInf";
+import { Purshase_Create, Vendor_By_Id } from "@data/constants";
 import { requred } from "@data/data";
 import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
@@ -55,10 +55,29 @@ function newPurchase() {
     console.log("images", images);
   }, [images]);
 
+  useEffect(() => {
+    const { user_id } = useUserInf()
+    axios.get(`${Vendor_By_Id}${user_id}`).then(res => {
+      console.log("vendorRes", res)
+      // first_name: "",
+      //   last_name: "",
+      //     contact_no: "+880",
+      //       email: "",
+        setFieldValue("first_name", res?.data?.first_name)
+        setFieldValue("last_name", res?.data?.last_name)
+        setFieldValue("email", res?.data?.email)
+        setFieldValue("contact_no", res?.data?.primary_phone)
+    })
+  }, [])
+
   //submit purchase data
   const handleFormSubmit = async (values) => {
 
     let purchaseData = {
+      first_name: values.first_name,
+      last_name: values.last_name,
+      contact_no: `${values.contact_no}`,
+      email: values.email,
       street_address: values.street_address,
       contact_type: contact_type,
       is_subscribed: isSubscribe,
@@ -86,7 +105,31 @@ function newPurchase() {
       .then((res) => {
         console.log("purchaserequestRes", res);
         setLoading(false)
-        router.push("/sell/youritems/success")
+        if (res?.data?.data?.purchase_request_items?.length) {
+          router.push("/vendor/new-purchase/success")
+        }
+        else if(res?.data?.user_exists){
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: `${values.email} is already exist`,
+              alerType: "warning",
+              alertShow: true,
+              alertChanged: Math.random()
+            }
+          })
+        }
+        else {
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: "someting went wrong",
+              alerType: "error",
+              alertShow: true,
+              alertChanged: Math.random()
+            }
+          })
+        }
       }).catch(() => {
         setLoading(false)
         dispatch({
@@ -186,6 +229,10 @@ function newPurchase() {
 
   var checkoutSchema = yup.object().shape({
     ...itemShema,
+    first_name: yup.string().required("required").nullable(requred),
+    last_name: yup.string().required("required").nullable(requred),
+    contact_no: yup.string().required("required").nullable(requred),
+    email: yup.string().email("invalid email").required("required").nullable(requred),
   });
 
   const {
@@ -201,7 +248,6 @@ function newPurchase() {
     validationSchema: checkoutSchema,
     onSubmit: handleFormSubmit,
   });
-
 
   return (
     <>
@@ -241,7 +287,7 @@ function newPurchase() {
       <Card p="30px">
 
         <form onSubmit={handleSubmit}>
-          {/* <Box
+          <Box
             mt="60px"
             py="60px"
             px="50px"
@@ -276,6 +322,7 @@ function newPurchase() {
                   onChange={handleChange}
                   value={values.first_name || ""}
                   errorText={touched.first_name && errors.first_name}
+                  readOnly
                 />
               </Grid>
 
@@ -285,6 +332,7 @@ function newPurchase() {
                   label="Last Name"
                   fullwidth
                   boxShadow
+                  readOnly
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.last_name || ""}
@@ -294,7 +342,7 @@ function newPurchase() {
 
               <Grid item md={6} xs={12}>
 
-                <div style={{ display: "flex" }}>
+                {/* <div style={{ display: "flex" }}>
                   <Select
                     mb="1rem"
                     mt="1.03rem"
@@ -303,6 +351,7 @@ function newPurchase() {
                     placeholder="Select Country"
                     getOptionLabelBy="label"
                     getOptionValueBy="value"
+                    readOnly
                     options={country_codes}
                     components={{ Option: CustomOption }}
                     value={values.country_code || null}
@@ -311,19 +360,20 @@ function newPurchase() {
                       setFieldValue("contact_no", `${value.value}`);
                     }}
                     errorText={touched.country_code && errors.country_code}
-                  />
+                  /> */}
                   <TextField
                     mt="1rem"
                     name="contact_no"
                     label="Contact Number"
                     fullwidth
                     boxShadow
+                    readOnly
                     onBlur={handleBlur}
                     onChange={handleChange}
                     value={values.contact_no || ""}
                     errorText={touched.contact_no && errors.contact_no}
                   />
-                </div>
+                {/* </div> */}
 
               </Grid>
 
@@ -335,6 +385,7 @@ function newPurchase() {
                   label="Email Address"
                   fullwidth
                   boxShadow
+                  readOnly
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.email || ""}
@@ -342,12 +393,11 @@ function newPurchase() {
                 />
               </Grid>
             </Grid>
-          </Box> */}
+          </Box>
 
           <Box
             mx={`${width < 950 || "20px"}`}
             pb="80px"
-            mt="30px"
             bg="#dcdcdc"
             boxShadow="0px -10px 10px #ababab"
             justifyContent="center"
@@ -710,12 +760,27 @@ function newPurchase() {
 }
 
 const initialValues = {
+  first_name: "",
+  last_name: "",
+  contact_no: "+880",
+  email: "",
   country_code: {
     code: "BD",
     label: "Bangladesh",
     value: "+880"
   },
 };
+
+// const CustomOption = ({ innerProps, isDisabled, data }) => {
+
+//   return !isDisabled ? (
+//     <div {...innerProps}
+//       style={{ cursor: "pointer", width: "180px" }}
+//     ><img src={`https://flagcdn.com/w20/${data.code.toLowerCase()}.png`}></img>
+//       {' ' + data.label}
+//     </div>
+//   ) : null;
+// }
 
 newPurchase.layout = VendorDashboardLayout;
 

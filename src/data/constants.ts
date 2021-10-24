@@ -2,7 +2,7 @@
 //http://api.cashconnectbd.com
 
 //base url
-export const BASE_URL = "http://api.cashconnectbd.com";
+export const BASE_URL = "http://192.168.0.172:8001";
 
 //branch api
 export const Branch_All = `${BASE_URL}/branch/api/v1/branch/all/`;
@@ -104,12 +104,13 @@ export const Product_Color_By_Product_Id = `${BASE_URL}/productcolor/api/v1/prod
 
 export const Product_Size_By_Product_Id = `${BASE_URL}/productsize/api/v1/productsize/get_by_product_id/`
 //purchase api
-export const Purshase_Create = `${BASE_URL}/purchase_request/api/v1/purchase_request/create_seller_purchase_request/`;
+export const Purshase_Create = `${BASE_URL}/purchase_request/api/v1/purchase_request/create_vendor_purchase_request/`;
 
-export const Purchase_All_By_Vendor_id = `${BASE_URL}/purchase_request/api/v1/purchase_request/all/`
+export const Purchase_All_By_Vendor_id = `${BASE_URL}/purchase_request/api/v1/purchase_request/get_all_by_vendor_id/`
 
-export const Purchase_Items_By_Purchase_Id = `${BASE_URL}/purchase_req_item/api/v1/purchase_req_item/all/`
+export const Purchase_Items_By_Purchase_Id = `${BASE_URL}/purchase_request/api/v1/purchase_request/get_all_purchase_request_items_with_images_by_purchase_request_id/`
 
+export const Purchase_Req_By_Id = `${BASE_URL}/purchase_request/api/v1/purchase_request/`
 
 
 //review_and_rating​ api

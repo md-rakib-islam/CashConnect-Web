@@ -86,7 +86,32 @@ function onlineSell() {
       .then((res) => {
         console.log("purchaserequestRes", res);
         setLoading(false)
-        router.push("/sell/youritems/success")
+        if (res?.data?.data?.purchase_request_items?.length) {
+          router.push("/sell/youritems/success")
+        }
+        else if(res?.data?.user_exists){
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: `${values.email} is already exist`,
+              alerType: "warning",
+              alertShow: true,
+              alertChanged: Math.random()
+            }
+          })
+        }
+        else {
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: "someting went wrong",
+              alerType: "error",
+              alertShow: true,
+              alertChanged: Math.random()
+            }
+          })
+        }
+
       }).catch(() => {
         setLoading(false)
         dispatch({

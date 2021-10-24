@@ -62,8 +62,6 @@ const PurchaseRow: React.FC<PurchaseRowProps> = ({ item }) => {
     }, []);
 
 
-    console.log("pursaheRow", item)
-
     return (
         <Link href={`/vendor/purchases/${item?.id}`}>
             <TableRow as="a" href={item.href} my="1rem" padding="6px 18px">
