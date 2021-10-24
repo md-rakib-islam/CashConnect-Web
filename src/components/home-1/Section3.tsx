@@ -59,7 +59,7 @@ const Section3 = ({ topCategoryList }) => {
       title="Top Categories"
       seeMoreLink="/product/search/view_all/top_category"
     >
-      <Carousel totalSlides={topCategoryLists.length} visibleSlides={visibleSlides} step={width} getMoreItem={getMoreItem}>
+      <Carousel totalSlides={topCategoryLists.length} visibleSlides={visibleSlides} step={visibleSlides} getMoreItem={getMoreItem}>
         {topCategoryLists.map((item) => (
           <Link href={`product/search/product_by_category?categoryId=${item?.id}`} key={item?.id}>
             <a>

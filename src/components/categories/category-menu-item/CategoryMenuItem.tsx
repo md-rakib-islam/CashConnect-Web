@@ -1,3 +1,4 @@
+import _ from "lodash";
 import Link from "next/link";
 import React from "react";
 import Icon from "../../icon/Icon";
@@ -8,26 +9,33 @@ interface CategoryMenuItemProps {
   icon?: string;
   title: string;
   caret?: boolean;
+  menuData?: any;
+  setIncreaseWidthMethod?: (action: any) => void
 }
 
 const CategoryMenuItem: React.FC<CategoryMenuItemProps> = ({
   href,
   icon,
   title,
-  caret,
+  menuData,
   children,
+  setIncreaseWidthMethod,
 }) => {
+  console.log("menuData", menuData)
+
   return (
+    <div onMouseOver={() => {!_.isEmpty(menuData?.categories) && setIncreaseWidthMethod(true)}} onMouseOut={() => {!_.isEmpty(menuData?.categories) && setIncreaseWidthMethod(false)}}>
     <StyledCategoryMenuItem>
       <Link href={href}>
         <div className="category-dropdown-link">
           {icon && <Icon variant="small" src={icon}></Icon>}
           <span className="title">{title}</span>
-          {caret && <Icon variant="small">chevron-right</Icon>}
+          {!_.isEmpty(menuData?.categories) && <Icon variant="small">chevron-right</Icon>}
         </div>
       </Link>
       {children}
     </StyledCategoryMenuItem>
+    </div>
   );
 };
 

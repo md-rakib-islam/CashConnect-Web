@@ -35,22 +35,17 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
       }).catch(() => { });
   }, []);
 
-  // const setIncreaseWidthMethod = (action) => {
-  //   setIncreaseWidth(action)
-  // }
+  const setIncreaseWidthMethod = (action) => {
+    setIncreaseWidth(action)
+  }
 
   console.log("formatedCategory", navigationData);
   return (
-    // <div style={{
-    //   width: "fit-content",
-    //   maxHeight: "460px",
-    //   overflow: "auto",
-    //   position: "absolute"
-    // }}>
-    <StyledCategoryDropdown open={open} position={position} increaseWidth={increaseWidth}>
+    <>
+    {!_.isEmpty(formattedCategoryData) && (<StyledCategoryDropdown open={open} position={position} increaseWidth={increaseWidth}>
       <div style={{ direction: "ltr" }}
-        onMouseOver={() => setIncreaseWidth(true)}
-        onMouseOut={() => setIncreaseWidth(false)}
+        // onMouseOver={() => setIncreaseWidth(true)}
+        // onMouseOut={() => setIncreaseWidth(false)}
       >
         {formattedCategoryData?.map((item, index) => {
           let MegaMenu = megaMenu[item.menuComponent];
@@ -60,17 +55,19 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
               title={item.title}
               href={item.href}
               icon={item.icon}
-              caret={!!item.menuData}
+              menuData={item.menuData}
               key={item.title}
             // setIncreaseWidth={setIncreaseWidthMethod}
+              setIncreaseWidthMethod={setIncreaseWidthMethod}
             >
               {!_.isEmpty(item.menuData?.categories) ? (<MegaMenu data={item.menuData} index={index} />) : null}
             </CategoryMenuItem>
           );
         })}
       </div>
-    </StyledCategoryDropdown>
-    // </div>
+    </StyledCategoryDropdown>)
+    }
+    </>
   );
 };
 
