@@ -101,7 +101,7 @@ const Products = () => {
               <Currency>{item.unit_price}</Currency>
             </H5>
             <div style={{minWidth: "80px"}}>
-            <Typography textAlign="center">
+            <Typography textAlign="center" mr="10px">
               {/* {item?.name} */}
               {item?.status? item?.status: "_"}
             </Typography>
