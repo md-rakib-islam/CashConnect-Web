@@ -46,13 +46,13 @@ const VendorOrderList: React.FC<VendorOrderListProps> = () => {
       <Hidden down={769}>
         <TableRow padding="0px 18px" boxShadow="none" bg="none">
           <H5 color="text.muted" my="0px" mx="6px" textAlign="left">
-            Purchase #
+            Sell #
           </H5>
           <H5 color="text.muted" my="0px" ml="12px" textAlign="left">
             Status
           </H5>
           <H5 color="text.muted" my="0px" mx="6px" textAlign="left">
-            Date purchased
+            Date
           </H5>
           <H5 color="text.muted" my="0px" mx="6px" textAlign="left">
             Total
@@ -76,11 +76,11 @@ const VendorOrderList: React.FC<VendorOrderListProps> = () => {
         alignItems="center"
         mt="32px"
       >
-        <SemiSpan>Showing <ShowingItemNumber initialNumber={10} totalItem={totalPurchase} /> of {totalPurchase} Purchases</SemiSpan>
+        <SemiSpan>Showing <ShowingItemNumber initialNumber={10} totalItem={totalPurchase} /> of {totalPurchase} sells</SemiSpan>
 
         <Pagination pageCount={totalPage} />
 
-        <PaginationRow product_per_page_option={product_per_page_options} name="Parchase" />
+        <PaginationRow product_per_page_option={product_per_page_options} name="sell" />
       </FlexBox>
     </Fragment>
   );

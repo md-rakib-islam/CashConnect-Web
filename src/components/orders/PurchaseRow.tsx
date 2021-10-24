@@ -60,7 +60,7 @@ const PurchaseRow: React.FC<PurchaseRowProps> = ({ item }) => {
 
 
     return (
-        <Link href={`/vendor/purchases/${item?.id}`}>
+        <Link href={`/vendor/sells/${item?.id}`}>
             <TableRow as="a" href={item.href} my="1rem" padding="6px 18px">
                 <H5 m="6px" textAlign="left">
                     {item.id}

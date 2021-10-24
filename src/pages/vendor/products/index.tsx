@@ -9,7 +9,9 @@ import PaginationRow from "@component/pagination/PaginationRow";
 import ShowingItemNumber from "@component/pagination/ShowingItemNumber";
 import TableRow from "@component/TableRow";
 import Typography, { H5, SemiSpan } from "@component/Typography";
-import { Purchase_Items_By_Purchase_Id } from "@data/constants";
+import useFormettedDate from "@customHook/useFormettedDate";
+import useUserInf from "@customHook/useUserInf";
+import { BASE_URL, Purchase_Products_By_Vendor_Id } from "@data/constants";
 import axios from "axios";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -23,9 +25,10 @@ const Products = () => {
   const { page, size } = router.query
 
   useEffect(() => {
-    axios.get(`${Purchase_Items_By_Purchase_Id}?size=${size || 10}&page=${page || 1}`).then(res => {
+    const {user_id, authTOKEN} = useUserInf()
+    axios.get(`${Purchase_Products_By_Vendor_Id}${user_id}?size=${size || 10}&page=${page || 1}`, authTOKEN).then(res => {
       console.log("Purchase_Items_By_Purchase_Id", res)
-      setProductList(res?.data?.purchase_req_items)
+      setProductList(res?.data?.purchase_request_items)
       setTotalPage(res?.data?.total_pages)
       setTotalProduct(res?.data?.total_elements)
     }).catch(() => { })
@@ -38,26 +41,26 @@ const Products = () => {
       <Hidden down={769}>
         <TableRow padding="0px 0px" mb="-0.125rem" boxShadow="none" bg="none">
 
-          <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "flex-start", alignItems: "center", height: "36px", padding: "6px 0px" }}>
+          <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "flex-start", alignItems: "center", height: "36px", padding: "6px 0px", flexBasis: "25%" }}>
             <H5 ml="70px" color="text.muted" textAlign="left">
               Name
             </H5>
           </div>
 
-          <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "space-around" }}>
-            <H5 color="text.muted" my="0px" mx="6px" textAlign="left">
-              Purchase#
+          <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "space-between", flexBasis: "25%" }}>
+            <H5 color="text.muted" my="0px" ml="30px" textAlign="left">
+              sell#
             </H5>
-            <H5 color="text.muted" my="0px" mx="6px" textAlign="left">
+            <H5 color="text.muted" my="0px" mr="50px" textAlign="left">
               Date
             </H5>
           </div>
 
-          <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "space-around" }}>
+          <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "space-around", flexBasis: "40%" }}>
             <H5 color="text.muted" my="0px" mx="6px" textAlign="center">
-              Stock
+            Quantity
             </H5>
-            <H5 color="text.muted" my="0px" mx="6px" textAlign="center">
+            <H5 color="text.muted" my="0px" mr="6px" textAlign="center">
               Regular price
             </H5>
             <H5 color="text.muted" my="0px" mx="6px" textAlign="center">
@@ -69,37 +72,40 @@ const Products = () => {
 
       {productList.map((item) => (
         <TableRow key={item?.id} as="a" href={item.href} my="1rem" padding="6px 0px">
-          <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "flex-start", alignItems: "center", height: "36px", padding: "6px 0px", flexBasis: "250px" }}>
-            <Avatar src="/assets/images/products/imageshoes.png" size={36} ml="20px" />
+          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "flex-start", alignItems: "center", minHeight: "36px", padding: "6px 0px", flexBasis: "25%" }}>
+            <Avatar src={`${BASE_URL}${item?.purchase_request_item_images[0]?.image}`} size={36} ml="20px" />
             <Typography textAlign="center" ml="15px">
               {item?.name}
+              {/* {item?.name && (item?.name?.length > 20? `${item?.name?.slice(0,20)}...` : item?.name)} */}
             </Typography>
           </div>
 
-          <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "space-around", alignItems: "center", height: "36px", padding: "6px 0px", flexBasis: "250px" }}>
-            <Typography textAlign="left" mx="6px">
-              {"100"}
+          <div style={{ display: "flex", flexWrap: "nowrap", flexDirection: "row", justifyContent: "space-between", alignItems: "center", minHeight: "36px", padding: "6px 0px", flexBasis: "25%" }}>
+            <Typography textAlign="left" ml="30px" mr="15px">
+              {item?.purchase_req}
             </Typography>
-            <Typography textAlign="center" mx="6px" flexWrap="nowrap">
-              {"10 oct. 2021"}
+            <Typography textAlign="center" mr="30px" flexWrap="nowrap">
+              {item?.created_at && useFormettedDate(item?.created_at)}
             </Typography>
           </div>
-          <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "space-around", alignItems: "center", height: "36px", padding: "6px 0px", flexBasis: "250px" }}>
+          <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "space-between", alignItems: "center", minHeight: "36px", padding: "6px 0px", flexBasis: "40%" }}>
             <H5
-              mx="6px"
+              ml="30px"
               textAlign="center"
               fontWeight="600"
               color={item.quantity < 6 ? "error.main" : "inherit"}
             >
               {item?.quantity?.toString()?.padStart(2, "0")}
             </H5>
-            <H5 mx="6px" textAlign="center" fontWeight="400">
+            <H5 ml="10px" textAlign="center" fontWeight="400">
               <Currency>{item.unit_price}</Currency>
             </H5>
+            <div style={{minWidth: "80px"}}>
             <Typography textAlign="center">
               {/* {item?.name} */}
-              {"pending"}
+              {item?.status? item?.status: "_"}
             </Typography>
+            </div>
           </div>
         </TableRow>
 

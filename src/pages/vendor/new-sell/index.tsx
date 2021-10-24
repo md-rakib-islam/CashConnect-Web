@@ -106,7 +106,7 @@ function newPurchase() {
         console.log("purchaserequestRes", res);
         setLoading(false)
         if (res?.data?.data?.purchase_request_items?.length) {
-          router.push("/vendor/new-purchase/success")
+          router.push("/vendor/new-sell/success")
         }
         else if(res?.data?.user_exists){
           dispatch({

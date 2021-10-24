@@ -18,7 +18,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
-const OrderDetails = () => {
+const SellDetails = () => {
   const [purchaseReqItems, setPurchaseReqItems] = useState([])
   const [shippingAddress, setShippingAddress] = useState("")
   const [subTotal, setSubTotal] = useState(0)
@@ -33,6 +33,7 @@ const OrderDetails = () => {
   const { id } = router.query;
 
   useEffect(() => {
+    if(id){
     axios.get(`${Purchase_Items_By_Purchase_Id}${id}`).then(res => {
       console.log("Purchase_Items_By_Purchase_Id", res)
       setPurchaseReqItems(res?.data?.purchase_request_items)
@@ -51,17 +52,18 @@ const OrderDetails = () => {
       setDiscount(0)
       setpaymentMathod("_")
     })
-  }, [])
+  }
+  }, [id])
 
   return (
     <div>
       <DashboardPageHeader
-        title="Order Details"
+        title="sell Details"
         iconName="bag_filled"
         button={
-          <Link href="/vendor/orders">
+          <Link href="/vendor/sells">
             <Button color="primary" bg="primary.light" px="2rem">
-              Back to Order List
+              Back to sell List
             </Button>
           </Link>
         }
@@ -76,7 +78,7 @@ const OrderDetails = () => {
             alignItems="center"
           >
             <Typography fontSize="14px" color="text.muted" mr="4px">
-              Purchase ID:
+              Sell ID:
             </Typography>
             <Typography fontSize="14px">{id}</Typography>
           </FlexBox>
@@ -89,7 +91,7 @@ const OrderDetails = () => {
             </Typography>
           </FlexBox>
           <Box maxWidth="160px">
-            <Select placeholder="Order Status" options={orderStatusList} />
+            <Select placeholder="Sell Status" options={sellStatusList} />
           </Box>
         </TableRow>
 
@@ -210,7 +212,7 @@ const OrderDetails = () => {
   );
 };
 
-const orderStatusList = [
+const sellStatusList = [
   {
     label: "Processing",
     value: "Processing",
@@ -228,6 +230,6 @@ const orderStatusList = [
     value: "Cancelled",
   },
 ];
-OrderDetails.layout = VendorDashboardLayout;
+SellDetails.layout = VendorDashboardLayout;
 
-export default OrderDetails;
+export default SellDetails;

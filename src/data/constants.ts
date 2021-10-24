@@ -114,6 +114,9 @@ export const Purchase_Items_By_Purchase_Id = `${BASE_URL}/purchase_request/api/v
 
 export const Purchase_Req_By_Id = `${BASE_URL}/purchase_request/api/v1/purchase_request/`
 
+export const Purchase_Products_By_Vendor_Id = `${BASE_URL}/purchase_request/api/v1/purchase_request/get_all_purchase_request_items_with_images_by_vendor_id/`
+
+
 //purchase status
 export const Purchase_Status_all = `${BASE_URL}/purchase_status/api/v1/purchase_status/all/`
 

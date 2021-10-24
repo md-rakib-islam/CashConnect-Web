@@ -49,13 +49,13 @@ const linkList = [
     count: 300,
   },
   {
-    href: "/vendor/new-purchase",
-    title: "New Purchase",
+    href: "/vendor/new-sell",
+    title: "New Sell",
     iconName: "upload",
   },
   {
-    href: "/vendor/purchases",
-    title: "Purchases",
+    href: "/vendor/sells",
+    title: "Sells",
     iconName: "shopping-cart",
     count: 40,
   },
