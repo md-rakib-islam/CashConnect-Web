@@ -8,7 +8,7 @@ import Hidden from "@component/hidden/Hidden";
 import Icon from "@component/icon/Icon";
 import DashboardLayout from "@component/layout/CustomerDashboardLayout";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
-import Select from "@component/Select";
+import Select, { CountryCodeSelect } from "@component/Select";
 import TextField from "@component/text-field/TextField";
 import { useAppContext } from "@context/app/AppContext";
 import useCheckValidation from "@customHook/useCheckValidation";
@@ -358,8 +358,8 @@ const ProfileEditor = ({
 
               <Grid item md={6} xs={12}>
 
-                <div style={{ display: "flex" }}>
-                  <Select
+                <div style={{ display: "flex", alignItems: "flex-end" }}>
+                  <CountryCodeSelect
                     mb="1rem"
                     mt="1rem"
                     label="Country"
@@ -378,6 +378,7 @@ const ProfileEditor = ({
                   />
                   <TextField
                     mt="1rem"
+                    mb="1rem"
                     name="primary_phone"
                     label="Primary Phone"
                     fullwidth
@@ -391,8 +392,8 @@ const ProfileEditor = ({
 
               <Grid item md={6} xs={12}>
 
-                <div style={{ display: "flex" }}>
-                  <Select
+                <div style={{ display: "flex", alignItems: "flex-end" }}>
+                  <CountryCodeSelect
                     mb="1rem"
                     mt="1rem"
                     label="Country"
@@ -411,6 +412,7 @@ const ProfileEditor = ({
                   />
                   <TextField
                     mt="1rem"
+                    mb="1rem"
                     name="secondary_phone"
                     label="Secondary Phone"
                     fullwidth

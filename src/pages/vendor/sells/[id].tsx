@@ -12,46 +12,58 @@ import Select from "@component/Select";
 import TableRow from "@component/TableRow";
 import Typography, { H5, H6, Paragraph } from "@component/Typography";
 import useFormettedDate from "@customHook/useFormettedDate";
-import { Purchase_Items_By_Purchase_Id } from "@data/constants";
+import { BASE_URL, Purchase_Items_By_Purchase_Id, Purchase_Req_By_Id } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
-const OrderDetails = () => {
+const SellDetails = () => {
   const [purchaseReqItems, setPurchaseReqItems] = useState([])
   const [shippingAddress, setShippingAddress] = useState("")
   const [subTotal, setSubTotal] = useState(0)
   const [shippingFee, setShippingFee] = useState(0)
   const [discount, setDiscount] = useState(0)
   const [total, setTotal] = useState(0)
-  const [placedOn, _setPlacedOn] = useState("")
-  const [customerNote, _setCustomerNote] = useState("")
+  const [placedOn, setPlacedOn] = useState("")
+  const [customerNote, setCustomerNote] = useState("")
+  const [paymentMathod, setpaymentMathod] = useState("")
 
   const router = useRouter();
   const { id } = router.query;
 
   useEffect(() => {
-    axios.get(`${Purchase_Items_By_Purchase_Id}`).then(res => {
+    if(id){
+    axios.get(`${Purchase_Items_By_Purchase_Id}${id}`).then(res => {
       console.log("Purchase_Items_By_Purchase_Id", res)
-      setPurchaseReqItems(res?.data?.purchase_req_items)
-      setShippingFee(100)
-      setSubTotal(100)
-      setShippingAddress("")
-      setDiscount(100)
-      setTotal(100)
+      setPurchaseReqItems(res?.data?.purchase_request_items)
     }).catch(() => { })
-  }, [])
+
+    axios.get(`${Purchase_Req_By_Id}${id}`).then(res => {
+      console.log("Purchaseres", res)
+      setSubTotal(res?.data?.total_price)
+      setTotal(res?.data?.total_price)
+      setShippingAddress(res?.data?.street_address)
+      setCustomerNote(res?.data?.vendor_comment)
+      setCustomerNote(res?.data?.vendor_comment)
+      setPlacedOn(res?.data?.created_at)
+
+      setShippingFee(0)
+      setDiscount(0)
+      setpaymentMathod("_")
+    })
+  }
+  }, [id])
 
   return (
     <div>
       <DashboardPageHeader
-        title="Order Details"
+        title="sell Details"
         iconName="bag_filled"
         button={
-          <Link href="/vendor/orders">
+          <Link href="/vendor/sells">
             <Button color="primary" bg="primary.light" px="2rem">
-              Back to Order List
+              Back to sell List
             </Button>
           </Link>
         }
@@ -66,7 +78,7 @@ const OrderDetails = () => {
             alignItems="center"
           >
             <Typography fontSize="14px" color="text.muted" mr="4px">
-              Purchase ID:
+              Sell ID:
             </Typography>
             <Typography fontSize="14px">{id}</Typography>
           </FlexBox>
@@ -79,7 +91,7 @@ const OrderDetails = () => {
             </Typography>
           </FlexBox>
           <Box maxWidth="160px">
-            <Select placeholder="Order Status" options={orderStatusList} />
+            <Select placeholder="Sell Status" options={sellStatusList} />
           </Box>
         </TableRow>
 
@@ -97,7 +109,7 @@ const OrderDetails = () => {
               key={item?.id}
             >
               <FlexBox flex="2 2 260px" m="6px" alignItems="center">
-                <Avatar src="/assets/images/products/imagetree.png" size={64} />
+                <Avatar src={`${BASE_URL}${item?.purchase_request_item_images[0]?.image}`} size={64} />
                 <Box ml="20px">
                   <H6 my="0px">{item?.name}</H6>
                   <FlexBox alignItems="center">
@@ -109,7 +121,7 @@ const OrderDetails = () => {
               </FlexBox>
               <FlexBox flex="1 1 260px" m="6px" alignItems="center">
                 <Typography fontSize="14px" color="text.muted">
-                  Product properties: Black, L
+                  Product properties: _, _
                 </Typography>
               </FlexBox>
               {/* <FlexBox flex="0 0 0 !important" m="6px" alignItems="center">
@@ -188,7 +200,7 @@ const OrderDetails = () => {
               <H6 my="0px">Total</H6>
               <H6 my="0px">{total ? (<Currency>{total}</Currency>) : "-"}</H6>
             </FlexBox>
-            <Typography fontSize="14px">Paid by Credit/Debit Card</Typography>
+            <Typography fontSize="14px">Paid by {paymentMathod}</Typography>
           </Card>
 
           <Button variant="contained" color="primary" ml="auto">
@@ -200,7 +212,7 @@ const OrderDetails = () => {
   );
 };
 
-const orderStatusList = [
+const sellStatusList = [
   {
     label: "Processing",
     value: "Processing",
@@ -218,6 +230,6 @@ const orderStatusList = [
     value: "Cancelled",
   },
 ];
-OrderDetails.layout = VendorDashboardLayout;
+SellDetails.layout = VendorDashboardLayout;
 
-export default OrderDetails;
+export default SellDetails;

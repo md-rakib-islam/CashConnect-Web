@@ -7,7 +7,7 @@ import Hidden from "@component/hidden/Hidden";
 import Icon from "@component/icon/Icon";
 import NavbarLayout from "@component/layout/NavbarLayout";
 import Radio from "@component/radio/Radio";
-import Select from "@component/Select";
+import  { CountryCodeSelect } from "@component/Select";
 import TextField from "@component/text-field/TextField";
 import Typography from "@component/Typography";
 import { useAppContext } from "@context/app/AppContext";
@@ -86,7 +86,32 @@ function onlineSell() {
       .then((res) => {
         console.log("purchaserequestRes", res);
         setLoading(false)
-        router.push("/sell/youritems/success")
+        if (res?.data?.data?.purchase_request_items?.length) {
+          router.push("/sell/youritems/success")
+        }
+        else if(res?.data?.user_exists){
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: `${values.email} is already exist`,
+              alerType: "warning",
+              alertShow: true,
+              alertChanged: Math.random()
+            }
+          })
+        }
+        else {
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: "someting went wrong",
+              alerType: "error",
+              alertShow: true,
+              alertChanged: Math.random()
+            }
+          })
+        }
+
       }).catch(() => {
         setLoading(false)
         dispatch({
@@ -297,9 +322,9 @@ function onlineSell() {
 
             <Grid item md={6} xs={12}>
 
-              <div style={{ display: "flex" }}>
-                <Select
-                  mb="1rem"
+
+              <div style={{ display: "flex", alignItems: "flex-end" }}>
+                <CountryCodeSelect
                   mt="1.03rem"
                   label="Country"
                   width="40%"

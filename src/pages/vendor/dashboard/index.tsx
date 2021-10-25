@@ -22,7 +22,9 @@ const VendorDashboard = () => {
                 {item.title}
               </H5>
               <H1 color="gray.700" mb="4px" lineHeight="1.3">
+                <div style={{display: "flex", justifyContent: "center"}}>
                 <Currency>{item.amount}</Currency>
+                </div>
               </H1>
               <Paragraph color="text.muted">{item.subtitle}</Paragraph>
             </Typography>
@@ -50,7 +52,7 @@ const VendorDashboard = () => {
                   <Avatar src={item.flagUrl} size={30} mr="8px" />
                   <span>{item.name}</span>
                 </FlexBox>
-                <H5>${item.amount}</H5>
+                <H5><Currency>{item.amount}</Currency></H5>
               </FlexBox>
             ))}
           </Card>

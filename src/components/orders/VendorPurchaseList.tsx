@@ -1,5 +1,6 @@
 import PaginationRow from "@component/pagination/PaginationRow";
 import ShowingItemNumber from "@component/pagination/ShowingItemNumber";
+import useUserInf from "@customHook/useUserInf";
 import { Purchase_All_By_Vendor_id } from "@data/constants";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -22,8 +23,10 @@ const VendorOrderList: React.FC<VendorOrderListProps> = () => {
   const router = useRouter()
   const { page, size } = router.query
 
+  const { user_id } = useUserInf()
+
   useEffect(() => {
-    axios.get(`${Purchase_All_By_Vendor_id}?size=${size || 10}&page=${page || 1}`).then(res => {
+    axios.get(`${Purchase_All_By_Vendor_id}${user_id}?size=${size || 10}&page=${page || 1}`).then(res => {
       console.log("purchaseAll", res)
       setPurchaseList(res?.data?.purchaserequests)
       setTotalPurchase(res?.data?.total_elements)
@@ -43,13 +46,13 @@ const VendorOrderList: React.FC<VendorOrderListProps> = () => {
       <Hidden down={769}>
         <TableRow padding="0px 18px" boxShadow="none" bg="none">
           <H5 color="text.muted" my="0px" mx="6px" textAlign="left">
-            Purchase #
+            Sell #
           </H5>
-          <H5 color="text.muted" my="0px" mx="6px" textAlign="left">
+          <H5 color="text.muted" my="0px" ml="12px" textAlign="left">
             Status
           </H5>
           <H5 color="text.muted" my="0px" mx="6px" textAlign="left">
-            Date purchased
+            Date
           </H5>
           <H5 color="text.muted" my="0px" mx="6px" textAlign="left">
             Total
@@ -73,11 +76,11 @@ const VendorOrderList: React.FC<VendorOrderListProps> = () => {
         alignItems="center"
         mt="32px"
       >
-        <SemiSpan>Showing <ShowingItemNumber initialNumber={10} totalItem={totalPurchase} /> of {totalPurchase} Purchases</SemiSpan>
+        <SemiSpan>Showing <ShowingItemNumber initialNumber={10} totalItem={totalPurchase} /> of {totalPurchase} sells</SemiSpan>
 
         <Pagination pageCount={totalPage} />
 
-        <PaginationRow product_per_page_option={product_per_page_options} name="Parchase" />
+        <PaginationRow product_per_page_option={product_per_page_options} name="sell" />
       </FlexBox>
     </Fragment>
   );

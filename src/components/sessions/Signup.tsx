@@ -1,6 +1,6 @@
 import Alert from "@component/alert/alert";
 import LoginPopup from "@component/LoginPopup";
-import Select from "@component/Select";
+import { CountryCodeSelect } from "@component/Select";
 import { useAppContext } from "@context/app/AppContext";
 import useCheckValidation from "@customHook/useCheckValidation";
 import { Customer_Create, Vendor_Create } from "@data/constants";
@@ -294,9 +294,9 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             errorText={touched.email && errors.email}
           />
 
-          <div style={{ display: "flex" }}>
-            <Select
-              mb="1rem"
+          <div style={{ display: "flex", alignItems: "flex-end" }}>
+            <CountryCodeSelect
+            mb="0.75rem"
               mt="1rem"
               label="Country"
               width="40%"

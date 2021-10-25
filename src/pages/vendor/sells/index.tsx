@@ -6,7 +6,7 @@ import React from "react";
 const Orders = () => {
   return (
     <div>
-      <DashboardPageHeader title="Orders" iconName="bag_filled" />
+      <DashboardPageHeader title="Sells" iconName="bag_filled" />
       <VendorPurchaseList />
     </div>
   );
