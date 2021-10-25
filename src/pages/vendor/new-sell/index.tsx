@@ -63,10 +63,10 @@ function newPurchase() {
       //   last_name: "",
       //     contact_no: "+880",
       //       email: "",
-        setFieldValue("first_name", res?.data?.first_name)
-        setFieldValue("last_name", res?.data?.last_name)
-        setFieldValue("email", res?.data?.email)
-        setFieldValue("contact_no", res?.data?.primary_phone)
+      setFieldValue("first_name", res?.data?.first_name)
+      setFieldValue("last_name", res?.data?.last_name)
+      setFieldValue("email", res?.data?.email)
+      setFieldValue("contact_no", res?.data?.primary_phone)
     })
   }, [])
 
@@ -108,7 +108,7 @@ function newPurchase() {
         if (res?.data?.data?.purchase_request_items?.length) {
           router.push("/vendor/new-sell/success")
         }
-        else if(res?.data?.user_exists){
+        else if (res?.data?.user_exists) {
           dispatch({
             type: "CHANGE_ALERT",
             payload: {
@@ -322,6 +322,7 @@ function newPurchase() {
                   onChange={handleChange}
                   value={values.first_name || ""}
                   errorText={touched.first_name && errors.first_name}
+                  style={{ cursor: "no-drop" }}
                   readOnly
                 />
               </Grid>
@@ -337,6 +338,7 @@ function newPurchase() {
                   onChange={handleChange}
                   value={values.last_name || ""}
                   errorText={touched.last_name && errors.last_name}
+                  style={{ cursor: "no-drop" }}
                 />
               </Grid>
 
@@ -361,18 +363,19 @@ function newPurchase() {
                     }}
                     errorText={touched.country_code && errors.country_code}
                   /> */}
-                  <TextField
-                    mt="1rem"
-                    name="contact_no"
-                    label="Contact Number"
-                    fullwidth
-                    boxShadow
-                    readOnly
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.contact_no || ""}
-                    errorText={touched.contact_no && errors.contact_no}
-                  />
+                <TextField
+                  mt="1rem"
+                  name="contact_no"
+                  label="Contact Number"
+                  fullwidth
+                  boxShadow
+                  readOnly
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.contact_no || ""}
+                  errorText={touched.contact_no && errors.contact_no}
+                  style={{ cursor: "no-drop" }}
+                />
                 {/* </div> */}
 
               </Grid>
@@ -390,6 +393,7 @@ function newPurchase() {
                   onChange={handleChange}
                   value={values.email || ""}
                   errorText={touched.email && errors.email}
+                  style={{ cursor: "no-drop" }}
                 />
               </Grid>
             </Grid>

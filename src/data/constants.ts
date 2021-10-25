@@ -130,7 +130,7 @@ export const Review_By_Product_Id = `${BASE_URL}/review_and_rating/api/v1/all_re
 export const Role_All = `${BASE_URL}/roles/api/v1/roles/all/`;
 
 //site settings api
-export const Site_Setting_All = `${BASE_URL}/site_settings/api/v1/general_setting/all/`
+export const Site_Setting_All = `${BASE_URL}/general_setting/api/v1/general_setting/all/`
 
 //shipping address api
 export const Shipping_Adress_By_Order_Id = `${BASE_URL}/shippingaddress/api/v1/shippingaddress_using_order_id/`;
@@ -142,6 +142,13 @@ export const Slider_All = `${BASE_URL}/homepage_slider/api/v1/homepage_slider/al
 
 //stock api
 export const Check_Stock = `${BASE_URL}/inventory/api/v1/inventory/check_by_product_id/`
+
+//ticket api
+export const Ticket_Create = `${BASE_URL}/ticket/api/v1/ticket/create/`
+
+export const Ticket_Department_All = `${BASE_URL}/ticket_department/api/v1/ticket_department/all/`
+
+export const Ticket_Priority_All = `${BASE_URL}/ticket_priority/api/v1/ticket_priority/all/`
 
 //user api
 export const User_By_Id = `${BASE_URL}/user/api/v1/user/`

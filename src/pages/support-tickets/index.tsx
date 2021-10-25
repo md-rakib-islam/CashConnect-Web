@@ -1,3 +1,4 @@
+import Button from "@component/buttons/Button";
 import IconButton from "@component/buttons/IconButton";
 import { Chip } from "@component/Chip";
 import FlexBox from "@component/FlexBox";
@@ -15,7 +16,16 @@ import React from "react";
 const TicketList = () => {
   return (
     <div>
-      <DashboardPageHeader title="Support Ticket" iconName="support" />
+      <DashboardPageHeader title="Support Ticket" iconName="support"
+        button={
+          <Link href="/open-ticket">
+            <a>
+              <Button color="primary" bg="primary.light" px="2rem">
+                Open Ticket
+              </Button>
+            </a>
+          </Link>
+        } />
 
       {[1, 2, 3].map((item) => (
         <Link href="/support-tickets/xkssThds6h37sd" key={item}>
