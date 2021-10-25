@@ -9,6 +9,7 @@ import Select from '@component/Select';
 import TextField from "@component/text-field/TextField";
 import TextArea from "@component/textarea/TextArea";
 import Typography from '@component/Typography';
+import { useAppContext } from '@context/app/AppContext';
 import useJsonToFormData from '@customHook/useJsonToFormData';
 import useUserInf from '@customHook/useUserInf';
 import { Ticket_Create, Ticket_Department_All, Ticket_Priority_All, User_By_Id } from '@data/constants';
@@ -24,8 +25,11 @@ function OpenTicket() {
     const [departmets, setDepartmets] = useState([])
     const [priorities, setPriorities] = useState([])
     const [isValidCapha, setIsValidCapha] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     const { user_id, authTOKEN } = useUserInf()
+
+    const { dispatch } = useAppContext()
 
     const handleFormSubmit = async (values) => {
         if (isValidCapha) {
@@ -38,11 +42,47 @@ function OpenTicket() {
             }
             const [ticketFormData] = useJsonToFormData(data)
 
+            setLoading(true)
+
             axios.post(`${Ticket_Create}`, ticketFormData, authTOKEN).then(res => {
                 console.log("ticketRes", res)
+                setLoading(false)
+                if (res?.data?.id) {
+                    dispatch({
+                        type: "CHANGE_ALERT",
+                        payload: {
+                            alertValue: "success...",
+                            alerType: "success",
+                            alertShow: true,
+                            alertChanged: Math.random()
+                        }
+                    })
+                }
+                else {
+                    dispatch({
+                        type: "CHANGE_ALERT",
+                        payload: {
+                            alertValue: "something went wrong",
+                            alerType: "error",
+                            alertShow: true,
+                            alertChanged: Math.random()
+                        }
+                    })
+                }
 
+            }).catch(() => {
+                setLoading(false)
+                dispatch({
+                    type: "CHANGE_ALERT",
+                    payload: {
+                        alertValue: "something went wrong",
+                        alerType: "error",
+                        alertShow: true,
+                        alertChanged: Math.random()
+                    }
+                })
+                console.log("data", data);
             })
-            console.log("data", data);
         }
     };
 
@@ -83,6 +123,27 @@ function OpenTicket() {
 
     return (
         <>
+            {loading && (
+                <div style={{
+                    position: 'fixed',
+                    height: '100%',
+                    width: '100%',
+                    top: '0px',
+                    left: '0px',
+                    display: 'flex',
+                    justifyContent: "center",
+                    backgroundColor: " rgb(0 0 0 / 50%)",
+                    alignItems: "center",
+                    zIndex: 100,
+                }}>
+                    <img style={{
+                        height: "50px",
+                        width: "50px",
+                        marginTop: "100pz"
+                    }}
+                        src="/assets/images/gif/loading.gif" />
+                </div>
+            )}
             <DashboardPageHeader title="Open Ticket" iconName="support"
                 button={
                     <Link href="/support-tickets">

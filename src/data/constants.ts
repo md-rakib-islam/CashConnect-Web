@@ -150,6 +150,10 @@ export const Ticket_Department_All = `${BASE_URL}/ticket_department/api/v1/ticke
 
 export const Ticket_Priority_All = `${BASE_URL}/ticket_priority/api/v1/ticket_priority/all/`
 
+export const Ticket_Status_All = `${BASE_URL}/ticket_status/api/v1/ticket_status/all/`
+
+export const Ticket_By_User_Id = `${BASE_URL}/ticket/api/v1/ticket/get_all_by_user_id/`
+
 //user api
 export const User_By_Id = `${BASE_URL}/user/api/v1/user/`
 

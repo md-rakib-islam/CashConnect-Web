@@ -7,13 +7,51 @@ import Icon from "@component/icon/Icon";
 import DashboardLayout from "@component/layout/CustomerDashboardLayout";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import Pagination from "@component/pagination/Pagination";
+import PaginationRow from "@component/pagination/PaginationRow";
+import ShowingItemNumber from "@component/pagination/ShowingItemNumber";
 import TableRow from "@component/TableRow";
 import Typography, { SemiSpan, Small } from "@component/Typography";
-import { format } from "date-fns";
+import useFormettedDate from "@customHook/useFormettedDate";
+import useUserInf from "@customHook/useUserInf";
+import { Ticket_By_User_Id, Ticket_Priority_All, Ticket_Status_All } from "@data/constants";
+import axios from "axios";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 
 const TicketList = () => {
+
+  const [tickets, setTickets] = useState([])
+  const [priorities, setPriorities] = useState([])
+  const [statuss, setStatuss] = useState([])
+  const [totalPage, setTotalPage] = useState(0)
+  const [totalTicket, setTotalTicket] = useState(0)
+
+  const { user_id } = useUserInf()
+
+  useEffect(() => {
+    axios.get(`${Ticket_Priority_All}`).then(res => {
+      setPriorities(res?.data?.ticket_priorities)
+    })
+    axios.get(`${Ticket_Status_All}`).then(res => {
+      console.log("ticket_Status_Res", res)
+      setStatuss(res?.data?.ticket_statuses)
+    })
+  }, [])
+
+  const router = useRouter()
+
+  const { page, size } = router.query
+
+  useEffect(() => {
+    axios.get(`${Ticket_By_User_Id}${user_id}?page=${page || 1}&size=${size || 10}`).then(res => {
+      console.log("ticketRes", res)
+      setTickets(res?.data?.tickets)
+      setTotalPage(res?.data?.total_pages)
+      setTotalTicket(res?.data?.total_elements)
+    })
+  }, [page, size])
+
   return (
     <div>
       <DashboardPageHeader title="Support Ticket" iconName="support"
@@ -27,25 +65,25 @@ const TicketList = () => {
           </Link>
         } />
 
-      {[1, 2, 3].map((item) => (
-        <Link href="/support-tickets/xkssThds6h37sd" key={item}>
+      {tickets.map((item) => (
+        <Link href={`/support-tickets/${item?.id}`} key={item?.id}>
           <TableRow
             as="a"
-            href="/support-tickets/xkssThds6h37sd"
+            href={`/support-tickets/${item?.id}`}
             my="1rem"
             padding="15px 24px"
           >
             <div>
-              <span>My product is broken. I need refund</span>
+              <span>{item?.subject}</span>
               <FlexBox alignItems="center" flexWrap="wrap" pt="0.5rem" m="-6px">
                 <Chip p="0.25rem 1rem" bg="primary.light" m="6px">
-                  <Small color="primary.main">Urgent</Small>
+                  <Small color="primary.main">{priorities.find((data) => data?.id == item?.ticket_priority)?.name}</Small>
                 </Chip>
                 <Chip p="0.25rem 1rem" bg="success.light" m="6px">
-                  <Small color="success.main">Open</Small>
+                  <Small color="success.main">{statuss.find((data) => data?.id == item?.ticket_status)?.name}</Small>
                 </Chip>
                 <SemiSpan className="pre" m="6px">
-                  {format(new Date("2020/10/12"), "MMM dd, yyyy")}
+                  {useFormettedDate(item?.created_at)}
                 </SemiSpan>
                 <SemiSpan m="6px">Website Problem</SemiSpan>
               </FlexBox>
@@ -64,17 +102,27 @@ const TicketList = () => {
         </Link>
       ))}
 
-      <FlexBox justifyContent="center" mt="2.5rem">
-        <Pagination
-          pageCount={5}
-          onChange={(data) => {
-            console.log(data.selected);
-          }}
-        />
+      <FlexBox
+        flexWrap="wrap"
+        justifyContent="space-around"
+        alignItems="center"
+        mt="32px"
+      >
+        <SemiSpan>Showing <ShowingItemNumber initialNumber={10} totalItem={totalTicket} /> of {totalTicket} Tickets</SemiSpan>
+
+        <Pagination pageCount={totalPage} />
+
+        <PaginationRow product_per_page_option={product_per_page_options} name="Ticket" />
       </FlexBox>
     </div>
   );
 };
+
+const product_per_page_options = [
+  { id: 10, name: 10 },
+  { id: 30, name: 30 },
+  { id: 50, name: 50 },
+]
 
 TicketList.layout = DashboardLayout;
 
