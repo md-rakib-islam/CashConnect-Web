@@ -52,7 +52,7 @@ const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
         setTotalOrder(orders?.data?.total_elements);
         setTotalPage(orders?.data?.total_pages);
         console.log("Orders", orders?.data?.orders);
-      }).catch(() => { });
+      }).catch((err) => { console.log("error", err) });
   }, [user_id, size, page]);
 
   console.log("ordersList", ordersList);

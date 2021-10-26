@@ -70,7 +70,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                     prductId: product?.product?.id,
                   },
                 });
-              }).catch(() => { });
+              }).catch((err) => { console.log("error", err) });
 
           } else if (action == "increase") {
             axios
@@ -81,7 +81,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                   type: "CHANGE_CART_QUANTITY",
                   payload: { chartQuantity: Math.random(), prductId: product?.product?.id, },
                 });
-              }).catch(() => { });
+              }).catch((err) => { console.log("error", err) });
 
           } else if (action == "decrease") {
             axios
@@ -92,7 +92,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                   type: "CHANGE_CART_QUANTITY",
                   payload: { chartQuantity: Math.random(), prductId: product?.product?.id, },
                 });
-              }).catch(() => { });
+              }).catch((err) => { console.log("error", err) });
           }
 
         }
@@ -121,7 +121,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
       axios.get(`${Customer_Order_Pending_Details}${order_Id}`).then((res) => {
         setCartProductList(res.data.order.order_items);
         console.log("miniCartLisdt", res.data.order.order_items);
-      }).catch(() => { });
+      }).catch((err) => { console.log("error", err) });
     }
   }, [reloadCart]);
 

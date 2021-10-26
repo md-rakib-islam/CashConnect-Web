@@ -76,7 +76,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
       let Categoriess = res.data.categories
       Categoriess?.unshift({ id: 0, name: "All Categories" })
       setCategories(Categoriess)
-    }).catch(() => { })
+    }).catch((err) => { console.log("error", err) })
 
     window.addEventListener("click", handleDocumentClick);
     return () => {

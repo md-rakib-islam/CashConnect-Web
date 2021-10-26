@@ -31,7 +31,7 @@ const VendorOrderList: React.FC<VendorOrderListProps> = () => {
       setPurchaseList(res?.data?.purchaserequests)
       setTotalPurchase(res?.data?.total_elements)
       setTotalPage(res?.data?.total_pages)
-    }).catch(() => { })
+    }).catch((err) => { console.log("error", err) })
   }, [size, page])
 
   const product_per_page_options = [

@@ -56,7 +56,7 @@ const OrderRow: React.FC<OrderRowProps> = ({ item }) => {
       console.log("ord_status", item.order_status);
 
       setOrderStatus(order_statuss.data.orderstatuses);
-    }).catch(() => { });
+    }).catch((err) => { console.log("error", err) });
   }, []);
 
   return (

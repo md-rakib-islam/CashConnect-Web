@@ -69,7 +69,7 @@ const CheckoutForm = () => {
             console.log("shipingRes", res);
             router.push("/payment");
           })
-          .catch(() => { })
+          .catch((err) => { console.log("error", err) })
       }
       // else if (shippingId) {
       //   const authTOKEN = {
@@ -83,7 +83,7 @@ const CheckoutForm = () => {
       //     .then((res) => {
       //       console.log("shppingDeleteRes", res);
       //       router.push("/payment");
-      //     }).catch(() => { })
+      //     }).catch((err) => {console.log("error", err)})
       // } 
       else {
         axios
@@ -127,26 +127,26 @@ const CheckoutForm = () => {
             setFieldValue(`${key}`, data[key]);
           }
         }
-      }).catch(() => { })
+      }).catch((err) => { console.log("error", err) })
     }
 
     fetch(`${City_All}`)
       .then((res) => res.json())
       .then((data) => {
         setCities(data.cities);
-      }).catch(() => { });
+      }).catch((err) => { console.log("error", err) });
 
     fetch(`${Thana_All}`)
       .then((res) => res.json())
       .then((data) => {
         setThanas(data.thanas);
-      }).catch(() => { });
+      }).catch((err) => { console.log("error", err) });
 
     fetch(`${Country_All}`)
       .then((res) => res.json())
       .then((data) => {
         setCountries(data.countries);
-      }).catch(() => { });
+      }).catch((err) => { console.log("error", err) });
   }, []);
 
   if (sameAsProfile) {

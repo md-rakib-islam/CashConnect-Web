@@ -94,17 +94,17 @@ function OpenTicket() {
             console.log("userInf", res)
             setFieldValue("name", `${res?.data?.first_name}${' '}${res?.data?.last_name}`)
             setFieldValue("email", res?.data?.email)
-        }).catch(() => { })
+        }).catch((err) => { console.log("error", err) })
 
         axios.get(`${Ticket_Department_All}`).then(res => {
             console.log("departmets", res)
             setDepartmets(res?.data?.ticket_departments)
-        }).catch(() => { })
+        }).catch((err) => { console.log("error", err) })
 
         axios.get(`${Ticket_Priority_All}`).then(res => {
             console.log("priorities", res)
             setPriorities(res?.data?.ticket_priorities)
-        }).catch(() => { })
+        }).catch((err) => { console.log("error", err) })
     }, [])
 
 

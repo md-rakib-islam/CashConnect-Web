@@ -37,7 +37,7 @@ const SellDetails = () => {
       axios.get(`${Purchase_Items_By_Purchase_Id}${id}`).then(res => {
         console.log("Purchase_Items_By_Purchase_Id", res)
         setPurchaseReqItems(res?.data?.purchase_request_items)
-      }).catch(() => { })
+      }).catch((err) => { console.log("error", err) })
 
       axios.get(`${Purchase_Req_By_Id}${id}`).then(res => {
         console.log("Purchaseres", res)

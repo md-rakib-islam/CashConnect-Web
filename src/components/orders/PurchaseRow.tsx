@@ -55,7 +55,7 @@ const PurchaseRow: React.FC<PurchaseRowProps> = ({ item }) => {
     useEffect(() => {
         axios.get(`${Purchase_Status_all}`, authTOKEN).then((order_statuss) => {
             setOrderStatus(order_statuss?.data?.purchase_statuses);
-        }).catch(() => { });
+        }).catch((err) => { console.log("error", err) });
     }, []);
 
 

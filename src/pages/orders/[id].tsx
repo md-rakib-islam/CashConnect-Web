@@ -60,7 +60,7 @@ const OrderDetails = () => {
         setDeliveredOn(res.data.order?.delivered_at)
         setPlacedOn(res.data.order?.created_at)
         setshippingAddress(res.data.order?.shipping_address?.street_address)
-      }).catch(() => { });
+      }).catch((err) => { console.log("error", err) });
     }
   }, [order_id]);
 

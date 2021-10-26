@@ -32,7 +32,7 @@ const ProductComment: React.FC<ProductCommentProps> = ({
       const { first_name, last_name, image } = userEes
       setUserName(`${first_name} ${last_name}`)
       setUserImg(image)
-    }).catch(() => { })
+    }).catch((err) => { console.log("error", err) })
   }, [])
   return (
     <Box mb="32px" maxWidth="600px">

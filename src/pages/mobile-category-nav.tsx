@@ -32,7 +32,7 @@ const MobileCategoryNav = () => {
       .then((data) => {
         console.log("category", data.categories);
         setNavigationData(data.categories);
-      }).catch(() => { });
+      }).catch((err) => { console.log("error", err) });
   }, []);
 
   console.log("mobileCategory", navigationData)
@@ -48,7 +48,7 @@ const MobileCategoryNav = () => {
   useEffect(() => {
     axios.get(`${Category_Top_All}?page=${1}&size=${6}`).then(res => {
       setSuggestedList(res.data?.categories);
-    }).catch(() => { })
+    }).catch((err) => { console.log("error", err) })
   }, []);
 
   return (

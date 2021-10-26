@@ -34,7 +34,7 @@ const Profile = () => {
       setemail(data.email);
       setphone(data.primary_phone);
       setbirth_day(data.date_of_birth);
-    }).catch(() => { });
+    }).catch((err) => { console.log("error", err) });
   }, [user_id]);
   return (
     <div>

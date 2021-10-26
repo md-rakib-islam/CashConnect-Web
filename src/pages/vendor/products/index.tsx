@@ -31,7 +31,7 @@ const Products = () => {
       setProductList(res?.data?.purchase_request_items)
       setTotalPage(res?.data?.total_pages)
       setTotalProduct(res?.data?.total_elements)
-    }).catch(() => { })
+    }).catch((err) => { console.log("error", err) })
   }, [size, page])
 
   return (

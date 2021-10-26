@@ -64,7 +64,7 @@ const Cart = () => {
           .then((res) => {
             console.log("comentRes", res);
             router.push("/checkout")
-          }).catch(() => { });
+          }).catch((err) => { console.log("error", err) });
       }
     }
     else {
@@ -77,7 +77,7 @@ const Cart = () => {
       console.log("CorderDetailsRes", res);
       setCartProductList(res.data.order?.order_items);
       setFieldValue("comment", res.data.order?.comment);
-    }).catch(() => { });
+    }).catch((err) => { console.log("error", err) });
   }, [reloadCart]);
 
   const runReloadCart = () => {

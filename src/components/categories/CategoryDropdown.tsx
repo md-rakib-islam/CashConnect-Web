@@ -32,7 +32,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
       .then((data) => {
         console.log("category", data.categories);
         setNavigationData(data.categories);
-      }).catch(() => { });
+      }).catch((err) => { console.log("error", err) });
   }, []);
 
   const setIncreaseWidthMethod = (action) => {
@@ -42,31 +42,31 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
   console.log("formatedCategory", navigationData);
   return (
     <>
-    {!_.isEmpty(formattedCategoryData) && (<StyledCategoryDropdown open={open} position={position} increaseWidth={increaseWidth}>
-      <div style={{ direction: "ltr" }}
+      {!_.isEmpty(formattedCategoryData) && (<StyledCategoryDropdown open={open} position={position} increaseWidth={increaseWidth}>
+        <div style={{ direction: "ltr" }}
         // onMouseOver={() => setIncreaseWidth(true)}
         // onMouseOut={() => setIncreaseWidth(false)}
-      >
-        {formattedCategoryData?.map((item, index) => {
-          let MegaMenu = megaMenu[item.menuComponent];
+        >
+          {formattedCategoryData?.map((item, index) => {
+            let MegaMenu = megaMenu[item.menuComponent];
 
-          return (
-            <CategoryMenuItem
-              title={item.title}
-              href={item.href}
-              icon={item.icon}
-              menuData={item.menuData}
-              key={item.title}
-            // setIncreaseWidth={setIncreaseWidthMethod}
-              setIncreaseWidthMethod={setIncreaseWidthMethod}
-            >
-              {!_.isEmpty(item.menuData?.categories) ? (<MegaMenu data={item.menuData} index={index} />) : null}
-            </CategoryMenuItem>
-          );
-        })}
-      </div>
-    </StyledCategoryDropdown>)
-    }
+            return (
+              <CategoryMenuItem
+                title={item.title}
+                href={item.href}
+                icon={item.icon}
+                menuData={item.menuData}
+                key={item.title}
+                // setIncreaseWidth={setIncreaseWidthMethod}
+                setIncreaseWidthMethod={setIncreaseWidthMethod}
+              >
+                {!_.isEmpty(item.menuData?.categories) ? (<MegaMenu data={item.menuData} index={index} />) : null}
+              </CategoryMenuItem>
+            );
+          })}
+        </div>
+      </StyledCategoryDropdown>)
+      }
     </>
   );
 };

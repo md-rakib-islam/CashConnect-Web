@@ -48,7 +48,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
       if (!res.data.is_in_stock) {
         setStock(false)
       }
-    }).catch(() => { })
+    }).catch((err) => { console.log("error", err) })
   }, [])
 
   const closeLoginTab = () => {
@@ -82,7 +82,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
                 type: "CHANGE_CART_QUANTITY",
                 payload: { chartQuantity: Math.random() },
               });
-            }).catch(() => { });
+            }).catch((err) => { console.log("error", err) });
 
         } else if (action == "increase") {
           console.log("increaseData", orderData);
@@ -91,7 +91,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
             .then((res) => {
               console.log("itemIncreaseRes", res);
               runReloadCart();
-            }).catch(() => { });
+            }).catch((err) => { console.log("error", err) });
 
         } else if (action == "decrease") {
           axios
@@ -99,7 +99,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
             .then((res) => {
               console.log("itemDecreaseRes", res);
               runReloadCart();
-            }).catch(() => { });
+            }).catch((err) => { console.log("error", err) });
         }
       }
       else {

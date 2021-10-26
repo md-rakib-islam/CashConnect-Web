@@ -88,11 +88,11 @@ const ProductFilterCard = () => {
     axios.get(`${Brand_All}`).then(res => {
       console.log("brands", res.data.brands)
       setBrandlist(res.data.brands)
-    }).catch(() => { })
+    }).catch((err) => { console.log("error", err) })
 
     axios.get(`${Category_All_With_Child}`).then(res => {
       setCategoryData(res.data.categories)
-    }).catch(() => { })
+    }).catch((err) => { console.log("error", err) })
   }, [])
 
   useEffect(() => {

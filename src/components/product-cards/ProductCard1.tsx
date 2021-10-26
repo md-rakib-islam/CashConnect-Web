@@ -69,7 +69,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
       if (!res.data.is_in_stock) {
         setStock(false)
       }
-    }).catch(() => { })
+    }).catch((err) => { console.log("error", err) })
   }, [])
 
 
@@ -141,7 +141,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
             type: "CHANGE_CART_QUANTITY",
             payload: { chartQuantity: Math.random() },
           });
-        }).catch(() => { });
+        }).catch((err) => { console.log("error", err) });
 
       } else {
         localStorage.setItem("backAfterLogin", `product/${id}`);
@@ -158,7 +158,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
         .then((res) => {
           console.log("increaseRes", res);
           setGetChartquantity(Math.random())
-        }).catch(() => { });
+        }).catch((err) => { console.log("error", err) });
     }
 
     //romove
@@ -172,7 +172,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
             type: "CHANGE_CART_QUANTITY",
             payload: { chartQuantity: Math.random() },
           });
-        }).catch(() => { });
+        }).catch((err) => { console.log("error", err) });
     }
 
     //decrease

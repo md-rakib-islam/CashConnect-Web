@@ -58,31 +58,31 @@ const AccountSettings = () => {
       .then((res) => res.json())
       .then((data) => {
         setRoles(data.roles);
-      }).catch(() => { });
+      }).catch((err) => { console.log("error", err) });
 
     fetch(`${City_All}`)
       .then((res) => res.json())
       .then((data) => {
         setCities(data.cities);
-      }).catch(() => { });
+      }).catch((err) => { console.log("error", err) });
 
     fetch(`${Thana_All}`)
       .then((res) => res.json())
       .then((data) => {
         setThanas(data.thanas);
-      }).catch(() => { });
+      }).catch((err) => { console.log("error", err) });
 
     fetch(`${Country_All}`)
       .then((res) => res.json())
       .then((data) => {
         setCountries(data.countries);
-      }).catch(() => { });
+      }).catch((err) => { console.log("error", err) });
 
     fetch(`${Branch_All}`)
       .then((res) => res.json())
       .then((data) => {
         setBranches(data.branches);
-      }).catch(() => { });
+      }).catch((err) => { console.log("error", err) });
   }, []);
 
 
@@ -103,7 +103,7 @@ const AccountSettings = () => {
         label: genders.find((gender: any) => gender?.value == data.gender)
           ?.label,
       });
-    }).catch(() => { });
+    }).catch((err) => { console.log("error", err) });
   }, [user_id, updated]);
 
   const handleFormSubmit = async (values) => {
@@ -422,7 +422,7 @@ const AccountSettings = () => {
 
               <Grid item md={6} xs={12}>
 
-                <div style={{ display: "flex", alignItems: "flex-end"  }}>
+                <div style={{ display: "flex", alignItems: "flex-end" }}>
                   <CountryCodeSelect
                     mb="1rem"
                     mt="1rem"

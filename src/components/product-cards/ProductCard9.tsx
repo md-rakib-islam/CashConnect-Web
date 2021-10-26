@@ -79,7 +79,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
       if (!res.data.is_in_stock) {
         setStock(false)
       }
-    }).catch(() => { })
+    }).catch((err) => { console.log("error", err) })
   }, [])
 
   useLayoutEffect(() => {
@@ -146,7 +146,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
             type: "CHANGE_CART_QUANTITY",
             payload: { chartQuantity: Math.random() },
           });
-        }).catch(() => { });
+        }).catch((err) => { console.log("error", err) });
 
       } else {
         localStorage.setItem("backAfterLogin", `product/${id}`);
@@ -163,7 +163,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
         .then((res) => {
           console.log("increaseRes", res);
           setGetChartquantity(Math.random())
-        }).catch(() => { });
+        }).catch((err) => { console.log("error", err) });
     }
 
     //romove
@@ -177,7 +177,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
             type: "CHANGE_CART_QUANTITY",
             payload: { chartQuantity: Math.random() },
           });
-        }).catch(() => { });
+        }).catch((err) => { console.log("error", err) });
     }
 
     //decrease

@@ -19,12 +19,12 @@ function Item({ item }) {
         // axios.get(`${Product_Color_By_Product_Id}${item?.product?.id}`).then(res => {
         //     console.log("color", res)
         //     setColor(res?.data?.name)
-        // }).catch(() => { })
+        // }).catch((err) => {console.log("error", err)})
 
         // axios.get(`${Product_Size_By_Product_Id}${item?.product?.id}`).then(res => {
         //     console.log("size", res)
         //     setSize(res?.data?.name)
-        // }).catch(() => { })
+        // }).catch((err) => {console.log("error", err)})
 
     }, [])
 

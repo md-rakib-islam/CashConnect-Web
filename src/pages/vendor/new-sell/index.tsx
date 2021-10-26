@@ -67,7 +67,7 @@ function newPurchase() {
       setFieldValue("last_name", res?.data?.last_name)
       setFieldValue("email", res?.data?.email)
       setFieldValue("contact_no", res?.data?.primary_phone)
-    }).catch(() => { })
+    }).catch((err) => { console.log("error", err) })
   }, [])
 
   //submit purchase data

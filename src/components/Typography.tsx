@@ -122,7 +122,7 @@ export const Tiny2: React.FC<CustomProps> = (props) => {
       axios.get(`${Customer_Order_Pending_Details}${order_Id}`)
         .then((res) => {
           setProductQuantity(res?.data?.order?.order_items?.length);
-        }).catch(() => { });
+        }).catch((err) => { console.log("error", err) });
     }
   }, [cartCanged]);
 

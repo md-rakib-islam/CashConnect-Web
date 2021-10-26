@@ -97,7 +97,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
         }
       })
       setMultipleUmg(images)
-    }).catch(() => { })
+    }).catch((err) => { console.log("error", err) })
   }, [imgUrl])
 
   useEffect(() => {
@@ -167,7 +167,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
             type: "CHANGE_CART_QUANTITY",
             payload: { chartQuantity: Math.random(), prductId: id || routerId },
           });
-        }).catch(() => { });
+        }).catch((err) => { console.log("error", err) });
       }
 
       //increase quantity

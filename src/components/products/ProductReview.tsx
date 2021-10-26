@@ -56,7 +56,7 @@ const ProductReview: React.FC<ProductReviewProps> = ({ productId, setReviews }) 
       console.log("ReviewAllRes", res)
       setCommentList(res?.data)
       setReviews(res?.data?.length)
-    }).catch(() => { })
+    }).catch((err) => { console.log("error", err) })
   }, [reloadreviews, query])
 
   const {

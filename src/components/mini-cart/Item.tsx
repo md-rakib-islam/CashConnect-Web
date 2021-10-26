@@ -24,7 +24,7 @@ const Item: React.FC<ItemProps> = ({ item, handleCartAmountChange }) => {
             if (!res.data.is_in_stock) {
                 setStock(false)
             }
-        }).catch(() => { })
+        }).catch((err) => { console.log("error", err) })
     }, [])
 
     return (

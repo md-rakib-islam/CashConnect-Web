@@ -22,7 +22,7 @@ const MobileNavigationBar: React.FC = () => {
     if (order_Id) {
       axios.get(`${Customer_Order_Pending_Details}${order_Id}`).then((res) => {
         setProductQuantity(res?.data?.order?.order_items?.length);
-      }).catch(() => { });
+      }).catch((err) => { console.log("error", err) });
     }
   }, [cartCanged]);
 

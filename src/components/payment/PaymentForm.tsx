@@ -74,7 +74,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
     axios.get(`${User_By_Id}${user_id}`).then(res => {
       console.log("resUseer", res)
       setuserName(res?.data?.username)
-    }).catch(() => { })
+    }).catch((err) => { console.log("error", err) })
     // }
   }, [])
 
@@ -227,7 +227,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
               router.push("/vendor/orders")
             }
 
-          }).catch(() => { });
+          }).catch((err) => { console.log("error", err) });
       }
     }
     else {
