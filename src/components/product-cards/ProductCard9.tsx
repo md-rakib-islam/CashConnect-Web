@@ -85,8 +85,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
   useLayoutEffect(() => {
     const { order_Id } = useUserInf()
 
-    if (id) {
-      if (id) {
+      if (order_Id) {
         axios
           .get(`${Customer_Order_Item_By_Product_Id}${order_Id}/${id}`)
           .then((item) => {
@@ -95,7 +94,6 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
           })
           .catch(() => setCartQuantity(0));
       }
-    }
   }, [getItemId, id, getChartquantity]);
 
   useEffect(() => {

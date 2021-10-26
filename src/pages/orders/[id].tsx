@@ -127,7 +127,14 @@ const OrderDetails = () => {
             color="primary.main"
             textAlign="center"
           >
-            Estimated Delivery Date <b>{placedOn && useFormettedDate(placedOn, 3)}</b>
+            Estimated Delivery Date <b>{
+            placedOn && useFormettedDate(placedOn, 3)
+            // addDays(
+            //   new Date("Oct 21, 2021"),
+            //   10,
+            // );
+            
+            }</b>
           </Typography>
         </FlexBox>
       </Card>
@@ -145,7 +152,7 @@ const OrderDetails = () => {
               Placed on:
             </Typography>
             <Typography fontSize="14px">
-              {format(new Date(placedOn), "MMM dd, yyyy")}
+              {placedOn && format(new Date(placedOn), "MMM dd, yyyy")}
             </Typography>
           </FlexBox>
           <FlexBox className="pre" m="6px" alignItems="center">
@@ -153,7 +160,7 @@ const OrderDetails = () => {
               Delivered on:
             </Typography>
             <Typography fontSize="14px">
-              {format(new Date(DeliveredOn), "MMM dd, yyyy")}
+              {DeliveredOn && format(new Date(DeliveredOn), "MMM dd, yyyy")}
             </Typography>
           </FlexBox>
         </TableRow>

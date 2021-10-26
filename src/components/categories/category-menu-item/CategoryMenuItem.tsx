@@ -21,7 +21,6 @@ const CategoryMenuItem: React.FC<CategoryMenuItemProps> = ({
   children,
   setIncreaseWidthMethod,
 }) => {
-  console.log("menuData", menuData)
 
   return (
     <div onMouseOver={() => {!_.isEmpty(menuData?.categories) && setIncreaseWidthMethod(true)}} onMouseOut={() => {!_.isEmpty(menuData?.categories) && setIncreaseWidthMethod(false)}}>

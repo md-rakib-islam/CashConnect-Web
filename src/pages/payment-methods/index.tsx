@@ -6,12 +6,36 @@ import Icon from "@component/icon/Icon";
 import DashboardLayout from "@component/layout/CustomerDashboardLayout";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import Pagination from "@component/pagination/Pagination";
+import PaginationRow from "@component/pagination/PaginationRow";
+import ShowingItemNumber from "@component/pagination/ShowingItemNumber";
 import TableRow from "@component/TableRow";
-import Typography, { H5 } from "@component/Typography";
+import Typography, { H5, SemiSpan } from "@component/Typography";
+import { Mayment_Mathod_All } from "@data/constants";
+import axios from "axios";
+import { format } from "date-fns";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 
 const AddressList = () => {
+
+  const [paymentmethods, setPaymentmethods] = useState([])
+  const [totalPage, setTotalPage] = useState(0)
+  const [totalPaymentMathod, setTotalPaymentMathod] = useState(0)
+
+  const router = useRouter()
+  const {page, size} = router.query
+
+  useEffect(() => {
+    console.log("url", `${Mayment_Mathod_All}?page=${page || 1}&size=${size || 10}`)
+    axios.get(`${Mayment_Mathod_All}?page=${page || 1}&size=${size || 10}`).then(res => {
+      console.log("Mayment_Mathod_All", res)
+      setPaymentmethods(res?.data?.paymentmethods)
+      setTotalPage(res?.data?.total_pages)
+      setTotalPaymentMathod(res?.data?.total_elements)
+    }).catch(() => { })
+  }, [page, size])
+
   return (
     <div>
       <DashboardPageHeader
@@ -28,25 +52,25 @@ const AddressList = () => {
         }
       />
 
-      {orderList.map((item) => (
-        <TableRow my="1rem" padding="6px 18px">
+      {paymentmethods.map((item, id) => (
+        <TableRow key={id} my="1rem" padding="6px 18px">
           <FlexBox alignItems="center" m="6px">
             <Card width="42px" height="28px" mr="10px" elevation={4}>
               <img
                 width="100%"
-                src={`/assets/images/payment-methods/${item.payment_method}.svg`}
+                src={`/assets/images/payment-methods/Mastercard.svg`}
                 alt={item.payment_method}
               />
             </Card>
             <H5 className="pre" m="6px">
-              Ralf Edward
+              {item?.name}
             </H5>
           </FlexBox>
           <Typography className="pre" m="6px">
-            {item.card_no}
+          1234 **** **** ****
           </Typography>
           <Typography className="pre" m="6px">
-            {item.exp}
+            {format(new Date(item?.created_at), "MMM dd, yyyy")}
           </Typography>
 
           <Typography className="pre" textAlign="center" color="text.muted">
@@ -72,44 +96,54 @@ const AddressList = () => {
         </TableRow>
       ))}
 
-      <FlexBox justifyContent="center" mt="2.5rem">
-        <Pagination
-          pageCount={5}
-          onChange={(data) => {
-            console.log(data.selected);
-          }}
-        />
+      <FlexBox
+        flexWrap="wrap"
+        justifyContent="space-around"
+        alignItems="center"
+        mt="32px"
+      >
+        <SemiSpan>Showing <ShowingItemNumber initialNumber={10} totalItem={totalPaymentMathod} /> of {totalPaymentMathod} Payment Mathods</SemiSpan>
+
+        <Pagination pageCount={totalPage} />
+
+        <PaginationRow product_per_page_option={product_per_page_options} name="Payment Mathod" />
       </FlexBox>
     </div>
   );
 };
 
-const orderList = [
-  {
-    orderNo: "1050017AS",
-    exp: "08 / 2022",
-    payment_method: "Amex",
-    card_no: "1234 **** **** ****",
-  },
-  {
-    orderNo: "1050017AS",
-    exp: "10 / 2025",
-    payment_method: "Mastercard",
-    card_no: "1234 **** **** ****",
-  },
-  {
-    orderNo: "1050017AS",
-    exp: "N/A",
-    payment_method: "PayPal",
-    card_no: "ui-lib@email.com",
-  },
-  {
-    orderNo: "1050017AS",
-    exp: "08 / 2022",
-    payment_method: "Visa",
-    card_no: "1234 **** **** ****",
-  },
-];
+const product_per_page_options = [
+  { id: 10, name: 10 },
+  { id: 30, name: 30 },
+  { id: 50, name: 50 },
+]
+
+// const orderList = [
+//   {
+//     orderNo: "1050017AS",
+//     exp: "08 / 2022",
+//     payment_method: "Amex",
+//     card_no: "1234 **** **** ****",
+//   },
+//   {
+//     orderNo: "1050017AS",
+//     exp: "10 / 2025",
+//     payment_method: "Mastercard",
+//     card_no: "1234 **** **** ****",
+//   },
+//   {
+//     orderNo: "1050017AS",
+//     exp: "N/A",
+//     payment_method: "PayPal",
+//     card_no: "ui-lib@email.com",
+//   },
+//   {
+//     orderNo: "1050017AS",
+//     exp: "08 / 2022",
+//     payment_method: "Visa",
+//     card_no: "1234 **** **** ****",
+//   },
+// ];
 
 AddressList.layout = DashboardLayout;
 

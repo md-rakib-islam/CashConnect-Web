@@ -8,7 +8,7 @@ import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import TextArea from "@component/textarea/TextArea";
 import { H5, SemiSpan } from "@component/Typography";
 import useUserInf from "@customHook/useUserInf";
-import { Ticket_Details_All, Ticket_Details_Create } from "@data/constants";
+import { BASE_URL, Ticket_Details_All, Ticket_Details_Create } from "@data/constants";
 import axios from "axios";
 import { format } from "date-fns";
 import { useFormik } from "formik";
@@ -33,7 +33,7 @@ const PaymentMethodEditor = () => {
         console.log("Ticket_Details_AllRes", res)
         setFieldValue("message", "")
         setMessagelist(res?.data?.ticket_details)
-      })
+      }).catch(() => {})
     }
   }, [id, reloadMessage])
 
@@ -52,7 +52,7 @@ const PaymentMethodEditor = () => {
     axios.post(`${Ticket_Details_Create}`, data, authTOKEN).then(res => {
       console.log("ticketDetailsRes", res)
       setReloadMessage(Math.random())
-    })
+    }).catch(() => {})
   };
 
   const {
@@ -86,7 +86,7 @@ const PaymentMethodEditor = () => {
 
       {messagelist.map((item, ind) => (
         <FlexBox mb="30px" key={ind}>
-          <Avatar src={item?.imgUrl} mr="1rem" />
+          <Avatar src={`${BASE_URL}${item?.image}`} mr="1rem" />
           <Box>
             <H5 fontWeight="600" mt="0px" mb="0px">
               {item?.customer || item?.admin}
@@ -138,29 +138,29 @@ const checkoutSchema = yup.object().shape({
   message: yup.string().required("required"),
 });
 
-const messageListss = [
-  {
-    imgUrl: "/assets/images/faces/face-7.jpg",
-    name: "Esther Howard",
-    date: "2020-12-14T08:39:58.219Z",
-    text:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ipsum velit amet, aliquam massa tellus. Condimentum sit at pharetra, congue. Sit mattis amet nec pharetra odio. Interdum lorem vestibulum et amet et duis placerat. Ac mattis massa duis mi tellus sed. Mus eget in fames urna, ornare nunc, tincidunt tincidunt interdum. Amet aliquet pharetra rhoncus scelerisque pulvinar dictumst at sit. Neque tempor tellus ac nullam. Etiam massa tempor eu risus fusce aliquam.",
-  },
-  {
-    imgUrl: "/assets/images/faces/10.jpg",
-    name: "Ralph Edwards",
-    date: "2021-01-05T05:39:58.219Z",
-    text:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ipsum velit amet, aliquam massa tellus. Condimentum sit at pharetra, congue. Sit mattis amet nec pharetra odio. Interdum lorem vestibulum et amet et duis placerat.",
-  },
-  {
-    imgUrl: "/assets/images/faces/face-7.jpg",
-    name: "Esther Howard",
-    date: "2021-01-14T08:39:58.219Z",
-    text:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nunc, lectus mi ornare. Bibendum proin euismod nibh tellus, phasellus.",
-  },
-];
+// const messageListss = [
+//   {
+//     imgUrl: "/assets/images/faces/face-7.jpg",
+//     name: "Esther Howard",
+//     date: "2020-12-14T08:39:58.219Z",
+//     text:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ipsum velit amet, aliquam massa tellus. Condimentum sit at pharetra, congue. Sit mattis amet nec pharetra odio. Interdum lorem vestibulum et amet et duis placerat. Ac mattis massa duis mi tellus sed. Mus eget in fames urna, ornare nunc, tincidunt tincidunt interdum. Amet aliquet pharetra rhoncus scelerisque pulvinar dictumst at sit. Neque tempor tellus ac nullam. Etiam massa tempor eu risus fusce aliquam.",
+//   },
+//   {
+//     imgUrl: "/assets/images/faces/10.jpg",
+//     name: "Ralph Edwards",
+//     date: "2021-01-05T05:39:58.219Z",
+//     text:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ipsum velit amet, aliquam massa tellus. Condimentum sit at pharetra, congue. Sit mattis amet nec pharetra odio. Interdum lorem vestibulum et amet et duis placerat.",
+//   },
+//   {
+//     imgUrl: "/assets/images/faces/face-7.jpg",
+//     name: "Esther Howard",
+//     date: "2021-01-14T08:39:58.219Z",
+//     text:
+//       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nunc, lectus mi ornare. Bibendum proin euismod nibh tellus, phasellus.",
+//   },
+// ];
 
 PaymentMethodEditor.layout = DashboardLayout;
 

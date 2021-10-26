@@ -87,7 +87,7 @@ const SellDetails = () => {
               Placed on:
             </Typography>
             <Typography fontSize="14px">
-              {format(new Date(placedOn), "MMM dd, yyyy")}
+              {placedOn && format(new Date(placedOn), "MMM dd, yyyy")}
             </Typography>
           </FlexBox>
           <Box maxWidth="160px">

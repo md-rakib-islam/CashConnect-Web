@@ -35,7 +35,7 @@ function PaginationRow({ product_per_page_option = product_per_page_options, nam
 
     return (
         <div style={{ display: "flex", width: "fit-contect", flexWrap: "nowrap", alignItems: "center" }}>
-            <SemiSpan>{name} per page</SemiSpan>
+            <SemiSpan>{name} Per Page</SemiSpan>
             <Select
                 width="80px"
                 ml="1rem"

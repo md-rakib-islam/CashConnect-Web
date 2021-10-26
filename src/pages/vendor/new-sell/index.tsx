@@ -766,13 +766,8 @@ function newPurchase() {
 const initialValues = {
   first_name: "",
   last_name: "",
-  contact_no: "+880",
+  contact_no: "",
   email: "",
-  country_code: {
-    code: "BD",
-    label: "Bangladesh",
-    value: "+880"
-  },
 };
 
 // const CustomOption = ({ innerProps, isDisabled, data }) => {

@@ -33,11 +33,12 @@ const TicketList = () => {
   useEffect(() => {
     axios.get(`${Ticket_Priority_All}`).then(res => {
       setPriorities(res?.data?.ticket_priorities)
-    })
+    }).catch(() => {})
+
     axios.get(`${Ticket_Status_All}`).then(res => {
       console.log("ticket_Status_Res", res)
       setStatuss(res?.data?.ticket_statuses)
-    })
+    }).catch(() => {})
   }, [])
 
   const router = useRouter()
@@ -50,7 +51,7 @@ const TicketList = () => {
       setTickets(res?.data?.tickets)
       setTotalPage(res?.data?.total_pages)
       setTotalTicket(res?.data?.total_elements)
-    })
+    }).catch(() => {})
   }, [page, size])
 
   return (
