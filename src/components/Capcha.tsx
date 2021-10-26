@@ -49,11 +49,11 @@ const Capcha: React.FC<CapchaProps> = ({ setValid }) => {
     const {
         values,
         errors,
-        touched,
+        // touched,
         handleChange,
         handleBlur,
         // handleSubmit,
-        // setFieldValue,
+        setFieldValue,
     } = useFormik({
         initialValues: initialValues,
         validationSchema: checkoutSchema,
@@ -78,7 +78,7 @@ const Capcha: React.FC<CapchaProps> = ({ setValid }) => {
                     checkCapcha(e)
                 }}
                 value={values.capcha || ""}
-                errorText={touched.capcha && capchaValid ? "Correct" : (values.capcha ? "Incorrect" : "requred")}
+                errorText={capchaValid ? "Correct" : (values.capcha ? "Incorrect" : "requred")}
                 style={{ width: "100px !important" }}
             />
             <Button
@@ -86,7 +86,11 @@ const Capcha: React.FC<CapchaProps> = ({ setValid }) => {
                 variant="outlined"
                 color="primary"
                 type="button"
-                onClick={() => setCapcha(`${charactor1}${charactor2}${charactor3}${charactor4}${charactor5}${charactor6}`)}
+                onClick={() => {
+                    setFieldValue("capcha", "")
+                    setCapcha(`${charactor1}${charactor2}${charactor3}${charactor4}${charactor5}${charactor6}`)
+                    setCapchaValid(false)
+                }}
             >
                 Refresh
             </Button>

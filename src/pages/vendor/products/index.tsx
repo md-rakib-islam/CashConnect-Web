@@ -9,10 +9,10 @@ import PaginationRow from "@component/pagination/PaginationRow";
 import ShowingItemNumber from "@component/pagination/ShowingItemNumber";
 import TableRow from "@component/TableRow";
 import Typography, { H5, SemiSpan } from "@component/Typography";
-import useFormettedDate from "@customHook/useFormettedDate";
 import useUserInf from "@customHook/useUserInf";
 import { BASE_URL, Purchase_Products_By_Vendor_Id } from "@data/constants";
 import axios from "axios";
+import { format } from "date-fns";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
@@ -25,7 +25,7 @@ const Products = () => {
   const { page, size } = router.query
 
   useEffect(() => {
-    const {user_id, authTOKEN} = useUserInf()
+    const { user_id, authTOKEN } = useUserInf()
     axios.get(`${Purchase_Products_By_Vendor_Id}${user_id}?size=${size || 10}&page=${page || 1}`, authTOKEN).then(res => {
       console.log("Purchase_Items_By_Purchase_Id", res)
       setProductList(res?.data?.purchase_request_items)
@@ -58,7 +58,7 @@ const Products = () => {
 
           <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "space-around", flexBasis: "40%" }}>
             <H5 color="text.muted" my="0px" mx="6px" textAlign="center">
-            Quantity
+              Quantity
             </H5>
             <H5 color="text.muted" my="0px" mr="6px" textAlign="center">
               Regular price
@@ -85,7 +85,7 @@ const Products = () => {
               {item?.purchase_req}
             </Typography>
             <Typography textAlign="center" mr="30px" flexWrap="nowrap">
-              {item?.created_at && useFormettedDate(item?.created_at)}
+              {format(new Date(item?.created_at), "MMM dd, yyyy")}
             </Typography>
           </div>
           <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "space-between", alignItems: "center", minHeight: "36px", padding: "6px 0px", flexBasis: "40%" }}>
@@ -100,11 +100,11 @@ const Products = () => {
             <H5 ml="10px" textAlign="center" fontWeight="400">
               <Currency>{item.unit_price}</Currency>
             </H5>
-            <div style={{minWidth: "80px"}}>
-            <Typography textAlign="center" mr="10px">
-              {/* {item?.name} */}
-              {item?.status? item?.status: "_"}
-            </Typography>
+            <div style={{ minWidth: "80px" }}>
+              <Typography textAlign="center" mr="10px">
+                {/* {item?.name} */}
+                {item?.status ? item?.status : "_"}
+              </Typography>
             </div>
           </div>
         </TableRow>

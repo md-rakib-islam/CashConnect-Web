@@ -7,14 +7,67 @@ import DashboardLayout from "@component/layout/CustomerDashboardLayout";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import TextArea from "@component/textarea/TextArea";
 import { H5, SemiSpan } from "@component/Typography";
+import useUserInf from "@customHook/useUserInf";
+import { Ticket_Details_All, Ticket_Details_Create } from "@data/constants";
+import axios from "axios";
 import { format } from "date-fns";
+import { useFormik } from "formik";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import * as yup from "yup";
 
 const PaymentMethodEditor = () => {
-  const handleFormSubmit = async (values) => {
+
+  const [messagelist, setMessagelist] = useState([])
+  const [reloadMessage, setReloadMessage] = useState(0)
+
+  const router = useRouter()
+  const { id } = router.query
+
+  const { user_id, authTOKEN } = useUserInf()
+
+  useEffect(() => {
+    if (id) {
+      axios.get(`${Ticket_Details_All}${id}`).then(res => {
+        console.log("Ticket_Details_AllRes", res)
+        setFieldValue("message", "")
+        setMessagelist(res?.data?.ticket_details)
+      })
+    }
+  }, [id, reloadMessage])
+
+
+
+  const handleFormSubmit = async () => {
     console.log(values);
+
+    const data = {
+      ticket: id,
+      message: values.message,
+      customer: user_id,
+    }
+    console.log("data", data)
+
+    axios.post(`${Ticket_Details_Create}`, data, authTOKEN).then(res => {
+      console.log("ticketDetailsRes", res)
+      setReloadMessage(Math.random())
+    })
   };
+
+  const {
+    values,
+    errors,
+    touched,
+    handleChange,
+    handleBlur,
+    // handleSubmit,
+    setFieldValue,
+  } = useFormik({
+    initialValues: initialValues,
+    validationSchema: checkoutSchema,
+    onSubmit: handleFormSubmit,
+  });
 
   return (
     <div>
@@ -30,18 +83,19 @@ const PaymentMethodEditor = () => {
         }
       />
 
-      {messageList.map((item, ind) => (
+
+      {messagelist.map((item, ind) => (
         <FlexBox mb="30px" key={ind}>
-          <Avatar src={item.imgUrl} mr="1rem" />
+          <Avatar src={item?.imgUrl} mr="1rem" />
           <Box>
             <H5 fontWeight="600" mt="0px" mb="0px">
-              {item.name}
+              {item?.customer || item?.admin}
             </H5>
             <SemiSpan>
-              {format(new Date(item.date), "hh:mm:a | dd MMM yyyy")}
+              {format(new Date(item?.created_at), "hh:mm:a | dd MMM yyyy")}
             </SemiSpan>
             <Box borderRadius="10px" bg="gray.200" p="1rem" mt="1rem">
-              {item.text}
+              {item?.message}
             </Box>
           </Box>
         </FlexBox>
@@ -50,18 +104,24 @@ const PaymentMethodEditor = () => {
       <Divider mb="2rem" bg="gray.300" />
 
       <TextArea
+        name="message"
         placeholder="Write your message here..."
         rows={8}
         borderRadius={8}
         fullwidth
         mb="1.5rem"
+        onBlur={handleBlur}
+        onChange={handleChange}
+        value={values.message || ""}
+        errorText={touched.message && errors.message}
       />
 
       <Button
         variant="contained"
         color="primary"
         ml="auto"
-        onClick={handleFormSubmit}
+        // type="submit"
+        onClick={() => handleFormSubmit()}
       >
         Post message
       </Button>
@@ -69,7 +129,16 @@ const PaymentMethodEditor = () => {
   );
 };
 
-const messageList = [
+
+const initialValues = {
+  message: "",
+};
+
+const checkoutSchema = yup.object().shape({
+  message: yup.string().required("required"),
+});
+
+const messageListss = [
   {
     imgUrl: "/assets/images/faces/face-7.jpg",
     name: "Esther Howard",

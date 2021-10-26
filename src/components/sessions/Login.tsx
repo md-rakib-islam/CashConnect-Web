@@ -89,7 +89,7 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
               localStorage.removeItem("backAfterLogin");
               router.push(`${backUrl}`);
             } else {
-              router.push("/vendor/account-settings");
+              router.push("/vendor/dashboard");
             }
           } else {
             closeLoginDialog()

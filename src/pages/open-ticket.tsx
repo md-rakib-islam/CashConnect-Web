@@ -16,6 +16,7 @@ import { Ticket_Create, Ticket_Department_All, Ticket_Priority_All, User_By_Id }
 import axios from 'axios';
 import { useFormik } from "formik";
 import Link from "next/link";
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import * as yup from "yup";
 
@@ -30,6 +31,7 @@ function OpenTicket() {
     const { user_id, authTOKEN } = useUserInf()
 
     const { dispatch } = useAppContext()
+    const router = useRouter()
 
     const handleFormSubmit = async (values) => {
         if (isValidCapha) {
@@ -57,6 +59,7 @@ function OpenTicket() {
                             alertChanged: Math.random()
                         }
                     })
+                    router.push("/support-tickets")
                 }
                 else {
                     dispatch({
@@ -91,16 +94,17 @@ function OpenTicket() {
             console.log("userInf", res)
             setFieldValue("name", `${res?.data?.first_name}${' '}${res?.data?.last_name}`)
             setFieldValue("email", res?.data?.email)
-        })
+        }).catch(() => { })
 
         axios.get(`${Ticket_Department_All}`).then(res => {
             console.log("departmets", res)
             setDepartmets(res?.data?.ticket_departments)
-        })
+        }).catch(() => { })
+
         axios.get(`${Ticket_Priority_All}`).then(res => {
             console.log("priorities", res)
             setPriorities(res?.data?.ticket_priorities)
-        })
+        }).catch(() => { })
     }, [])
 
 
@@ -340,8 +344,8 @@ const initialValues = {
 };
 
 const checkoutSchema = yup.object().shape({
-    // name: yup.string().required("required"),
-    // email: yup.string().required("required"),
+    name: yup.string().required("required"),
+    email: yup.string().required("required"),
     subject: yup.string().required("required"),
     ticket_department: yup.object().required("required"),
     ticket_priority: yup.object().required("required"),

@@ -11,9 +11,9 @@ import VendorDashboardLayout from "@component/layout/VendorDashboardLayout";
 import Select from "@component/Select";
 import TableRow from "@component/TableRow";
 import Typography, { H5, H6, Paragraph } from "@component/Typography";
-import useFormettedDate from "@customHook/useFormettedDate";
 import { BASE_URL, Purchase_Items_By_Purchase_Id, Purchase_Req_By_Id } from "@data/constants";
 import axios from "axios";
+import { format } from "date-fns";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -33,26 +33,26 @@ const SellDetails = () => {
   const { id } = router.query;
 
   useEffect(() => {
-    if(id){
-    axios.get(`${Purchase_Items_By_Purchase_Id}${id}`).then(res => {
-      console.log("Purchase_Items_By_Purchase_Id", res)
-      setPurchaseReqItems(res?.data?.purchase_request_items)
-    }).catch(() => { })
+    if (id) {
+      axios.get(`${Purchase_Items_By_Purchase_Id}${id}`).then(res => {
+        console.log("Purchase_Items_By_Purchase_Id", res)
+        setPurchaseReqItems(res?.data?.purchase_request_items)
+      }).catch(() => { })
 
-    axios.get(`${Purchase_Req_By_Id}${id}`).then(res => {
-      console.log("Purchaseres", res)
-      setSubTotal(res?.data?.total_price)
-      setTotal(res?.data?.total_price)
-      setShippingAddress(res?.data?.street_address)
-      setCustomerNote(res?.data?.vendor_comment)
-      setCustomerNote(res?.data?.vendor_comment)
-      setPlacedOn(res?.data?.created_at)
+      axios.get(`${Purchase_Req_By_Id}${id}`).then(res => {
+        console.log("Purchaseres", res)
+        setSubTotal(res?.data?.total_price)
+        setTotal(res?.data?.total_price)
+        setShippingAddress(res?.data?.street_address)
+        setCustomerNote(res?.data?.vendor_comment)
+        setCustomerNote(res?.data?.vendor_comment)
+        setPlacedOn(res?.data?.created_at)
 
-      setShippingFee(0)
-      setDiscount(0)
-      setpaymentMathod("_")
-    })
-  }
+        setShippingFee(0)
+        setDiscount(0)
+        setpaymentMathod("_")
+      })
+    }
   }, [id])
 
   return (
@@ -87,7 +87,7 @@ const SellDetails = () => {
               Placed on:
             </Typography>
             <Typography fontSize="14px">
-              {placedOn && useFormettedDate(placedOn)}
+              {format(new Date(placedOn), "MMM dd, yyyy")}
             </Typography>
           </FlexBox>
           <Box maxWidth="160px">

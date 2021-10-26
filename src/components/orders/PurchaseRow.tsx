@@ -1,8 +1,8 @@
 
 import Currency from "@component/Currency";
-import useFormettedDate from "@customHook/useFormettedDate";
 import { Purchase_Status_all } from "@data/constants";
 import axios from "axios";
+import { format } from "date-fns";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import Box from "../Box";
@@ -86,7 +86,7 @@ const PurchaseRow: React.FC<PurchaseRowProps> = ({ item }) => {
                     </Chip>
                 </Box>
                 <Typography className="flex-grow pre" m="6px" textAlign="left">
-                    {item?.request_date && useFormettedDate(item?.request_date)}
+                    {format(new Date(item?.request_date), "MMM dd, yyyy")}
                 </Typography>
                 <Typography m="6px" textAlign="left">
                     <Currency>{Number(item.total_price).toFixed(2)}</Currency>

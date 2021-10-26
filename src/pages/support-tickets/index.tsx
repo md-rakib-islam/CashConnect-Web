@@ -11,13 +11,14 @@ import PaginationRow from "@component/pagination/PaginationRow";
 import ShowingItemNumber from "@component/pagination/ShowingItemNumber";
 import TableRow from "@component/TableRow";
 import Typography, { SemiSpan, Small } from "@component/Typography";
-import useFormettedDate from "@customHook/useFormettedDate";
 import useUserInf from "@customHook/useUserInf";
 import { Ticket_By_User_Id, Ticket_Priority_All, Ticket_Status_All } from "@data/constants";
 import axios from "axios";
+import { format } from "date-fns";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+
 
 const TicketList = () => {
 
@@ -83,7 +84,7 @@ const TicketList = () => {
                   <Small color="success.main">{statuss.find((data) => data?.id == item?.ticket_status)?.name}</Small>
                 </Chip>
                 <SemiSpan className="pre" m="6px">
-                  {useFormettedDate(item?.created_at)}
+                  {format(new Date(item?.created_at), "MMM dd, yyyy")}
                 </SemiSpan>
                 <SemiSpan m="6px">Website Problem</SemiSpan>
               </FlexBox>

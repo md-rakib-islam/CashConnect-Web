@@ -154,6 +154,10 @@ export const Ticket_Status_All = `${BASE_URL}/ticket_status/api/v1/ticket_status
 
 export const Ticket_By_User_Id = `${BASE_URL}/ticket/api/v1/ticket/get_all_by_user_id/`
 
+export const Ticket_Details_Create = `${BASE_URL}/ticket_detail/api/v1/ticket_detail/create/`
+
+export const Ticket_Details_All = `${BASE_URL}/ticket_detail/api/v1/ticket_detail/get_all_by_ticket_id/`
+
 //user api
 export const User_By_Id = `${BASE_URL}/user/api/v1/user/`
 

@@ -23,26 +23,32 @@ const ProductReview: React.FC<ProductReviewProps> = ({ productId, setReviews }) 
   const [commentList, setCommentList] = useState([])
   const [reloadreviews, setReloadreviews] = useState(0)
 
-  const { query } = useRouter()
+  const { user_id, authTOKEN, isLogin } = useUserInf()
+
+  const { query, push } = useRouter()
 
   const review = query?.review
 
   const handleFormSubmit = async (values, { resetForm }) => {
     console.log(values);
 
-    const { user_id, authTOKEN } = useUserInf()
-
-    const reviewData = {
-      ...values,
-      user: user_id,
-      product: productId,
+    if (isLogin) {
+      const reviewData = {
+        ...values,
+        user: user_id,
+        product: productId,
+      }
+      console.log("reviewData", reviewData)
+      axios.post(`${Review_Create}`, reviewData, authTOKEN).then(res => {
+        console.log("reviewCreateRe", res)
+        resetForm();
+        setReloadreviews(Math.random())
+      })
     }
-    console.log("reviewData", reviewData)
-    axios.post(`${Review_Create}`, reviewData, authTOKEN).then(res => {
-      console.log("reviewCreateRe", res)
-      resetForm();
-      setReloadreviews(Math.random())
-    })
+    else {
+      push("/login")
+      localStorage.setItem("backAfterLogin", `/product/${query?.id}?review=write`)
+    }
   };
 
   useEffect(() => {

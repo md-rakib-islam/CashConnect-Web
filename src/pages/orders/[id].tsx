@@ -15,6 +15,7 @@ import useFormettedDate from "@customHook/useFormettedDate";
 import { Customer_order_Details_For_Status } from "@data/constants";
 import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
+import { format } from "date-fns";
 import { useRouter } from "next/router";
 import React, { Fragment, useEffect, useState } from "react";
 import Item from "./Item";
@@ -144,7 +145,7 @@ const OrderDetails = () => {
               Placed on:
             </Typography>
             <Typography fontSize="14px">
-              {placedOn && useFormettedDate(placedOn)}
+              {format(new Date(placedOn), "MMM dd, yyyy")}
             </Typography>
           </FlexBox>
           <FlexBox className="pre" m="6px" alignItems="center">
@@ -152,7 +153,7 @@ const OrderDetails = () => {
               Delivered on:
             </Typography>
             <Typography fontSize="14px">
-              {DeliveredOn && useFormettedDate(DeliveredOn)}
+              {format(new Date(DeliveredOn), "MMM dd, yyyy")}
             </Typography>
           </FlexBox>
         </TableRow>
