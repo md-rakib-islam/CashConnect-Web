@@ -13,6 +13,9 @@ export const StyledProductCard1 = styled(Card)`
   flex-direction: column;
   justify-content: space-between;
 
+  .image-holder {
+    padding: 0px 15px;
+  }
   &:hover {
     .details {
       .add-cart {
@@ -20,6 +23,7 @@ export const StyledProductCard1 = styled(Card)`
       }
     }
     .image-holder {
+      // padding: 0px;
       .extra-icons {
         display: block;
       }
@@ -46,7 +50,7 @@ export const StyledProductCard1 = styled(Card)`
   }
 
   .details {
-    padding: 1rem;
+    padding: 0px 15px 10px 15px;
 
     .title,
     .categories {

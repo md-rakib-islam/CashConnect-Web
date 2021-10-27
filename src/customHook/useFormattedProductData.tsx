@@ -26,6 +26,7 @@ function useFormattedProductData(productData, type?: string) {
                 id: data?.id,
                 price: Number(data?.unit_price),
                 title: data?.name,
+                // imgUrl: `${data?.thumbnail? `${BASE_URL}${data?.thumbnail}` : (data?.image? `${BASE_URL}${data?.image}` : "")}`,
                 imgUrl: `${BASE_URL}${data?.thumbnail || data?.image}`,
                 category: data?.category || null,
                 brand: data?.brand || null,

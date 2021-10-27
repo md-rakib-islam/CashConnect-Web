@@ -23,8 +23,10 @@ const AddressList = () => {
   const [totalPage, setTotalPage] = useState(0)
   const [totalPaymentMathod, setTotalPaymentMathod] = useState(0)
 
+  const [reloadMethod, setReloadMethod] = useState(0)
+
   const router = useRouter()
-  const {page, size} = router.query
+  const { page, size } = router.query
 
   useEffect(() => {
     console.log("url", `${Mayment_Mathod_All}?page=${page || 1}&size=${size || 10}`)
@@ -34,7 +36,12 @@ const AddressList = () => {
       setTotalPage(res?.data?.total_pages)
       setTotalPaymentMathod(res?.data?.total_elements)
     }).catch(() => { })
-  }, [page, size])
+  }, [page, size, reloadMethod])
+
+  const handleDelete = (id) => {
+    console.log(id)
+    setReloadMethod(Math.random())
+  }
 
   return (
     <div>
@@ -67,17 +74,17 @@ const AddressList = () => {
             </H5>
           </FlexBox>
           <Typography className="pre" m="6px">
-          1234 **** **** ****
+            1234 **** **** ****
           </Typography>
           <Typography className="pre" m="6px">
             {format(new Date(item?.created_at), "MMM dd, yyyy")}
           </Typography>
 
           <Typography className="pre" textAlign="center" color="text.muted">
-            <Link href="/payment-methods/xkssThds6h37sd">
+            <Link href={`/payment-methods/${item?.id}`}>
               <Typography
                 as="a"
-                href="/payment-methods/xkssThds6h37sd"
+                href={`/payment-methods/${item?.id}`}
                 color="inherit"
               >
                 <IconButton size="small">
@@ -87,7 +94,7 @@ const AddressList = () => {
                 </IconButton>
               </Typography>
             </Link>
-            <IconButton size="small" onClick={(e) => e.stopPropagation()}>
+            <IconButton size="small" onClick={() => handleDelete(item.id)}>
               <Icon variant="small" defaultcolor="currentColor">
                 delete
               </Icon>

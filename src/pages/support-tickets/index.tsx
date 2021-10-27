@@ -12,7 +12,7 @@ import ShowingItemNumber from "@component/pagination/ShowingItemNumber";
 import TableRow from "@component/TableRow";
 import Typography, { SemiSpan, Small } from "@component/Typography";
 import useUserInf from "@customHook/useUserInf";
-import { Ticket_By_User_Id, Ticket_Priority_All, Ticket_Status_All } from "@data/constants";
+import { Ticket_By_User_Id } from "@data/constants";
 import axios from "axios";
 import { format } from "date-fns";
 import Link from "next/link";
@@ -23,24 +23,10 @@ import React, { useEffect, useState } from "react";
 const TicketList = () => {
 
   const [tickets, setTickets] = useState([])
-  const [priorities, setPriorities] = useState([])
-  const [statuss, setStatuss] = useState([])
   const [totalPage, setTotalPage] = useState(0)
   const [totalTicket, setTotalTicket] = useState(0)
 
   const { user_id } = useUserInf()
-
-  useEffect(() => {
-    axios.get(`${Ticket_Priority_All}`).then(res => {
-      setPriorities(res?.data?.ticket_priorities)
-    }).catch(() => {})
-
-    axios.get(`${Ticket_Status_All}`).then(res => {
-      console.log("ticket_Status_Res", res)
-      setStatuss(res?.data?.ticket_statuses)
-    }).catch(() => {})
-  }, [])
-
   const router = useRouter()
 
   const { page, size } = router.query
@@ -67,22 +53,28 @@ const TicketList = () => {
           </Link>
         } />
 
-      {tickets.map((item) => (
-        <Link href={`/support-tickets/${item?.id}`} key={item?.id}>
+      {tickets.map((item) => {
+
+        const closedStatus = item?.ticket_status == "Closed" || item?.ticket_status == "closed" || item?.ticket_status == "Cancelled" || item?.ticket_status == "cancelled"
+        const priorityHigh = item?.ticket_priority == "High" || item?.ticket_priority == "high" || item?.ticket_priority == "Urgent" || item?.ticket_priority == "urgent"
+
+        return (
+        <Link href={`${closedStatus? "" : `/support-tickets/${item?.id}`}`} key={item?.id}>
           <TableRow
             as="a"
-            href={`/support-tickets/${item?.id}`}
+            href={`${closedStatus? "" : `/support-tickets/${item?.id}`}`}
             my="1rem"
             padding="15px 24px"
+            style={{cursor:  closedStatus && "no-drop"}}
           >
             <div>
               <span>{item?.subject}</span>
               <FlexBox alignItems="center" flexWrap="wrap" pt="0.5rem" m="-6px">
-                <Chip p="0.25rem 1rem" bg="primary.light" m="6px">
-                  <Small color="primary.main">{priorities.find((data) => data?.id == item?.ticket_priority)?.name}</Small>
+                <Chip p="0.25rem 1rem" bg={priorityHigh? "primary.light" : "success.light"} m="6px">
+                  <Small color={priorityHigh? "primary.main" : "success.main"}>{item?.ticket_priority}</Small>
                 </Chip>
-                <Chip p="0.25rem 1rem" bg="success.light" m="6px">
-                  <Small color="success.main">{statuss.find((data) => data?.id == item?.ticket_status)?.name}</Small>
+                <Chip p="0.25rem 1rem" bg={closedStatus? "primary.light" : "success.light"} m="6px">
+                  <Small color={closedStatus? "primary.main" : "success.main"}>{item?.ticket_status}</Small>
                 </Chip>
                 <SemiSpan className="pre" m="6px">
                   {format(new Date(item?.created_at), "MMM dd, yyyy")}
@@ -93,7 +85,7 @@ const TicketList = () => {
 
             <Hidden flex="0 0 0 !important" down={769}>
               <Typography textAlign="center" color="text.muted">
-                <IconButton size="small">
+                <IconButton size="small" style={{cursor: closedStatus && "no-drop"}}>
                   <Icon variant="small" defaultcolor="currentColor">
                     arrow-right
                   </Icon>
@@ -102,7 +94,8 @@ const TicketList = () => {
             </Hidden>
           </TableRow>
         </Link>
-      ))}
+      )}
+      )}
 
       <FlexBox
         flexWrap="wrap"

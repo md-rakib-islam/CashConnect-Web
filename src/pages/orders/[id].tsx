@@ -11,7 +11,6 @@ import DashboardLayout from "@component/layout/CustomerDashboardLayout";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import TableRow from "@component/TableRow";
 import Typography, { H5, H6, Paragraph } from "@component/Typography";
-import useFormettedDate from "@customHook/useFormettedDate";
 import { Customer_order_Details_For_Status } from "@data/constants";
 import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
@@ -19,6 +18,7 @@ import { format } from "date-fns";
 import { useRouter } from "next/router";
 import React, { Fragment, useEffect, useState } from "react";
 import Item from "./Item";
+import addDays from "date-fns/addDays"
 
 
 type OrderStatus = "packaging" | "shipping" | "delivering" | "complete";
@@ -127,14 +127,9 @@ const OrderDetails = () => {
             color="primary.main"
             textAlign="center"
           >
-            Estimated Delivery Date <b>{
-            placedOn && useFormettedDate(placedOn, 3)
-            // addDays(
-            //   new Date("Oct 21, 2021"),
-            //   10,
-            // );
-            
-            }</b>
+            Estimated Delivery Date <b>
+              {placedOn && addDays(new Date(placedOn), 3,)?.toString()?.slice(0, 15)}
+            </b>
           </Typography>
         </FlexBox>
       </Card>

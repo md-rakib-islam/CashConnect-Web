@@ -12,6 +12,7 @@ import Typography, { H3, H5, Small } from "@component/Typography";
 import useUserInf from "@customHook/useUserInf";
 import { BASE_URL, Customer_By_Id } from "@data/constants";
 import axios from "axios";
+import { format } from "date-fns";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
@@ -141,7 +142,7 @@ const Profile = () => {
           </Small>
           <span className="pre">
             {/* {format(new Date(1996 / 11 / 16), "dd MMM, yyyy")} */}
-            {birth_day}
+            {birth_day && format(new Date(birth_day), "dd MMM, yyyy")}
           </span>
         </FlexBox>
       </TableRow>

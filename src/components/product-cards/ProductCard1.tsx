@@ -242,7 +242,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
                   textAlign="left"
                   fontWeight="600"
                   color="text.secondary"
-                  mb="10px"
+                  mb="5px"
                   title={title}
                 >
                   {title}

@@ -121,7 +121,7 @@ export const getStaticProps: GetStaticProps = async () => {
   }
 
   try {
-    var categoryWithProductBrandRes = await axios.get(`${Category_With_Product_Brand}`)
+    var categoryWithProductBrandRes = await axios.get(`${Category_With_Product_Brand}?page=${1}&size=${10}`)
     var categoryWithProductBrandList: any[] = await categoryWithProductBrandRes.data.categories_with_products_and_brands
   } catch (err) {
     var categoryWithProductBrandList = []

@@ -20,7 +20,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
     MegaMenu1,
   };
 
-  const [increaseWidth, setIncreaseWidth] = useState(true)
+  const [increaseWidth, setIncreaseWidth] = useState(false)
 
   const [navigationData, setNavigationData] = useState([]);
   const [formattedCategoryData] =

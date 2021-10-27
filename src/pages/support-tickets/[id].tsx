@@ -33,7 +33,7 @@ const PaymentMethodEditor = () => {
         console.log("Ticket_Details_AllRes", res)
         setFieldValue("message", "")
         setMessagelist(res?.data?.ticket_details)
-      }).catch(() => {})
+      }).catch(() => { })
     }
   }, [id, reloadMessage])
 
@@ -52,7 +52,7 @@ const PaymentMethodEditor = () => {
     axios.post(`${Ticket_Details_Create}`, data, authTOKEN).then(res => {
       console.log("ticketDetailsRes", res)
       setReloadMessage(Math.random())
-    }).catch(() => {})
+    }).catch(() => { })
   };
 
   const {
@@ -61,7 +61,7 @@ const PaymentMethodEditor = () => {
     touched,
     handleChange,
     handleBlur,
-    // handleSubmit,
+    handleSubmit,
     setFieldValue,
   } = useFormik({
     initialValues: initialValues,
@@ -71,6 +71,7 @@ const PaymentMethodEditor = () => {
 
   return (
     <div>
+
       <DashboardPageHeader
         iconName="support"
         title="Support Ticket"
@@ -85,14 +86,16 @@ const PaymentMethodEditor = () => {
 
 
       {messagelist.map((item, ind) => (
-        <FlexBox mb="30px" key={ind}>
-          <Avatar src={`${BASE_URL}${item?.image}`} mr="1rem" />
+        <FlexBox mb="30px" key={ind} style={{ direction: item?.customer ? "rtl" : "ltr" }}>
+          <Avatar src={
+            `${item?.customer_image ? `${BASE_URL}${item?.customer_image}` : (item?.admin_image ? `${BASE_URL}${item?.admin_image}` : "")}`
+          } mr={item?.admin && "1rem"} ml={item?.customer && "1rem"} />
           <Box>
             <H5 fontWeight="600" mt="0px" mb="0px">
               {item?.customer || item?.admin}
             </H5>
-            <SemiSpan>
-              {format(new Date(item?.created_at), "hh:mm:a | dd MMM yyyy")}
+            <SemiSpan style={{ direction: "ltr" }}>
+              <pre style={{ margin: "0px", wordSpacing: "-5px" }}>{format(new Date(item?.created_at), "hh:mm:a | dd MMM yyyy")}</pre>
             </SemiSpan>
             <Box borderRadius="10px" bg="gray.200" p="1rem" mt="1rem">
               {item?.message}
@@ -102,29 +105,30 @@ const PaymentMethodEditor = () => {
       ))}
 
       <Divider mb="2rem" bg="gray.300" />
+      <form onSubmit={handleSubmit}>
+        <TextArea
+          name="message"
+          placeholder="Write your message here..."
+          rows={8}
+          borderRadius={8}
+          fullwidth
+          mb="1.5rem"
+          onBlur={handleBlur}
+          onChange={handleChange}
+          value={values.message || ""}
+          errorText={touched.message && errors.message}
+        />
 
-      <TextArea
-        name="message"
-        placeholder="Write your message here..."
-        rows={8}
-        borderRadius={8}
-        fullwidth
-        mb="1.5rem"
-        onBlur={handleBlur}
-        onChange={handleChange}
-        value={values.message || ""}
-        errorText={touched.message && errors.message}
-      />
-
-      <Button
-        variant="contained"
-        color="primary"
-        ml="auto"
-        // type="submit"
-        onClick={() => handleFormSubmit()}
-      >
-        Post message
-      </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          ml="auto"
+          type="submit"
+        // onClick={() => handleFormSubmit()}
+        >
+          Post message
+        </Button>
+      </form>
     </div>
   );
 };
