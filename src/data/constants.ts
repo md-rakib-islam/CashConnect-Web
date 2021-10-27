@@ -116,8 +116,16 @@ export const Purchase_Req_By_Id = `${BASE_URL}/purchase_request/api/v1/purchase_
 
 export const Purchase_Products_By_Vendor_Id = `${BASE_URL}/purchase_request/api/v1/purchase_request/get_all_purchase_request_items_with_images_by_vendor_id/`
 
-//payment mathod
+//payment method
 export const Mayment_Mathod_All = `${BASE_URL}/paymentmethod/api/v1/paymentmethod/all/`
+
+export const Customer_Payment_Methods_By_Customer_Id = `${BASE_URL}/customer_payment_method/api/v1/customer_payment_method/get_all_by_customer_id/`
+
+export const Customer_Payment_Method_Create = `${BASE_URL}/customer_payment_method/api/v1/customer_payment_method/create/`
+
+export const Customer_Payment_Method_Update = `${BASE_URL}/customer_payment_method/api/v1/customer_payment_method/update/`
+
+export const Customer_Payment_Method_Delete = `${BASE_URL}/customer_payment_method/api/v1/customer_payment_method/delete/`
 
 //purchase status
 export const Purchase_Status_all = `${BASE_URL}/purchase_status/api/v1/purchase_status/all/`

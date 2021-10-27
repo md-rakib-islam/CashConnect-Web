@@ -10,6 +10,11 @@ import DashboardLayout from "@component/layout/CustomerDashboardLayout";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import TextField from "@component/text-field/TextField";
 import Typography from "@component/Typography";
+import { useAppContext } from "@context/app/AppContext";
+import useJsonToFormData from "@customHook/useJsonToFormData";
+import useUserInf from "@customHook/useUserInf";
+import { Customer_Payment_Method_Create, Customer_Payment_Method_Update } from "@data/constants";
+import axios from "axios";
 import { useFormik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -21,15 +26,74 @@ const PaymentMethodEditor = () => {
     query: { id },
   } = useRouter();
 
+  const router = useRouter()
+  const { dispatch } = useAppContext()
+  const { user_id } = useUserInf()
+
   const [previewImage, setPreviewImage] = useState<any>("");
-  const [_image, setImage] = useState<any>("");
+  const [image, setImage] = useState<any>("");
 
   const handleFormSubmit = async (values) => {
+
+    const data = {
+      ...values,
+      customer: user_id,
+      image,
+    }
+    const [saveData] = useJsonToFormData(data)
+
+    if (id === "add") {
+      axios.post(`${Customer_Payment_Method_Create}`, saveData).then(res => {
+        console.log("Customer_Payment_Method_Create", res)
+        router.push("/payment-methods")
+        dispatch({
+          type: "CHANGE_ALERT",
+          payload: {
+            alertValue: "payment method added",
+            alerType: "success",
+            alertShow: true,
+            alertChanged: Math.random()
+          }
+        })
+      }
+      ).catch(() => {
+        dispatch({
+          type: "CHANGE_ALERT",
+          payload: {
+            alertValue: "sumthing went wrong",
+            alerType: "error",
+            alertShow: true,
+            alertChanged: Math.random()
+          }
+        })
+      })
+    }
+    else {
+      axios.put(`${Customer_Payment_Method_Update}${id}`, saveData).then(res => {
+        console.log("Customer_Payment_Method_Update", res)
+        router.push("/payment-methods")
+        dispatch({
+          type: "CHANGE_ALERT",
+          payload: {
+            alertValue: "payment method updated",
+            alerType: "success",
+            alertShow: true,
+            alertChanged: Math.random()
+          }
+        })
+      }).catch(() => {
+        dispatch({
+          type: "CHANGE_ALERT",
+          payload: {
+            alertValue: "sumthing went wrong",
+            alerType: "error",
+            alertShow: true,
+            alertChanged: Math.random()
+          }
+        })
+      })
+    }
     console.log(values);
-    // const data = {
-    //   ...values,
-    //   image,
-    // }
   };
 
 
@@ -67,46 +131,46 @@ const PaymentMethodEditor = () => {
             <Grid container horizontal_spacing={6} vertical_spacing={4}>
               <Grid item md={6} xs={12}>
                 <TextField
-                  name="card_no"
+                  name="card_number"
                   label="Card Number"
                   fullwidth
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.card_no || ""}
-                  errorText={touched.card_no && errors.card_no}
+                  value={values.card_number || ""}
+                  errorText={touched.card_number && errors.card_number}
                 />
               </Grid>
               <Grid item md={6} xs={12}>
                 <TextField
-                  name="name"
+                  name="card_holder"
                   label="Name on Card"
                   fullwidth
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.name || ""}
-                  errorText={touched.name && errors.name}
+                  value={values.card_holder || ""}
+                  errorText={touched.card_holder && errors.card_holder}
                 />
               </Grid>
               <Grid item md={6} xs={12}>
                 <TextField
-                  name="exp"
+                  name="expiry_date"
                   label="Exp. Date"
                   fullwidth
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.exp || ""}
-                  errorText={touched.exp && errors.exp}
+                  value={values.expiry_date || ""}
+                  errorText={touched.expiry_date && errors.expiry_date}
                 />
               </Grid>
               <Grid item md={6} xs={12}>
                 <TextField
-                  name="cvc"
+                  name="cvc_code"
                   label="CVC"
                   fullwidth
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.cvc || ""}
-                  errorText={touched.cvc && errors.cvc}
+                  value={values.cvc_code || ""}
+                  errorText={touched.cvc_code && errors.cvc_code}
                 />
               </Grid>
 
@@ -186,17 +250,17 @@ const PaymentMethodEditor = () => {
 };
 
 const initialValues = {
-  card_no: "",
-  name: "",
-  exp: "",
-  cvc: "",
+  card_number: "",
+  card_holder: "",
+  expiry_date: "",
+  cvc_code: "",
 };
 
 const checkoutSchema = yup.object().shape({
-  name: yup.string().required("required"),
-  card_no: yup.string().required("required"),
-  exp: yup.string().required("required"),
-  cvc: yup.string().required("required"),
+  card_holder: yup.string().required("required"),
+  card_number: yup.string().required("required"),
+  expiry_date: yup.string().required("required"),
+  cvc_code: yup.string().required("required"),
 });
 
 PaymentMethodEditor.layout = DashboardLayout;

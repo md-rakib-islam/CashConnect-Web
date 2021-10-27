@@ -10,9 +10,10 @@ import PaginationRow from "@component/pagination/PaginationRow";
 import ShowingItemNumber from "@component/pagination/ShowingItemNumber";
 import TableRow from "@component/TableRow";
 import Typography, { H5, SemiSpan } from "@component/Typography";
-import { Mayment_Mathod_All } from "@data/constants";
+import { useAppContext } from "@context/app/AppContext";
+import useUserInf from "@customHook/useUserInf";
+import { BASE_URL, Customer_Payment_Methods_By_Customer_Id, Customer_Payment_Method_Delete, Mayment_Mathod_All } from "@data/constants";
 import axios from "axios";
-import { format } from "date-fns";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -28,20 +29,48 @@ const AddressList = () => {
   const router = useRouter()
   const { page, size } = router.query
 
+  const { dispatch } = useAppContext()
+
+  const { user_id } = useUserInf()
+
   useEffect(() => {
     console.log("url", `${Mayment_Mathod_All}?page=${page || 1}&size=${size || 10}`)
-    axios.get(`${Mayment_Mathod_All}?page=${page || 1}&size=${size || 10}`).then(res => {
+    axios.get(`${Customer_Payment_Methods_By_Customer_Id}${user_id}?page=${page || 1}&size=${size || 10}`).then(res => {
       console.log("Mayment_Mathod_All", res)
-      setPaymentmethods(res?.data?.paymentmethods)
+      setPaymentmethods(res?.data?.customer_payment_methods)
       setTotalPage(res?.data?.total_pages)
       setTotalPaymentMathod(res?.data?.total_elements)
     }).catch(() => { })
   }, [page, size, reloadMethod])
 
   const handleDelete = (id) => {
+    axios.delete(`${Customer_Payment_Method_Delete}${id}`).then(res => {
+      console.log("Customer_Payment_Method_DeleteRes", res)
+      setReloadMethod(Math.random())
+      dispatch({
+        type: "CHANGE_ALERT",
+        payload: {
+          alertValue: "payment method deleted",
+          alerType: "success",
+          alertShow: true,
+          alertChanged: Math.random()
+        }
+      })
+    }).catch(() => {
+      dispatch({
+        type: "CHANGE_ALERT",
+        payload: {
+          alertValue: "sumthing went wrong",
+          alerType: "error",
+          alertShow: true,
+          alertChanged: Math.random()
+        }
+      })
+    })
     console.log(id)
-    setReloadMethod(Math.random())
   }
+
+  console.log("paymentmethods", paymentmethods)
 
   return (
     <div>
@@ -59,25 +88,26 @@ const AddressList = () => {
         }
       />
 
-      {paymentmethods.map((item, id) => (
+      {paymentmethods?.map((item, id) => (
         <TableRow key={id} my="1rem" padding="6px 18px">
           <FlexBox alignItems="center" m="6px">
             <Card width="42px" height="28px" mr="10px" elevation={4}>
               <img
                 width="100%"
-                src={`/assets/images/payment-methods/Mastercard.svg`}
-                alt={item.payment_method}
+                src={`${BASE_URL}${item?.image}`}
+                alt={item.card_holder}
               />
             </Card>
             <H5 className="pre" m="6px">
-              {item?.name}
+              {item?.card_holder}
             </H5>
           </FlexBox>
           <Typography className="pre" m="6px">
-            1234 **** **** ****
+            {item?.card_number}
           </Typography>
           <Typography className="pre" m="6px">
-            {format(new Date(item?.created_at), "MMM dd, yyyy")}
+            {/* {format(new Date(item?.expiry_date), "MMM dd, yyyy")} */}
+            {item?.expiry_date}
           </Typography>
 
           <Typography className="pre" textAlign="center" color="text.muted">
