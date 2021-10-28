@@ -21,8 +21,7 @@ import {
   Country_All,
   Customer_By_Id,
   Customer_type_All,
-  Customer_Update, Role_All,
-  Thana_All
+  Customer_Update, Thana_All
 } from "@data/constants";
 import { country_codes } from "@data/country_code";
 import { requred } from "@data/data";
@@ -41,7 +40,6 @@ const ProfileEditor = ({
   const [previewImage, setPreviewImage] = useState<Iimage>();
   const [image, setImage] = useState<TIMG>("");
 
-  const [roles, setRoles] = useState([]);
   const [thanas, setThanas] = useState([]);
   const [cities, setCities] = useState([]);
   const [countries, setCountries] = useState([]);
@@ -133,6 +131,13 @@ const ProfileEditor = ({
       console.log("EditDetails", datas.data);
       const { data } = datas;
 
+      resetForm({
+        values: {
+          ...values,
+          ...data,
+        }
+      })
+
       setPreviewImage(`${BASE_URL}${data.image}`);
 
       for (let key in data) {
@@ -149,12 +154,6 @@ const ProfileEditor = ({
   }, [user_id]);
 
   useEffect(() => {
-    fetch(`${Role_All}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setRoles(data.roles);
-      }).catch((err) => { console.log("error", err) });
-
     fetch(`${City_All}`)
       .then((res) => res.json())
       .then((data) => {
@@ -195,6 +194,7 @@ const ProfileEditor = ({
     handleSubmit,
     setFieldValue,
     setErrors,
+    resetForm,
   } = useFormik({
     initialValues: initialValues,
     validationSchema: checkoutSchema,
@@ -211,6 +211,8 @@ const ProfileEditor = ({
       </div>
     ) : null;
   }
+
+  console.log("render")
 
 
   return (
@@ -452,19 +454,7 @@ const ProfileEditor = ({
                 />
               </Grid>
 
-              <Grid item md={6} xs={12}>
-                <Select
-                  mb="1rem"
-                  label="Role"
-                  placeholder="Select Role"
-                  options={roles}
-                  value={values.role || ""}
-                  onChange={(role) => {
-                    setFieldValue("role", role);
-                  }}
-                  errorText={touched.role && errors.role}
-                />
-              </Grid>
+
 
               <Grid item md={6} xs={12}>
                 <Select

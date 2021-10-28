@@ -31,7 +31,7 @@ const AddressList = () => {
 
   const { dispatch } = useAppContext()
 
-  const { user_id } = useUserInf()
+  const { user_id, authTOKEN } = useUserInf()
 
   useEffect(() => {
     console.log("url", `${Mayment_Mathod_All}?page=${page || 1}&size=${size || 10}`)
@@ -43,14 +43,14 @@ const AddressList = () => {
     }).catch(() => { })
   }, [page, size, reloadMethod])
 
-  const handleDelete = (id) => {
-    axios.delete(`${Customer_Payment_Method_Delete}${id}`).then(res => {
+  const handleDelete = (id, cardName) => {
+    axios.delete(`${Customer_Payment_Method_Delete}${id}`, authTOKEN).then(res => {
       console.log("Customer_Payment_Method_DeleteRes", res)
       setReloadMethod(Math.random())
       dispatch({
         type: "CHANGE_ALERT",
         payload: {
-          alertValue: "payment method deleted",
+          alertValue: `${cardName} deleted`,
           alerType: "success",
           alertShow: true,
           alertChanged: Math.random()
@@ -124,7 +124,7 @@ const AddressList = () => {
                 </IconButton>
               </Typography>
             </Link>
-            <IconButton size="small" onClick={() => handleDelete(item.id)}>
+            <IconButton size="small" onClick={() => handleDelete(item.id, item?.card_holder)}>
               <Icon variant="small" defaultcolor="currentColor">
                 delete
               </Icon>

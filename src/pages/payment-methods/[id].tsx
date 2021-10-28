@@ -13,12 +13,12 @@ import Typography from "@component/Typography";
 import { useAppContext } from "@context/app/AppContext";
 import useJsonToFormData from "@customHook/useJsonToFormData";
 import useUserInf from "@customHook/useUserInf";
-import { Customer_Payment_Method_Create, Customer_Payment_Method_Update } from "@data/constants";
+import { BASE_URL, Customer_Payment_Maythod_By_Id, Customer_Payment_Method_Create, Customer_Payment_Method_Update } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as yup from "yup";
 
 const PaymentMethodEditor = () => {
@@ -28,33 +28,60 @@ const PaymentMethodEditor = () => {
 
   const router = useRouter()
   const { dispatch } = useAppContext()
-  const { user_id } = useUserInf()
+  const { user_id, authTOKEN } = useUserInf()
 
   const [previewImage, setPreviewImage] = useState<any>("");
   const [image, setImage] = useState<any>("");
+
+  useEffect(() => {
+    if (id) {
+      if (id !== "add") {
+        axios.get(`${Customer_Payment_Maythod_By_Id}${id}`, authTOKEN).then(res => {
+          console.log("paymentDetailsRes", res)
+          resetForm({ values: { ...res?.data } })
+          setPreviewImage(`${BASE_URL}${res?.data?.image}`)
+        })
+      }
+    }
+  }, [id])
 
   const handleFormSubmit = async (values) => {
 
     const data = {
       ...values,
       customer: user_id,
-      image,
+      image: image || previewImage,
     }
     const [saveData] = useJsonToFormData(data)
 
     if (id === "add") {
-      axios.post(`${Customer_Payment_Method_Create}`, saveData).then(res => {
+      axios.post(`${Customer_Payment_Method_Create}`, saveData, authTOKEN).then(res => {
+
         console.log("Customer_Payment_Method_Create", res)
-        router.push("/payment-methods")
-        dispatch({
-          type: "CHANGE_ALERT",
-          payload: {
-            alertValue: "payment method added",
-            alerType: "success",
-            alertShow: true,
-            alertChanged: Math.random()
-          }
-        })
+
+        if (res?.data?.id) {
+          router.push("/payment-methods")
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: "payment method added",
+              alerType: "success",
+              alertShow: true,
+              alertChanged: Math.random()
+            }
+          })
+        }
+        else {
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: "sumthing went wrong",
+              alerType: "error",
+              alertShow: true,
+              alertChanged: Math.random()
+            }
+          })
+        }
       }
       ).catch(() => {
         dispatch({
@@ -69,7 +96,7 @@ const PaymentMethodEditor = () => {
       })
     }
     else {
-      axios.put(`${Customer_Payment_Method_Update}${id}`, saveData).then(res => {
+      axios.put(`${Customer_Payment_Method_Update}${id}`, saveData, authTOKEN).then(res => {
         console.log("Customer_Payment_Method_Update", res)
         router.push("/payment-methods")
         dispatch({
@@ -93,7 +120,7 @@ const PaymentMethodEditor = () => {
         })
       })
     }
-    console.log(values);
+    console.log("data", data);
   };
 
 
@@ -104,6 +131,7 @@ const PaymentMethodEditor = () => {
     handleChange,
     handleBlur,
     handleSubmit,
+    resetForm,
     // setFieldValue,
   } = useFormik({
     initialValues: initialValues,

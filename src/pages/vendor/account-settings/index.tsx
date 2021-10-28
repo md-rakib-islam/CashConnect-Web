@@ -17,8 +17,7 @@ import {
   BASE_URL,
   Branch_All,
   City_All,
-  Country_All, Role_All,
-  Thana_All,
+  Country_All, Thana_All,
   Vendor_By_Id,
   Vendor_Update
 } from "@data/constants";
@@ -35,7 +34,6 @@ type TIMG = any;
 const AccountSettings = () => {
   const [previewImage, setPreviewImage] = useState<Timage>();
   const [image, setImage] = useState<TIMG>("");
-  const [roles, setRoles] = useState([]);
   const [thanas, setThanas] = useState([]);
   const [cities, setCities] = useState([]);
   const [countries, setCountries] = useState([]);
@@ -54,11 +52,6 @@ const AccountSettings = () => {
   const { user_id, authTOKEN } = useUserInf()
 
   useEffect(() => {
-    fetch(`${Role_All}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setRoles(data.roles);
-      }).catch((err) => { console.log("error", err) });
 
     fetch(`${City_All}`)
       .then((res) => res.json())
@@ -93,16 +86,13 @@ const AccountSettings = () => {
 
       setPreviewImage(`${BASE_URL}${data.image}`);
 
-      for (let key in data) {
+      resetForm({
+        values: {
+          ...values,
+          ...data,
+        }
+      })
 
-        setFieldValue(`${key}`, data[key]);
-      }
-
-      setFieldValue("gender", {
-        value: data.gender,
-        label: genders.find((gender: any) => gender?.value == data.gender)
-          ?.label,
-      });
     }).catch((err) => { console.log("error", err) });
   }, [user_id, updated]);
 
@@ -187,6 +177,7 @@ const AccountSettings = () => {
     handleBlur,
     handleSubmit,
     setFieldValue,
+    resetForm,
   } = useFormik({
     initialValues: initialValues,
     validationSchema: accountSchema,
@@ -480,20 +471,6 @@ const AccountSettings = () => {
                   errorText={
                     touched.street_address_two && errors.street_address_two
                   }
-                />
-              </Grid>
-
-              <Grid item md={6} xs={12}>
-                <Select
-                  mb="1rem"
-                  label="Role"
-                  placeholder="Select Role"
-                  options={roles}
-                  value={values.role || ""}
-                  onChange={(role) => {
-                    setFieldValue("role", role);
-                  }}
-                  errorText={touched.role && errors.role}
                 />
               </Grid>
 

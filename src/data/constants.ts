@@ -127,6 +127,8 @@ export const Customer_Payment_Method_Update = `${BASE_URL}/customer_payment_meth
 
 export const Customer_Payment_Method_Delete = `${BASE_URL}/customer_payment_method/api/v1/customer_payment_method/delete/`
 
+export const Customer_Payment_Maythod_By_Id = `${BASE_URL}/customer_payment_method/api/v1/customer_payment_method/`
+
 //purchase status
 export const Purchase_Status_all = `${BASE_URL}/purchase_status/api/v1/purchase_status/all/`
 
@@ -136,7 +138,7 @@ export const Review_Create = `${BASE_URL}/review_and_rating/api/v1/review_and_ra
 export const Review_By_Product_Id = `${BASE_URL}/review_and_rating/api/v1/all_review_and_rating_of_a_product/`
 
 //role api
-export const Role_All = `${BASE_URL}/roles/api/v1/roles/all/`;
+export const Role_All = `${BASE_URL}/role/api/v1/role/all/`;
 
 //site settings api
 export const Site_Setting_All = `${BASE_URL}/general_setting/api/v1/general_setting/all/`
