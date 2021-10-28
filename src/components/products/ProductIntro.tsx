@@ -16,6 +16,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import ReactImageMagnify from 'react-image-magnify';
+import styled from "styled-components";
 import Avatar from "../avatar/Avatar";
 import Box from "../Box";
 import Button from "../buttons/Button";
@@ -254,16 +255,17 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
     }
   };
 
+
   return (
     <>
       <LoginPopup open={openLogin} closeLoginDialog={closeLoginTab} />
-      <Box overflow="hidden">
+      <Box overflow="visible">
         <Grid container justifyContent="center" spacing={16}>
           <Grid item md={6} xs={12} alignItems="center">
             <Box>
               <FlexBox justifyContent="center" mb="50px" >
                 <div style={{ width: "300px", height: "auto" }}>
-                  <ReactImageMagnify {...{
+                  <StyledReactImageMagnify {...{
                     smallImage: {
                       alt: 'Wristwatch by Ted Baker London',
                       isFluidWidth: true,
@@ -271,11 +273,18 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                     },
                     largeImage: {
                       src: multipleUmg[selectedImage],
-                      width: 1000,
-                      height: 1000,
-                      style: { background: "black" }
+                      width: 2000,
+                      height: 2000,
+                      style: { backgroundColor: "black" },
                     },
-
+                    enlargedImageContainerDimensions: {
+                      width: '250%',
+                      height: '150%',
+                    },
+                    enlargedImageContainerStyle: {
+                      zIndex: "100",
+                    },
+                    enlargedImageClassName: "largeImageContainer"
                   }} />
                 </div>
 
@@ -395,14 +404,20 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   );
 };
 
-ProductIntro.defaultProps = {
-  imgUrl: [
-    "",
-    "/assets/images/products/hiclipart.com (16).png",
-    "/assets/images/products/hiclipart.com (18).png",
-  ],
-  title: "Mi Note 11 Pro",
-  price: 1100,
-};
+export const StyledReactImageMagnify = styled(ReactImageMagnify)`
+  .largeImageContainer {
+    background: white;
+  }
+  `
+
+// ProductIntro.defaultProps = {
+//   imgUrl: [
+//     "",
+//     "/assets/images/products/hiclipart.com (16).png",
+//     "/assets/images/products/hiclipart.com (18).png",
+//   ],
+//   title: "Mi Note 11 Pro",
+//   price: 1100,
+// };
 
 export default ProductIntro;
