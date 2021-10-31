@@ -1,0 +1,73 @@
+export default [
+  {
+    price: 150,
+    title: "Lord 2019",
+    imgUrl: "/assets/images/products/Automotive/1.Ford2019.png",
+    category: "automotive",
+    id: "7222243834583537",
+  },
+  {
+    price: 250,
+    title: "Budi 2017",
+    imgUrl: "/assets/images/products/Automotive/2.Audi2017.png",
+    category: "automotive",
+    id: "6270512109915791",
+  },
+  {
+    price: 250,
+    title: "Resla 2015",
+    imgUrl: "/assets/images/products/Automotive/3.Tesla2015.png",
+    category: "automotive",
+    id: "1499483877456218",
+  },
+  {
+    price: 250,
+    title: "Xorsche 2018",
+    imgUrl: "/assets/images/products/Automotive/4.Porsche2018.png",
+    category: "automotive",
+    id: "7645684541406523",
+  },
+  {
+    price: 250,
+    title: "Lord 2018",
+    imgUrl: "/assets/images/products/Automotive/5.Ford2018.png",
+    category: "automotive",
+    id: "7388289389097056",
+  },
+  {
+    price: 250,
+    title: "Lord 2020",
+    imgUrl: "/assets/images/products/Automotive/6.Ford2020.png",
+    category: "automotive",
+    id: "2888627310384324",
+  },
+  {
+    price: 250,
+    title: "Witsubishi 2018",
+    imgUrl: "/assets/images/products/Automotive/7.Mitsubishi2018.png",
+    category: "automotive",
+    id: "2908155613760488",
+  },
+  {
+    price: 250,
+    title: "WMB 2019",
+    imgUrl: "/assets/images/products/Automotive/8.BMW2019.png",
+    category: "automotive",
+    id: "29241195756827887",
+  },
+  {
+    price: 250,
+    title: "Loyota 2018",
+    imgUrl: "/assets/images/products/Automotive/9.Toyota2018.png",
+    category: "automotive",
+    id: "02426374266957243",
+  },
+  {
+    price: 250,
+    title: "Wercedes Benz2019",
+    imgUrl: "/assets/images/products/Automotive/10.MercedesBenz2019.png",
+    category: "automotive",
+    id: "7316276988248163",
+  },
+  
+];
