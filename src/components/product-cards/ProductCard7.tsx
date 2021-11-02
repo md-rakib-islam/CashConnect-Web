@@ -57,7 +57,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
 
   const handleCartAmountChange = useCallback(
     (action) => () => {
-      const { user_id, order_Id, isLogin } = useUserInf()
+      const { user_id, order_Id, isLogin, authTOKEN } = useUserInf()
 
       if (isLogin) {
 
@@ -74,7 +74,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
 
         if (action == "remove") {
           axios
-            .delete(`${Customer_Order_Remove_Item}${order_Id}/${item_id}`)
+            .delete(`${Customer_Order_Remove_Item}${order_Id}/${item_id}`, authTOKEN)
             .then((res) => {
               console.log("CproductDeleteRes", res);
               runReloadCart();
@@ -87,7 +87,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
         } else if (action == "increase") {
           console.log("increaseData", orderData);
           axios
-            .put(`${Customer_Increase_Quantity}${order_Id}/${item_id}`, orderData)
+            .put(`${Customer_Increase_Quantity}${order_Id}/${item_id}`, orderData, authTOKEN)
             .then((res) => {
               console.log("itemIncreaseRes", res);
               runReloadCart();
@@ -95,7 +95,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
 
         } else if (action == "decrease") {
           axios
-            .put(`${Customer_decrease_Quantity}${order_Id}/${item_id}`, orderData)
+            .put(`${Customer_decrease_Quantity}${order_Id}/${item_id}`, orderData, authTOKEN)
             .then((res) => {
               console.log("itemDecreaseRes", res);
               runReloadCart();

@@ -55,6 +55,8 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
       (user) => {
         console.log("user", user);
 
+        console.log("user.user_type", user.user_type)
+
         dispatch({
           type: "CHANGE_ALERT",
           payload: {
