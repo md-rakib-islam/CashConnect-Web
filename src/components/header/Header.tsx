@@ -70,7 +70,7 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
 
   const goToFrofile = () => {
     const user_type: string = localStorage.getItem("userType")
-    if (user_type == "2") {
+    if (user_type == "vendor") {
       Router.push("/vendor/dashboard")
     }
     else {

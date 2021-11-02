@@ -75,7 +75,6 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
       const data = {
         ...values,
         primary_phone: `${values.primary_phone}`,
-        user_type,
       };
 
       if (user_type == 3) {
@@ -296,7 +295,7 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
 
           <div style={{ display: "flex", alignItems: "flex-end" }}>
             <CountryCodeSelect
-            mb="0.75rem"
+              mb="0.75rem"
               mt="1rem"
               label="Country"
               width="40%"
