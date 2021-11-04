@@ -78,7 +78,7 @@ export const order_Status_All = `${BASE_URL}/orderstatus/api/v1/orderstatus/all/
 export const Order_Details_By_Id = `${BASE_URL}/order/api/v1/order/`;
 
 //product api
-export const product_by_categoryId = `${BASE_URL}/product/api/v1/product_using_category/`;
+export const product_by_categoryId = `${BASE_URL}/product/api/v1/product_using_category_nested/`;
 
 export const Product_by_id = `${BASE_URL}/product/api/v1/product/`;
 
