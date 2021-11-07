@@ -25,6 +25,7 @@ type CartItem = {
   quantity: any;
   price: any;
   product: any;
+  condition: string;
 };
 
 const Cart = () => {

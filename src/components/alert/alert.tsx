@@ -41,13 +41,14 @@ function Alert({ onLogin = false, onSignup = false }) {
         <>
             {
                 <div style={{
-                    position: "fixed",
-                    top: onLogin ? "45px" : onSignup ? "45px" : isMobile ? "7px" : "200px",
+                    position: "absolute",
+                    top: onLogin ? "45px" : onSignup ? "45px" : isMobile ? "7px" : "78px",
                     left: 0,
                     width: "100%",
                     textAlign: "center",
-                    zIndex: showAlert ? 1 : -1,
+                    zIndex: showAlert ? 100 : -1,
                     opacity: showAlert ? 1 : 0,
+                    // display: showAlert ? "block" : "none",
                     transitionProperty: "all",
                     transitionDuration: "1s",
                     transitionTimingFunction: "cubic-bezier(0.27, 0.24, 0, 1.03)",
