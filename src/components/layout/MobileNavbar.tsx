@@ -2,13 +2,48 @@ import Accordion from "@component/accordion/Accordion";
 import AccordionHeader from "@component/accordion/AccordionHeader";
 import Divider from "@component/Divider";
 import NavLink from "@component/nav-link/NavLink";
-import React, { Fragment } from "react";
+import { useRouter } from "next/router";
+import React, { Fragment, useEffect, useState } from "react";
 import Typography, { Paragraph } from "../Typography";
 
 const MobileNavbar = () => {
 
+  const [loading, setLoading] = useState(false)
+
+  const router = useRouter()
+
+  const handleLoadingComplete = () => {
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    router.events.on('routeChangeComplete', handleLoadingComplete)
+  }, [router.events])
+
   return (
     <>
+      {loading && (
+        <div style={{
+          position: 'fixed',
+          height: '100%',
+          width: '100%',
+          top: '0px',
+          left: '0px',
+          display: 'flex',
+          justifyContent: "center",
+          backgroundColor: " rgb(0 0 0 / 50%)",
+          alignItems: "center",
+          zIndex: 100,
+        }}>
+          <img style={{
+            height: "50px",
+            width: "50px",
+            marginTop: "100pz"
+          }}
+            src="/assets/images/gif/loading.gif" />
+        </div>
+      )}
+
       {linkLists.map((item, ind) => (
         <Fragment key={ind}>
           <Divider />
@@ -41,6 +76,11 @@ const MobileNavbar = () => {
                 fontSize="14px"
                 fontWeight="600"
                 py="6px"
+                onClick={() => {
+                  if (item?.title === "Home") {
+                    setLoading(true)
+                  }
+                }}
               >
                 {item.title}
               </Paragraph>
