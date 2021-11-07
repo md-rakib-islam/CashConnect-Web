@@ -25,7 +25,7 @@ export const StyledCarousel = styled(
 )`
   position: relative;
   min-width: 100%;
-  min-height: 420px;
+  // min-height: 420px;
 
   .custom-slider {
     margin-left: calc(-1 * ${({ spacing }) => spacing || "0px"} / 2);

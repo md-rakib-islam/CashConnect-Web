@@ -22,7 +22,7 @@ import Icon from "../icon/Icon";
 import Modal from "../modal/Modal";
 import ProductIntro from "../products/ProductIntro";
 import Rating from "../rating/Rating";
-import { H3, SemiSpan } from "../Typography";
+import { H3, H4, SemiSpan } from "../Typography";
 import { StyledProductCard1 } from "./ProductCardStyle";
 
 export interface ProductCard1Props extends CardProps {
@@ -36,6 +36,7 @@ export interface ProductCard1Props extends CardProps {
   id?: string | number;
   brand?: string | number;
   reviewCount?: string | number;
+  condition?: string;
 }
 
 const ProductCard1: React.FC<ProductCard1Props> = ({
@@ -47,6 +48,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
   off,
   rating,
   reviewCount,
+  condition,
   ...props
 }) => {
   const [open, setOpen] = useState(false);
@@ -305,7 +307,17 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
               </Fragment>
             ) : ""}
           </FlexBox>
+
         </FlexBox>
+
+        <H4
+          display="flex"
+          className="title"
+          fontSize="15px"
+          fontWeight="600"
+          color={(condition === "new" || condition === "New") ? "primary.main" : "secondary.main"}
+        >{condition || "used"}
+        </H4>
       </div>
 
       <Modal open={open} onClose={toggleDialog}>

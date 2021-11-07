@@ -98,6 +98,16 @@ const Section13 = ({ bigDiscountList }) => {
                         <del><Currency>{Math.ceil(item.oldPrice).toLocaleString()}</Currency></del>
                       </H4>
                     </FlexBox>
+
+
+                    <H4
+                      display="flex"
+                      className="title"
+                      fontSize="16px"
+                      fontWeight="600"
+                      color={(item?.condition === "new" || item?.condition === "New") ? "primary.main" : "secondary.main"}
+                    >{item?.condition || "used"}
+                    </H4>
                   </a>
                 </Link>
               </Card>

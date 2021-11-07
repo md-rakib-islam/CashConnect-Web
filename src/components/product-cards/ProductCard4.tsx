@@ -16,6 +16,7 @@ export interface ProductCard4Props {
   title: string;
   price: number | string;
   reviewCount: number;
+  condition: string
 }
 
 const ProductCard4: React.FC<ProductCard4Props> = ({
@@ -24,6 +25,7 @@ const ProductCard4: React.FC<ProductCard4Props> = ({
   title,
   price,
   reviewCount,
+  condition
 }) => {
   return (
     <Box>
@@ -63,6 +65,14 @@ const ProductCard4: React.FC<ProductCard4Props> = ({
         color="primary.main"
       >
         <Currency>{Number(price).toFixed(2)}</Currency>
+      </H4>
+      <H4
+        display="flex"
+        className="title"
+        fontSize="15px"
+        fontWeight="600"
+        color={(condition === "new" || condition === "New") ? "primary.main" : "secondary.main"}
+      >{condition || "used"}
       </H4>
     </Box>
   );

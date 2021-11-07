@@ -20,7 +20,7 @@ import Modal from "../modal/Modal";
 import NavLink from "../nav-link/NavLink";
 import ProductIntro from "../products/ProductIntro";
 import Rating from "../rating/Rating";
-import { H5, SemiSpan } from "../Typography";
+import { H4, H5, SemiSpan } from "../Typography";
 import { StyledProductCard9 } from "./ProductCardStyle";
 
 
@@ -40,6 +40,7 @@ export interface ProductCard9Props {
   }>;
   [key: string]: unknown;
   reviewCount?: string | number;
+  condition: string
 }
 
 const ProductCard9: React.FC<ProductCard9Props> = ({
@@ -52,6 +53,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
   brand,
   id,
   reviewCount,
+  condition,
   ...props
 }) => {
 
@@ -259,7 +261,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
 
             {stock || (<SemiSpan fontWeight="bold" color="primary.main" mt="5px">Out Of Stock</SemiSpan>)}
 
-            <FlexBox mt="0.5rem" mb="1rem" alignItems="center">
+            <FlexBox mt="0.5rem" alignItems="center">
               <H5 fontWeight={600} color="primary.main" mr="0.5rem">
                 <Currency>{(price - ((price * off) / 100))}</Currency>
               </H5>
@@ -268,7 +270,17 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
                   <del><Currency>{price?.toFixed(2)}</Currency></del>
                 </SemiSpan>
               )}
+
             </FlexBox>
+
+            <H4
+              display="flex"
+              className="title"
+              fontSize="16px"
+              fontWeight="600"
+              color={(condition === "new" || condition === "New") ? "primary.main" : "secondary.main"}
+            >{condition || "used"}
+            </H4>
 
             <Hidden up="sm">
               <FlexBox

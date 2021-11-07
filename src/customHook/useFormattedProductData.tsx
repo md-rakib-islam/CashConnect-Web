@@ -32,6 +32,7 @@ function useFormattedProductData(productData, type?: string) {
                 brand: data?.brand || null,
                 rating: data?.rating || null,
                 reviewCount: data?.num_reviews || null,
+                condition: data?.condition || null,
             }
         }
         )
