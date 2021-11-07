@@ -1,6 +1,6 @@
+import _ from "lodash";
 import React from "react";
 import Section6 from "./Section6";
-import _ from "lodash"
 
 interface Section7Props {
   categoryWithProductBrandList: any
