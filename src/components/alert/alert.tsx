@@ -48,7 +48,7 @@ function Alert({ onLogin = false, onSignup = false }) {
                     textAlign: "center",
                     zIndex: showAlert ? 100 : -1,
                     opacity: showAlert ? 1 : 0,
-                    // display: showAlert ? "block" : "none",
+                    display: showAlert ? "block" : "none",
                     transitionProperty: "all",
                     transitionDuration: "1s",
                     transitionTimingFunction: "cubic-bezier(0.27, 0.24, 0, 1.03)",
