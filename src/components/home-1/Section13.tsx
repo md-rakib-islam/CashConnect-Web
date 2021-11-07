@@ -106,7 +106,7 @@ const Section13 = ({ bigDiscountList }) => {
                       fontSize="16px"
                       fontWeight="600"
                       color={(item?.condition === "new" || item?.condition === "New") ? "primary.main" : "secondary.main"}
-                    >{item?.condition || "used"}
+                    >{item?.condition || ""}
                     </H4>
                   </a>
                 </Link>

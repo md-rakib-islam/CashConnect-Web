@@ -159,7 +159,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
             fontSize="15px"
             fontWeight="600"
             color={(condition === "new" || condition === "New") ? "primary.main" : "secondary.main"}
-          >{condition || "used"}
+          >{condition || ""}
           </H4>
 
           {stock || (<SemiSpan fontWeight="bold" color="primary.main" ml="1px">Out Of Stock</SemiSpan>)}

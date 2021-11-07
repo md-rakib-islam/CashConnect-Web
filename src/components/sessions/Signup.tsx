@@ -293,7 +293,7 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             errorText={touched.email && errors.email}
           />
 
-          <div style={{ display: "flex", alignItems: "flex-end" }}>
+          <div style={{ display: "flex", alignItems: "flex-start" }}>
             <CountryCodeSelect
               mb="0.75rem"
               mt="1rem"

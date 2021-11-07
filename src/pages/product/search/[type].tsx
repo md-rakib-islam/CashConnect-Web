@@ -12,11 +12,13 @@ import ProductFilterCard from "@component/products/ProductFilterCard";
 import Select from "@component/Select";
 import Sidenav from "@component/sidenav/Sidenav";
 import { H5, Paragraph } from "@component/Typography";
-import { Category_By_Id, Product_Arrival, Product_By_BrandId, product_by_categoryId, Product_Discount, Product_Filter, Product_Flash_Deals, Product_For_You, Product_Search, Product_Top_Rated } from "@data/constants";
+import { Category_By_Id, Product_Arrival, Product_By_BrandId, product_by_categoryId, Product_Discount, Product_Filter, Product_Flash_Deals, Product_For_You, Product_High_To_Low, Product_Low_To_High, Product_Search, Product_Top_Rated } from "@data/constants";
 import axios from "axios";
+import { useFormik } from "formik";
 import { GetServerSideProps } from 'next';
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
+import * as yup from "yup";
 import useWindowSize from "../../../hooks/useWindowSize";
 
 const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
@@ -30,7 +32,7 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
 
   const router = useRouter();
 
-  var id = router.query.categoryId;
+  const id = router.query.categoryId;
 
   const toggleView = useCallback(
     (v) => () => {
@@ -38,6 +40,8 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
     },
     []
   );
+
+  const handleFormSubmit = () => { }
 
 
   useEffect(() => {
@@ -85,8 +89,14 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
   }, [productLists, totalProduct])
 
 
-  console.log("product_list", productList)
-  console.log("router.query", router.query)
+  const {
+    values,
+    setFieldValue,
+  } = useFormik({
+    initialValues: initialValues,
+    validationSchema: checkoutSchema,
+    onSubmit: handleFormSubmit,
+  });
   return (
     <Box pt="20px">
       <FlexBox
@@ -109,8 +119,19 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
           <Box flex="1 1 0" mr="1.75rem" minWidth="150px">
             <Select
               placeholder="Short by"
-              defaultValue={sortOptions[0]}
+              // defaultValue={sortOptions[0]}
               options={sortOptions}
+              getOptionLabelBy="label"
+              getOptionValueBy="value"
+              value={values?.shortBy || ""}
+              onChange={(shortBy: any) => {
+                setFieldValue("shortBy", shortBy);
+                router.push({
+                  pathname: `/product/search/${shortBy?.value === "High" ? "product_high_to_low" : "product_low_to_high"}`,
+                  query: { categoryId: id },
+                })
+                console.log("shortBy", shortBy)
+              }}
             />
           </Box>
 
@@ -170,11 +191,14 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
 };
 
 const sortOptions = [
-  { label: "Relevance", value: "Relevance" },
-  { label: "Date", value: "Date" },
-  { label: "Price Low to High", value: "Price Low to High" },
-  { label: "Price High to Low", value: "Price High to Low" },
+  { label: "Price Low to High", value: "Low" },
+  { label: "Price High to Low", value: "High" },
 ];
+const initialValues = {
+  shortBy: ""
+};
+
+var checkoutSchema = yup.object().shape({});
 
 ProductSearchResult.layout = NavbarLayout;
 
@@ -335,7 +359,33 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
     }
   }
 
+  else if (params.type === "product_high_to_low") {
+    try {
+      const res = await axios.post(`${Product_High_To_Low}?page=${query.page || 1}&size=${query.size || 9}`, { category })
+      var data: any[] = await res.data.products
+      var totalProduct: number = await res.data.total_elements
+      var totalPage: number = await res.data.total_pages
 
+    } catch (error) {
+      var data = []
+      var totalProduct = 0
+      var totalPage = 0
+    }
+  }
+
+  else if (params.type === "product_low_to_high") {
+    try {
+      const res = await axios.post(`${Product_Low_To_High}?page=${query.page || 1}&size=${query.size || 9}`, { category })
+      var data: any[] = await res.data.products
+      var totalProduct: number = await res.data.total_elements
+      var totalPage: number = await res.data.total_pages
+
+    } catch (error) {
+      var data = []
+      var totalProduct = 0
+      var totalPage = 0
+    }
+  }
 
   else {
     var data = []

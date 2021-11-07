@@ -219,9 +219,14 @@ const ProductFilterCard = () => {
           type="number"
           fullwidth
           onChange={(e) => {
-            filterProduct("min_price", e);
             handleChange(e);
           }}
+          onKeyDown={(e: any) => {
+            if (e.code === "NumpadEnter") {
+              filterProduct("min_price", e);
+            }
+          }}
+          // onBlur={(e) => filterProduct("min_price", e)}
           value={values.min_price || ""}
           errorText={touched.min_price && errors.min_price}
         />
@@ -232,12 +237,18 @@ const ProductFilterCard = () => {
           name="max_price"
           placeholder="250"
           type="number"
-          fullwidth onChange={(e) => {
-            filterProduct("max_price", e);
+          onChange={(e) => {
             handleChange(e)
           }}
+          onKeyDown={(e: any) => {
+            if (e.code === "NumpadEnter") {
+              filterProduct("max_price", e);
+            }
+          }}
+          onBlur={(e) => filterProduct("max_price", e)}
           value={values.max_price || ""}
           errorText={touched.max_price && errors.max_price}
+          fullwidth
         />
       </FlexBox>
 

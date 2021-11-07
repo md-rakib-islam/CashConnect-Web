@@ -47,7 +47,7 @@ const ProductCard2: React.FC<ProductCard2Props> = ({
           fontSize="15px"
           fontWeight="600"
           color={(condition === "new" || condition === "New") ? "primary.main" : "secondary.main"}
-        >{condition || "used"}
+        >{condition || ""}
         </H4>
       </a>
     </Link>

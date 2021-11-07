@@ -104,6 +104,9 @@ export const Product_Color_By_Product_Id = `${BASE_URL}/productcolor/api/v1/prod
 
 export const Product_Size_By_Product_Id = `${BASE_URL}/productsize/api/v1/productsize/get_by_product_id/`
 
+export const Product_High_To_Low = `${BASE_URL}/product/api/v1/product/filter_by_category_with_price_high_to_low/`
+
+export const Product_Low_To_High =`${BASE_URL}/product/api/v1/product/filter_by_category_with_price_low_to_high/`
 
 //purchase api
 export const Purshase_Create = `${BASE_URL}/purchase_request/api/v1/purchase_request/create_vendor_purchase_request/`;

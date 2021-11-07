@@ -7,7 +7,7 @@ import Hidden from "@component/hidden/Hidden";
 import Icon from "@component/icon/Icon";
 import NavbarLayout from "@component/layout/NavbarLayout";
 import Radio from "@component/radio/Radio";
-import  { CountryCodeSelect } from "@component/Select";
+import { CountryCodeSelect } from "@component/Select";
 import TextField from "@component/text-field/TextField";
 import Typography from "@component/Typography";
 import { useAppContext } from "@context/app/AppContext";
@@ -89,7 +89,7 @@ function onlineSell() {
         if (res?.data?.data?.purchase_request_items?.length) {
           router.push("/sell/youritems/success")
         }
-        else if(res?.data?.user_exists){
+        else if (res?.data?.user_exists) {
           dispatch({
             type: "CHANGE_ALERT",
             payload: {
@@ -323,7 +323,7 @@ function onlineSell() {
             <Grid item md={6} xs={12}>
 
 
-              <div style={{ display: "flex", alignItems: "flex-end" }}>
+              <div style={{ display: "flex", alignItems: "flex-start" }}>
                 <CountryCodeSelect
                   mt="1.03rem"
                   label="Country"

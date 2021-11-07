@@ -34,6 +34,7 @@ export interface ProductIntroProps {
   brand?: string | number;
   reviewCount?: string | number;
   rating?: number;
+  condition: string
 }
 
 const ProductIntro: React.FC<ProductIntroProps> = ({
@@ -44,6 +45,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   brand,
   reviewCount,
   rating,
+  condition
 }) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [brandName, setbrandName] = useState(brand);
@@ -328,7 +330,12 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
           </Grid>
 
           <Grid item md={6} xs={12} alignItems="center">
-            <H1 mb="1rem">{title}</H1>
+            <H1 mb="0.8rem">{title}</H1>
+
+            <FlexBox alignItems="center" mb="1rem">
+              <SemiSpan>Condition:</SemiSpan>
+              <H6 ml="8px">{condition || "_"}</H6>
+            </FlexBox>
 
             <FlexBox alignItems="center" mb="1rem">
               <SemiSpan>Brand:</SemiSpan>
@@ -403,7 +410,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               <Link href="/shop/fdfdsa">
                 <a>
                   <H6 lineHeight="1" ml="8px">
-                    Mobile Store
+                    Locale Store
                   </H6>
                 </a>
               </Link>

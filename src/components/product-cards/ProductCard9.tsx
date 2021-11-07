@@ -279,7 +279,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
               fontSize="16px"
               fontWeight="600"
               color={(condition === "new" || condition === "New") ? "primary.main" : "secondary.main"}
-            >{condition || "used"}
+            >{condition || ""}
             </H4>
 
             <Hidden up="sm">
@@ -391,6 +391,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
             id={id}
             rating={rating}
             reviewCount={reviewCount}
+            condition={condition}
           />
           <Box
             position="absolute"

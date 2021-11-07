@@ -390,7 +390,7 @@ const AccountSettings = () => {
 
               <Grid item md={6} xs={12}>
 
-                <div style={{ display: "flex", alignItems: "flex-end" }}>
+                <div style={{ display: "flex", alignItems: "flex-start" }}>
                   <CountryCodeSelect
                     mb="1rem"
                     mt="1rem"
@@ -424,7 +424,7 @@ const AccountSettings = () => {
 
               <Grid item md={6} xs={12}>
 
-                <div style={{ display: "flex", alignItems: "flex-end" }}>
+                <div style={{ display: "flex", alignItems: "flex-start" }}>
                   <CountryCodeSelect
                     mb="1rem"
                     mt="1rem"
