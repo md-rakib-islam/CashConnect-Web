@@ -1,5 +1,6 @@
 import Icon from '@component/icon/Icon';
 import { useAppContext } from '@context/app/AppContext';
+import useWindowSize from '@hook/useWindowSize';
 import React, { useEffect, useState } from 'react';
 
 function Alert({ onLogin = false, onSignup = false }) {
@@ -7,6 +8,9 @@ function Alert({ onLogin = false, onSignup = false }) {
     const [showAlert, setShowAlert] = useState(false)
 
     const { state, dispatch } = useAppContext();
+
+    const width = useWindowSize();
+    const isMobile = width < 769;
 
     useEffect(() => {
         if (state.alert.alertShow) {
@@ -38,12 +42,13 @@ function Alert({ onLogin = false, onSignup = false }) {
             {
                 <div style={{
                     position: "absolute",
-                    top: onLogin ? "45px" : onSignup ? "45px" : "7px",
+                    top: onLogin ? "45px" : onSignup ? "45px" : isMobile ? "7px" : "78px",
                     left: 0,
                     width: "100%",
                     textAlign: "center",
-                    zIndex: showAlert ? 1 : -1,
+                    zIndex: showAlert ? 100 : -1,
                     opacity: showAlert ? 1 : 0,
+                    display: showAlert ? "block" : "none",
                     transitionProperty: "all",
                     transitionDuration: "1s",
                     transitionTimingFunction: "cubic-bezier(0.27, 0.24, 0, 1.03)",

@@ -18,7 +18,7 @@ export interface PurchaseRowProps {
     item: {
         id?: any;
         purchase_status?: string;
-        request_date?: string;
+        created_at?: string;
         total_price?: number | string;
         href?: string;
     };
@@ -86,7 +86,7 @@ const PurchaseRow: React.FC<PurchaseRowProps> = ({ item }) => {
                     </Chip>
                 </Box>
                 <Typography className="flex-grow pre" m="6px" textAlign="left">
-                    {format(new Date(item?.request_date), "MMM dd, yyyy")}
+                    {format(new Date(item?.created_at), "MMM dd, yyyy")}
                 </Typography>
                 <Typography m="6px" textAlign="left">
                     <Currency>{Number(item.total_price).toFixed(2)}</Currency>

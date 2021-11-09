@@ -19,7 +19,7 @@ import Button from "../buttons/Button";
 import IconButton from "../buttons/IconButton";
 import FlexBox from "../FlexBox";
 import Icon from "../icon/Icon";
-import Typography, { SemiSpan } from "../Typography";
+import Typography, { H4, SemiSpan } from "../Typography";
 import { StyledProductCard7 } from "./ProductCardStyle";
 
 export interface ProductCard7Props {
@@ -27,6 +27,7 @@ export interface ProductCard7Props {
   quantity: any;
   price: number;
   product: any;
+  condition: string;
   runReloadCart: () => void;
 }
 
@@ -35,6 +36,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
   quantity,
   price,
   product,
+  condition,
   runReloadCart,
   ...props
 }) => {
@@ -57,7 +59,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
 
   const handleCartAmountChange = useCallback(
     (action) => () => {
-      const { user_id, order_Id, isLogin } = useUserInf()
+      const { user_id, order_Id, isLogin, authTOKEN } = useUserInf()
 
       if (isLogin) {
 
@@ -74,7 +76,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
 
         if (action == "remove") {
           axios
-            .delete(`${Customer_Order_Remove_Item}${order_Id}/${item_id}`)
+            .delete(`${Customer_Order_Remove_Item}${order_Id}/${item_id}`, authTOKEN)
             .then((res) => {
               console.log("CproductDeleteRes", res);
               runReloadCart();
@@ -87,7 +89,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
         } else if (action == "increase") {
           console.log("increaseData", orderData);
           axios
-            .put(`${Customer_Increase_Quantity}${order_Id}/${item_id}`, orderData)
+            .put(`${Customer_Increase_Quantity}${order_Id}/${item_id}`, orderData, authTOKEN)
             .then((res) => {
               console.log("itemIncreaseRes", res);
               runReloadCart();
@@ -95,7 +97,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
 
         } else if (action == "decrease") {
           axios
-            .put(`${Customer_decrease_Quantity}${order_Id}/${item_id}`, orderData)
+            .put(`${Customer_decrease_Quantity}${order_Id}/${item_id}`, orderData, authTOKEN)
             .then((res) => {
               console.log("itemDecreaseRes", res);
               runReloadCart();
@@ -150,6 +152,15 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
               <Icon size="1.25rem">close</Icon>
             </IconButton>
           </Box>
+
+          <H4
+            display="flex"
+            className="title"
+            fontSize="15px"
+            fontWeight="600"
+            color={(condition === "new" || condition === "New") ? "primary.main" : "secondary.main"}
+          >{condition || ""}
+          </H4>
 
           {stock || (<SemiSpan fontWeight="bold" color="primary.main" ml="1px">Out Of Stock</SemiSpan>)}
 

@@ -39,7 +39,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
     setIncreaseWidth(action)
   }
 
-  console.log("formatedCategory", navigationData);
+  // console.log("formatedCategory", navigationData);
   return (
     <>
       {!_.isEmpty(formattedCategoryData) && (<StyledCategoryDropdown open={open} position={position} increaseWidth={increaseWidth}>

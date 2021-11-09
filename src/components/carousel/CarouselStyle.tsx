@@ -24,7 +24,8 @@ export const StyledCarousel = styled(
   )
 )`
   position: relative;
-  min-width: 0px;
+  min-width: 100%;
+  // min-height: 420px;
 
   .custom-slider {
     margin-left: calc(-1 * ${({ spacing }) => spacing || "0px"} / 2);
@@ -109,7 +110,7 @@ export const StyledCarousel = styled(
     border-radius: 300px;
     transform: translate(-50%, -50%) scaleX(0);
     background: ${({ dotColor }) =>
-      dotColor || getTheme("colors.secondary.main")};
+    dotColor || getTheme("colors.secondary.main")};
   }
   .dot-active:after {
     transform: translate(-50%, -50%) scaleX(1);

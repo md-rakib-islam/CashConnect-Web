@@ -14,9 +14,7 @@ import useCheckValidation from "@customHook/useCheckValidation";
 import useJsonToFormData from "@customHook/useJsonToFormData";
 import useUserInf from "@customHook/useUserInf";
 import {
-  BASE_URL,
-  Branch_All,
-  City_All,
+  BASE_URL, City_All,
   Country_All, Thana_All,
   Vendor_By_Id,
   Vendor_Update
@@ -37,7 +35,7 @@ const AccountSettings = () => {
   const [thanas, setThanas] = useState([]);
   const [cities, setCities] = useState([]);
   const [countries, setCountries] = useState([]);
-  const [branches, setBranches] = useState([]);
+  // const [branches, setBranches] = useState([]);
 
   const [updated, setUpdated] = useState(0)
 
@@ -71,11 +69,11 @@ const AccountSettings = () => {
         setCountries(data.countries);
       }).catch((err) => { console.log("error", err) });
 
-    fetch(`${Branch_All}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setBranches(data.branches);
-      }).catch((err) => { console.log("error", err) });
+    // fetch(`${Branch_All}`)
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     setBranches(data.branches);
+    //   }).catch((err) => { console.log("error", err) });
   }, []);
 
 
@@ -90,6 +88,8 @@ const AccountSettings = () => {
         values: {
           ...values,
           ...data,
+          primary_phone: data?.primary_phone || "+880",
+          secondary_phone: data?.secondary_phone || "+880"
         }
       })
 
@@ -105,7 +105,7 @@ const AccountSettings = () => {
       const data = {
         ...values,
         primary_phone: `${values.primary_phone}`,
-        secondary_phone: `${values.secondary_phone}`,
+        secondary_phone: values.secondary_phone === "+880" ? "" : values.secondary_phone || "",
         image: image,
         gender:
           typeof values.gender != "object"
@@ -129,21 +129,32 @@ const AccountSettings = () => {
 
       axios
         .put(`${Vendor_Update}${user_id}`, vendorEditData, authTOKEN)
-        .then((data) => {
+        .then(({ data }) => {
           console.log("VenderUpdatedRes", data);
 
-          dispatch({
-            type: "CHANGE_ALERT",
-            payload: {
-              alerType: "success",
-              alertValue: "update sussess...",
-              alertShow: true,
-              alertChanged: Math.random()
-            }
-          })
-
-          setUpdated(Math.random())
-
+          if (data?.id) {
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alerType: "success",
+                alertValue: "update sussess...",
+                alertShow: true,
+                alertChanged: Math.random()
+              }
+            })
+            setUpdated(Math.random())
+          }
+          else {
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alerType: "error",
+                alertValue: "someting went wrong",
+                alertShow: true,
+                alertChanged: Math.random()
+              }
+            })
+          }
         }).catch(() => {
           dispatch({
             type: "CHANGE_ALERT",
@@ -379,7 +390,7 @@ const AccountSettings = () => {
 
               <Grid item md={6} xs={12}>
 
-                <div style={{ display: "flex", alignItems: "flex-end" }}>
+                <div style={{ display: "flex", alignItems: "flex-start" }}>
                   <CountryCodeSelect
                     mb="1rem"
                     mt="1rem"
@@ -413,7 +424,7 @@ const AccountSettings = () => {
 
               <Grid item md={6} xs={12}>
 
-                <div style={{ display: "flex", alignItems: "flex-end" }}>
+                <div style={{ display: "flex", alignItems: "flex-start" }}>
                   <CountryCodeSelect
                     mb="1rem"
                     mt="1rem"
@@ -439,7 +450,7 @@ const AccountSettings = () => {
                     fullwidth
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    value={values.secondary_phone || ""}
+                    value={values.secondary_phone}
                     errorText={touched.secondary_phone && errors.secondary_phone}
                   />
                 </div>
@@ -540,7 +551,7 @@ const AccountSettings = () => {
                 />
               </Grid>
 
-              <Grid item md={6} xs={12}>
+              {/* <Grid item md={6} xs={12}>
                 <Select
                   mb="1rem"
                   label="Branch"
@@ -568,7 +579,7 @@ const AccountSettings = () => {
                     errors.customer_credit_limit
                   }
                 />
-              </Grid>
+              </Grid> */}
 
               <Grid item md={6} xs={12}>
                 <TextField
@@ -630,7 +641,7 @@ const accountSchema = yup.object().shape({
   email: yup.string().email("invalid email").required("required").nullable(requred),
   date_of_birth: yup.date().required("invalid date").nullable(requred),
   primary_phone: yup.string().required("primary_phone required").nullable(requred),
-  secondary_phone: yup.string().required("secondary_phone required").nullable(requred),
+  // secondary_phone: yup.string().required("secondary_phone required").nullable(requred),
 });
 
 AccountSettings.layout = VendorDashboardLayout;

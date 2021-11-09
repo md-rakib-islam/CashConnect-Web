@@ -44,7 +44,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
 
   const handleCartAmountChange = useCallback(
     (product, action) => () => {
-      const { user_id, order_Id, isLogin } = useUserInf()
+      const { user_id, order_Id, isLogin, authTOKEN } = useUserInf()
 
       if (isLogin) {
         if (order_Id) {
@@ -60,7 +60,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
 
           if (action == "remove") {
             axios
-              .delete(`${Customer_Order_Remove_Item}${order_Id}/${item_id}`)
+              .delete(`${Customer_Order_Remove_Item}${order_Id}/${item_id}`, authTOKEN)
               .then(() => {
                 setReloadCart(Math.random());
                 dispatch({
@@ -74,7 +74,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
 
           } else if (action == "increase") {
             axios
-              .put(`${Customer_Increase_Quantity}${order_Id}/${item_id}`, orderData)
+              .put(`${Customer_Increase_Quantity}${order_Id}/${item_id}`, orderData, authTOKEN)
               .then(() => {
                 setReloadCart(Math.random());
                 dispatch({
@@ -85,7 +85,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
 
           } else if (action == "decrease") {
             axios
-              .put(`${Customer_decrease_Quantity}${order_Id}/${item_id}`, orderData)
+              .put(`${Customer_decrease_Quantity}${order_Id}/${item_id}`, orderData, authTOKEN)
               .then(() => {
                 setReloadCart(Math.random());
                 dispatch({

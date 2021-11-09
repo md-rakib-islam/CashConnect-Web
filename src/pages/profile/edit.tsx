@@ -15,13 +15,9 @@ import useCheckValidation from "@customHook/useCheckValidation";
 import useJsonToFormData from "@customHook/useJsonToFormData";
 import useUserInf from "@customHook/useUserInf";
 import {
-  BASE_URL,
-  Branch_All,
-  City_All,
+  BASE_URL, City_All,
   Country_All,
-  Customer_By_Id,
-  Customer_type_All,
-  Customer_Update, Thana_All
+  Customer_By_Id, Customer_Update, Thana_All
 } from "@data/constants";
 import { country_codes } from "@data/country_code";
 import { requred } from "@data/data";
@@ -43,8 +39,8 @@ const ProfileEditor = ({
   const [thanas, setThanas] = useState([]);
   const [cities, setCities] = useState([]);
   const [countries, setCountries] = useState([]);
-  const [branches, setBranches] = useState([]);
-  const [customer_types, setCustomer_types] = useState([]);
+  // const [branches, setBranches] = useState([]);
+  // const [customer_types, setCustomer_types] = useState([]);
 
   const genders = [
     { label: "Male", value: "male" },
@@ -60,11 +56,12 @@ const ProfileEditor = ({
 
     const { isValid, userNameExist, emailExist, primaryPhoneExist, SecondaryPhoneExist } = await useCheckValidation({ username: values.username, email: values.email, primaryPhone: values.primary_phone, secondaryPhone: values.secondary_phone, userId: user_id })
 
+    // console.log("values.secondary_phone",)
     if (isValid) {
       const data = {
         ...values,
         primary_phone: `${values.primary_phone}`,
-        secondary_phone: `${values.secondary_phone}`,
+        secondary_phone: values.secondary_phone === "+880" ? "" : values.secondary_phone || "",
         image: image,
         gender:
           typeof values.gender != "object"
@@ -87,21 +84,35 @@ const ProfileEditor = ({
       };
 
       const [customerEditData] = useJsonToFormData(data);
-
+      console.log(data)
       axios
         .put(`${Customer_Update}${user_id}`, customerEditData, authTOKEN)
-        .then((data) => {
-          console.log("updatedRes", data);
-          router.push("/profile");
-          dispatch({
-            type: "CHANGE_ALERT",
-            payload: {
-              alerType: "success",
-              alertValue: "update sussess...",
-              alertShow: true,
-              alertChanged: Math.random()
-            }
-          })
+        .then((res) => {
+          console.log("updatedRes", res.data);
+
+          if (res?.data?.id) {
+            router.push("/profile");
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alerType: "success",
+                alertValue: "update sussess...",
+                alertShow: true,
+                alertChanged: Math.random()
+              }
+            })
+          }
+          else {
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alerType: "error",
+                alertValue: "someting went wrong",
+                alertShow: true,
+                alertChanged: Math.random()
+              }
+            })
+          }
         }).catch(() => {
           dispatch({
             type: "CHANGE_ALERT",
@@ -131,10 +142,14 @@ const ProfileEditor = ({
       console.log("EditDetails", datas.data);
       const { data } = datas;
 
+      console.log("secondary_phone", data?.secondary_phone)
+
       resetForm({
         values: {
           ...values,
           ...data,
+          primary_phone: data?.primary_phone || "+880",
+          secondary_phone: data?.secondary_phone || "+880"
         }
       })
 
@@ -172,17 +187,17 @@ const ProfileEditor = ({
         setCountries(data.countries);
       }).catch((err) => { console.log("error", err) });
 
-    fetch(`${Branch_All}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setBranches(data.branches);
-      }).catch((err) => { console.log("error", err) });
+    // fetch(`${Branch_All}`)
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     setBranches(data.branches);
+    //   }).catch((err) => { console.log("error", err) });
 
-    fetch(`${Customer_type_All}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setCustomer_types(data.customer_types);
-      }).catch((err) => { console.log("error", err) });
+    // fetch(`${Customer_type_All}`)
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     setCustomer_types(data.customer_types);
+    //   }).catch((err) => { console.log("error", err) });
   }, []);
 
   const {
@@ -211,8 +226,6 @@ const ProfileEditor = ({
       </div>
     ) : null;
   }
-
-  console.log("render")
 
 
   return (
@@ -360,7 +373,7 @@ const ProfileEditor = ({
 
               <Grid item md={6} xs={12}>
 
-                <div style={{ display: "flex", alignItems: "flex-end" }}>
+                <div style={{ display: "flex", alignItems: "flex-start" }}>
                   <CountryCodeSelect
                     mb="1rem"
                     mt="1rem"
@@ -394,7 +407,7 @@ const ProfileEditor = ({
 
               <Grid item md={6} xs={12}>
 
-                <div style={{ display: "flex", alignItems: "flex-end" }}>
+                <div style={{ display: "flex", alignItems: "flex-start" }}>
                   <CountryCodeSelect
                     mb="1rem"
                     mt="1rem"
@@ -420,7 +433,7 @@ const ProfileEditor = ({
                     fullwidth
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    value={values.secondary_phone || ""}
+                    value={values?.secondary_phone}
                     errorText={touched.secondary_phone && errors.secondary_phone}
                   />
                 </div>
@@ -522,7 +535,7 @@ const ProfileEditor = ({
                 />
               </Grid>
 
-              <Grid item md={6} xs={12}>
+              {/* <Grid item md={6} xs={12}>
                 <Select
                   mb="1rem"
                   label="Branch"
@@ -564,7 +577,7 @@ const ProfileEditor = ({
                     errors.customer_credit_limit
                   }
                 />
-              </Grid>
+              </Grid> */}
             </Grid>
           </Box>
 
@@ -605,7 +618,7 @@ const checkoutSchema = yup.object().shape({
   email: yup.string().email("invalid email").required("required").nullable(requred),
   date_of_birth: yup.date().required("invalid date").nullable(requred),
   primary_phone: yup.string().required("primary_phone required").nullable(requred),
-  secondary_phone: yup.string().required("secondary_phone required").nullable(requred),
+  // secondary_phone: yup.string().required("secondary_phone required").nullable(requred),
 });
 
 ProfileEditor.layout = DashboardLayout;

@@ -34,6 +34,7 @@ export interface ProductIntroProps {
   brand?: string | number;
   reviewCount?: string | number;
   rating?: number;
+  condition: string
 }
 
 const ProductIntro: React.FC<ProductIntroProps> = ({
@@ -44,6 +45,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   brand,
   reviewCount,
   rating,
+  condition
 }) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [brandName, setbrandName] = useState(brand);
@@ -136,7 +138,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   };
 
   const handleCartAmountChange = (amount, action) => {
-    const { user_id, order_Id, isLogin } = useUserInf()
+    const { user_id, order_Id, isLogin, authTOKEN } = useUserInf()
 
     if (isLogin) {
       const dateObj: any = new Date();
@@ -159,7 +161,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       //addToCart
       if (action == "addToCart") {
         console.log("orderData", orderData);
-        axios.post(`${Customer_Order_Create}`, orderData).then((res) => {
+        axios.post(`${Customer_Order_Create}`, orderData, authTOKEN).then((res) => {
           console.log("orderRes", res);
 
           localStorage.setItem("OrderId", res.data.order_details.id);
@@ -168,13 +170,24 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
             type: "CHANGE_CART_QUANTITY",
             payload: { chartQuantity: Math.random(), prductId: id || routerId },
           });
-        }).catch((err) => { console.log("error", err) });
+        }).catch(() => {
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alerType: "error",
+              alertValue: "something went wrong",
+              alertShow: true,
+              alertChanged: Math.random()
+            }
+          })
+
+        });
       }
 
       //increase quantity
       else if (action == "increase") {
         axios
-          .put(`${Customer_Increase_Quantity}${order_Id}/${itemId}`, orderData)
+          .put(`${Customer_Increase_Quantity}${order_Id}/${itemId}`, orderData, authTOKEN)
           .then((res) => {
             console.log("increaseRes", res);
             setGetItemId(Math.random());
@@ -198,7 +211,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       //remove
       else if (amount == 0 && action == "decrease") {
         axios
-          .delete(`${Customer_Order_Remove_Item}${order_Id}/${itemId}`)
+          .delete(`${Customer_Order_Remove_Item}${order_Id}/${itemId}`, authTOKEN)
           .then((res) => {
             console.log("removeRes", res);
             setGetItemId(Math.random());
@@ -222,7 +235,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       //decrease quantity
       else if (action == "decrease") {
         axios
-          .put(`${Customer_decrease_Quantity}${order_Id}/${itemId}`, orderData)
+          .put(`${Customer_decrease_Quantity}${order_Id}/${itemId}`, orderData, authTOKEN)
           .then((res) => {
             console.log("decreaseRes", res);
             setGetItemId(Math.random());
@@ -317,7 +330,12 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
           </Grid>
 
           <Grid item md={6} xs={12} alignItems="center">
-            <H1 mb="1rem">{title}</H1>
+            <H1 mb="0.8rem">{title}</H1>
+
+            <FlexBox alignItems="center" mb="1rem">
+              <SemiSpan>Condition:</SemiSpan>
+              <H6 ml="8px">{condition || "_"}</H6>
+            </FlexBox>
 
             <FlexBox alignItems="center" mb="1rem">
               <SemiSpan>Brand:</SemiSpan>
@@ -392,7 +410,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               <Link href="/shop/fdfdsa">
                 <a>
                   <H6 lineHeight="1" ml="8px">
-                    Mobile Store
+                    Locale Store
                   </H6>
                 </a>
               </Link>

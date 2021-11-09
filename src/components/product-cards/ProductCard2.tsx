@@ -10,6 +10,7 @@ export interface ProductCard2Props {
   title: string;
   price: number;
   productUrl: string;
+  condition: string;
 }
 
 const ProductCard2: React.FC<ProductCard2Props> = ({
@@ -17,6 +18,7 @@ const ProductCard2: React.FC<ProductCard2Props> = ({
   title,
   price,
   productUrl,
+  condition
 }) => {
   return (
     <Link href={productUrl}>
@@ -38,6 +40,14 @@ const ProductCard2: React.FC<ProductCard2Props> = ({
         </H4>
         <H4 fontWeight="600" fontSize="14px" color="primary.main">
           <Currency>{Math.ceil(price).toLocaleString()}</Currency>
+        </H4>
+        <H4
+          display="flex"
+          className="title"
+          fontSize="15px"
+          fontWeight="600"
+          color={(condition === "new" || condition === "New") ? "primary.main" : "secondary.main"}
+        >{condition || ""}
         </H4>
       </a>
     </Link>

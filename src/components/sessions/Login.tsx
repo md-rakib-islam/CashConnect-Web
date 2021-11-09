@@ -55,6 +55,8 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
       (user) => {
         console.log("user", user);
 
+        console.log("user.user_type", user.user_type)
+
         dispatch({
           type: "CHANGE_ALERT",
           payload: {
@@ -65,7 +67,7 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
           }
         });
 
-        if (user.user_type == 3) {
+        if (user.user_type === "customer") {
 
           if (type != "popup") {
             const backUrl = localStorage.getItem("backAfterLogin");
@@ -81,7 +83,7 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
           }
 
         }
-        else if (user.user_type == 2) {
+        else if (user.user_type == "vendor") {
 
           if (type != "popup") {
             const backUrl = localStorage.getItem("backAfterLogin");

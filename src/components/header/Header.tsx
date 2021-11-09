@@ -38,6 +38,18 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
 
   const { dispatch } = useAppContext()
 
+  const [loading, setLoading] = useState(false)
+
+  const router = useRouter()
+
+  const handleLoadingComplete = () => {
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    router.events.on('routeChangeComplete', handleLoadingComplete)
+  }, [router.events])
+
   useEffect(() => {
     fetch(`${Site_Setting_All}`).then(res => res.json()).then(res => {
       console.log("SiteSettingRes", res.general_settings[0])
@@ -70,7 +82,7 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
 
   const goToFrofile = () => {
     const user_type: string = localStorage.getItem("userType")
-    if (user_type == "2") {
+    if (user_type == "vendor") {
       Router.push("/vendor/dashboard")
     }
     else {
@@ -114,119 +126,142 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
 
 
   return (
-    <StyledHeader className={className}>
-      <Container
-        display="flex"
-        alignItems="center"
-        justifyContent="space-between"
-        height="100%"
-      >
-        <FlexBox className="logo" alignItems="center" mr="1rem">
-          <Link href="/">
-            <a>
-              <Image src={`${BASE_URL}${logo}`} alt="logo" height="60" width="auto" borderRadius={50} />
-            </a>
-          </Link>
+    <>
+      {loading && (
+        <div style={{
+          position: 'fixed',
+          height: '100%',
+          width: '100%',
+          top: '0px',
+          left: '0px',
+          display: 'flex',
+          justifyContent: "center",
+          backgroundColor: " rgb(0 0 0 / 50%)",
+          alignItems: "center",
+          zIndex: 100,
+        }}>
+          <img style={{
+            height: "50px",
+            width: "50px",
+            marginTop: "100pz"
+          }}
+            src="/assets/images/gif/loading.gif" />
+        </div>
+      )}
+      <StyledHeader className={className}>
+        <Container
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          height="100%"
+        >
+          <FlexBox className="logo" alignItems="center" mr="1rem">
+            <Link href="/">
+              <a onClick={() => setLoading(true)}>
+                <Image src={`${BASE_URL}${logo}`} alt="logo" height="60" width="auto" borderRadius={50} />
+              </a>
+            </Link>
 
-          {isFixed && (
-            <div className="category-holder">
-              <Categories>
-                <FlexBox color="text.hint" alignItems="center" ml="1rem">
-                  <Icon>categories</Icon>
-                  <Icon>arrow-down-filled</Icon>
-                </FlexBox>
-              </Categories>
-            </div>
-          )}
-        </FlexBox>
+            {isFixed && (
+              <div className="category-holder">
+                <Categories>
+                  <FlexBox color="text.hint" alignItems="center" ml="1rem">
+                    <Icon>categories</Icon>
+                    <Icon>arrow-down-filled</Icon>
+                  </FlexBox>
+                </Categories>
+              </div>
+            )}
+          </FlexBox>
 
-        <FlexBox justifyContent="center" flex="1 1 0">
-          <SearchBox />
-        </FlexBox>
+          <FlexBox justifyContent="center" flex="1 1 0">
+            <SearchBox />
+          </FlexBox>
 
-        <FlexBox className="header-right" alignItems="center">
-          {!isLogin ? (<UserLoginDialog
-            handle={
-              <IconButton ml="1rem" bg="gray.200" p="8px">
-                <Icon size="28px">user</Icon>
-              </IconButton>
+          <FlexBox className="header-right" alignItems="center">
+            {!isLogin ? (<UserLoginDialog
+              handle={
+                <IconButton ml="1rem" bg="gray.200" p="8px">
+                  <Icon size="28px">user</Icon>
+                </IconButton>
+              }
+            >
+              <Box>
+                <Login />
+              </Box>
+            </UserLoginDialog>
+            ) : (
+              <>
+
+                <Menu
+                  direction="left"
+                  handler={
+                    <IconButton ml="1rem" bg="gray.200" p="8px">
+                      <Icon size="25px">settingsAccount</Icon>
+                    </IconButton>
+                  }
+                >
+                  <MenuItem p="2px">
+                    <div style={{
+                      fontSize: "20px", display: "flex",
+                      alignItems: "center",
+                      justifyContent: "flexStart",
+                      cursor: "pointer",
+                    }}
+                      onClick={() => goToFrofile()}
+                    >
+                      <Icon size="30px" ml="5px">user</Icon>
+                      <Typography fontWeight="600" fontSize="16px" ml="5px">Profile</Typography>
+                    </div>
+                  </MenuItem>
+
+                  <MenuItem p="2px">
+                    <div style={{
+                      fontSize: "20px", display: "flex",
+                      alignItems: "center",
+                      justifyContent: "flexStart",
+                      cursor: "pointer",
+                    }}
+                      onClick={() => handleLogout()}
+                    >
+                      <Icon size="23px" ml="8px">logout</Icon>
+                      <Typography fontWeight="600" fontSize="16px" ml="10px">Logout</Typography>
+                    </div>
+                  </MenuItem>
+
+                </Menu>
+
+
+              </>
+            )
             }
-          >
-            <Box>
-              <Login />
-            </Box>
-          </UserLoginDialog>
-          ) : (
-            <>
 
-              <Menu
-                direction="left"
-                handler={
-                  <IconButton ml="1rem" bg="gray.200" p="8px">
-                    <Icon size="25px">settingsAccount</Icon>
-                  </IconButton>
-                }
-              >
-                <MenuItem p="2px">
-                  <div style={{
-                    fontSize: "20px", display: "flex",
-                    alignItems: "center",
-                    justifyContent: "flexStart",
-                    cursor: "pointer",
-                  }}
-                    onClick={() => goToFrofile()}
-                  >
-                    <Icon size="30px" ml="5px">user</Icon>
-                    <Typography fontWeight="600" fontSize="16px" ml="5px">Profile</Typography>
-                  </div>
-                </MenuItem>
+            <UserRegisterDialog
+              handle={
+                <IconButton ml="1rem" bg="gray.200" p="8px">
+                  <Icon size="25px">register</Icon>
+                </IconButton>
+              }
+            >
+              <Box>
+                <Signup />
+              </Box>
+            </UserRegisterDialog>
 
-                <MenuItem p="2px">
-                  <div style={{
-                    fontSize: "20px", display: "flex",
-                    alignItems: "center",
-                    justifyContent: "flexStart",
-                    cursor: "pointer",
-                  }}
-                    onClick={() => handleLogout()}
-                  >
-                    <Icon size="23px" ml="8px">logout</Icon>
-                    <Typography fontWeight="600" fontSize="16px" ml="10px">Logout</Typography>
-                  </div>
-                </MenuItem>
+            <Sidenav
+              handle={cartHandle}
+              position="right"
+              open={open}
+              width={380}
+              toggleSidenav={toggleSidenav}
+            >
 
-              </Menu>
-
-
-            </>
-          )
-          }
-
-          <UserRegisterDialog
-            handle={
-              <IconButton ml="1rem" bg="gray.200" p="8px">
-                <Icon size="25px">register</Icon>
-              </IconButton>
-            }
-          >
-            <Box>
-              <Signup />
-            </Box>
-          </UserRegisterDialog>
-
-          <Sidenav
-            handle={cartHandle}
-            position="right"
-            open={open}
-            width={380}
-            toggleSidenav={toggleSidenav}
-          >
-
-            <MiniCart toggleSidenav={toggleSidenav} />
-          </Sidenav>
-        </FlexBox>
-      </Container>
-    </StyledHeader >
+              <MiniCart toggleSidenav={toggleSidenav} />
+            </Sidenav>
+          </FlexBox>
+        </Container>
+      </StyledHeader >
+    </>
   );
 };
 

@@ -2,7 +2,8 @@ import Box from "@component/Box";
 import Card from "@component/Card";
 import MenuItem from "@component/MenuItem";
 import navbarNavigations from "@data/navbarNavigations";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 import Button from "../buttons/Button";
 import Categories from "../categories/Categories";
 import Container from "../Container";
@@ -24,6 +25,19 @@ interface Nav {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
+
+  const [loading, setLoading] = useState(false)
+
+  const router = useRouter()
+
+  const handleLoadingComplete = () => {
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    router.events.on('routeChangeComplete', handleLoadingComplete)
+  }, [router.events])
+
   const renderNestedNav = (list: any[], isRoot = false) => {
     return list?.map((nav: Nav) => {
       if (isRoot) {
@@ -35,13 +49,22 @@ const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
               key={nav.title}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => {
+                if (nav?.title === "Home") {
+                  setLoading(true)
+                }
+              }}
             >
               {nav.title}
             </NavLink>
           );
         else if (nav.url)
           return (
-            <NavLink className="nav-link" href={nav.url} key={nav.title}>
+            <NavLink className="nav-link" href={nav.url} key={nav.title} onClick={() => {
+              if (nav?.title === "Home") {
+                setLoading(true)
+              }
+            }}>
               {nav.title}
             </NavLink>
           );
@@ -105,34 +128,57 @@ const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
   };
 
   return (
-    <StyledNavbar>
-      <Container
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        height="100%"
-      >
-        <Categories open={navListOpen}>
-          <Button width="278px" height="40px" bg="body.default" variant="text">
-            <Icon>categories</Icon>
-            <Typography
-              fontWeight="600"
-              textAlign="left"
-              flex="1 1 0"
-              ml="10px"
-              color="text.muted"
-            >
-              Categories
-            </Typography>
-            <Icon className="dropdown-icon" variant="small">
-              chevron-right
-            </Icon>
-          </Button>
-        </Categories>
+    <>
+      {loading && (
+        <div style={{
+          position: 'fixed',
+          height: '100%',
+          width: '100%',
+          top: '0px',
+          left: '0px',
+          display: 'flex',
+          justifyContent: "center",
+          backgroundColor: " rgb(0 0 0 / 50%)",
+          alignItems: "center",
+          zIndex: 100,
+        }}>
+          <img style={{
+            height: "50px",
+            width: "50px",
+            marginTop: "100pz"
+          }}
+            src="/assets/images/gif/loading.gif" />
+        </div>
+      )}
+      <StyledNavbar>
+        <Container
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          height="100%"
+        >
+          <Categories open={navListOpen}>
+            <Button width="278px" height="40px" bg="body.default" variant="text">
+              <Icon>categories</Icon>
+              <Typography
+                fontWeight="600"
+                textAlign="left"
+                flex="1 1 0"
+                ml="10px"
+                color="text.muted"
+              >
+                Categories
+              </Typography>
+              <Icon className="dropdown-icon" variant="small">
+                chevron-right
+              </Icon>
+            </Button>
+          </Categories>
 
-        <FlexBox>{renderNestedNav(navbarNavigations, true)}</FlexBox>
-      </Container>
-    </StyledNavbar>
+          <FlexBox>{renderNestedNav(navbarNavigations, true)}</FlexBox>
+        </Container>
+      </StyledNavbar>
+    </>
   );
 };
 
