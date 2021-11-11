@@ -212,12 +212,12 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   if ((params.type === "product_by_category") || (params.type === "search_for")) {
 
     try {
-      const res = await fetch(`${product_by_categoryId}${category}?page=${query.page || 1}&size=${query.size || 9}`)
+      const res = await fetch(`${product_by_categoryId}${category}?page=${query.page || 1}&size=${query.size || 12}`)
       var json = await res.json()
       var data: any[] = await json.products
       var totalProduct: number = await json.total_elements
       var totalPage: number = await json.total_pages
-      console.log("categoryUrl", `${product_by_categoryId}${category}?page=${query.page || 1}&size=${query.size || 9}`)
+      console.log("categoryUrl", `${product_by_categoryId}${category}?page=${query.page || 1}&size=${query.size || 12}`)
     }
     catch (err) {
       var data = []
@@ -229,7 +229,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   else if (params.type === "search_by_product_name") {
     try {
 
-      const res = await axios.get(`${Product_Search}?page=${query.page || 1}&size=${query.size || 9}`, { params: { name: query.search_key, category } })
+      const res = await axios.get(`${Product_Search}?page=${query.page || 1}&size=${query.size || 12}`, { params: { name: query.search_key, category } })
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
       var totalPage: number = await res.data.total_pages
@@ -268,7 +268,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
         params: params
       };
 
-      const res = await axios.get(`${Product_Filter}?page=${query.page || 1}&size=${query.size || 9}`, request)
+      const res = await axios.get(`${Product_Filter}?page=${query.page || 1}&size=${query.size || 12}`, request)
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
       var totalPage: number = await res.data.total_pages
@@ -282,7 +282,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   }
   else if (params.type === "flash_deals_all") {
     try {
-      const res = await axios.get(`${Product_Flash_Deals}?page=${query.page || 1}&size=${query.size || 9}`)
+      const res = await axios.get(`${Product_Flash_Deals}?page=${query.page || 1}&size=${query.size || 12}`)
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
       var totalPage: number = await res.data.total_pages
@@ -295,7 +295,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   }
   else if (params.type === "top_ratings_all") {
     try {
-      const res = await axios.get(`${Product_Top_Rated}?page=${query.page || 1}&size=${query.size || 9}`)
+      const res = await axios.get(`${Product_Top_Rated}?page=${query.page || 1}&size=${query.size || 12}`)
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
       var totalPage: number = await res.data.total_pages
@@ -308,7 +308,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   }
   else if (params.type === "new_arrivals_all") {
     try {
-      const res = await axios.get(`${Product_Arrival}?page=${query.page || 1}&size=${query.size || 9}`)
+      const res = await axios.get(`${Product_Arrival}?page=${query.page || 1}&size=${query.size || 12}`)
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
       var totalPage: number = await res.data.total_pages
@@ -321,7 +321,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   }
   else if (params.type === "big_discounts_all") {
     try {
-      const res = await axios.get(`${Product_Discount}?page=${query.page || 1}&size=${query.size || 9}`)
+      const res = await axios.get(`${Product_Discount}?page=${query.page || 1}&size=${query.size || 12}`)
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
       var totalPage: number = await res.data.total_pages
@@ -334,7 +334,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   }
   else if (params.type === "more_for_you_all") {
     try {
-      const res = await axios.get(`${Product_For_You}?page=${query.page || 1}&size=${query.size || 9}`)
+      const res = await axios.get(`${Product_For_You}?page=${query.page || 1}&size=${query.size || 12}`)
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
       var totalPage: number = await res.data.total_pages
@@ -347,7 +347,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   }
   else if (params.type === "product_by_brand") {
     try {
-      const res = await axios.get(`${Product_By_BrandId}${query.brandId}?page=${query.page || 1}&size=${query.size || 9}`)
+      const res = await axios.get(`${Product_By_BrandId}${query.brandId}?page=${query.page || 1}&size=${query.size || 12}`)
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
       var totalPage: number = await res.data.total_pages
@@ -361,7 +361,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
 
   else if (params.type === "product_high_to_low") {
     try {
-      const res = await axios.post(`${Product_High_To_Low}?page=${query.page || 1}&size=${query.size || 9}`, { category })
+      const res = await axios.post(`${Product_High_To_Low}?page=${query.page || 1}&size=${query.size || 12}`, { category })
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
       var totalPage: number = await res.data.total_pages
@@ -375,7 +375,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
 
   else if (params.type === "product_low_to_high") {
     try {
-      const res = await axios.post(`${Product_Low_To_High}?page=${query.page || 1}&size=${query.size || 9}`, { category })
+      const res = await axios.post(`${Product_Low_To_High}?page=${query.page || 1}&size=${query.size || 12}`, { category })
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
       var totalPage: number = await res.data.total_pages

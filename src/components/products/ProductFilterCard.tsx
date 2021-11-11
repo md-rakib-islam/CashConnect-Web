@@ -222,7 +222,7 @@ const ProductFilterCard = () => {
             handleChange(e);
           }}
           onKeyDown={(e: any) => {
-            if (e.code === "NumpadEnter") {
+            if (e.key === "Enter") {
               filterProduct("min_price", e);
             }
           }}
@@ -241,7 +241,7 @@ const ProductFilterCard = () => {
             handleChange(e)
           }}
           onKeyDown={(e: any) => {
-            if (e.code === "NumpadEnter") {
+            if (e.key === "Enter") {
               filterProduct("max_price", e);
             }
           }}

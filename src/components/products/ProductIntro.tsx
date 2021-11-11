@@ -410,7 +410,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               <Link href="/shop/fdfdsa">
                 <a>
                   <H6 lineHeight="1" ml="8px">
-                    Locale Store
+                    Local Store
                   </H6>
                 </a>
               </Link>

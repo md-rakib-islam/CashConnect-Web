@@ -103,9 +103,9 @@ const Section13 = ({ bigDiscountList }) => {
                     <H4
                       display="flex"
                       className="title"
-                      fontSize="16px"
+                      fontSize="14px"
                       fontWeight="600"
-                      color={(item?.condition === "new" || item?.condition === "New") ? "primary.main" : "secondary.main"}
+                      color={(item?.condition === "new" || item?.condition === "New" || item?.condition === "NEW") ? "primary.main" : "secondary.main"}
                     >{item?.condition || ""}
                     </H4>
                   </a>

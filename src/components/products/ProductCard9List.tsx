@@ -34,7 +34,7 @@ const ProductCard9List: React.FC<ProductCard9ListProps> = ({ productList, totalP
         alignItems="center"
         mt="32px"
       >
-        <SemiSpan>Showing <ShowingItemNumber initialNumber={9} totalItem={totalProduct} /> of {totalProduct} Products</SemiSpan>
+        <SemiSpan>Showing <ShowingItemNumber initialNumber={12} totalItem={totalProduct} /> of {totalProduct} Products</SemiSpan>
 
         <Pagination pageCount={totalPage} />
 

@@ -276,9 +276,9 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
             <H4
               display="flex"
               className="title"
-              fontSize="16px"
+              fontSize="13px"
               fontWeight="600"
-              color={(condition === "new" || condition === "New") ? "primary.main" : "secondary.main"}
+              color={(condition === "new" || condition === "New" || condition === "NEW") ? "primary.main" : "secondary.main"}
             >{condition || ""}
             </H4>
 
