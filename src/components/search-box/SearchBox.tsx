@@ -3,7 +3,7 @@ import Card from "@component/Card";
 import MobileNavbar from "@component/layout/MobileNavbar";
 import Sidenav from "@component/sidenav/Sidenav";
 import { Span } from "@component/Typography";
-import { Category_All, Product_Search } from "@data/constants";
+import { Category_All_With_Child, Product_Search } from "@data/constants";
 import { requred } from "@data/data";
 import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
@@ -71,8 +71,8 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
   }
 
   useEffect(() => {
-    axios.get(`${Category_All}`).then(res => {
-      console.log("Category_All", res.data.categories)
+    axios.get(`${Category_All_With_Child}`).then(res => {
+      console.log("Category_All_With_Child", res.data.categories)
       let Categoriess = res.data.categories
       Categoriess?.unshift({ id: 0, name: "All Categories" })
       setCategories(Categoriess)
