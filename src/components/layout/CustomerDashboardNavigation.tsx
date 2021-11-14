@@ -101,6 +101,17 @@ const linkList = [
         iconName: "customer-service",
         count: 1,
       },
+      {
+        href: "/new-sell",
+        title: "New Sell",
+        iconName: "upload",
+      },
+      {
+        href: "/sells",
+        title: "Sells",
+        iconName: "shopping-cart",
+        count: 40,
+      },
     ],
   },
   {

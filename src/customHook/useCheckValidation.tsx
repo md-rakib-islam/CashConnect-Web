@@ -52,7 +52,7 @@ const useCheckValidation = async ({ username = "", email = "", primaryPhone = ""
     }
 
     const isValid = Boolean(!userNameExist && !EmailExist && !PrimaryPhoneExist && !SecondaryPhoneExist)
-    console.log("isvalidation", userNameExist, EmailExist, PrimaryPhoneExist, SecondaryPhoneExist)
+    console.log("isValid", isValid)
 
     return { isValid: isValid, userNameExist: userNameExist, emailExist: EmailExist, primaryPhoneExist: PrimaryPhoneExist, SecondaryPhoneExist: SecondaryPhoneExist }
 }

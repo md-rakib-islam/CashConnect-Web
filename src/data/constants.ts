@@ -2,7 +2,7 @@
 //http://api.cashconnectbd.com
 
 //base url
-export const BASE_URL = "http://api.cashconnectbd.com";
+export const BASE_URL = "http://192.168.0.172:8001";
 
 //branch api
 export const Branch_All = `${BASE_URL}/branch/api/v1/branch/all/`;
@@ -111,7 +111,7 @@ export const Product_Low_To_High =`${BASE_URL}/product/api/v1/product/filter_by_
 //purchase api
 export const Purshase_Create = `${BASE_URL}/purchase_request/api/v1/purchase_request/create_vendor_purchase_request/`;
 
-export const Purchase_All_By_Vendor_id = `${BASE_URL}/purchase_request/api/v1/purchase_request/get_all_by_vendor_id/`
+export const Purchase_All_By_Vendor_id = `${BASE_URL}/purchase_request/api/v1/purchase_request/get_all_by_vendor_id/`;
 
 export const Purchase_Items_By_Purchase_Id = `${BASE_URL}/purchase_request/api/v1/purchase_request/get_all_purchase_request_items_with_images_by_purchase_request_id/`
 

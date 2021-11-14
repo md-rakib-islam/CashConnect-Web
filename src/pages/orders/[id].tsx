@@ -7,18 +7,19 @@ import Divider from "@component/Divider";
 import FlexBox from "@component/FlexBox";
 import Grid from "@component/grid/Grid";
 import Icon from "@component/icon/Icon";
-import DashboardLayout from "@component/layout/CustomerDashboardLayout";
+import CustomerDashboardLayout from "@component/layout/CustomerDashboardLayout";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
+import VendorDashboardLayout from "@component/layout/VendorDashboardLayout";
 import TableRow from "@component/TableRow";
 import Typography, { H5, H6, Paragraph } from "@component/Typography";
 import { Customer_order_Details_For_Status } from "@data/constants";
 import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
 import { format } from "date-fns";
+import addDays from "date-fns/addDays";
 import { useRouter } from "next/router";
 import React, { Fragment, useEffect, useState } from "react";
 import Item from "./Item";
-import addDays from "date-fns/addDays"
 
 
 type OrderStatus = "packaging" | "shipping" | "delivering" | "complete";
@@ -230,6 +231,12 @@ const OrderDetails = () => {
   );
 };
 
-OrderDetails.layout = DashboardLayout;
+try {
+  var user_type: string = localStorage.getItem("userType")
+} catch (err) {
+  var user_type = "";
+}
+
+OrderDetails.layout = user_type === "vendor" ? VendorDashboardLayout : CustomerDashboardLayout;
 
 export default OrderDetails;

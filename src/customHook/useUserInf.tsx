@@ -4,7 +4,7 @@ function useUserInf() {
     try {
         var user_id: any = localStorage?.getItem("UserId");
     } catch (err) {
-        user_id = null;
+        var user_id = null;
     }
 
     try {
@@ -15,12 +15,12 @@ function useUserInf() {
             },
         };
     } catch (err) {
-        authTOKEN = null
+        var authTOKEN = null
     }
     try {
-        var order_Id = localStorage.getItem("OrderId");
+        var order_Id: any = localStorage.getItem("OrderId");
     } catch (err) {
-        order_Id = null
+        var order_Id = null
     }
 
     const isLogin = (user_id && localStorage.getItem("jwt_access_token")) ? true : false

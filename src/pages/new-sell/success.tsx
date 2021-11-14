@@ -1,4 +1,4 @@
-import VendorDashboardLayout from '@component/layout/VendorDashboardLayout';
+import CustomerDashboardLayout from '@component/layout/CustomerDashboardLayout';
 import Success from 'pages/sell/youritems/success';
 
 function success() {
@@ -7,6 +7,6 @@ function success() {
     )
 }
 
-success.layout = VendorDashboardLayout;
+success.layout = CustomerDashboardLayout;
 
 export default success

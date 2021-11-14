@@ -96,6 +96,12 @@ const linkList = [
     count: 40,
   },
   {
+    href: "/vendor/orders",
+    title: "Orders",
+    iconName: "bag",
+    count: 5,
+  },
+  {
     href: "/vendor/account-settings",
     title: "Account Settings",
     iconName: "gear-2",

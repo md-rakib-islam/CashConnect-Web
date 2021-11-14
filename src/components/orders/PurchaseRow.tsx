@@ -1,5 +1,6 @@
 
 import Currency from "@component/Currency";
+import useUserInf from "@customHook/useUserInf";
 import { Purchase_Status_all } from "@data/constants";
 import axios from "axios";
 import { format } from "date-fns";
@@ -41,16 +42,7 @@ const PurchaseRow: React.FC<PurchaseRowProps> = ({ item }) => {
         }
     };
 
-    try {
-        var authTOKEN = {
-            headers: {
-                "Content-type": "application/json",
-                Authorization: localStorage.getItem("jwt_access_token"),
-            },
-        };
-    } catch (err) {
-        authTOKEN = null;
-    }
+    const { authTOKEN } = useUserInf()
 
     useEffect(() => {
         axios.get(`${Purchase_Status_all}`, authTOKEN).then((order_statuss) => {
@@ -58,9 +50,15 @@ const PurchaseRow: React.FC<PurchaseRowProps> = ({ item }) => {
         }).catch((err) => { console.log("error", err) });
     }, []);
 
+    try {
+        var user_type: string = localStorage.getItem("userType")
+    } catch (err) {
+        var user_type = "";
+    }
+
 
     return (
-        <Link href={`/vendor/sells/${item?.id}`}>
+        <Link href={`${user_type === "vendor" ? `/vendor/sells/${item?.id}` : `/sells/${item?.id}`}`}>
             <TableRow as="a" href={item.href} my="1rem" padding="6px 18px">
                 <H5 m="6px" textAlign="left">
                     {item.id}

@@ -16,7 +16,7 @@ import Typography from "@component/Typography";
 import { useAppContext } from "@context/app/AppContext";
 import useJsonToFormData from "@customHook/useJsonToFormData";
 import useUserInf from "@customHook/useUserInf";
-import { Purshase_Create, Vendor_By_Id } from "@data/constants";
+import { Purshase_Create, User_By_Id } from "@data/constants";
 import { requred } from "@data/data";
 import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
@@ -57,7 +57,7 @@ function newPurchase() {
 
   useEffect(() => {
     const { user_id } = useUserInf()
-    axios.get(`${Vendor_By_Id}${user_id}`).then(res => {
+    axios.get(`${User_By_Id}${user_id}`).then(res => {
       console.log("vendorRes", res)
       // first_name: "",
       //   last_name: "",
@@ -98,6 +98,7 @@ function newPurchase() {
 
     const [PurchaseDataToFormData] = useJsonToFormData(purchaseData);
 
+
     setLoading(true)
 
     axios
@@ -106,7 +107,8 @@ function newPurchase() {
         console.log("purchaserequestRes", res);
         setLoading(false)
         if (res?.data?.data?.purchase_request_items?.length) {
-          router.push("/vendor/new-sell/success")
+          const user_type = localStorage.getItem("userType")
+          router.push(`${user_type === "vendor" ? "/vendor/new-sell/success" : "/new-sell/success"}`)
         }
         else if (res?.data?.user_exists) {
           dispatch({
