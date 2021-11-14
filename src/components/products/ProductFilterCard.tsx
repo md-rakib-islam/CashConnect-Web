@@ -1,5 +1,5 @@
 import useFormattedNavigationData from "@customHook/useFormattedCategoryData";
-import { Brand_All, Category_All_With_Child } from "@data/constants";
+import { Brands_By_Category, Brand_All, Category_All_With_Child } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
 import _ from "lodash";
@@ -21,7 +21,7 @@ const ProductFilterCard = () => {
   const [brandlist, setBrandlist] = useState([])
   const [brandIds, setBrandIds] = useState({})
   const [ratingIds, setRatingIds] = useState({})
-  const [categoryId, setCategoryId] = useState<string | number>("")
+  const [categoryId, setCategoryId] = useState<any>("")
 
   const [categoryData, setCategoryData] = useState([]);
   const [formattedCategoryData] =
@@ -85,10 +85,6 @@ const ProductFilterCard = () => {
   }
 
   useEffect(() => {
-    axios.get(`${Brand_All}`).then(res => {
-      console.log("brands", res.data.brands)
-      setBrandlist(res.data.brands)
-    }).catch((err) => { console.log("error", err) })
 
     axios.get(`${Category_All_With_Child}`).then(res => {
       setCategoryData(res.data.categories)
@@ -96,7 +92,20 @@ const ProductFilterCard = () => {
   }, [])
 
   useEffect(() => {
+    if (router.query.categoryId) {
+      setCategoryId(router.query.categoryId)
 
+      axios.get(`${Brands_By_Category}${router.query.categoryId}`).then(res => {
+        console.log("brandBasedCategory", res.data.brands)
+        setBrandlist(res.data.brands)
+      }).catch((err) => { console.log("error", err) })
+    }
+    else {
+      axios.get(`${Brand_All}`).then(res => {
+        console.log("brandAll", res.data.brands)
+        setBrandlist(res.data.brands)
+      }).catch((err) => { console.log("error", err) })
+    }
   }, [router.query])
 
   console.log("categoryId", categoryId)

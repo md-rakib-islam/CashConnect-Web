@@ -14,6 +14,8 @@ export const Brand_Featured = `${BASE_URL}/brand/api/v1/brand/featured_brand/all
 
 export const Brand_All = `${BASE_URL}/brand/api/v1/brand/all/`
 
+export const Brands_By_Category = `${BASE_URL}/category/api/v1/category/get_all_brands_of_nested_category_products_by_category_id/`
+
 //catogory api
 export const Category_By_Id = `${BASE_URL}/category/api/v1/category/`;
 
