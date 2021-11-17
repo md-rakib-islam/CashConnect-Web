@@ -85,7 +85,7 @@ const Products = () => {
               {item?.purchase_req}
             </Typography>
             <Typography textAlign="center" mr="30px" flexWrap="nowrap">
-              {format(new Date(item?.created_at), "MMM dd, yyyy")}
+              {item?.created_at && format(new Date(item?.created_at), "MMM dd, yyyy")}
             </Typography>
           </div>
           <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "space-between", alignItems: "center", minHeight: "36px", padding: "6px 0px", flexBasis: "40%" }}>

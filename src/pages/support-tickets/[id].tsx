@@ -95,7 +95,7 @@ const PaymentMethodEditor = () => {
               {item?.customer || item?.admin}
             </H5>
             <SemiSpan style={{ direction: "ltr" }}>
-              <pre style={{ margin: "0px", wordSpacing: "-5px" }}>{format(new Date(item?.created_at), "hh:mm:a | dd MMM yyyy")}</pre>
+              <pre style={{ margin: "0px", wordSpacing: "-5px" }}>{item?.created_at && format(new Date(item?.created_at), "hh:mm:a | dd MMM yyyy")}</pre>
             </SemiSpan>
             <Box borderRadius="10px" bg="gray.200" p="1rem" mt="1rem">
               {item?.message}

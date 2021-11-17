@@ -22,6 +22,7 @@ export interface PurchaseRowProps {
         created_at?: string;
         total_price?: number | string;
         href?: string;
+        invoice_no?: string;
     };
 }
 
@@ -29,11 +30,11 @@ const PurchaseRow: React.FC<PurchaseRowProps> = ({ item }) => {
     const [orderStatus, setOrderStatus] = useState([]);
     const getColor = (status) => {
         switch (status) {
-            case "pending":
+            case ("pending" || "Pending"):
                 return "secondary";
-            case "processing":
+            case ("processing" || "Processing"):
                 return "secondary";
-            case "delivered":
+            case ("submitted" || "Submitted"):
                 return "success";
             case "cancelled":
                 return "error";
@@ -61,7 +62,7 @@ const PurchaseRow: React.FC<PurchaseRowProps> = ({ item }) => {
         <Link href={`${user_type === "vendor" ? `/vendor/sells/${item?.id}` : `/sells/${item?.id}`}`}>
             <TableRow as="a" href={item.href} my="1rem" padding="6px 18px">
                 <H5 m="6px" textAlign="left">
-                    {item.id}
+                    {item.invoice_no}
                 </H5>
                 <Box m="6px">
                     <Chip
@@ -84,7 +85,7 @@ const PurchaseRow: React.FC<PurchaseRowProps> = ({ item }) => {
                     </Chip>
                 </Box>
                 <Typography className="flex-grow pre" m="6px" textAlign="left">
-                    {format(new Date(item?.created_at), "MMM dd, yyyy")}
+                    {item?.created_at && format(new Date(item?.created_at), "MMM dd, yyyy")}
                 </Typography>
                 <Typography m="6px" textAlign="left">
                     <Currency>{Number(item.total_price).toFixed(2)}</Currency>

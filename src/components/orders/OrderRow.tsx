@@ -86,7 +86,7 @@ const OrderRow: React.FC<OrderRowProps> = ({ item }) => {
           </Chip>
         </Box>
         <Typography className="flex-grow pre" m="6px" textAlign="left">
-          {format(new Date(item?.paid_at), "MMM dd, yyyy")}
+          {item?.paid_at && format(new Date(item?.paid_at), "MMM dd, yyyy")}
         </Typography>
         <Typography m="6px" textAlign="left">
           <Currency>{Number(item.net_amount).toFixed(2)}</Currency>
