@@ -476,7 +476,6 @@ function onlineSell() {
                   </Box>
                   <Box width="80%" mt="25px">
                     <TextField
-                      type="number"
                       name={`item_price${idx}`}
                       label="Item Price"
                       fullwidth
