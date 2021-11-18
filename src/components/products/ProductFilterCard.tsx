@@ -138,7 +138,7 @@ const ProductFilterCard = () => {
               >
                 <SemiSpan className="cursor-pointer" mr="9px"
                   // onClick={(e) => filterProduct("category", e, item.id)}
-                  bg={`${categoryId === item.id && "#d4d4d4"}`}
+                  bg={`${categoryId == item.id && "#d4d4d4"}`}
                   onClick={(e) => filterProduct("category", e, item.id)}
                 >
                   {item.title}
@@ -156,7 +156,7 @@ const ProductFilterCard = () => {
                     >
                       <SemiSpan className="cursor-pointer" mr="9px"
                         // onClick={(e) => filterProduct("category", e, category.id)}
-                        bg={`${categoryId === category.id && "#d4d4d4"}`}
+                        bg={`${categoryId == category.id && "#d4d4d4"}`}
                         onClick={(e) => filterProduct("category", e, category.id)}
                       >
 
@@ -171,7 +171,7 @@ const ProductFilterCard = () => {
                         pl="22px"
                         py="6px"
                         borderRadius={5}
-                        bg={`${categoryId === subCaterory.id && "#d4d4d4"}`}
+                        bg={`${categoryId == subCaterory.id && "#d4d4d4"}`}
                         key={subCaterory.id}
                         onClick={(e) => filterProduct("category", e, subCaterory.id)}
                       >
@@ -189,7 +189,7 @@ const ProductFilterCard = () => {
                       pl="22px"
                       py="6px"
                       borderRadius={5}
-                      bg={`${categoryId === category.id && "#d4d4d4"}`}
+                      bg={`${categoryId == category.id && "#d4d4d4"}`}
                       key={category.id}
                       onClick={(e) => filterProduct("category", e, category.id)}
                     >
@@ -206,7 +206,7 @@ const ProductFilterCard = () => {
               py="6px"
               key={item.id}
               borderRadius={5}
-              bg={`${categoryId === item.id && "#d4d4d4"}`}
+              bg={`${categoryId == item.id && "#d4d4d4"}`}
               onClick={(e) => filterProduct("category", e, item.id)}
             >
               {item.title}
