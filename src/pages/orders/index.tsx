@@ -1,4 +1,4 @@
-import CustomerDashboardLayout from "@component/layout/VendorDashboardLayout";
+import CustomerDashboardLayout from "@component/layout/CustomerDashboardLayout";
 import CustomerOrderList from "@component/orders/CustomerOrderList";
 import React from "react";
 

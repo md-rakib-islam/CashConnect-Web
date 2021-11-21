@@ -39,7 +39,7 @@ function OpenTicket() {
                 ...values,
                 ticket_department: typeof values.ticket_department != "object" ? values?.ticket_department : values?.ticket_department?.id,
                 ticket_priority: typeof values.ticket_priority != "object" ? values?.ticket_priority : values?.ticket_priority?.id,
-                user: user_id,
+                // user: user_id,
                 file: attachment,
             }
             const [ticketFormData] = useJsonToFormData(data)
@@ -121,9 +121,6 @@ function OpenTicket() {
         validationSchema: checkoutSchema,
         onSubmit: handleFormSubmit,
     });
-
-    console.log("isValidCapha", isValidCapha)
-
 
     return (
         <>
