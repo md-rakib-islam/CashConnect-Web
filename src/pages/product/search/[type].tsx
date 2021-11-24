@@ -242,11 +242,11 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   }
   else if (params.type === "filter") {
     try {
-      const brand: any = query.brand
-      const rating: any = query.rating
+      const brands: any = query.brand
+      const ratings: any = query.rating
 
-      const brandIds = JSON.parse(brand)
-      const ratingIds = JSON.parse(rating)
+      const brandIds = JSON.parse(brands)
+      const ratingIds = JSON.parse(ratings)
 
       let params = new URLSearchParams();
 
@@ -262,7 +262,6 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
       ratingIds.map((rating) => {
         params.append("rating", rating);
       })
-
 
       var request = {
         params: params

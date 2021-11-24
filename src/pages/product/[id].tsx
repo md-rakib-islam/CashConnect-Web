@@ -105,7 +105,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   }
 
   try {
-    const relatedProductRes = await fetch(`${product_by_categoryId}${data.category}?size=8`)
+    const relatedProductRes = await fetch(`${product_by_categoryId}${data.category}?size=12`)
     var relatedProductjson = await relatedProductRes.json()
     var relatedProduct: any[] = await relatedProductjson.products
   }
