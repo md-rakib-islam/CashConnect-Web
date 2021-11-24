@@ -62,71 +62,70 @@ const Section13 = ({ bigDiscountList }) => {
     <CategorySectionCreator
       iconName="gift"
       title="Big Discounts"
-      seeMoreLink="product/search/big_discounts_all"
+      // seeMoreLink="product/search/big_discounts_all"
+      seeMoreLink=""
     >
       <Box my="-0.25rem">
         <Carousel totalSlides={bigDiscountLists?.length} visibleSlides={visibleSlides} step={visibleSlides} getMoreItem={getMoreItem}>
           {bigDiscountLists?.map((item) => (
-            <Box py="0.25rem" key={item.id}>
-              <Card p="1rem">
+            <Box py="0.25rem" key={item.id} style={{ height: "100%" }}>
+              <Card p="1rem" style={{ height: "100%" }}>
                 <Link href={`/product/${item.id}`}>
-                  <>
-                    <a style={{ position: "relative" }}>
-                      {!!item?.off && (
-                        <Chip
-                          position="absolute"
-                          bg="primary.main"
-                          color="primary.text"
-                          fontSize="10px"
-                          fontWeight="600"
-                          p="5px 10px"
-                          top="10px"
-                          left="10px"
-                        >
-                          {/* {item?.off}% off */}
-                          <pre style={{ margin: "0px" }}>{`${item?.off}% off`}</pre>
-                        </Chip>
-                      )}
-                      <HoverBox borderRadius={8} mb="0.5rem">
-                        <LazyImage
-                          src={item.imgUrl}
-                          loader={() => item.imgUrl}
-                          width="100%"
-                          height="auto"
-                          layout="responsive"
-                          alt={item.title}
-                        />
-                      </HoverBox>
-                      <H4 fontWeight="600" fontSize="14px" mb="0.25rem">
-                        {item.title}
-                      </H4>
-
-                      <FlexBox>
-                        <H4
-                          fontWeight="600"
-                          fontSize="14px"
-                          color="primary.main"
-                          mr="0.5rem"
-                        >
-                          <Currency>{Math.ceil(item.price).toLocaleString()}</Currency>
-                        </H4>
-
-                        <H4 fontWeight="600" fontSize="14px" color="text.muted">
-                          <del><Currency>{Math.ceil(item.oldPrice).toLocaleString()}</Currency></del>
-                        </H4>
-                      </FlexBox>
-
-
-                      <H4
-                        display="flex"
-                        className="title"
-                        fontSize="14px"
+                  <a style={{ position: "relative" }}>
+                    {!!item?.off && (
+                      <Chip
+                        position="absolute"
+                        bg="primary.main"
+                        color="primary.text"
+                        fontSize="10px"
                         fontWeight="600"
-                        color={(item?.condition === "new" || item?.condition === "New" || item?.condition === "NEW") ? "primary.main" : "secondary.main"}
-                      >{item?.condition || ""}
+                        p="5px 10px"
+                        top="10px"
+                        left="10px"
+                      >
+                        {/* {item?.off}% off */}
+                        <pre style={{ margin: "0px" }}>{`${item?.off}% off`}</pre>
+                      </Chip>
+                    )}
+                    <HoverBox borderRadius={8} mb="0.5rem">
+                      <LazyImage
+                        src={item.imgUrl}
+                        loader={() => item.imgUrl}
+                        width="100%"
+                        height="auto"
+                        layout="responsive"
+                        alt={item.title}
+                      />
+                    </HoverBox>
+                    <H4 fontWeight="600" fontSize="14px" mb="0.25rem">
+                      {item.title}
+                    </H4>
+
+                    <FlexBox>
+                      <H4
+                        fontWeight="600"
+                        fontSize="14px"
+                        color="primary.main"
+                        mr="0.5rem"
+                      >
+                        <Currency>{Math.ceil(item.price).toLocaleString()}</Currency>
                       </H4>
-                    </a>
-                  </>
+
+                      <H4 fontWeight="600" fontSize="14px" color="text.muted">
+                        <del><Currency>{Math.ceil(item.oldPrice).toLocaleString()}</Currency></del>
+                      </H4>
+                    </FlexBox>
+
+
+                    <H4
+                      display="flex"
+                      className="title"
+                      fontSize="14px"
+                      fontWeight="600"
+                      color={(item?.condition === "new" || item?.condition === "New" || item?.condition === "NEW") ? "primary.main" : "secondary.main"}
+                    >{item?.condition || ""}
+                    </H4>
+                  </a>
                 </Link>
               </Card>
             </Box>

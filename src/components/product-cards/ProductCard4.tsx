@@ -51,7 +51,6 @@ const ProductCard4: React.FC<ProductCard4Props> = ({
       <H4
         fontWeight="600"
         fontSize="14px"
-        textAlign="center"
         mb="0.25rem"
         title={title}
         ellipsis

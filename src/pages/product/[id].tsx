@@ -82,7 +82,7 @@ const ProductDetails = ({ id, title, price, imgUrl, brand, rating, initialReview
 
       <Box mb="50px">
         {selectedOption === "description" && <ProductDescription fullDes={fullDes} />}
-        {selectedOption === "review" && <ProductReview productId={id} setReviews={setNumOfReviews} />}
+        {selectedOption === "review" && <ProductReview product_id={id} setReviews={setNumOfReviews} />}
       </Box>
 
       <RelatedProducts relatedProduct={relatedProduct} />
@@ -118,7 +118,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     props: {
       id: params.id,
       title: data.name,
-      price: data?.unit_price,
+      price: data?.product_discount?.discounted_price || data?.unit_price,
       imgUrl: `${BASE_URL}${data?.thumbnail}`,
       brand: data?.brand,
       fullDes: data?.full_desc,

@@ -142,6 +142,8 @@ export const Review_Create = `${BASE_URL}/review_and_rating/api/v1/review_and_ra
 
 export const Review_By_Product_Id = `${BASE_URL}/review_and_rating/api/v1/all_review_and_rating_of_a_product/`
 
+export const Review_Permission = `${BASE_URL}/review_and_rating/api/v1/review_and_rating/can_user_create_review_and_rating/`
+
 //role api
 export const Role_All = `${BASE_URL}/role/api/v1/role/all/`;
 
