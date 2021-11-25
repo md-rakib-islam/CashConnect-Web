@@ -82,6 +82,7 @@ const Section13 = ({ bigDiscountList }) => {
                         p="5px 10px"
                         top="10px"
                         left="10px"
+                        zIndex={1}
                       >
                         {/* {item?.off}% off */}
                         <pre style={{ margin: "0px" }}>{`${item?.off}% off`}</pre>

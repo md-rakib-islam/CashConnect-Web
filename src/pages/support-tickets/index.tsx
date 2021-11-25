@@ -33,11 +33,11 @@ const TicketList = () => {
 
   useEffect(() => {
     axios.get(`${Ticket_By_User_Id}${user_id}?page=${page || 1}&size=${size || 10}`).then(res => {
-      console.log("ticketRes", res)
+      console.log("ticketssRes", res)
       setTickets(res?.data?.tickets)
       setTotalPage(res?.data?.total_pages)
       setTotalTicket(res?.data?.total_elements)
-    }).catch(() => {})
+    }).catch(() => { })
   }, [page, size])
 
   return (
@@ -59,42 +59,43 @@ const TicketList = () => {
         const priorityHigh = item?.ticket_priority == "High" || item?.ticket_priority == "high" || item?.ticket_priority == "Urgent" || item?.ticket_priority == "urgent"
 
         return (
-        <Link href={`${closedStatus? "" : `/support-tickets/${item?.id}`}`} key={item?.id}>
-          <TableRow
-            as="a"
-            href={`${closedStatus? "" : `/support-tickets/${item?.id}`}`}
-            my="1rem"
-            padding="15px 24px"
-            style={{cursor:  closedStatus && "no-drop"}}
-          >
-            <div>
-              <span>{item?.subject}</span>
-              <FlexBox alignItems="center" flexWrap="wrap" pt="0.5rem" m="-6px">
-                <Chip p="0.25rem 1rem" bg={priorityHigh? "primary.light" : "success.light"} m="6px">
-                  <Small color={priorityHigh? "primary.main" : "success.main"}>{item?.ticket_priority}</Small>
-                </Chip>
-                <Chip p="0.25rem 1rem" bg={closedStatus? "primary.light" : "success.light"} m="6px">
-                  <Small color={closedStatus? "primary.main" : "success.main"}>{item?.ticket_status}</Small>
-                </Chip>
-                <SemiSpan className="pre" m="6px">
-                  {format(new Date(item?.created_at), "MMM dd, yyyy")}
-                </SemiSpan>
-                <SemiSpan m="6px">Website Problem</SemiSpan>
-              </FlexBox>
-            </div>
+          <Link href={`${closedStatus ? "" : `/support-tickets/${item?.id}`}`} key={item?.id}>
+            <TableRow
+              as="a"
+              href={`${closedStatus ? "" : `/support-tickets/${item?.id}`}`}
+              my="1rem"
+              padding="15px 24px"
+              style={{ cursor: closedStatus && "no-drop" }}
+            >
+              <div>
+                <span>{item?.subject}</span>
+                <FlexBox alignItems="center" flexWrap="wrap" pt="0.5rem" m="-6px">
+                  <Chip p="0.25rem 1rem" bg={priorityHigh ? "primary.light" : "success.light"} m="6px">
+                    <Small color={priorityHigh ? "primary.main" : "success.main"}>{item?.ticket_priority}</Small>
+                  </Chip>
+                  <Chip p="0.25rem 1rem" bg={closedStatus ? "primary.light" : "success.light"} m="6px">
+                    <Small color={closedStatus ? "primary.main" : "success.main"}>{item?.ticket_status}</Small>
+                  </Chip>
+                  <SemiSpan className="pre" m="6px">
+                    {format(new Date(item?.created_at), "MMM dd, yyyy")}
+                  </SemiSpan>
+                  {/* <SemiSpan m="6px">Website Problem</SemiSpan> */}
+                </FlexBox>
+              </div>
 
-            <Hidden flex="0 0 0 !important" down={769}>
-              <Typography textAlign="center" color="text.muted">
-                <IconButton size="small" style={{cursor: closedStatus && "no-drop"}}>
-                  <Icon variant="small" defaultcolor="currentColor">
-                    arrow-right
-                  </Icon>
-                </IconButton>
-              </Typography>
-            </Hidden>
-          </TableRow>
-        </Link>
-      )}
+              <Hidden flex="0 0 0 !important" down={769}>
+                <Typography textAlign="center" color="text.muted">
+                  <IconButton size="small" style={{ cursor: closedStatus && "no-drop" }}>
+                    <Icon variant="small" defaultcolor="currentColor">
+                      arrow-right
+                    </Icon>
+                  </IconButton>
+                </Typography>
+              </Hidden>
+            </TableRow>
+          </Link>
+        )
+      }
       )}
 
       <FlexBox

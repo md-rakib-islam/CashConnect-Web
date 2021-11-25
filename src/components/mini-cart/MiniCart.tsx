@@ -108,7 +108,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
     return (
       cartProductList.reduce(
         (accumulator, item) =>
-          accumulator + item.product?.unit_price * item.quantity,
+          accumulator + item.price * item.quantity,
         0
       ) || 0
     );
