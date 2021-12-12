@@ -1,9 +1,7 @@
 import Currency from "@component/Currency";
-import { order_Status_All } from "@data/constants";
-import axios from "axios";
 import { format } from "date-fns";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Box from "../Box";
 import IconButton from "../buttons/IconButton";
 import { Chip } from "../Chip";
@@ -16,48 +14,28 @@ export interface OrderRowProps {
   item: {
     order_no?: any;
     order_status?: string;
-    paid_at?: string;
+    created_at?: string;
     net_amount?: number | string;
     href?: string;
   };
 }
 
 const OrderRow: React.FC<OrderRowProps> = ({ item }) => {
-  const [orderStatus, setOrderStatus] = useState([]);
   const getColor = (status) => {
     switch (status) {
-      case "pending":
+      case ("pending" || "Pending"):
         return "secondary";
-      case "processing":
+      case ("processing" || "Processing"):
         return "secondary";
-      case "delivered":
-        return "success";
-      case "cancelled":
+      case ("cancelled" || "Cancelled"):
         return "error";
+      case ("delivered" || "Delivered" || "on_the_way" || "on the way" || "Nn the way" || "On The Way"):
+        return "success";
       default:
         return "";
     }
   };
 
-  try {
-    var authTOKEN = {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: localStorage.getItem("jwt_access_token"),
-      },
-    };
-  } catch (err) {
-    authTOKEN = null;
-  }
-
-  useEffect(() => {
-    axios.get(`${order_Status_All}`, authTOKEN).then((order_statuss) => {
-      console.log("order_status", order_statuss.data.orderstatuses);
-      console.log("ord_status", item.order_status);
-
-      setOrderStatus(order_statuss.data.orderstatuses);
-    }).catch((err) => { console.log("error", err) });
-  }, []);
 
   return (
     <Link href={item.href}>
@@ -69,24 +47,22 @@ const OrderRow: React.FC<OrderRowProps> = ({ item }) => {
           <Chip
             p="0.25rem 1rem"
             bg={`${getColor(
-              orderStatus.find((orders) => item.order_status == orders.id)?.name
+              item.order_status
             )}.light`}
           >
             <Small
               color={`${getColor(
-                orderStatus.find((orders) => item.order_status == orders.id)
-                  ?.name
+                item.order_status
               )}.main`}
             >
               {
-                orderStatus.find((orders) => item.order_status == orders.id)
-                  ?.name
+                item.order_status
               }
             </Small>
           </Chip>
         </Box>
         <Typography className="flex-grow pre" m="6px" textAlign="left">
-          {item?.paid_at && format(new Date(item?.paid_at), "MMM dd, yyyy")}
+          {item?.created_at && format(new Date(item?.created_at), "MMM dd, yyyy")}
         </Typography>
         <Typography m="6px" textAlign="left">
           <Currency>{Number(item.net_amount).toFixed(2)}</Currency>

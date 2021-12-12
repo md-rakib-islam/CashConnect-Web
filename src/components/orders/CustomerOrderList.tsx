@@ -42,7 +42,7 @@ const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
           let Order: any = {};
           Order.order_no = order.order_no;
           Order.order_status = order.order_status;
-          Order.paid_at = order.paid_at;
+          Order.created_at = order.created_at;
           Order.net_amount = order.net_amount;
           Order.href = `/orders/${order.id}`;
 

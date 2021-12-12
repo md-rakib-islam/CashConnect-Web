@@ -22,10 +22,12 @@ import React, { Fragment, useEffect, useState } from "react";
 import Item from "./Item";
 
 
-type OrderStatus = "packaging" | "shipping" | "delivering" | "complete";
+// type OrderStatus = "packaging" | "shipping" | "delivering" | "complete";
 
 const OrderDetails = () => {
-  const orderStatus: OrderStatus = "shipping";
+
+  const [orderStatus, setorderStatus] = useState<any>("packaging")
+
   const orderStatusList = ["packaging", "shipping", "delivering", "complete"];
   const stepIconList = ["package-box", "truck-1", "delivery"];
 
@@ -44,8 +46,27 @@ const OrderDetails = () => {
   const [placedOn, setPlacedOn] = useState("")
   const [shippingAddress, setshippingAddress] = useState("")
 
+
   const router = useRouter()
   const order_id = router.query?.id
+
+
+  const getStatus = (status) => {
+    switch (status) {
+      case ("pending" || "Pending"):
+        return "packaging";
+      case ("processing" || "Processing"):
+        return "shipping";
+      case ("cancelled" || "Cancelled"):
+        return "packaging";
+      case ("delivered" || "Delivered"):
+        return "complete";
+      case ("on_the_way" || "on the way" || "Nn the way" || "On The Way"):
+        return "delivering";
+      default:
+        return "";
+    }
+  };
 
   useEffect(() => {
     if (order_id) {
@@ -61,6 +82,9 @@ const OrderDetails = () => {
         setDeliveredOn(res.data.order?.delivered_at)
         setPlacedOn(res.data.order?.created_at)
         setshippingAddress(res.data.order?.shipping_address?.street_address)
+
+        setorderStatus(getStatus(res.data.order?.order_status))
+
       }).catch((err) => { console.log("error", err) });
     }
   }, [order_id]);
