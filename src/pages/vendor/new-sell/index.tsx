@@ -14,13 +14,13 @@ import Radio from "@component/radio/Radio";
 import TextField from "@component/text-field/TextField";
 import Typography from "@component/Typography";
 import { useAppContext } from "@context/app/AppContext";
-import useJsonToFormData from "@customHook/useJsonToFormData";
 import useUserInf from "@customHook/useUserInf";
 import { Purshase_Create, User_By_Id } from "@data/constants";
 import { requred } from "@data/data";
 import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
 import { useFormik } from "formik";
+import jsonToFormData from "helper/jsonToFormData";
 import _ from "lodash";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -96,7 +96,7 @@ function newPurchase() {
     });
     purchaseData.items = Items;
 
-    const [PurchaseDataToFormData] = useJsonToFormData(purchaseData);
+    const [PurchaseDataToFormData] = jsonToFormData(purchaseData);
 
 
     setLoading(true)

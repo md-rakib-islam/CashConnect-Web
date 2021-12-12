@@ -1,11 +1,8 @@
 
 import Currency from "@component/Currency";
-import useUserInf from "@customHook/useUserInf";
-import { Purchase_Status_all } from "@data/constants";
-import axios from "axios";
 import { format } from "date-fns";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useMemo } from "react";
 import Box from "../Box";
 import IconButton from "../buttons/IconButton";
 import { Chip } from "../Chip";
@@ -27,14 +24,18 @@ export interface PurchaseRowProps {
 }
 
 const PurchaseRow: React.FC<PurchaseRowProps> = ({ item }) => {
-    const [orderStatus, setOrderStatus] = useState([]);
+
     const getColor = (status) => {
+
+        console.log("status", status)
         switch (status) {
             case ("pending" || "Pending"):
                 return "secondary";
             case ("processing" || "Processing"):
                 return "secondary";
             case ("submitted" || "Submitted"):
+                return "success";
+            case ("verified" || "Verified"):
                 return "success";
             case "cancelled":
                 return "error";
@@ -43,13 +44,9 @@ const PurchaseRow: React.FC<PurchaseRowProps> = ({ item }) => {
         }
     };
 
-    const { authTOKEN } = useUserInf()
 
-    useEffect(() => {
-        axios.get(`${Purchase_Status_all}`, authTOKEN).then((order_statuss) => {
-            setOrderStatus(order_statuss?.data?.purchase_statuses);
-        }).catch((err) => { console.log("error", err) });
-    }, []);
+    const memoizedGetColor = (status) => useMemo(() => getColor(status), []);
+
 
     try {
         var user_type: string = localStorage.getItem("userType")
@@ -67,19 +64,17 @@ const PurchaseRow: React.FC<PurchaseRowProps> = ({ item }) => {
                 <Box m="6px">
                     <Chip
                         p="0.25rem 1rem"
-                        bg={`${getColor(
-                            orderStatus.find((orders) => item.purchase_status == orders.id)?.name
+                        bg={`${memoizedGetColor(
+                            item.purchase_status
                         )}.light`}
                     >
                         <Small
-                            color={`${getColor(
-                                orderStatus.find((orders) => item.purchase_status == orders.id)
-                                    ?.name
+                            color={`${memoizedGetColor(
+                                item.purchase_status
                             )}.main`}
                         >
                             {
-                                orderStatus.find((orders) => item.purchase_status == orders.id)
-                                    ?.name
+                                item.purchase_status
                             }
                         </Small>
                     </Chip>

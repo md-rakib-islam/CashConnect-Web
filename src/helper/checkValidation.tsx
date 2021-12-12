@@ -1,7 +1,7 @@
 import { Check_Email, Check_Email_When_Update, Check_Primary_Phone, Check_Primary_Phone_When_Update, Check_Secondary_Phone, Check_Secondary_Phone_When_Update, Check_User_Name, Check_User_Name_When_Update } from "@data/constants"
 import axios from 'axios'
 
-const useCheckValidation = async ({ username = "", email = "", primaryPhone = "", secondaryPhone = "", userId = 0 }) => {
+const checkValidation = async ({ username = "", email = "", primaryPhone = "", secondaryPhone = "", userId = 0 }) => {
 
     if (username && userId) {
         var userNameCheckRes = await axios.get(`${Check_User_Name_When_Update}?username=${username}&user=${userId}`)
@@ -57,6 +57,6 @@ const useCheckValidation = async ({ username = "", email = "", primaryPhone = ""
     return { isValid: isValid, userNameExist: userNameExist, emailExist: EmailExist, primaryPhoneExist: PrimaryPhoneExist, SecondaryPhoneExist: SecondaryPhoneExist }
 }
 
-export default useCheckValidation
+export default checkValidation
 
 

@@ -2,11 +2,11 @@ import Alert from "@component/alert/alert";
 import LoginPopup from "@component/LoginPopup";
 import { CountryCodeSelect } from "@component/Select";
 import { useAppContext } from "@context/app/AppContext";
-import useCheckValidation from "@customHook/useCheckValidation";
 import { Customer_Create, Vendor_Create } from "@data/constants";
 import { country_codes } from "@data/country_code";
 import axios from "axios";
 import { useFormik } from "formik";
+import checkValidation from "helper/checkValidation";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import * as yup from "yup";
@@ -68,7 +68,7 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
 
   const handleFormSubmit = async (values) => {
 
-    const { userNameExist, isValid, emailExist, primaryPhoneExist } = await useCheckValidation({ username: values.username, email: values.email, primaryPhone: values.primary_phone })
+    const { userNameExist, isValid, emailExist, primaryPhoneExist } = await checkValidation({ username: values.username, email: values.email, primaryPhone: values.primary_phone })
 
     console.log("isValid", isValid)
     if (isValid) {

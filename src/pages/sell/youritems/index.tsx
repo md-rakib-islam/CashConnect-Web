@@ -11,13 +11,13 @@ import { CountryCodeSelect } from "@component/Select";
 import TextField from "@component/text-field/TextField";
 import Typography from "@component/Typography";
 import { useAppContext } from "@context/app/AppContext";
-import useJsonToFormData from "@customHook/useJsonToFormData";
 import { Purshase_Create } from "@data/constants";
 import { country_codes } from "@data/country_code";
 import { requred } from "@data/data";
 import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
 import { useFormik } from "formik";
+import jsonToFormData from "helper/jsonToFormData";
 import _ from "lodash";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -77,7 +77,7 @@ function onlineSell() {
     });
     purchaseData.items = Items;
 
-    const [PurchaseDataToFormData] = useJsonToFormData(purchaseData);
+    const [PurchaseDataToFormData] = jsonToFormData(purchaseData);
 
     setLoading(true)
 

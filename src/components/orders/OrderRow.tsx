@@ -1,7 +1,7 @@
 import Currency from "@component/Currency";
 import { format } from "date-fns";
 import Link from "next/link";
-import React from "react";
+import React, { useMemo } from "react";
 import Box from "../Box";
 import IconButton from "../buttons/IconButton";
 import { Chip } from "../Chip";
@@ -36,6 +36,8 @@ const OrderRow: React.FC<OrderRowProps> = ({ item }) => {
     }
   };
 
+  const memoizedGetColor = (status) => useMemo(() => getColor(status), []);
+
 
   return (
     <Link href={item.href}>
@@ -46,12 +48,12 @@ const OrderRow: React.FC<OrderRowProps> = ({ item }) => {
         <Box m="6px">
           <Chip
             p="0.25rem 1rem"
-            bg={`${getColor(
+            bg={`${memoizedGetColor(
               item.order_status
             )}.light`}
           >
             <Small
-              color={`${getColor(
+              color={`${memoizedGetColor(
                 item.order_status
               )}.main`}
             >

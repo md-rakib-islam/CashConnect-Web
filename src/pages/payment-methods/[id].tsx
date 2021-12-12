@@ -11,11 +11,11 @@ import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import TextField from "@component/text-field/TextField";
 import Typography from "@component/Typography";
 import { useAppContext } from "@context/app/AppContext";
-import useJsonToFormData from "@customHook/useJsonToFormData";
 import useUserInf from "@customHook/useUserInf";
 import { BASE_URL, Customer_Payment_Maythod_By_Id, Customer_Payment_Method_Create, Customer_Payment_Method_Update } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
+import jsonToFormData from "helper/jsonToFormData";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -52,7 +52,7 @@ const PaymentMethodEditor = () => {
       customer: user_id,
       image: image || previewImage,
     }
-    const [saveData] = useJsonToFormData(data)
+    const [saveData] = jsonToFormData(data)
 
     if (id === "add") {
       axios.post(`${Customer_Payment_Method_Create}`, saveData, authTOKEN).then(res => {

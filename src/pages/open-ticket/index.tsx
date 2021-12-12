@@ -10,11 +10,11 @@ import TextField from "@component/text-field/TextField";
 import TextArea from "@component/textarea/TextArea";
 import Typography from '@component/Typography';
 import { useAppContext } from '@context/app/AppContext';
-import useJsonToFormData from '@customHook/useJsonToFormData';
 import useUserInf from '@customHook/useUserInf';
 import { Ticket_Create, Ticket_Department_All, Ticket_Priority_All, User_By_Id } from '@data/constants';
 import axios from 'axios';
 import { useFormik } from "formik";
+import jsonToFormData from 'helper/jsonToFormData';
 import Link from "next/link";
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -42,7 +42,7 @@ function OpenTicket() {
                 // user: user_id,
                 file: attachment,
             }
-            const [ticketFormData] = useJsonToFormData(data)
+            const [ticketFormData] = jsonToFormData(data)
 
             setLoading(true)
 

@@ -10,8 +10,6 @@ import VendorDashboardLayout from "@component/layout/VendorDashboardLayout";
 import Select, { CountryCodeSelect } from "@component/Select";
 import TextField from "@component/text-field/TextField";
 import { useAppContext } from "@context/app/AppContext";
-import useCheckValidation from "@customHook/useCheckValidation";
-import useJsonToFormData from "@customHook/useJsonToFormData";
 import useUserInf from "@customHook/useUserInf";
 import {
   BASE_URL, City_All,
@@ -23,6 +21,8 @@ import { country_codes } from "@data/country_code";
 import { requred } from "@data/data";
 import axios from "axios";
 import { useFormik } from "formik";
+import checkValidation from "helper/checkValidation";
+import jsonToFormData from "helper/jsonToFormData";
 import React, { useEffect, useState } from "react";
 import * as yup from "yup";
 
@@ -98,7 +98,7 @@ const AccountSettings = () => {
 
   const handleFormSubmit = async (values) => {
 
-    const { isValid, userNameExist, emailExist, primaryPhoneExist, SecondaryPhoneExist } = await useCheckValidation({ username: values.username, email: values.email, primaryPhone: values.primary_phone, secondaryPhone: values.secondary_phone, userId: user_id })
+    const { isValid, userNameExist, emailExist, primaryPhoneExist, SecondaryPhoneExist } = await checkValidation({ username: values.username, email: values.email, primaryPhone: values.primary_phone, secondaryPhone: values.secondary_phone, userId: user_id })
 
     if (isValid) {
 
@@ -123,7 +123,7 @@ const AccountSettings = () => {
           typeof values.branch != "object" ? values?.branch : values?.branch?.id,
       };
 
-      const [vendorEditData] = useJsonToFormData(data);
+      const [vendorEditData] = jsonToFormData(data);
 
       console.log("data", data)
 

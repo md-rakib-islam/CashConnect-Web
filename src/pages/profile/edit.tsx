@@ -11,8 +11,6 @@ import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import Select, { CountryCodeSelect } from "@component/Select";
 import TextField from "@component/text-field/TextField";
 import { useAppContext } from "@context/app/AppContext";
-import useCheckValidation from "@customHook/useCheckValidation";
-import useJsonToFormData from "@customHook/useJsonToFormData";
 import useUserInf from "@customHook/useUserInf";
 import {
   BASE_URL, City_All,
@@ -23,6 +21,8 @@ import { country_codes } from "@data/country_code";
 import { requred } from "@data/data";
 import axios from "axios";
 import { useFormik } from "formik";
+import checkValidation from "helper/checkValidation";
+import jsonToFormData from "helper/jsonToFormData";
 import Link from "next/link";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
@@ -54,7 +54,7 @@ const ProfileEditor = ({
 
   const handleFormSubmit = async (values) => {
 
-    const { isValid, userNameExist, emailExist, primaryPhoneExist, SecondaryPhoneExist } = await useCheckValidation({ username: values.username, email: values.email, primaryPhone: values.primary_phone, secondaryPhone: values.secondary_phone, userId: user_id })
+    const { isValid, userNameExist, emailExist, primaryPhoneExist, SecondaryPhoneExist } = await checkValidation({ username: values.username, email: values.email, primaryPhone: values.primary_phone, secondaryPhone: values.secondary_phone, userId: user_id })
 
     // console.log("values.secondary_phone",)
     if (isValid) {
@@ -83,7 +83,7 @@ const ProfileEditor = ({
             : values?.cusotmer_type?.id,
       };
 
-      const [customerEditData] = useJsonToFormData(data);
+      const [customerEditData] = jsonToFormData(data);
       console.log(data)
       axios
         .put(`${Customer_Update}${user_id}`, customerEditData, authTOKEN)
