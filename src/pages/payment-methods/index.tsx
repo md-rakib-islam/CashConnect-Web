@@ -89,7 +89,7 @@ const AddressList = () => {
       />
 
       {paymentmethods?.map((item, id) => (
-        <TableRow key={id} my="1rem" padding="6px 18px">
+        <TableRow key={item.id || id} my="1rem" padding="6px 18px">
           <FlexBox alignItems="center" m="6px">
             <Card width="42px" height="28px" mr="10px" elevation={4}>
               <img

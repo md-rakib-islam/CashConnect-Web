@@ -71,6 +71,9 @@ export const Customer_Order_Pending_Details = `${BASE_URL}/customerorder/api/v1/
 
 export const Customer_order_Details_For_Status = `${BASE_URL}/customerorder/api/v1/customerorder/get_a_customer_order_detail_with_order_orderitem_shipping/`
 
+export const Get_Pending_Order_After_Login = `${BASE_URL}/customerorder/api/v1/customerorder/get_a_pending_order_of_an_authenticated_customer/`
+
+
 //login api
 export const LOGIN_URL = `${BASE_URL}/user/api/v1/user/login/`
 
@@ -109,6 +112,8 @@ export const Product_Size_By_Product_Id = `${BASE_URL}/productsize/api/v1/produc
 export const Product_High_To_Low = `${BASE_URL}/product/api/v1/product/filter_by_category_with_price_high_to_low/`
 
 export const Product_Low_To_High =`${BASE_URL}/product/api/v1/product/filter_by_category_with_price_low_to_high/`
+
+export const Product_Discount_By_Id = `${BASE_URL}/discount/api/v1/discount/get_a_discount_by_product_id/`
 
 //purchase api
 export const Purshase_Create = `${BASE_URL}/purchase_request/api/v1/purchase_request/create_vendor_purchase_request/`;

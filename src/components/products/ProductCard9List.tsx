@@ -25,7 +25,7 @@ const ProductCard9List: React.FC<ProductCard9ListProps> = ({ productList, totalP
   return (
     <div>
       {formattedProductData?.map((item, ind) => (
-        <ProductCard9 mb="1.25rem" key={ind} {...item} />
+        <ProductCard9 mb="1.25rem" key={item?.id || ind} {...item} />
       ))}
 
       <FlexBox

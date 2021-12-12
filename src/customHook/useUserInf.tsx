@@ -29,3 +29,44 @@ function useUserInf() {
 }
 
 export default useUserInf
+
+
+// import { useEffect, useState } from "react";
+
+// function useUserInf() {
+
+//     const [user_id, setuser_id] = useState("")
+//     const [authTOKEN, setauthTOKEN] = useState({})
+//     const [order_Id, setorder_Id] = useState("")
+//     const [user_type, setuser_type] = useState("")
+//     const [isLogin, setisLogin] = useState(false)
+
+//     useEffect(() => {
+//         setuser_id(localStorage?.getItem("UserId"))
+//     }, [localStorage?.getItem("UserId")])
+
+//     useEffect(() => {
+//         setauthTOKEN({
+//             headers: {
+//                 "Content-type": "application/json",
+//                 Authorization: localStorage.getItem("jwt_access_token"),
+//             }
+//         })
+
+//         setisLogin((localStorage?.getItem("UserId") && localStorage.getItem("jwt_access_token")) ? true : false)
+//     }, [localStorage.getItem("jwt_access_token")])
+
+//     useEffect(() => {
+//         setorder_Id(localStorage.getItem("OrderId"))
+//     }, [localStorage.getItem("OrderId")])
+
+//     useEffect(() => {
+//         setuser_type(localStorage.getItem("userType"))
+//     }, [localStorage.getItem("userType")])
+
+
+//     return { user_id, authTOKEN, order_Id, isLogin, user_type }
+// }
+
+// export default useUserInf
+

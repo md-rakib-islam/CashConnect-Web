@@ -84,7 +84,7 @@ const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
       </Hidden>
 
       {ordersList?.map((item, ind) => (
-        <OrderRow item={item} key={ind} />
+        <OrderRow item={item} key={item?.id || ind} />
       ))}
 
       <FlexBox

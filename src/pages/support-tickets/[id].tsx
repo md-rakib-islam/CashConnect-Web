@@ -85,8 +85,8 @@ const PaymentMethodEditor = () => {
       />
 
 
-      {messagelist.map((item, ind) => (
-        <FlexBox mb="30px" key={ind} style={{ direction: item?.customer ? "rtl" : "ltr" }}>
+      {messagelist.map((item) => (
+        <FlexBox mb="30px" key={item.id} style={{ direction: item?.customer ? "rtl" : "ltr" }}>
           <Avatar src={
             `${item?.customer_image ? `${BASE_URL}${item?.customer_image}` : (item?.admin_image ? `${BASE_URL}${item?.admin_image}` : "")}`
           } mr={item?.admin && "1rem"} ml={item?.customer && "1rem"} />

@@ -68,7 +68,7 @@ const VendorOrderList: React.FC<VendorOrderListProps> = () => {
       </Hidden>
 
       {purchaseList.map((item, ind) => (
-        <ParchaseRow item={item} key={ind} />
+        <ParchaseRow item={item} key={item?.id || ind} />
       ))}
 
       <FlexBox

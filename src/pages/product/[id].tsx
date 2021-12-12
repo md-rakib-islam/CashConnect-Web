@@ -12,7 +12,7 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
-const ProductDetails = ({ id, title, price, imgUrl, brand, rating, initialReviewsQuantity, fullDes, relatedProduct, condition }) => {
+const ProductDetails = ({ id, title, price, imgUrl, brand, rating, initialReviewsQuantity, fullDes, relatedProduct, condition, orginalrice }) => {
 
   const [_reviewsQuantity, setreviewsQuantity] = useState(initialReviewsQuantity)
 
@@ -47,6 +47,7 @@ const ProductDetails = ({ id, title, price, imgUrl, brand, rating, initialReview
         rating={rating}
         reviewCount={initialReviewsQuantity}
         condition={condition}
+        orginalrice={orginalrice}
       />
 
       <FlexBox
@@ -113,12 +114,13 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     var relatedProduct = []
   }
 
-  console.log("relatedProduct", relatedProduct)
+  console.log("product_Data", data)
   return {
     props: {
       id: params.id,
       title: data.name,
       price: data?.product_discount?.discounted_price || data?.unit_price,
+      orginalrice: data?.product_discount?.discounted_price ? data?.unit_price : null,
       imgUrl: `${BASE_URL}${data?.thumbnail}`,
       brand: data?.brand,
       fullDes: data?.full_desc,

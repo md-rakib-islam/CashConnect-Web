@@ -56,7 +56,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
                 href={item.href}
                 icon={item.icon}
                 menuData={item.menuData}
-                key={item.title}
+                key={item?.id || item.title}
                 // setIncreaseWidth={setIncreaseWidthMethod}
                 setIncreaseWidthMethod={setIncreaseWidthMethod}
               >

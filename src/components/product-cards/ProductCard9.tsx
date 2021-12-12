@@ -3,11 +3,11 @@ import Currency from "@component/Currency";
 import Image from "@component/Image";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
-import { Check_Stock, Customer_decrease_Quantity, Customer_Increase_Quantity, Customer_Order_Create, Customer_Order_Item_By_Product_Id, Customer_Order_Remove_Item } from "@data/constants";
+import { Check_Stock, Customer_decrease_Quantity, Customer_Increase_Quantity, Customer_Order_Create, Customer_Order_Item_By_Product_Id, Customer_Order_Remove_Item, Product_Discount_By_Id } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { Fragment, useCallback, useEffect, useLayoutEffect, useState } from "react";
+import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { CSSProperties } from "styled-components";
 import Box from "../Box";
 import Button from "../buttons/Button";
@@ -59,6 +59,11 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
 
   const [open, setOpen] = useState(false);
 
+
+  const [sellablePrice, setsellablePrice] = useState(Number(price))
+  const [orginalPrice, setorginalPrice] = useState(0)
+  const [discountedPercent, setdiscountedPercent] = useState(0)
+
   const router = useRouter();
 
   const { state, dispatch } = useAppContext();
@@ -84,7 +89,18 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
     }).catch((err) => { console.log("error", err) })
   }, [])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
+    axios.get(`${Product_Discount_By_Id}${id}`).then(res => {
+      console.log("descountRes", res)
+      if (res.data.discounts?.discounted_price) {
+        setsellablePrice(res.data.discounts?.discounted_price)
+        setorginalPrice(Number(res.data.discounts?.product.unit_price))
+        setdiscountedPercent(res.data.discounts?.discount_percent)
+      }
+    })
+  }, [])
+
+  useEffect(() => {
     const { order_Id } = useUserInf()
 
     if (order_Id) {
@@ -127,7 +143,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
     const orderData = {
       product_id: id,
       quantity: 1,
-      price: price,
+      price: sellablePrice,
       order_date: currentDate,
       branch_id: 1,
       user_id: user_id,
@@ -196,7 +212,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
       <Grid container spacing={1}>
         <Grid item md={3} sm={4} xs={12}>
           <Box position="relative">
-            {off && (
+            {!!discountedPercent && (
               <Chip
                 position="absolute"
                 bg="primary.main"
@@ -207,7 +223,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
                 top="10px"
                 left="10px"
               >
-                {off}% off
+                {discountedPercent}% off
               </Chip>
             )}
             <Icon
@@ -263,11 +279,11 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
 
             <FlexBox mt="0.5rem" alignItems="center">
               <H5 fontWeight={600} color="primary.main" mr="0.5rem">
-                <Currency>{(price - ((price * off) / 100))}</Currency>
+                <Currency>{sellablePrice.toFixed(2)}</Currency>
               </H5>
-              {off && (
+              {!!orginalPrice && (
                 <SemiSpan fontWeight="600">
-                  <del><Currency>{price?.toFixed(2)}</Currency></del>
+                  <del><Currency>{orginalPrice?.toFixed(2)}</Currency></del>
                 </SemiSpan>
               )}
 
@@ -386,7 +402,8 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
           <ProductIntro
             imgUrl={[imgUrl]}
             title={title}
-            price={price}
+            price={sellablePrice}
+            orginalrice={orginalPrice}
             brand={brand}
             id={id}
             rating={rating}
@@ -414,14 +431,14 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
   );
 };
 
-ProductCard9.defaultProps = {
-  id: "30",
-  title: "Product",
-  imgUrl: "/assets/images/products/loadingProduct.png",
-  off: null,
-  price: 0.00,
-  rating: 0,
-  brand: "Unknown",
-};
+// ProductCard9.defaultProps = {
+//   id: "30",
+//   title: "Product",
+//   imgUrl: "/assets/images/products/loadingProduct.png",
+//   off: null,
+//   price: 0.00,
+//   rating: 0,
+//   brand: "Unknown",
+// };
 
 export default ProductCard9;

@@ -18,10 +18,9 @@ function useFormattedProductData(productData, type?: string) {
 
             if (type === "bigdiscount") {
 
-                console.log("bigdiscountCall", data)
                 return {
                     ...productUrl,
-                    oldPrice: Number(data?.product?.unit_price) || null,
+                    orginalPrice: Number(data?.product?.unit_price) || null,
                     id: data?.product?.id || null,
                     price: Number(data?.discounted_price) || null,
                     title: data?.product?.name,

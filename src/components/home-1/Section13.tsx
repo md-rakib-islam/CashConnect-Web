@@ -113,7 +113,7 @@ const Section13 = ({ bigDiscountList }) => {
                       </H4>
 
                       <H4 fontWeight="600" fontSize="14px" color="text.muted">
-                        <del><Currency>{Math.ceil(item.oldPrice).toLocaleString()}</Currency></del>
+                        <del><Currency>{Math.ceil(item.orginalPrice).toLocaleString()}</Currency></del>
                       </H4>
                     </FlexBox>
 

@@ -131,7 +131,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
             }
           >
             {categories?.map((item, key) => (
-              <MenuItem key={key} onClick={handleCategoryChange(item)}>
+              <MenuItem key={item?.id || key} onClick={handleCategoryChange(item)}>
                 {item?.name}
               </MenuItem>
             ))}

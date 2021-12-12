@@ -93,7 +93,7 @@ const ProductReview: React.FC<ProductReviewProps> = ({ product_id, setReviews })
   return (
     <Box>
       {commentList.map((item, ind) => (
-        <ProductComment {...item} key={ind} />
+        <ProductComment {...item} key={item?.id || ind} />
       ))}
 
       <H2 fontWeight="600" mt="55px" mb="20">

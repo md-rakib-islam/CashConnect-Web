@@ -88,8 +88,8 @@ const Profile = () => {
 
           <Grid item lg={6} md={6} sm={12} xs={12}>
             <Grid container spacing={4}>
-              {infoList.map((item) => (
-                <Grid item lg={3} sm={6} xs={6} key={item.subtitle}>
+              {infoList.map((item, idx) => (
+                <Grid item lg={3} sm={6} xs={6} key={idx}>
                   <FlexBox
                     as={Card}
                     flexDirection="column"

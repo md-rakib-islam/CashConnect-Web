@@ -34,7 +34,8 @@ export interface ProductIntroProps {
   brand?: string | number;
   reviewCount?: string | number;
   rating?: number;
-  condition: string
+  condition: string;
+  orginalrice?: number;
 }
 
 const ProductIntro: React.FC<ProductIntroProps> = ({
@@ -45,7 +46,8 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   brand,
   reviewCount,
   rating,
-  condition
+  condition,
+  orginalrice
 }) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [brandName, setbrandName] = useState(brand);
@@ -351,8 +353,13 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
             </FlexBox>
 
             <Box mb="24px">
+              {orginalrice && (
+                <H2 color="text.muted" mb="4px" lineHeight="1">
+                  <del><Currency>{orginalrice}</Currency></del>
+                </H2>
+              )}
               <H2 color="primary.main" mb="4px" lineHeight="1">
-                <Currency>{price}</Currency>
+                <Currency>{Number(price).toFixed(2)}</Currency>
               </H2>
               {stock ? (
                 <SemiSpan color="inherit">Stock Available</SemiSpan>

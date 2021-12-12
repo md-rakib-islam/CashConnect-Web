@@ -92,8 +92,8 @@ const ViewAll = ({ topCategoryLists, CategoryLists, featuredBrandLists, type, to
             </Grid>)}
             {type === "featured_brands" && (<Card p="1rem">
                 <Grid container spacing={4}>
-                    {featuredBrandLists.map((item, key) => (
-                        <Grid item sm={3} xs={12} key={key}>
+                    {featuredBrandLists.map((item) => (
+                        <Grid item sm={3} xs={12} key={item.id}>
                             {/* <Link href={item.productUrl}> */}
                             <a>
                                 <ProductCard5 {...item} />
