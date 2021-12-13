@@ -4,6 +4,8 @@ function useFormattedProductData(productData, type?: string) {
     let render = 1
     if (typeof productData === "object") {
 
+        console.log("renderHooks", render++)
+
         var formattedProductData: any[] = productData?.map(data => {
             console.log("formattedProductData", render++)
             let productUrl = {}

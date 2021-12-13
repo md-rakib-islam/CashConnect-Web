@@ -46,7 +46,7 @@ function TicketImage({ file }) {
 
     return (
         <>
-            <StyledIcon px="10px" py="6px" size="25px" defaultcolor="auto" style={{
+            <StyledIcon px="6px" py="10px" size="25px" defaultcolor="auto" color='primary' style={{
                 cursor: "pointer",
                 width: "fit-content",
                 borderRadius: "10px",
@@ -55,7 +55,7 @@ function TicketImage({ file }) {
                     showFile(`${BASE_URL}${file}`)
                 }}
             >
-                image
+                attachment-image
             </StyledIcon>
 
             <Modal open={open} onClose={toggleDialog}>
@@ -97,7 +97,7 @@ function TicketImage({ file }) {
 
 export const StyledIcon = styled(Icon)`
   :hover {
-      background: ${getTheme("colors.secondary.light")};
+      background: ${getTheme("colors.primary.light")};
   }
 `;
 

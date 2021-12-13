@@ -65,9 +65,6 @@ const PaymentMethodEditor = () => {
             type: "CHANGE_ALERT",
             payload: {
               alertValue: "payment method added",
-              alerType: "success",
-              alertShow: true,
-              alertChanged: Math.random()
             }
           })
         }
@@ -77,8 +74,6 @@ const PaymentMethodEditor = () => {
             payload: {
               alertValue: "sumthing went wrong",
               alerType: "error",
-              alertShow: true,
-              alertChanged: Math.random()
             }
           })
         }
@@ -89,8 +84,6 @@ const PaymentMethodEditor = () => {
           payload: {
             alertValue: "sumthing went wrong",
             alerType: "error",
-            alertShow: true,
-            alertChanged: Math.random()
           }
         })
       })
@@ -103,19 +96,14 @@ const PaymentMethodEditor = () => {
           type: "CHANGE_ALERT",
           payload: {
             alertValue: "payment method updated",
-            alerType: "success",
-            alertShow: true,
-            alertChanged: Math.random()
           }
         })
       }).catch(() => {
         dispatch({
           type: "CHANGE_ALERT",
           payload: {
-            alertValue: "sumthing went wrong",
+            alertValue: "something went wrong",
             alerType: "error",
-            alertShow: true,
-            alertChanged: Math.random()
           }
         })
       })

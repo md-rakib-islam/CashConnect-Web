@@ -30,9 +30,6 @@ const CustomerDashboardNavigation = () => {
       type: "CHANGE_ALERT",
       payload: {
         alertValue: "logout success",
-        alerType: "success",
-        alertShow: true,
-        alertChanged: Math.random()
       }
     })
   }

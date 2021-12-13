@@ -97,8 +97,6 @@ const ProfileEditor = ({
               payload: {
                 alerType: "success",
                 alertValue: "update sussess...",
-                alertShow: true,
-                alertChanged: Math.random()
               }
             })
           }
@@ -108,8 +106,6 @@ const ProfileEditor = ({
               payload: {
                 alerType: "error",
                 alertValue: "someting went wrong",
-                alertShow: true,
-                alertChanged: Math.random()
               }
             })
           }
@@ -119,8 +115,6 @@ const ProfileEditor = ({
             payload: {
               alerType: "error",
               alertValue: "someting went wrong",
-              alertShow: true,
-              alertChanged: Math.random()
             }
           })
         })

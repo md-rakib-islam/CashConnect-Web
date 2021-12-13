@@ -116,8 +116,6 @@ function newPurchase() {
             payload: {
               alertValue: `${values.email} is already exist`,
               alerType: "warning",
-              alertShow: true,
-              alertChanged: Math.random()
             }
           })
         }
@@ -127,8 +125,6 @@ function newPurchase() {
             payload: {
               alertValue: "someting went wrong",
               alerType: "error",
-              alertShow: true,
-              alertChanged: Math.random()
             }
           })
         }
@@ -139,8 +135,6 @@ function newPurchase() {
           payload: {
             alertValue: "someting went wrong",
             alerType: "error",
-            alertShow: true,
-            alertChanged: Math.random()
           }
         })
       });

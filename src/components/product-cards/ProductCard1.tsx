@@ -202,7 +202,6 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
     }
   };
 
-  console.log("rendered", id)
   return (
     <StyledProductCard1 {...props}>
       <div className="image-holder">

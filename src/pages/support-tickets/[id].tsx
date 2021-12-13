@@ -174,7 +174,7 @@ const PaymentMethodEditor = () => {
             />
 
             <Typography mt="5px" mb="5px">
-              (Allowed File Extensions: jpg, jpeg, png, doc, pdf, txt, docs)
+              {`(Allowed File Extensions: ${ticketfileExtension.replace(/\./g, "")}`}
             </Typography>
 
           </Box>

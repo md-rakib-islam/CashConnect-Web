@@ -55,9 +55,6 @@ function OpenTicket() {
                         type: "CHANGE_ALERT",
                         payload: {
                             alertValue: "success...",
-                            alerType: "success",
-                            alertShow: true,
-                            alertChanged: Math.random()
                         }
                     })
                     router.push("/support-tickets")
@@ -68,8 +65,6 @@ function OpenTicket() {
                         payload: {
                             alertValue: "something went wrong",
                             alerType: "error",
-                            alertShow: true,
-                            alertChanged: Math.random()
                         }
                     })
                 }
@@ -81,8 +76,6 @@ function OpenTicket() {
                     payload: {
                         alertValue: "something went wrong",
                         alerType: "error",
-                        alertShow: true,
-                        alertChanged: Math.random()
                     }
                 })
                 console.log("data", data);
@@ -281,7 +274,7 @@ function OpenTicket() {
                                 />
 
                                 <Typography mt="5px" mb="5px">
-                                    (Allowed File Extensions: jpg, jpeg, png, doc, pdf, txt, docs)
+                                    {`(Allowed File Extensions: ${ticketfileExtension.replace(/\./g, "")}`}
                                 </Typography>
 
                             </Box>

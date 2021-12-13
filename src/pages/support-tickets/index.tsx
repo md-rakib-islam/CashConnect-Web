@@ -34,9 +34,9 @@ const TicketList = () => {
   useEffect(() => {
     axios.get(`${Ticket_By_User_Id}${user_id}?page=${page || 1}&size=${size || 10}`).then(res => {
       console.log("ticketssRes", res)
-      setTickets(res?.data?.tickets)
-      setTotalPage(res?.data?.total_pages)
-      setTotalTicket(res?.data?.total_elements)
+      setTickets(res?.data?.tickets || [])
+      setTotalPage(res?.data?.total_pages || 0)
+      setTotalTicket(res?.data?.total_elements || 0)
     }).catch(() => { })
   }, [page, size])
 

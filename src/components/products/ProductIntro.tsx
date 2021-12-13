@@ -178,8 +178,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
             payload: {
               alerType: "error",
               alertValue: "something went wrong",
-              alertShow: true,
-              alertChanged: Math.random()
             }
           })
 
@@ -203,8 +201,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               payload: {
                 alerType: "error",
                 alertValue: "something went wrong",
-                alertShow: true,
-                alertChanged: Math.random()
               }
             })
           });
@@ -227,8 +223,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               payload: {
                 alerType: "error",
                 alertValue: "something went wrong",
-                alertShow: true,
-                alertChanged: Math.random()
               }
             })
           });
@@ -251,8 +245,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               payload: {
                 alerType: "error",
                 alertValue: "something went wrong",
-                alertShow: true,
-                alertChanged: Math.random()
               }
             })
           });
@@ -353,7 +345,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
             </FlexBox>
 
             <Box mb="24px">
-              {orginalrice && (
+              {!!orginalrice && (
                 <H2 color="text.muted" mb="4px" lineHeight="1">
                   <del><Currency>{orginalrice}</Currency></del>
                 </H2>

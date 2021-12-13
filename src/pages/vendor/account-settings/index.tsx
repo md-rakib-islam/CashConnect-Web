@@ -136,10 +136,7 @@ const AccountSettings = () => {
             dispatch({
               type: "CHANGE_ALERT",
               payload: {
-                alerType: "success",
                 alertValue: "update sussess...",
-                alertShow: true,
-                alertChanged: Math.random()
               }
             })
             setUpdated(Math.random())
@@ -150,8 +147,6 @@ const AccountSettings = () => {
               payload: {
                 alerType: "error",
                 alertValue: "someting went wrong",
-                alertShow: true,
-                alertChanged: Math.random()
               }
             })
           }
@@ -161,8 +156,6 @@ const AccountSettings = () => {
             payload: {
               alerType: "error",
               alertValue: "someting went wrong",
-              alertShow: true,
-              alertChanged: Math.random()
             }
           })
         });

@@ -51,9 +51,6 @@ const AddressList = () => {
         type: "CHANGE_ALERT",
         payload: {
           alertValue: `${cardName} deleted`,
-          alerType: "success",
-          alertShow: true,
-          alertChanged: Math.random()
         }
       })
     }).catch(() => {
@@ -62,8 +59,6 @@ const AddressList = () => {
         payload: {
           alertValue: "sumthing went wrong",
           alerType: "error",
-          alertShow: true,
-          alertChanged: Math.random()
         }
       })
     })

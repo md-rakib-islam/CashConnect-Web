@@ -74,9 +74,6 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
           type: "CHANGE_ALERT",
           payload: {
             alertValue: "login success...",
-            alerType: "success",
-            alertShow: true,
-            alertChanged: Math.random(),
           }
         });
 
@@ -119,8 +116,6 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
           payload: {
             alertValue: "something went wrong",
             alerType: "error",
-            alertShow: true,
-            alertChanged: Math.random(),
           }
         });
         if (type != "popup") {

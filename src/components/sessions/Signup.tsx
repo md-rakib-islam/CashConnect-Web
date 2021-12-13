@@ -86,9 +86,6 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
               type: "CHANGE_ALERT",
               payload: {
                 alertValue: "sugnup success...",
-                alerType: "success",
-                alertShow: true,
-                alertChanged: Math.random(),
               }
             });
           } else {
@@ -97,9 +94,6 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
               type: "CHANGE_ALERT",
               payload: {
                 alertValue: "sugnup success...",
-                alerType: "success",
-                alertShow: true,
-                alertChanged: Math.random(),
               }
             });
           }
@@ -109,8 +103,6 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             payload: {
               alertValue: "someting went wrong",
               alerType: "error",
-              alertShow: true,
-              alertChanged: Math.random(),
             }
           });
         })
@@ -125,9 +117,6 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
               type: "CHANGE_ALERT",
               payload: {
                 alertValue: "sugnup success...",
-                alerType: "success",
-                alertShow: true,
-                alertChanged: Math.random(),
               }
             });
           } else {
@@ -136,9 +125,6 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
               type: "CHANGE_ALERT",
               payload: {
                 alertValue: "sugnup success...",
-                alerType: "success",
-                alertShow: true,
-                alertChanged: Math.random(),
               }
             });
           }
@@ -148,8 +134,6 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             payload: {
               alertValue: "someting went wrong",
               alerType: "error",
-              alertShow: true,
-              alertChanged: Math.random(),
             }
           });
         });
