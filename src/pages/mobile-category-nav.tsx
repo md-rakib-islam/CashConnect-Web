@@ -21,21 +21,16 @@ const MobileCategoryNav = () => {
   const [suggestedList, setSuggestedList] = useState([]);
   const [subCategoryList, setSubCategoryList] = useState([]);
 
-
-  const [navigationData, setNavigationData] = useState([]);
-  const [formattedCategoryData] =
-    useFormattedCategoryData(navigationData);
+  const [formattedCategoryData, setFormattedCategoryData] = useFormattedCategoryData();
 
   useEffect(() => {
     fetch(`${Category_All_With_Child}`)
       .then((res) => res.json())
       .then((data) => {
         console.log("category", data.categories);
-        setNavigationData(data.categories);
+        setFormattedCategoryData(data.categories);
       }).catch((err) => { console.log("error", err) });
   }, []);
-
-  console.log("mobileCategory", navigationData)
 
   const handleCategoryClick = (cat) => () => {
     let menuData = cat.menuData;

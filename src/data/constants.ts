@@ -2,7 +2,7 @@
 //http://api.cashconnectbd.com
 
 //base url
-export const BASE_URL = "http://api.cashconnectbd.com";
+export const BASE_URL = "http://192.168.0.172:8001";
 
 //branch api
 export const Branch_All = `${BASE_URL}/branch/api/v1/branch/all/`;

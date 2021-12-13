@@ -10,6 +10,7 @@ import TextArea from "@component/textarea/TextArea";
 import Typography, { H5, SemiSpan } from "@component/Typography";
 import useUserInf from "@customHook/useUserInf";
 import { BASE_URL, Ticket_Details_All, Ticket_Details_Create } from "@data/constants";
+import { ticketfileExtension } from "@data/data";
 import axios from "axios";
 import { format } from "date-fns";
 import { useFormik } from "formik";
@@ -168,7 +169,7 @@ const PaymentMethodEditor = () => {
                 // onChange(file);
               }}
               id="profile-image"
-              accept=".jpg, .jpeg, .png, .doc, .pdf, .txt, .docs"
+              accept={ticketfileExtension}
               type="file"
             />
 

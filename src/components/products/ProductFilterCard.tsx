@@ -1,4 +1,4 @@
-import useFormattedNavigationData from "@customHook/useFormattedCategoryData";
+import useFormattedCategoryData from "@customHook/useFormattedCategoryData";
 import { Brands_By_Category, Brand_All, Category_All_With_Child } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
@@ -23,9 +23,7 @@ const ProductFilterCard = () => {
   const [ratingIds, setRatingIds] = useState({})
   const [categoryId, setCategoryId] = useState<any>("")
 
-  const [categoryData, setCategoryData] = useState([]);
-  const [formattedCategoryData] =
-    useFormattedNavigationData(categoryData);
+  const [formattedCategoryData, setFormattedCategoryData] = useFormattedCategoryData();
 
   const router = useRouter()
 
@@ -85,9 +83,8 @@ const ProductFilterCard = () => {
   }
 
   useEffect(() => {
-
     axios.get(`${Category_All_With_Child}`).then(res => {
-      setCategoryData(res.data.categories)
+      setFormattedCategoryData(res.data.categories)
     }).catch((err) => { console.log("error", err) })
   }, [])
 

@@ -12,6 +12,7 @@ import Typography from '@component/Typography';
 import { useAppContext } from '@context/app/AppContext';
 import useUserInf from '@customHook/useUserInf';
 import { Ticket_Create, Ticket_Department_All, Ticket_Priority_All, User_By_Id } from '@data/constants';
+import { ticketfileExtension } from '@data/data';
 import axios from 'axios';
 import { useFormik } from "formik";
 import jsonToFormData from 'helper/jsonToFormData';
@@ -275,7 +276,7 @@ function OpenTicket() {
                                         // onChange(file);
                                     }}
                                     id="profile-image"
-                                    accept=".jpg, .jpeg, .png, .doc, .pdf, .txt, .docs"
+                                    accept={ticketfileExtension}
                                     type="file"
                                 />
 

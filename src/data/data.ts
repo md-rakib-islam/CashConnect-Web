@@ -5,3 +5,6 @@ export const product_per_page_options = [
   ]
 
 export var requred: any = "required"
+
+export const ticketfileExtension = ".jpg, .jpeg, .png, .doc, .pdf, .txt, .docs"
+export const ticketImgExtensionArr = [".jpg", ".jpeg", ".png"]

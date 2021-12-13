@@ -1,10 +1,11 @@
 import { BASE_URL } from "@data/constants";
 function useFormattedProductData(productData, type?: string) {
 
+    let render = 1
     if (typeof productData === "object") {
 
         var formattedProductData: any[] = productData?.map(data => {
-
+            console.log("formattedProductData", render++)
             let productUrl = {}
             if (type === "Arrivals") {
                 productUrl = { productUrl: `/product/${data?.id}` };
