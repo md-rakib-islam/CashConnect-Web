@@ -42,7 +42,7 @@ const MegaMenu1: React.FC<MegaMenuProps> = ({
           <Box flex="1 1 0">
             <Grid container spacing={4}>
               {categories?.map((item, ind) => (
-                <Grid item md={3} key={item?.id || ind}>
+                <Grid item md={3} key={ind}>
                   {item.href ? (
                     <NavLink className="title-link" href={item.href}>
                       {item.title}

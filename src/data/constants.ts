@@ -21,6 +21,8 @@ export const Category_By_Id = `${BASE_URL}/category/api/v1/category/`;
 
 export const Category_All = `${BASE_URL}/category/api/v1/category/all/`
 
+export const Category_All_Without_Pg = `${BASE_URL}/category/api/v1/category/without_pagination/all/`
+
 export const Category_All_With_Child = `${BASE_URL}/category/api/v1/categories_tree/all/`;
 
 export const Category_Top_All = `${BASE_URL}/category/api/v1/top_categories/all/`

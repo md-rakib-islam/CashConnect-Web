@@ -202,10 +202,6 @@ const SellDetails = () => {
             </FlexBox>
             <Typography fontSize="14px">Paid by {paymentMathod}</Typography>
           </Card>
-
-          <Button variant="contained" color="primary" ml="auto">
-            Save Changes
-          </Button>
         </Grid>
       </Grid>
     </div>

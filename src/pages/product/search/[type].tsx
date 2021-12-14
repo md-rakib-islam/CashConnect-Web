@@ -12,9 +12,10 @@ import ProductFilterCard from "@component/products/ProductFilterCard";
 import Select from "@component/Select";
 import Sidenav from "@component/sidenav/Sidenav";
 import { H5, Paragraph } from "@component/Typography";
-import { Category_By_Id, Product_Arrival, Product_By_BrandId, product_by_categoryId, Product_Discount, Product_Filter, Product_Flash_Deals, Product_For_You, Product_High_To_Low, Product_Low_To_High, Product_Search, Product_Top_Rated } from "@data/constants";
+import { Category_All_Without_Pg, Product_Arrival, Product_By_BrandId, product_by_categoryId, Product_Discount, Product_Filter, Product_Flash_Deals, Product_For_You, Product_High_To_Low, Product_Low_To_High, Product_Search, Product_Top_Rated } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
+import _ from "lodash";
 import { GetServerSideProps } from 'next';
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
@@ -25,6 +26,7 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
   const [searchingFor, setSearchingFor] = useState("");
   const [totalProducts, setTotalProducts] = useState(totalProduct);
   const [productList, setProductList] = useState(productLists)
+  const [categories, setCategories] = useState([])
 
   const [view, setView] = useState("grid");
   const width = useWindowSize();
@@ -46,40 +48,66 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
 
   useEffect(() => {
     const type = router.query.type
-    if (type === "product_by_category") {
-      if (id) {
-        fetch(`${Category_By_Id}${id}`)
-          .then((res) => res.json())
-          .then((data) => {
-            console.log("searchingFor", data.name);
-            setSearchingFor(data.name);
-          })
-          .catch(() => {
-            setSearchingFor("Not Found");
-          });
+    const { categoryId } = router.query;
+    if (type) {
+      if (type === "product_by_category") {
+        if (categoryId) {
+          if (!_.isEmpty(categories)) {
+            setSearchingFor(categories.find(deta => deta.id == categoryId)?.name || "")
+          }
+          else {
+            fetch(`${Category_All_Without_Pg}`)
+              .then((res) => res.json())
+              .then((data) => {
+                setCategories(data?.categories || [])
+                _.isArray(data?.categories) && setSearchingFor(data?.categories.find(deta => deta.id == categoryId)?.name || "")
+              })
+              .catch(() => {
+                setSearchingFor("");
+              });
+          }
+        }
       }
-    }
-    else if (type === "search_by_product_name") {
-      const search_key: any = router.query.search_key
-      setSearchingFor(search_key)
-    }
-    else if (type === "flash_deals_all") {
-      setSearchingFor("Flash Deals")
-    }
-    else if (type === "top_ratings_all") {
-      setSearchingFor("Top Ratings")
-    }
-    else if (type === "new_arrivals_all") {
-      setSearchingFor("New Arrivals")
-    }
-    else if (type === "big_discounts_all") {
-      setSearchingFor("Big Discounts")
-    }
-    else if (type === "more_for_you_all") {
-      setSearchingFor("More For You")
-    }
-    else if (type === "search_by_product_name") {
-      setSearchingFor("Top Ratings")
+      if (type === "filter") {
+        if (categoryId) {
+          if (!_.isEmpty(categories)) {
+            setSearchingFor(categories.find(deta => deta.id == categoryId)?.name || "")
+          }
+          else {
+            fetch(`${Category_All_Without_Pg}`)
+              .then((res) => res.json())
+              .then((data) => {
+                setCategories(data?.categories || [])
+                _.isArray(data?.categories) && setSearchingFor(data?.categories.find(deta => deta.id == categoryId)?.name || "")
+              })
+              .catch(() => {
+                setSearchingFor("");
+              });
+          }
+        }
+      }
+      else if (type === "search_by_product_name") {
+        const search_key: any = router.query.search_key
+        setSearchingFor(search_key)
+      }
+      else if (type === "flash_deals_all") {
+        setSearchingFor("Flash Deals")
+      }
+      else if (type === "top_ratings_all") {
+        setSearchingFor("Top Ratings")
+      }
+      else if (type === "new_arrivals_all") {
+        setSearchingFor("New Arrivals")
+      }
+      else if (type === "big_discounts_all") {
+        setSearchingFor("Big Discounts")
+      }
+      else if (type === "more_for_you_all") {
+        setSearchingFor("More For You")
+      }
+      else if (type === "search_by_product_name") {
+        setSearchingFor("Top Ratings")
+      }
     }
   }, [id]);
 
