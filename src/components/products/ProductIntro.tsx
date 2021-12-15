@@ -152,12 +152,12 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
         dateObj.getDate().toString().padStart(2, 0);
 
       const orderData = {
-        product_id: id || routerId,
+        product: id || routerId,
         quantity: 1,
         price: price,
         order_date: currentDate,
-        branch_id: 1,
-        user_id: user_id,
+        branch: 4,
+        user: user_id,
       };
 
       //addToCart

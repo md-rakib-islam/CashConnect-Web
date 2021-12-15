@@ -15,7 +15,7 @@ import Typography, { H5, Small } from "../Typography";
 export interface PurchaseRowProps {
     item: {
         id?: any;
-        purchase_status?: string;
+        purchase_status?: { name: string };
         created_at?: string;
         total_price?: number | string;
         href?: string;
@@ -65,16 +65,16 @@ const PurchaseRow: React.FC<PurchaseRowProps> = ({ item }) => {
                     <Chip
                         p="0.25rem 1rem"
                         bg={`${memoizedGetColor(
-                            item.purchase_status
+                            item.purchase_status?.name
                         )}.light`}
                     >
                         <Small
                             color={`${memoizedGetColor(
-                                item.purchase_status
+                                item.purchase_status?.name
                             )}.main`}
                         >
                             {
-                                item.purchase_status
+                                item.purchase_status?.name
                             }
                         </Small>
                     </Chip>

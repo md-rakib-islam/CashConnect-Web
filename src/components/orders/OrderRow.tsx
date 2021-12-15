@@ -13,7 +13,7 @@ import Typography, { H5, Small } from "../Typography";
 export interface OrderRowProps {
   item: {
     order_no?: any;
-    order_status?: string;
+    order_status?: { name: string };
     created_at?: string;
     net_amount?: number | string;
     href?: string;
@@ -49,16 +49,16 @@ const OrderRow: React.FC<OrderRowProps> = ({ item }) => {
           <Chip
             p="0.25rem 1rem"
             bg={`${memoizedGetColor(
-              item.order_status
+              item.order_status?.name
             )}.light`}
           >
             <Small
               color={`${memoizedGetColor(
-                item.order_status
+                item.order_status?.name
               )}.main`}
             >
               {
-                item.order_status
+                item.order_status?.name
               }
             </Small>
           </Chip>

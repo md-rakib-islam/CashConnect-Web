@@ -141,12 +141,12 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
       dateObj.getDate().toString().padStart(2, 0);
 
     const orderData = {
-      product_id: id,
+      product: id,
       quantity: 1,
       price: sellablePrice,
       order_date: currentDate,
-      branch_id: 1,
-      user_id: user_id,
+      branch: 4,
+      user: user_id,
     };
 
     //add to cart

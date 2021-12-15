@@ -72,19 +72,17 @@ const OrderDetails = () => {
     if (order_id) {
       axios.get(`${Customer_order_Details_For_Status}${order_id}`).then((res) => {
         console.log("CorderDetailsRes", res.data);
-        setProductList(res.data.order?.order_items);
-        setSubTotal(res.data.order?.net_amount);
+        setProductList(res.data.order?.order_items || []);
+        setSubTotal(res.data.order?.net_amount || 0);
         setTotal(res.data.order?.net_amount);
-        setShippingFee(res.data.order?.shipping_price)
-        setDiscount(res.data.order?.discount_amount)
-        setPaid_by(res.data.order?.payment_method)
-        setOrderId(res.data.order?.id)
-        setDeliveredOn(res.data.order?.delivered_at)
-        setPlacedOn(res.data.order?.created_at)
-        setshippingAddress(res.data.order?.shipping_address?.street_address)
-
-        setorderStatus(getStatus(res.data.order?.order_status))
-
+        setShippingFee(res.data.order?.shipping_price || 0)
+        setDiscount(res.data.order?.discount_amount || 0)
+        setPaid_by(res.data.order?.payment_method?.name || "_")
+        setOrderId(res.data.order?.id || 0)
+        setDeliveredOn(res.data.order?.delivered_at || "")
+        setPlacedOn(res.data.order?.created_at || "")
+        setshippingAddress(res.data.order?.shipping_address?.street_address || "")
+        setorderStatus(getStatus(res.data.order?.order_status?.name || ""))
       }).catch((err) => { console.log("error", err) });
     }
   }, [order_id]);
@@ -186,7 +184,7 @@ const OrderDetails = () => {
         </TableRow>
 
         <Box py="0.5rem">
-          {productList.map((item) => <Item item={item}></Item>)}
+          {productList.map((item) => <Item item={item} key={item?.id}></Item>)}
         </Box>
       </Card>
 
