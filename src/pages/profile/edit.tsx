@@ -18,7 +18,7 @@ import {
   Customer_By_Id, Customer_Update, Thana_All
 } from "@data/constants";
 import { country_codes } from "@data/country_code";
-import { requred } from "@data/data";
+import { genders, requred } from "@data/data";
 import axios from "axios";
 import { useFormik } from "formik";
 import checkValidation from "helper/checkValidation";
@@ -42,12 +42,6 @@ const ProfileEditor = ({
   // const [branches, setBranches] = useState([]);
   // const [customer_types, setCustomer_types] = useState([]);
 
-  const genders = [
-    { label: "Male", value: "male" },
-    { label: "Female", value: "female" },
-    { label: "Others", value: "others" },
-  ];
-
   const { user_id, authTOKEN } = useUserInf()
 
   const { dispatch } = useAppContext()
@@ -66,7 +60,7 @@ const ProfileEditor = ({
         gender:
           typeof values.gender != "object"
             ? values?.gender
-            : values?.gender?.value,
+            : values?.gender?.id,
         role: typeof values.role != "object" ? values?.role : values?.role?.id,
         thana:
           typeof values.thana != "object" ? values?.thana : values?.thana?.id,
@@ -155,9 +149,9 @@ const ProfileEditor = ({
         setFieldValue(`${key}`, data[key]);
       }
       setFieldValue("gender", {
-        value: data.gender,
-        label: genders.find((gender: any) => gender?.value == data.gender)
-          ?.label,
+        id: data.gender,
+        name: genders.find((gender: any) => gender?.id == data.gender)
+          ?.name,
       });
     }).catch((err) => { console.log("error", err) });
   }, [user_id]);
@@ -342,8 +336,6 @@ const ProfileEditor = ({
                   label="Gender"
                   placeholder="Select Gender"
                   options={genders}
-                  getOptionLabelBy="label"
-                  getOptionValueBy="value"
                   value={values.gender || ""}
                   onChange={(gender) => {
                     setFieldValue("gender", gender);

@@ -13,6 +13,7 @@ import useUserInf from "@customHook/useUserInf";
 import { BASE_URL, Purchase_Products_By_Vendor_Id } from "@data/constants";
 import axios from "axios";
 import { format } from "date-fns";
+import _ from "lodash";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
@@ -103,7 +104,7 @@ const Products = () => {
             <div style={{ minWidth: "80px" }}>
               <Typography textAlign="center" mr="10px">
                 {/* {item?.name} */}
-                {item?.status ? item?.status : "_"}
+                {_.isObject(item?.status) ? item?.status?.name : item?.status || "_"}
               </Typography>
             </div>
           </div>

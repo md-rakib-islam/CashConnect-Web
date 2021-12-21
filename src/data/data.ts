@@ -8,3 +8,5 @@ export var requred: any = "required"
 
 export const ticketfileExtension = ".jpg, .jpeg, .png, .doc, .pdf, .txt, .docs"
 export const ticketImgExtensionArr = [".jpg", ".jpeg", ".png"]
+
+export const genders = [{ id: "male", name: "Male" }, { id: "female", name: "Female" }, { id: "others", name: "Others" }];

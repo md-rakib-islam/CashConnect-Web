@@ -18,7 +18,7 @@ import {
   Vendor_Update
 } from "@data/constants";
 import { country_codes } from "@data/country_code";
-import { requred } from "@data/data";
+import { genders, requred } from "@data/data";
 import axios from "axios";
 import { useFormik } from "formik";
 import checkValidation from "helper/checkValidation";
@@ -40,12 +40,6 @@ const AccountSettings = () => {
   const [updated, setUpdated] = useState(0)
 
   const { dispatch } = useAppContext()
-
-  const genders = [
-    { label: "Male", value: "male" },
-    { label: "Female", value: "female" },
-    { label: "Others", value: "others" },
-  ];
 
   const { user_id, authTOKEN } = useUserInf()
 
@@ -110,7 +104,7 @@ const AccountSettings = () => {
         gender:
           typeof values.gender != "object"
             ? values?.gender
-            : values?.gender?.value,
+            : values?.gender?.id,
         role: typeof values.role != "object" ? values?.role : values?.role?.id,
         thana:
           typeof values.thana != "object" ? values?.thana : values?.thana?.id,
@@ -198,6 +192,8 @@ const AccountSettings = () => {
       </div>
     ) : null;
   }
+
+  console.log("values", values)
 
 
   return (
@@ -358,8 +354,6 @@ const AccountSettings = () => {
                   label="Gender"
                   placeholder="Select Gender"
                   options={genders}
-                  getOptionLabelBy="label"
-                  getOptionValueBy="value"
                   value={values.gender || ""}
                   onChange={(gender) => {
                     setFieldValue("gender", gender);

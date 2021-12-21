@@ -10,7 +10,7 @@ type SelectOption = {
   label?: number | string;
   value?: string | number;
   name?: string | number;
-  id?: number;
+  id?: number | string;
 };
 
 interface SelectProps
@@ -105,7 +105,7 @@ const Select: React.FC<SelectProps> = ({
 };
 
 const customStyles = {
-  input: (styles) => ({ ...styles, height: 30, boxShadow: "0px 0px 10px #ababab"}),
+  input: (styles) => ({ ...styles, height: 30, boxShadow: "0px 0px 10px #ababab" }),
   option: (provided, state) => ({
     ...provided,
     color: "inherit",

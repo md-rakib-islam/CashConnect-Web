@@ -65,8 +65,8 @@ const Section2: React.FC<Section2Props> = ({ flashDealsList }) => {
       seeMoreLink="product/search/flash_deals_all"
     >
       <Box mt="-0.25rem" mb="-0.25rem">
-        <Carousel totalSlides={flashDealsList?.length} visibleSlides={visibleSlides} step={visibleSlides} getMoreItem={getMoreItem}>
-          {flashDealsList?.map((item) => (
+        <Carousel totalSlides={flashDealsListLists?.length} visibleSlides={visibleSlides} step={visibleSlides} getMoreItem={getMoreItem}>
+          {flashDealsListLists?.map((item) => (
             <Box py="0.25rem" key={item.id}>
               <ProductCard1
                 id={item.id}

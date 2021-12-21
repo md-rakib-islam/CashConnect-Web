@@ -3,7 +3,7 @@ import LoginPopup from "@component/LoginPopup";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import {
-  BASE_URL, Brand_By_Id, Check_Stock, Customer_decrease_Quantity,
+  BASE_URL, Check_Stock, Customer_decrease_Quantity,
   Customer_Increase_Quantity,
   Customer_Order_Create,
   Customer_Order_Item_By_Product_Id,
@@ -50,7 +50,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   orginalrice
 }) => {
   const [selectedImage, setSelectedImage] = useState(0);
-  const [brandName, setbrandName] = useState(brand);
 
   const { state, dispatch } = useAppContext();
   const router = useRouter();
@@ -121,19 +120,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       }
     }
   }, [getItemId, id, cartCanged]);
-
-  useEffect(() => {
-    if (typeof brand == "number") {
-      fetch(`${Brand_By_Id}${brand}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setbrandName(data.name);
-        })
-        .catch(() => {
-          setbrandName("Not Found");
-        });
-    }
-  }, [brand]);
 
   const handleImageClick = (ind) => () => {
     setSelectedImage(ind);
@@ -333,7 +319,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
             <FlexBox alignItems="center" mb="1rem">
               <SemiSpan>Brand:</SemiSpan>
-              <H6 ml="8px">{brandName || "Unknown"}</H6>
+              <H6 ml="8px">{brand || ""}</H6>
             </FlexBox>
 
             <FlexBox alignItems="center" mb="1rem">

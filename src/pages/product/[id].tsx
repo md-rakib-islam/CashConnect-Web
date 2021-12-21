@@ -8,6 +8,7 @@ import RelatedProducts from "@component/products/RelatedProducts";
 import { H5 } from "@component/Typography";
 import { BASE_URL, product_by_categoryId, Product_by_id } from "@data/constants";
 import axios from "axios";
+import _ from "lodash";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -122,7 +123,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       price: data?.product_discount?.discounted_price || data?.unit_price,
       orginalrice: data?.product_discount?.discounted_price ? data?.unit_price : null,
       imgUrl: `${BASE_URL}${data?.thumbnail}`,
-      brand: data?.brand,
+      brand: _.isObject(data?.brand) ? data?.brand?.name : data?.brand || "",
       fullDes: data?.full_desc,
       initialReviewsQuantity: data?.num_reviews,
       rating: data?.rating,

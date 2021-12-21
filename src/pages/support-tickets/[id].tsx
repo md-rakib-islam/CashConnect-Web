@@ -94,14 +94,14 @@ const PaymentMethodEditor = () => {
       />
 
 
-      {messagelist.map((item) => (
-        <FlexBox mb="30px" key={item.id} style={{ direction: item?.customer ? "rtl" : "ltr" }}>
+      {messagelist?.map((item) => (
+        <FlexBox mb="30px" key={item.id} style={{ direction: item?.customer?.name ? "rtl" : "ltr" }}>
           <Avatar src={
             `${item?.customer_image ? `${item?.customer_image !== "/media/" ? `${BASE_URL}${item?.customer_image}` : null}` : (item?.admin_image ? `${item?.admin_image != "/media/" ? `${BASE_URL}${item?.admin_image}` : null}` : "")}`
-          } mr={item?.admin && "1rem"} ml={item?.customer && "1rem"} />
+          } mr={item?.admin?.name && "1rem"} ml={item?.customer?.name && "1rem"} />
           <Box>
             <H5 fontWeight="600" mt="0px" mb="0px">
-              {item?.customer || item?.admin}
+              {item?.customer?.name || item?.admin?.name}
             </H5>
             <SemiSpan style={{ direction: "ltr" }}>
               <pre style={{ margin: "0px", wordSpacing: "-5px", textAlign: item?.customer ? "right" : "left" }}>{item?.created_at && format(new Date(item?.created_at), "hh:mm:a | dd MMM yyyy")}</pre>

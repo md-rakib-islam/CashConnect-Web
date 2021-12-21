@@ -53,10 +53,10 @@ const TicketList = () => {
           </Link>
         } />
 
-      {tickets.map((item) => {
+      {tickets?.map((item) => {
 
-        const closedStatus = item?.ticket_status == "Closed" || item?.ticket_status == "closed" || item?.ticket_status == "Cancelled" || item?.ticket_status == "cancelled"
-        const priorityHigh = item?.ticket_priority == "High" || item?.ticket_priority == "high" || item?.ticket_priority == "Urgent" || item?.ticket_priority == "urgent"
+        const closedStatus = item?.ticket_status?.name == "Closed" || item?.ticket_status?.name == "closed" || item?.ticket_status?.name == "Cancelled" || item?.ticket_status?.name == "cancelled"
+        const priorityHigh = item?.ticket_priority?.name == "High" || item?.ticket_priority?.name == "high" || item?.ticket_priority?.name == "Urgent" || item?.ticket_priority?.name == "urgent"
 
         return (
           <Link href={`${closedStatus ? "" : `/support-tickets/${item?.id}`}`} key={item?.id}>
@@ -71,10 +71,10 @@ const TicketList = () => {
                 <span>{item?.subject}</span>
                 <FlexBox alignItems="center" flexWrap="wrap" pt="0.5rem" m="-6px">
                   <Chip p="0.25rem 1rem" bg={priorityHigh ? "primary.light" : "success.light"} m="6px">
-                    <Small color={priorityHigh ? "primary.main" : "success.main"}>{item?.ticket_priority}</Small>
+                    <Small color={priorityHigh ? "primary.main" : "success.main"}>{item?.ticket_priority?.name || ""}</Small>
                   </Chip>
                   <Chip p="0.25rem 1rem" bg={closedStatus ? "primary.light" : "success.light"} m="6px">
-                    <Small color={closedStatus ? "primary.main" : "success.main"}>{item?.ticket_status}</Small>
+                    <Small color={closedStatus ? "primary.main" : "success.main"}>{item?.ticket_status?.name || ""}</Small>
                   </Chip>
                   <SemiSpan className="pre" m="6px">
                     {format(new Date(item?.created_at), "MMM dd, yyyy")}

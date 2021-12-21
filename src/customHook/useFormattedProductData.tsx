@@ -1,4 +1,5 @@
 import { BASE_URL } from "@data/constants";
+import _ from "lodash";
 function useFormattedProductData(productData, type?: string) {
 
     let render = 1
@@ -30,7 +31,7 @@ function useFormattedProductData(productData, type?: string) {
                     imgUrl: `${data?.product?.thumbnail ? `${BASE_URL}${data?.product?.thumbnail}` : (data?.product?.image ? `${BASE_URL}${data?.product?.image}` : null)}`,
                     // imgUrl: `${BASE_URL}${data?.product?.thumbnail || data?.product?.image || ""}`,
                     category: data?.product?.category || null,
-                    brand: data?.product?.brand || null,
+                    brand: _.isObject(data?.product?.brand) ? data?.product?.brand?.name : data?.product?.brand || null,
                     rating: data?.product?.rating || null,
                     reviewCount: data?.product?.num_reviews || null,
                     condition: data?.product?.condition || null,
@@ -46,7 +47,7 @@ function useFormattedProductData(productData, type?: string) {
                     imgUrl: `${data?.thumbnail ? `${BASE_URL}${data?.thumbnail}` : (data?.image ? `${BASE_URL}${data?.image}` : null)}`,
                     // imgUrl: `${BASE_URL}${data?.thumbnail || data?.image || ""}`,
                     category: data?.category || null,
-                    brand: data?.brand || null,
+                    brand: _.isObject(data?.brand) ? data?.brand?.name : data?.brand || null,
                     rating: data?.rating || null,
                     reviewCount: data?.num_reviews || null,
                     condition: data?.condition || null,

@@ -136,7 +136,7 @@ const Section13 = ({ bigDiscountList }) => {
     </CategorySectionCreator>
   );
 
-  const returnableData = _.isEmpty(bigDiscountList) ? null : big_discount_list
+  const returnableData = _.isEmpty(bigDiscountLists) ? null : big_discount_list
 
   return returnableData
 };
