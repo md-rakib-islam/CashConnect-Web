@@ -66,6 +66,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
   const cartCanged = state.cart.chartQuantity;
 
+  const { user_id, order_Id, isLogin, authTOKEN } = useUserInf()
 
   const width = useWindowSize();
   const isMobile = width < 769;
@@ -105,8 +106,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   }, [imgUrl])
 
   useEffect(() => {
-    const { order_Id } = useUserInf()
-
     if (id) {
       if (order_Id) {
         axios
@@ -126,7 +125,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   };
 
   const handleCartAmountChange = (amount, action) => {
-    const { user_id, order_Id, isLogin, authTOKEN } = useUserInf()
 
     if (isLogin) {
       const dateObj: any = new Date();

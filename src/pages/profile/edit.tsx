@@ -39,8 +39,6 @@ const ProfileEditor = ({
   const [thanas, setThanas] = useState([]);
   const [cities, setCities] = useState([]);
   const [countries, setCountries] = useState([]);
-  // const [branches, setBranches] = useState([]);
-  // const [customer_types, setCustomer_types] = useState([]);
 
   const { user_id, authTOKEN } = useUserInf()
 
@@ -50,7 +48,6 @@ const ProfileEditor = ({
 
     const { isValid, userNameExist, emailExist, primaryPhoneExist, SecondaryPhoneExist } = await checkValidation({ username: values.username, email: values.email, primaryPhone: values.primary_phone, secondaryPhone: values.secondary_phone, userId: user_id })
 
-    // console.log("values.secondary_phone",)
     if (isValid) {
       const data = {
         ...values,

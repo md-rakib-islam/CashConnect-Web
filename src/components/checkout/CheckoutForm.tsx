@@ -31,13 +31,13 @@ const CheckoutForm = () => {
   const [countries, setCountries] = useState([]);
   const [openLogin, setOpenLogin] = useState(false)
 
+  const { user_id, authTOKEN, order_Id, isLogin } = useUserInf()
+
   const closeLoginTab = () => {
     setOpenLogin(false)
   }
 
   const handleFormSubmit = async (values) => {
-    const { user_id, authTOKEN, order_Id, isLogin } = useUserInf()
-
     if (isLogin) {
       if (!sameAsProfile) {
         console.log(values);
@@ -110,7 +110,6 @@ const CheckoutForm = () => {
       };
 
   useEffect(() => {
-    const { order_Id } = useUserInf()
     if (order_Id) {
       axios.get(`${Shipping_Adress_By_Order_Id}${order_Id}`).then((res) => {
         console.log("shippingDetailsRes", res);

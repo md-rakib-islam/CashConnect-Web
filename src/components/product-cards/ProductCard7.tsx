@@ -45,6 +45,8 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
   const [openLogin, setOpenLogin] = useState(false)
   const [stock, setStock] = useState(true)
 
+  const { user_id, order_Id, isLogin, authTOKEN } = useUserInf()
+
   useEffect(() => {
     axios.get(`${Check_Stock}${product?.id}`).then(res => {
       if (!res.data.is_in_stock) {
@@ -59,8 +61,6 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
 
   const handleCartAmountChange = useCallback(
     (action) => () => {
-      const { user_id, order_Id, isLogin, authTOKEN } = useUserInf()
-
       if (isLogin) {
 
         const item_id = id;

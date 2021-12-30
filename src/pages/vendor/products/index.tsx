@@ -25,8 +25,9 @@ const Products = () => {
   const router = useRouter()
   const { page, size } = router.query
 
+  const { user_id, authTOKEN } = useUserInf()
+
   useEffect(() => {
-    const { user_id, authTOKEN } = useUserInf()
     axios.get(`${Purchase_Products_By_Vendor_Id}${user_id}?size=${size || 10}&page=${page || 1}`, authTOKEN).then(res => {
       console.log("Purchase_Products_By_Vendor_Id", res)
       setProductList(res?.data?.purchase_request_items)

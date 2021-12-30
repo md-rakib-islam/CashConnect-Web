@@ -38,14 +38,14 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
   const [reloadCart, setReloadCart] = useState(0);
   const [openLogin, setOpenLogin] = useState(false)
 
+  const { user_id, order_Id, isLogin, authTOKEN } = useUserInf()
+
   const closeLoginTab = () => {
     setOpenLogin(false)
   }
 
   const handleCartAmountChange = useCallback(
     (product, action) => () => {
-      const { user_id, order_Id, isLogin, authTOKEN } = useUserInf()
-
       if (isLogin) {
         if (order_Id) {
 
@@ -115,8 +115,6 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
   };
 
   useEffect(() => {
-    const { order_Id } = useUserInf()
-
     if (order_Id) {
       axios.get(`${Customer_Order_Pending_Details}${order_Id}`).then((res) => {
         setCartProductList(res.data.order.order_items);

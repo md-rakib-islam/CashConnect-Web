@@ -115,9 +115,10 @@ export const Tiny2: React.FC<CustomProps> = (props) => {
   const [productQuantity, setProductQuantity] = useState(0);
   const { state } = useAppContext();
   const cartCanged = state.cart.chartQuantity;
-  useEffect(() => {
-    const { order_Id } = useUserInf()
 
+  const { order_Id } = useUserInf()
+
+  useEffect(() => {
     if (order_Id) {
       axios.get(`${Customer_Order_Pending_Details}${order_Id}`)
         .then((res) => {

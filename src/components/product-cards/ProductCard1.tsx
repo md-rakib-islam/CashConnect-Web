@@ -69,6 +69,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 
   const cartCanged = state.cart.chartQuantity;
 
+  const { user_id, order_Id, authTOKEN } = useUserInf()
 
   const toggleDialog = useCallback(() => {
     setOpen((open) => !open);
@@ -95,8 +96,6 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
   }, [])
 
   useEffect(() => {
-    const { order_Id } = useUserInf()
-
     if (order_Id) {
       axios
         .get(`${Customer_Order_Item_By_Product_Id}${order_Id}/${id}`)
@@ -112,7 +111,6 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
   useEffect(() => {
     if (id) {
       if (state.cart.prductId == id) {
-        const { order_Id } = useUserInf()
         axios
           .get(`${Customer_Order_Item_By_Product_Id}${order_Id}/${id}`)
           .then((item) => {
@@ -125,8 +123,6 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
   }, [cartCanged])
 
   const handleCartAmountChange = (amount, action) => {
-    const { user_id, order_Id, authTOKEN } = useUserInf()
-
     const dateObj: any = new Date();
     const currentDate =
       dateObj.getFullYear() +

@@ -21,6 +21,8 @@ const MobileNavigationBar: React.FC = () => {
 
   const router = useRouter()
 
+  const { order_Id, isLogin } = useUserInf()
+
   const handleLoadingComplete = () => {
     setLoading(false)
   }
@@ -30,16 +32,12 @@ const MobileNavigationBar: React.FC = () => {
   }, [router.events])
 
   useEffect(() => {
-    const { order_Id } = useUserInf()
-
     if (order_Id) {
       axios.get(`${Customer_Order_Pending_Details}${order_Id}`).then((res) => {
         setProductQuantity(res?.data?.order?.order_items?.length);
       }).catch((err) => { console.log("error", err) });
     }
   }, [cartCanged]);
-
-  const { isLogin } = useUserInf()
 
   try {
     var userID: string = localStorage.getItem("UserId")

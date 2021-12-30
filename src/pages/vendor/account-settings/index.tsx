@@ -35,7 +35,6 @@ const AccountSettings = () => {
   const [thanas, setThanas] = useState([]);
   const [cities, setCities] = useState([]);
   const [countries, setCountries] = useState([]);
-  // const [branches, setBranches] = useState([]);
 
   const [updated, setUpdated] = useState(0)
 

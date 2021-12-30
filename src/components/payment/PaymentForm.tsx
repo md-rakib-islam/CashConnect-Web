@@ -42,6 +42,8 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
 
   const router = useRouter()
 
+  const { user_id, authTOKEN, order_Id, isLogin } = useUserInf()
+
   const cardNumberRef = useRef();
   const cardHolderRef = useRef();
   const cvcCodeRef = useRef();
@@ -69,13 +71,10 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
   }
 
   useEffect(() => {
-    const { user_id } = useUserInf()
-    // if (user_id) {
     axios.get(`${User_By_Id}${user_id}`).then(res => {
       console.log("resUseer", res)
       setuserName(res?.data?.username)
     }).catch((err) => { console.log("error", err) })
-    // }
   }, [])
 
   useLayoutEffect(() => {
@@ -132,8 +131,6 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
 
   const handleFormSubmit = async (values) => {
     console.log(values);
-
-    const { user_id, authTOKEN, order_Id, isLogin } = useUserInf()
 
     if (isLogin) {
 

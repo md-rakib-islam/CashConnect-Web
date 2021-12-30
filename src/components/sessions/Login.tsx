@@ -31,6 +31,7 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
 
   const [openSignup, setOpenSignup] = useState(false)
 
+  const { authTOKEN } = useUserInf()
 
   const closeSignupTab = () => {
     setOpenSignup(false)
@@ -57,8 +58,6 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
     return jwtService.signInWithEmailAndPassword(email, password).then(
       (user) => {
         console.log("user", user);
-
-        const { authTOKEN } = useUserInf()
 
         axios.get(`${Get_Pending_Order_After_Login}`, authTOKEN).then(res => {
           console.log("order_Id_res", res)

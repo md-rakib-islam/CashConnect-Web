@@ -42,6 +42,8 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
 
   const router = useRouter()
 
+  const { isLogin } = useUserInf()
+
   const handleLoadingComplete = () => {
     setLoading(false)
   }
@@ -74,8 +76,6 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
   }
 
   const Router = useRouter()
-
-  const { isLogin } = useUserInf()
 
   const goToFrofile = () => {
     const user_type: string = localStorage.getItem("userType")

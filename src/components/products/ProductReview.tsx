@@ -25,7 +25,6 @@ const ProductReview: React.FC<ProductReviewProps> = ({ product_id, setReviews })
   const [reviewPermission, setReviewPermission] = useState(false)
   const [reCheackReviewPermission, setReCheackReviewPermission] = useState(0)
 
-
   const { user_id, authTOKEN, isLogin } = useUserInf()
 
   const { query, push } = useRouter()

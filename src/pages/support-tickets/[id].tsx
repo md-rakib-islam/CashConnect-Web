@@ -43,11 +43,8 @@ const PaymentMethodEditor = () => {
     }
   }, [id, reloadMessage])
 
-
-
   const handleFormSubmit = async () => {
     console.log(values);
-
     const data = {
       ticket: id,
       message: values.message,

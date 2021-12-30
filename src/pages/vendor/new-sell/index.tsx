@@ -44,6 +44,8 @@ function newPurchase() {
 
   const router = useRouter()
 
+  const { user_id } = useUserInf()
+
   useEffect(() => {
     images.map((img, id) => {
       if (_.isEmpty(img)) {
@@ -56,13 +58,8 @@ function newPurchase() {
   }, [images]);
 
   useEffect(() => {
-    const { user_id } = useUserInf()
     axios.get(`${User_By_Id}${user_id}`).then(res => {
       console.log("vendorRes", res)
-      // first_name: "",
-      //   last_name: "",
-      //     contact_no: "+880",
-      //       email: "",
       setFieldValue("first_name", res?.data?.first_name)
       setFieldValue("last_name", res?.data?.last_name)
       setFieldValue("email", res?.data?.email)
