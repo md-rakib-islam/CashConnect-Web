@@ -1,6 +1,6 @@
 import PaginationRow from "@component/pagination/PaginationRow";
 import ShowingItemNumber from "@component/pagination/ShowingItemNumber";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import useFormattedProductData from "../../customHook/useFormattedProductData";
 import FlexBox from "../FlexBox";
 import Pagination from "../pagination/Pagination";
@@ -15,11 +15,11 @@ export interface ProductCard9ListProps {
 }
 
 const ProductCard9List: React.FC<ProductCard9ListProps> = ({ productList, totalPage, totalProduct }) => {
-  const [productData, setProductData] = useState([]);
-  const [formattedProductData] = useFormattedProductData(productData);
+
+  const [formattedProductData, setFormattedProductData] = useFormattedProductData([]);
 
   useEffect(() => {
-    setProductData(productList);
+    setFormattedProductData(productList);
   }, [productList]);
 
   return (

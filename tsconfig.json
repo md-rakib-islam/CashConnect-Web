@@ -25,7 +25,8 @@
       "@hook/*": ["hooks/*"],
       "@utils/*": ["utils/*"],
       "@reducer/*": ["reducers/*"],
-      "@customHook/*": ["customHook/*"]
+      "@customHook/*": ["customHook/*"],
+      "@helper/*": ["helper/*"]
     }
   },
   "exclude": ["node_modules"],

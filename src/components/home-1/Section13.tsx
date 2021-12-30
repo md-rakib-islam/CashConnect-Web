@@ -17,7 +17,7 @@ import CategorySectionCreator from "../CategorySectionCreator";
 import { Chip } from "../Chip";
 
 const Section13 = ({ bigDiscountList }) => {
-  const [bigDiscountLists, setbigDiscountLists] = useState(bigDiscountList)
+  const [bigDiscountLists, setbigDiscountLists] = useFormattedProductData(bigDiscountList, "bigdiscount")
   const [page, setPage] = useState(1)
   const [pageEnd, setpageEnd] = useState(false)
   const [visibleSlides, setVisibleSlides] = useState(6);
@@ -36,11 +36,8 @@ const Section13 = ({ bigDiscountList }) => {
       axios.get(`${Product_Discount}?page=${page + 1}&size=${6}`).then(res => {
 
         if (res.data.total_pages > 1) {
-          const [bigDiscountList] = useFormattedProductData(res.data.products, "bigdiscount")
-          const bigDiscountListState = bigDiscountLists
-          var bigDiscountListAll = bigDiscountListState.concat(bigDiscountList)
-          setbigDiscountLists(bigDiscountListAll)
-          console.log(bigDiscountListAll)
+          setbigDiscountLists(bigDiscountLists.concat(res.data.products), "bigdiscount")
+          console.log(bigDiscountLists)
           setPage(page + 1)
         }
         if (res.data.total_pages == (page + 1)) {

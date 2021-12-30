@@ -21,6 +21,7 @@ const Section6: React.FC<Section6Props> = ({ data }) => {
 
   const [productList] = useFormattedProductData(data.products)
 
+
   const handleCategoryClick = ({ target: { id: brand } }) => {
     if (selected.match(brand)) {
       setSelected("");
