@@ -110,7 +110,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
 
     },
 
-    []
+    [user_id, order_Id, isLogin, authTOKEN]
   );
 
   return (

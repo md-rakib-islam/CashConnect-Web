@@ -101,7 +101,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
         setOpenLogin(true)
       }
     },
-    []
+    [user_id, order_Id, isLogin, authTOKEN]
   );
 
   const getTotalPrice = () => {
