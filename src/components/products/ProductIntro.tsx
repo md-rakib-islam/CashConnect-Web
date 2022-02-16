@@ -118,7 +118,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
           .catch(() => setCartQuantity(0));
       }
     }
-  }, [getItemId, id, cartCanged]);
+  }, [order_Id, getItemId, id, cartCanged]);
 
   const handleImageClick = (ind) => () => {
     setSelectedImage(ind);

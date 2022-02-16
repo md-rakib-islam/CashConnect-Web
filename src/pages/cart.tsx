@@ -74,12 +74,14 @@ const Cart = () => {
   };
 
   useEffect(() => {
-    axios.get(`${Customer_Order_Pending_Details}${order_Id}`).then((res) => {
-      console.log("CorderDetailsRes", res);
-      setCartProductList(res.data.order?.order_items);
-      setFieldValue("comment", res.data.order?.comment);
-    }).catch((err) => { console.log("error", err) });
-  }, [reloadCart]);
+    if (order_Id) {
+      axios.get(`${Customer_Order_Pending_Details}${order_Id}`).then((res) => {
+        console.log("CorderDetailsRes", res);
+        setCartProductList(res.data.order?.order_items);
+        setFieldValue("comment", res.data.order?.comment);
+      }).catch((err) => { console.log("error", err) });
+    }
+  }, [order_Id, reloadCart]);
 
   const runReloadCart = () => {
     setReloadCart(Math.random());

@@ -125,7 +125,7 @@ export const Tiny2: React.FC<CustomProps> = (props) => {
           setProductQuantity(res?.data?.order?.order_items?.length);
         }).catch((err) => { console.log("error", err) });
     }
-  }, [cartCanged]);
+  }, [cartCanged, order_Id]);
 
   return (
     <Typography as="span" fontSize="10px" {...props}>

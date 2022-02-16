@@ -26,7 +26,7 @@ const Checkout = () => {
         setDiscountAmount(order.discount_amount);
       }).catch((err) => { console.log("error", err) });
     }
-  }, []);
+  }, [order_Id]);
 
   return (
     <Grid container flexWrap="wrap-reverse" spacing={6}>

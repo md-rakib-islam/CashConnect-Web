@@ -28,13 +28,15 @@ const Products = () => {
   const { user_id, authTOKEN } = useUserInf()
 
   useEffect(() => {
-    axios.get(`${Purchase_Products_By_Vendor_Id}${user_id}?size=${size || 10}&page=${page || 1}`, authTOKEN).then(res => {
-      console.log("Purchase_Products_By_Vendor_Id", res)
-      setProductList(res?.data?.purchase_request_items)
-      setTotalPage(res?.data?.total_pages)
-      setTotalProduct(res?.data?.total_elements)
-    }).catch((err) => { console.log("error", err) })
-  }, [size, page])
+    if (user_id) {
+      axios.get(`${Purchase_Products_By_Vendor_Id}${user_id}?size=${size || 10}&page=${page || 1}`, authTOKEN).then(res => {
+        console.log("Purchase_Products_By_Vendor_Id", res)
+        setProductList(res?.data?.purchase_request_items)
+        setTotalPage(res?.data?.total_pages)
+        setTotalProduct(res?.data?.total_elements)
+      }).catch((err) => { console.log("error", err) })
+    }
+  }, [user_id, size, page])
 
   return (
     <div>

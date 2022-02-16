@@ -71,11 +71,13 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
   }
 
   useEffect(() => {
-    axios.get(`${User_By_Id}${user_id}`).then(res => {
-      console.log("resUseer", res)
-      setuserName(res?.data?.username)
-    }).catch((err) => { console.log("error", err) })
-  }, [])
+    if (user_id) {
+      axios.get(`${User_By_Id}${user_id}`).then(res => {
+        console.log("resUseer", res)
+        setuserName(res?.data?.username)
+      }).catch((err) => { console.log("error", err) })
+    }
+  }, [user_id])
 
   useLayoutEffect(() => {
     cardNumberRef.current = values.card_number;

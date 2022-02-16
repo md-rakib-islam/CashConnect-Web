@@ -32,13 +32,15 @@ const TicketList = () => {
   const { page, size } = router.query
 
   useEffect(() => {
-    axios.get(`${Ticket_By_User_Id}${user_id}?page=${page || 1}&size=${size || 10}`).then(res => {
-      console.log("ticketssRes", res)
-      setTickets(res?.data?.tickets || [])
-      setTotalPage(res?.data?.total_pages || 0)
-      setTotalTicket(res?.data?.total_elements || 0)
-    }).catch(() => { })
-  }, [page, size])
+    if (user_id) {
+      axios.get(`${Ticket_By_User_Id}${user_id}?page=${page || 1}&size=${size || 10}`).then(res => {
+        console.log("ticketssRes", res)
+        setTickets(res?.data?.tickets || [])
+        setTotalPage(res?.data?.total_pages || 0)
+        setTotalTicket(res?.data?.total_elements || 0)
+      }).catch(() => { })
+    }
+  }, [user_id, page, size])
 
   return (
     <div>

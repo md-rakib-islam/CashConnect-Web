@@ -37,7 +37,7 @@ const MobileNavigationBar: React.FC = () => {
         setProductQuantity(res?.data?.order?.order_items?.length);
       }).catch((err) => { console.log("error", err) });
     }
-  }, [cartCanged]);
+  }, [cartCanged, order_Id]);
 
   try {
     var userID: string = localStorage.getItem("UserId")

@@ -121,7 +121,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
         console.log("miniCartLisdt", res.data.order.order_items);
       }).catch((err) => { console.log("error", err) });
     }
-  }, [reloadCart]);
+  }, [reloadCart, order_Id]);
 
   return (
     <>

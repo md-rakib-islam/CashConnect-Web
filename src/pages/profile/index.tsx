@@ -27,15 +27,17 @@ const Profile = () => {
   const { user_id, authTOKEN } = useUserInf()
 
   useEffect(() => {
-    axios.get(`${Customer_By_Id}${user_id}`, authTOKEN).then((user) => {
-      const { data } = user;
-      setpreViewImg(`${BASE_URL}${data.image}`);
-      setfirst_name(data.first_name);
-      setlast_name(data.last_name);
-      setemail(data.email);
-      setphone(data.primary_phone);
-      setbirth_day(data.date_of_birth);
-    }).catch((err) => { console.log("error", err) });
+    if (user_id) {
+      axios.get(`${Customer_By_Id}${user_id}`, authTOKEN).then((user) => {
+        const { data } = user;
+        setpreViewImg(`${BASE_URL}${data.image}`);
+        setfirst_name(data.first_name);
+        setlast_name(data.last_name);
+        setemail(data.email);
+        setphone(data.primary_phone);
+        setbirth_day(data.date_of_birth);
+      }).catch((err) => { console.log("error", err) });
+    }
   }, [user_id]);
   return (
     <div>

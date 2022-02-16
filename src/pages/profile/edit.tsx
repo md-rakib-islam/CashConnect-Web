@@ -123,35 +123,37 @@ const ProfileEditor = ({
 
 
   useEffect(() => {
-    axios.get(`${Customer_By_Id}${user_id}`, authTOKEN).then((datas) => {
-      console.log("EditDetails", datas.data);
-      const { data } = datas;
+    if (user_id && authTOKEN) {
+      axios.get(`${Customer_By_Id}${user_id}`, authTOKEN).then((datas) => {
+        console.log("EditDetails", datas.data);
+        const { data } = datas;
 
-      console.log("secondary_phone", data?.secondary_phone)
+        console.log("secondary_phone", data?.secondary_phone)
 
-      resetForm({
-        values: {
-          ...values,
-          ...data,
-          primary_phone: data?.primary_phone || "+880",
-          secondary_phone: data?.secondary_phone || "+880"
+        resetForm({
+          values: {
+            ...values,
+            ...data,
+            primary_phone: data?.primary_phone || "+880",
+            secondary_phone: data?.secondary_phone || "+880"
+          }
+        })
+
+        setPreviewImage(`${BASE_URL}${data.image}`);
+
+        for (let key in data) {
+
+          // setFieldValue(`${key}`, _.isNull(data[key]) ? "" : data[key]);
+          setFieldValue(`${key}`, data[key]);
         }
-      })
-
-      setPreviewImage(`${BASE_URL}${data.image}`);
-
-      for (let key in data) {
-
-        // setFieldValue(`${key}`, _.isNull(data[key]) ? "" : data[key]);
-        setFieldValue(`${key}`, data[key]);
-      }
-      setFieldValue("gender", {
-        id: data.gender,
-        name: genders.find((gender: any) => gender?.id == data.gender)
-          ?.name,
-      });
-    }).catch((err) => { console.log("error", err) });
-  }, [user_id]);
+        setFieldValue("gender", {
+          id: data.gender,
+          name: genders.find((gender: any) => gender?.id == data.gender)
+            ?.name,
+        });
+      }).catch((err) => { console.log("error", err) });
+    }
+  }, [user_id, authTOKEN]);
 
   useEffect(() => {
     fetch(`${City_All}`)
@@ -171,18 +173,6 @@ const ProfileEditor = ({
       .then((data) => {
         setCountries(data.countries);
       }).catch((err) => { console.log("error", err) });
-
-    // fetch(`${Branch_All}`)
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     setBranches(data.branches);
-    //   }).catch((err) => { console.log("error", err) });
-
-    // fetch(`${Customer_type_All}`)
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     setCustomer_types(data.customer_types);
-    //   }).catch((err) => { console.log("error", err) });
   }, []);
 
   const {

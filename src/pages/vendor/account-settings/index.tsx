@@ -71,22 +71,24 @@ const AccountSettings = () => {
 
 
   useEffect(() => {
-    axios.get(`${Vendor_By_Id}${user_id}`, authTOKEN).then((datas) => {
-      console.log("VendorEditDetails", datas.data);
-      const { data } = datas;
+    if (user_id) {
+      axios.get(`${Vendor_By_Id}${user_id}`, authTOKEN).then((datas) => {
+        console.log("VendorEditDetails", datas.data);
+        const { data } = datas;
 
-      setPreviewImage(`${BASE_URL}${data.image}`);
+        setPreviewImage(`${BASE_URL}${data.image}`);
 
-      resetForm({
-        values: {
-          ...values,
-          ...data,
-          primary_phone: data?.primary_phone || "+880",
-          secondary_phone: data?.secondary_phone || "+880"
-        }
-      })
+        resetForm({
+          values: {
+            ...values,
+            ...data,
+            primary_phone: data?.primary_phone || "+880",
+            secondary_phone: data?.secondary_phone || "+880"
+          }
+        })
 
-    }).catch((err) => { console.log("error", err) });
+      }).catch((err) => { console.log("error", err) });
+    }
   }, [user_id, updated]);
 
   const handleFormSubmit = async (values) => {

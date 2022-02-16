@@ -12,7 +12,7 @@ import TableRow from "@component/TableRow";
 import Typography, { H5, SemiSpan } from "@component/Typography";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
-import { BASE_URL, Customer_Payment_Methods_By_Customer_Id, Customer_Payment_Method_Delete, Mayment_Mathod_All } from "@data/constants";
+import { BASE_URL, Customer_Payment_Methods_By_Customer_Id, Customer_Payment_Method_Delete } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -34,14 +34,15 @@ const AddressList = () => {
   const { user_id, authTOKEN } = useUserInf()
 
   useEffect(() => {
-    console.log("url", `${Mayment_Mathod_All}?page=${page || 1}&size=${size || 10}`)
-    axios.get(`${Customer_Payment_Methods_By_Customer_Id}${user_id}?page=${page || 1}&size=${size || 10}`).then(res => {
-      console.log("Mayment_Mathod_All", res)
-      setPaymentmethods(res?.data?.customer_payment_methods)
-      setTotalPage(res?.data?.total_pages)
-      setTotalPaymentMathod(res?.data?.total_elements)
-    }).catch(() => { })
-  }, [page, size, reloadMethod])
+    if (user_id) {
+      axios.get(`${Customer_Payment_Methods_By_Customer_Id}${user_id}?page=${page || 1}&size=${size || 10}`).then(res => {
+        console.log("Mayment_Mathod_All", res)
+        setPaymentmethods(res?.data?.customer_payment_methods)
+        setTotalPage(res?.data?.total_pages)
+        setTotalPaymentMathod(res?.data?.total_elements)
+      }).catch(() => { })
+    }
+  }, [user_id, page, size, reloadMethod])
 
   const handleDelete = (id, cardName) => {
     axios.delete(`${Customer_Payment_Method_Delete}${id}`, authTOKEN).then(res => {

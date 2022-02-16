@@ -58,14 +58,16 @@ function newPurchase() {
   }, [images]);
 
   useEffect(() => {
-    axios.get(`${User_By_Id}${user_id}`).then(res => {
-      console.log("vendorRes", res)
-      setFieldValue("first_name", res?.data?.first_name)
-      setFieldValue("last_name", res?.data?.last_name)
-      setFieldValue("email", res?.data?.email)
-      setFieldValue("contact_no", res?.data?.primary_phone)
-    }).catch((err) => { console.log("error", err) })
-  }, [])
+    if (user_id) {
+      axios.get(`${User_By_Id}${user_id}`).then(res => {
+        console.log("vendorRes", res)
+        setFieldValue("first_name", res?.data?.first_name)
+        setFieldValue("last_name", res?.data?.last_name)
+        setFieldValue("email", res?.data?.email)
+        setFieldValue("contact_no", res?.data?.primary_phone)
+      }).catch((err) => { console.log("error", err) })
+    }
+  }, [user_id])
 
   //submit purchase data
   const handleFormSubmit = async (values) => {

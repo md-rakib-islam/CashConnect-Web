@@ -84,22 +84,24 @@ function OpenTicket() {
     };
 
     useEffect(() => {
-        axios.get(`${User_By_Id}${user_id}`).then(res => {
-            console.log("userInf", res)
-            setFieldValue("name", `${res?.data?.first_name}${' '}${res?.data?.last_name}`)
-            setFieldValue("email", res?.data?.email)
-        }).catch((err) => { console.log("error", err) })
+        if (user_id) {
+            axios.get(`${User_By_Id}${user_id}`).then(res => {
+                console.log("userInf", res)
+                setFieldValue("name", `${res?.data?.first_name}${' '}${res?.data?.last_name}`)
+                setFieldValue("email", res?.data?.email)
+            }).catch((err) => { console.log("error", err) })
 
-        axios.get(`${Ticket_Department_All}`).then(res => {
-            console.log("departmets", res)
-            setDepartmets(res?.data?.ticket_departments)
-        }).catch((err) => { console.log("error", err) })
+            axios.get(`${Ticket_Department_All}`).then(res => {
+                console.log("departmets", res)
+                setDepartmets(res?.data?.ticket_departments)
+            }).catch((err) => { console.log("error", err) })
 
-        axios.get(`${Ticket_Priority_All}`).then(res => {
-            console.log("priorities", res)
-            setPriorities(res?.data?.ticket_priorities)
-        }).catch((err) => { console.log("error", err) })
-    }, [])
+            axios.get(`${Ticket_Priority_All}`).then(res => {
+                console.log("priorities", res)
+                setPriorities(res?.data?.ticket_priorities)
+            }).catch((err) => { console.log("error", err) })
+        }
+    }, [user_id])
 
 
     const {

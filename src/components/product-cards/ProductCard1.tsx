@@ -105,11 +105,11 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
         })
         .catch(() => setCartQuantity(0));
     }
-  }, [getItemId, id, getChartquantity]);
+  }, [order_Id, getItemId, id, getChartquantity]);
 
 
   useEffect(() => {
-    if (id) {
+    if (id && order_Id) {
       if (state.cart.prductId == id) {
         axios
           .get(`${Customer_Order_Item_By_Product_Id}${order_Id}/${id}`)
@@ -120,7 +120,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
           .catch(() => { setCartQuantity(0) });
       }
     }
-  }, [cartCanged])
+  }, [order_Id, cartCanged])
 
   const handleCartAmountChange = (amount, action) => {
     const dateObj: any = new Date();

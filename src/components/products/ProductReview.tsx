@@ -66,12 +66,14 @@ const ProductReview: React.FC<ProductReviewProps> = ({ product_id, setReviews })
   }, [reloadreviews, query])
 
   useEffect(() => {
-    axios.post(`${Review_Permission}`, { product_id }, authTOKEN).then(res => {
-      console.log("reviewPermissionRes", res)
-      const canReview = res.data.can_user_review_and_rating === "no" ? false : true
-      setReviewPermission(canReview)
-    })
-  }, [reCheackReviewPermission])
+    if (authTOKEN) {
+      axios.post(`${Review_Permission}`, { product_id }, authTOKEN).then(res => {
+        console.log("reviewPermissionRes", res)
+        const canReview = res.data.can_user_review_and_rating === "no" ? false : true
+        setReviewPermission(canReview)
+      })
+    }
+  }, [authTOKEN, reCheackReviewPermission])
 
   const {
     values,

@@ -34,7 +34,7 @@ const PaymentMethodEditor = () => {
   const [image, setImage] = useState<any>("");
 
   useEffect(() => {
-    if (id) {
+    if (id && authTOKEN) {
       if (id !== "add") {
         axios.get(`${Customer_Payment_Maythod_By_Id}${id}`, authTOKEN).then(res => {
           console.log("paymentDetailsRes", res)
@@ -43,7 +43,7 @@ const PaymentMethodEditor = () => {
         })
       }
     }
-  }, [id])
+  }, [authTOKEN, id])
 
   const handleFormSubmit = async (values) => {
 
