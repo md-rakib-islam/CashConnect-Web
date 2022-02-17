@@ -24,9 +24,23 @@ function useUserInf() {
             },
         })
 
-        return () => {
-            //cleanup
-        }
+        const resetUserData = () => {
+            setUser_id(localStorage.getItem("UserId"))
+            setOrder_Id(localStorage.getItem("OrderId"))
+            setIsLogin((localStorage.getItem("UserId") && localStorage.getItem("jwt_access_token")) ? true : false)
+            setAuthTOKEN({
+                headers: {
+                    "Content-type": "application/json",
+                    Authorization: localStorage.getItem("jwt_access_token"),
+                },
+            })
+        };
+
+        //reset state whene localstorage changed
+        window.addEventListener('storage', resetUserData);
+
+        //unsibscibe event listener when this hook unmount
+        return () => window.removeEventListener('storage', resetUserData);
     }, [])
 
     return { user_id, authTOKEN, order_Id, isLogin }

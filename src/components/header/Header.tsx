@@ -67,6 +67,8 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
     localStorage.removeItem("OrderId")
     localStorage.removeItem("userType")
 
+    window.dispatchEvent(new CustomEvent('storage', { detail: '' }))
+
     dispatch({
       type: "CHANGE_ALERT",
       payload: {
