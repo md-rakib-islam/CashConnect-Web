@@ -86,7 +86,7 @@ export const Order_Details_By_Id = `${BASE_URL}/order/api/v1/order/`;
 //product api
 export const product_by_categoryId = `${BASE_URL}/product/api/v1/product_using_category_nested/`;
 
-export const Product_by_id = `${BASE_URL}/product/api/v1/product/`;
+export const Product_by_id = `${BASE_URL}/product/api/v1/product_with_discount/`;
 
 export const Product_Flash_Deals = `${BASE_URL}/product/api/v1/product_with_top_selling/all/`;
 
