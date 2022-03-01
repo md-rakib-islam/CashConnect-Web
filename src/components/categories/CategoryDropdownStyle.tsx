@@ -18,6 +18,7 @@ export const StyledCategoryDropdown = styled.div<CategoryDropdownProps>`
   z-index: 98;
   max-height: 450px;
   width: ${({ increaseWidth }) => increaseWidth ? "1100px" : "fit-content"};
-  overflow: auto;
+  overflow-y: scroll;
+  overflow-x: auto;
   direction: rtl; 
 `;
