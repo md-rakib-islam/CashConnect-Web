@@ -12,7 +12,7 @@ import TableRow from "@component/TableRow";
 import Typography, { H5, SemiSpan } from "@component/Typography";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
-import { BASE_URL, Customer_Payment_Methods_By_Customer_Id, Customer_Payment_Method_Delete, Mayment_Mathod_All } from "@data/constants";
+import { BASE_URL, Customer_Payment_Methods_By_Customer_Id, Customer_Payment_Method_Delete } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -34,14 +34,15 @@ const AddressList = () => {
   const { user_id, authTOKEN } = useUserInf()
 
   useEffect(() => {
-    console.log("url", `${Mayment_Mathod_All}?page=${page || 1}&size=${size || 10}`)
-    axios.get(`${Customer_Payment_Methods_By_Customer_Id}${user_id}?page=${page || 1}&size=${size || 10}`).then(res => {
-      console.log("Mayment_Mathod_All", res)
-      setPaymentmethods(res?.data?.customer_payment_methods)
-      setTotalPage(res?.data?.total_pages)
-      setTotalPaymentMathod(res?.data?.total_elements)
-    }).catch(() => { })
-  }, [page, size, reloadMethod])
+    if (user_id) {
+      axios.get(`${Customer_Payment_Methods_By_Customer_Id}${user_id}?page=${page || 1}&size=${size || 10}`).then(res => {
+        console.log("Mayment_Mathod_All", res)
+        setPaymentmethods(res?.data?.customer_payment_methods)
+        setTotalPage(res?.data?.total_pages)
+        setTotalPaymentMathod(res?.data?.total_elements)
+      }).catch(() => { })
+    }
+  }, [user_id, page, size, reloadMethod])
 
   const handleDelete = (id, cardName) => {
     axios.delete(`${Customer_Payment_Method_Delete}${id}`, authTOKEN).then(res => {
@@ -51,9 +52,6 @@ const AddressList = () => {
         type: "CHANGE_ALERT",
         payload: {
           alertValue: `${cardName} deleted`,
-          alerType: "success",
-          alertShow: true,
-          alertChanged: Math.random()
         }
       })
     }).catch(() => {
@@ -62,8 +60,6 @@ const AddressList = () => {
         payload: {
           alertValue: "sumthing went wrong",
           alerType: "error",
-          alertShow: true,
-          alertChanged: Math.random()
         }
       })
     })
@@ -89,7 +85,7 @@ const AddressList = () => {
       />
 
       {paymentmethods?.map((item, id) => (
-        <TableRow key={id} my="1rem" padding="6px 18px">
+        <TableRow key={item.id || id} my="1rem" padding="6px 18px">
           <FlexBox alignItems="center" m="6px">
             <Card width="42px" height="28px" mr="10px" elevation={4}>
               <img

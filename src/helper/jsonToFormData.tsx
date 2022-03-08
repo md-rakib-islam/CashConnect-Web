@@ -1,4 +1,4 @@
-function useJsonToFormData(data) {
+function jsonToFormData(data) {
   const formData = new FormData();
 
   buildFormData(formData, data);
@@ -6,7 +6,7 @@ function useJsonToFormData(data) {
   return [formData];
 }
 
-export default useJsonToFormData;
+export default jsonToFormData;
 
 function buildFormData(formData, data, parentKey?: any) {
   if (

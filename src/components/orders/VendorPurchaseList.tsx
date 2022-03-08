@@ -26,18 +26,21 @@ const VendorOrderList: React.FC<VendorOrderListProps> = () => {
   const { user_id } = useUserInf()
 
   useEffect(() => {
-    axios.get(`${Purchase_All_By_Vendor_id}${user_id}?size=${size || 10}&page=${page || 1}`).then(res => {
-      console.log("purchaseAll", res)
-      setPurchaseList(res?.data?.purchaserequests)
-      setTotalPurchase(res?.data?.total_elements)
-      setTotalPage(res?.data?.total_pages)
-    }).catch((err) => { console.log("error", err) })
-  }, [size, page])
+    if (user_id) {
+      axios.get(`${Purchase_All_By_Vendor_id}${user_id}?size=${size || 10}&page=${page || 1}`).then(res => {
+        console.log("purchaseAll", res)
+        setPurchaseList(res?.data?.purchaserequests)
+        setTotalPurchase(res?.data?.total_elements)
+        setTotalPage(res?.data?.total_pages)
+      }).catch((err) => { console.log("error", err) })
+    }
+  }, [size, page, user_id])
 
   const product_per_page_options = [
     { id: 10, name: 10 },
     { id: 30, name: 30 },
     { id: 50, name: 50 },
+    { id: 100, name: 100 },
   ]
 
 
@@ -67,7 +70,7 @@ const VendorOrderList: React.FC<VendorOrderListProps> = () => {
       </Hidden>
 
       {purchaseList.map((item, ind) => (
-        <ParchaseRow item={item} key={ind} />
+        <ParchaseRow item={item} key={item?.id || ind} />
       ))}
 
       <FlexBox

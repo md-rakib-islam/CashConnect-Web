@@ -8,11 +8,12 @@ import RelatedProducts from "@component/products/RelatedProducts";
 import { H5 } from "@component/Typography";
 import { BASE_URL, product_by_categoryId, Product_by_id } from "@data/constants";
 import axios from "axios";
+import _ from "lodash";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
-const ProductDetails = ({ id, title, price, imgUrl, brand, rating, initialReviewsQuantity, fullDes, relatedProduct }) => {
+const ProductDetails = ({ id, title, price, imgUrl, brand, rating, initialReviewsQuantity, fullDes, relatedProduct, condition, orginalrice }) => {
 
   const [_reviewsQuantity, setreviewsQuantity] = useState(initialReviewsQuantity)
 
@@ -46,6 +47,8 @@ const ProductDetails = ({ id, title, price, imgUrl, brand, rating, initialReview
         brand={brand}
         rating={rating}
         reviewCount={initialReviewsQuantity}
+        condition={condition}
+        orginalrice={orginalrice}
       />
 
       <FlexBox
@@ -81,7 +84,7 @@ const ProductDetails = ({ id, title, price, imgUrl, brand, rating, initialReview
 
       <Box mb="50px">
         {selectedOption === "description" && <ProductDescription fullDes={fullDes} />}
-        {selectedOption === "review" && <ProductReview productId={id} setReviews={setNumOfReviews} />}
+        {selectedOption === "review" && <ProductReview product_id={id} setReviews={setNumOfReviews} />}
       </Box>
 
       <RelatedProducts relatedProduct={relatedProduct} />
@@ -104,7 +107,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   }
 
   try {
-    const relatedProductRes = await fetch(`${product_by_categoryId}${data.category}?size=8`)
+    const relatedProductRes = await fetch(`${product_by_categoryId}${data.category}?size=12`)
     var relatedProductjson = await relatedProductRes.json()
     var relatedProduct: any[] = await relatedProductjson.products
   }
@@ -112,17 +115,19 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     var relatedProduct = []
   }
 
-  console.log("relatedProduct", relatedProduct)
+  console.log("product_Data", data)
   return {
     props: {
       id: params.id,
       title: data.name,
-      price: data?.unit_price,
+      price: data?.product_discount?.discounted_price || data?.unit_price,
+      orginalrice: data?.product_discount?.discounted_price ? data?.unit_price : null,
       imgUrl: `${BASE_URL}${data?.thumbnail}`,
-      brand: data?.brand,
+      brand: _.isObject(data?.brand) ? data?.brand?.name : data?.brand || "",
       fullDes: data?.full_desc,
       initialReviewsQuantity: data?.num_reviews,
       rating: data?.rating,
+      condition: data?.condition,
       relatedProduct
     },
   }

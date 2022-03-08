@@ -12,17 +12,21 @@ import ProductFilterCard from "@component/products/ProductFilterCard";
 import Select from "@component/Select";
 import Sidenav from "@component/sidenav/Sidenav";
 import { H5, Paragraph } from "@component/Typography";
-import { Category_By_Id, Product_Arrival, Product_By_BrandId, product_by_categoryId, Product_Discount, Product_Filter, Product_Flash_Deals, Product_For_You, Product_Search, Product_Top_Rated } from "@data/constants";
+import { Category_All_Without_Pg, Product_Arrival, Product_By_BrandId, product_by_categoryId, Product_Discount, Product_Filter, Product_Flash_Deals, Product_For_You, Product_High_To_Low, Product_Low_To_High, Product_Search, Product_Top_Rated } from "@data/constants";
 import axios from "axios";
+import { useFormik } from "formik";
+import _ from "lodash";
 import { GetServerSideProps } from 'next';
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
+import * as yup from "yup";
 import useWindowSize from "../../../hooks/useWindowSize";
 
 const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
   const [searchingFor, setSearchingFor] = useState("");
   const [totalProducts, setTotalProducts] = useState(totalProduct);
   const [productList, setProductList] = useState(productLists)
+  const [categories, setCategories] = useState([])
 
   const [view, setView] = useState("grid");
   const width = useWindowSize();
@@ -30,7 +34,7 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
 
   const router = useRouter();
 
-  var id = router.query.categoryId;
+  const id = router.query.categoryId;
 
   const toggleView = useCallback(
     (v) => () => {
@@ -39,43 +43,71 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
     []
   );
 
+  const handleFormSubmit = () => { }
+
 
   useEffect(() => {
     const type = router.query.type
-    if (type === "product_by_category") {
-      if (id) {
-        fetch(`${Category_By_Id}${id}`)
-          .then((res) => res.json())
-          .then((data) => {
-            console.log("searchingFor", data.name);
-            setSearchingFor(data.name);
-          })
-          .catch(() => {
-            setSearchingFor("Not Found");
-          });
+    const { categoryId } = router.query;
+    if (type) {
+      if (type === "product_by_category") {
+        if (categoryId) {
+          if (!_.isEmpty(categories)) {
+            setSearchingFor(categories.find(deta => deta.id == categoryId)?.name || "")
+          }
+          else {
+            fetch(`${Category_All_Without_Pg}`)
+              .then((res) => res.json())
+              .then((data) => {
+                setCategories(data?.categories || [])
+                _.isArray(data?.categories) && setSearchingFor(data?.categories.find(deta => deta.id == categoryId)?.name || "")
+              })
+              .catch(() => {
+                setSearchingFor("");
+              });
+          }
+        }
       }
-    }
-    else if (type === "search_by_product_name") {
-      const search_key: any = router.query.search_key
-      setSearchingFor(search_key)
-    }
-    else if (type === "flash_deals_all") {
-      setSearchingFor("Flash Deals")
-    }
-    else if (type === "top_ratings_all") {
-      setSearchingFor("Top Ratings")
-    }
-    else if (type === "new_arrivals_all") {
-      setSearchingFor("New Arrivals")
-    }
-    else if (type === "big_discounts_all") {
-      setSearchingFor("Big Discounts")
-    }
-    else if (type === "more_for_you_all") {
-      setSearchingFor("More For You")
-    }
-    else if (type === "search_by_product_name") {
-      setSearchingFor("Top Ratings")
+      if (type === "filter") {
+        if (categoryId) {
+          if (!_.isEmpty(categories)) {
+            setSearchingFor(categories.find(deta => deta.id == categoryId)?.name || "")
+          }
+          else {
+            fetch(`${Category_All_Without_Pg}`)
+              .then((res) => res.json())
+              .then((data) => {
+                setCategories(data?.categories || [])
+                _.isArray(data?.categories) && setSearchingFor(data?.categories.find(deta => deta.id == categoryId)?.name || "")
+              })
+              .catch(() => {
+                setSearchingFor("");
+              });
+          }
+        }
+      }
+      else if (type === "search_by_product_name") {
+        const search_key: any = router.query.search_key
+        setSearchingFor(search_key)
+      }
+      else if (type === "flash_deals_all") {
+        setSearchingFor("Flash Deals")
+      }
+      else if (type === "top_ratings_all") {
+        setSearchingFor("Top Ratings")
+      }
+      else if (type === "new_arrivals_all") {
+        setSearchingFor("New Arrivals")
+      }
+      else if (type === "big_discounts_all") {
+        setSearchingFor("Big Discounts")
+      }
+      else if (type === "more_for_you_all") {
+        setSearchingFor("More For You")
+      }
+      else if (type === "search_by_product_name") {
+        setSearchingFor("Top Ratings")
+      }
     }
   }, [id]);
 
@@ -85,8 +117,14 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
   }, [productLists, totalProduct])
 
 
-  console.log("product_list", productList)
-  console.log("router.query", router.query)
+  const {
+    values,
+    setFieldValue,
+  } = useFormik({
+    initialValues: initialValues,
+    validationSchema: checkoutSchema,
+    onSubmit: handleFormSubmit,
+  });
   return (
     <Box pt="20px">
       <FlexBox
@@ -109,8 +147,19 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
           <Box flex="1 1 0" mr="1.75rem" minWidth="150px">
             <Select
               placeholder="Short by"
-              defaultValue={sortOptions[0]}
+              // defaultValue={sortOptions[0]}
               options={sortOptions}
+              getOptionLabelBy="label"
+              getOptionValueBy="value"
+              value={values?.shortBy || ""}
+              onChange={(shortBy: any) => {
+                setFieldValue("shortBy", shortBy);
+                router.push({
+                  pathname: `/product/search/${shortBy?.value === "High" ? "product_high_to_low" : "product_low_to_high"}`,
+                  query: { categoryId: id },
+                })
+                console.log("shortBy", shortBy)
+              }}
             />
           </Box>
 
@@ -170,11 +219,14 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
 };
 
 const sortOptions = [
-  { label: "Relevance", value: "Relevance" },
-  { label: "Date", value: "Date" },
-  { label: "Price Low to High", value: "Price Low to High" },
-  { label: "Price High to Low", value: "Price High to Low" },
+  { label: "Price Low to High", value: "Low" },
+  { label: "Price High to Low", value: "High" },
 ];
+const initialValues = {
+  shortBy: ""
+};
+
+var checkoutSchema = yup.object().shape({});
 
 ProductSearchResult.layout = NavbarLayout;
 
@@ -188,12 +240,11 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   if ((params.type === "product_by_category") || (params.type === "search_for")) {
 
     try {
-      const res = await fetch(`${product_by_categoryId}${category}?page=${query.page || 1}&size=${query.size || 9}`)
+      const res = await fetch(`${product_by_categoryId}${category}?page=${query.page || 1}&size=${query.size || 12}`)
       var json = await res.json()
       var data: any[] = await json.products
       var totalProduct: number = await json.total_elements
       var totalPage: number = await json.total_pages
-      console.log("categoryUrl", `${product_by_categoryId}${category}?page=${query.page || 1}&size=${query.size || 9}`)
     }
     catch (err) {
       var data = []
@@ -205,7 +256,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   else if (params.type === "search_by_product_name") {
     try {
 
-      const res = await axios.get(`${Product_Search}?page=${query.page || 1}&size=${query.size || 9}`, { params: { name: query.search_key, category } })
+      const res = await axios.get(`${Product_Search}?page=${query.page || 1}&size=${query.size || 12}`, { params: { name: query.search_key, category } })
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
       var totalPage: number = await res.data.total_pages
@@ -218,11 +269,11 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   }
   else if (params.type === "filter") {
     try {
-      const brand: any = query.brand
-      const rating: any = query.rating
+      const brands: any = query.brand
+      const ratings: any = query.rating
 
-      const brandIds = JSON.parse(brand)
-      const ratingIds = JSON.parse(rating)
+      const brandIds = JSON.parse(brands)
+      const ratingIds = JSON.parse(ratings)
 
       let params = new URLSearchParams();
 
@@ -239,12 +290,11 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
         params.append("rating", rating);
       })
 
-
       var request = {
         params: params
       };
 
-      const res = await axios.get(`${Product_Filter}?page=${query.page || 1}&size=${query.size || 9}`, request)
+      const res = await axios.get(`${Product_Filter}?page=${query.page || 1}&size=${query.size || 12}`, request)
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
       var totalPage: number = await res.data.total_pages
@@ -258,7 +308,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   }
   else if (params.type === "flash_deals_all") {
     try {
-      const res = await axios.get(`${Product_Flash_Deals}?page=${query.page || 1}&size=${query.size || 9}`)
+      const res = await axios.get(`${Product_Flash_Deals}?page=${query.page || 1}&size=${query.size || 12}`)
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
       var totalPage: number = await res.data.total_pages
@@ -271,7 +321,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   }
   else if (params.type === "top_ratings_all") {
     try {
-      const res = await axios.get(`${Product_Top_Rated}?page=${query.page || 1}&size=${query.size || 9}`)
+      const res = await axios.get(`${Product_Top_Rated}?page=${query.page || 1}&size=${query.size || 12}`)
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
       var totalPage: number = await res.data.total_pages
@@ -284,7 +334,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   }
   else if (params.type === "new_arrivals_all") {
     try {
-      const res = await axios.get(`${Product_Arrival}?page=${query.page || 1}&size=${query.size || 9}`)
+      const res = await axios.get(`${Product_Arrival}?page=${query.page || 1}&size=${query.size || 12}`)
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
       var totalPage: number = await res.data.total_pages
@@ -297,7 +347,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   }
   else if (params.type === "big_discounts_all") {
     try {
-      const res = await axios.get(`${Product_Discount}?page=${query.page || 1}&size=${query.size || 9}`)
+      const res = await axios.get(`${Product_Discount}?page=${query.page || 1}&size=${query.size || 12}`)
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
       var totalPage: number = await res.data.total_pages
@@ -310,7 +360,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   }
   else if (params.type === "more_for_you_all") {
     try {
-      const res = await axios.get(`${Product_For_You}?page=${query.page || 1}&size=${query.size || 9}`)
+      const res = await axios.get(`${Product_For_You}?page=${query.page || 1}&size=${query.size || 12}`)
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
       var totalPage: number = await res.data.total_pages
@@ -323,7 +373,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   }
   else if (params.type === "product_by_brand") {
     try {
-      const res = await axios.get(`${Product_By_BrandId}${query.brandId}?page=${query.page || 1}&size=${query.size || 9}`)
+      const res = await axios.get(`${Product_By_BrandId}${query.brandId}?page=${query.page || 1}&size=${query.size || 12}`)
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
       var totalPage: number = await res.data.total_pages
@@ -335,7 +385,33 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
     }
   }
 
+  else if (params.type === "product_high_to_low") {
+    try {
+      const res = await axios.post(`${Product_High_To_Low}?page=${query.page || 1}&size=${query.size || 12}`, { category })
+      var data: any[] = await res.data.products
+      var totalProduct: number = await res.data.total_elements
+      var totalPage: number = await res.data.total_pages
 
+    } catch (error) {
+      var data = []
+      var totalProduct = 0
+      var totalPage = 0
+    }
+  }
+
+  else if (params.type === "product_low_to_high") {
+    try {
+      const res = await axios.post(`${Product_Low_To_High}?page=${query.page || 1}&size=${query.size || 12}`, { category })
+      var data: any[] = await res.data.products
+      var totalProduct: number = await res.data.total_elements
+      var totalPage: number = await res.data.total_pages
+
+    } catch (error) {
+      var data = []
+      var totalProduct = 0
+      var totalPage = 0
+    }
+  }
 
   else {
     var data = []

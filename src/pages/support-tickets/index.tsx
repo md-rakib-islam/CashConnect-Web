@@ -32,13 +32,15 @@ const TicketList = () => {
   const { page, size } = router.query
 
   useEffect(() => {
-    axios.get(`${Ticket_By_User_Id}${user_id}?page=${page || 1}&size=${size || 10}`).then(res => {
-      console.log("ticketRes", res)
-      setTickets(res?.data?.tickets)
-      setTotalPage(res?.data?.total_pages)
-      setTotalTicket(res?.data?.total_elements)
-    }).catch(() => {})
-  }, [page, size])
+    if (user_id) {
+      axios.get(`${Ticket_By_User_Id}${user_id}?page=${page || 1}&size=${size || 10}`).then(res => {
+        console.log("ticketssRes", res)
+        setTickets(res?.data?.tickets || [])
+        setTotalPage(res?.data?.total_pages || 0)
+        setTotalTicket(res?.data?.total_elements || 0)
+      }).catch(() => { })
+    }
+  }, [user_id, page, size])
 
   return (
     <div>
@@ -53,48 +55,49 @@ const TicketList = () => {
           </Link>
         } />
 
-      {tickets.map((item) => {
+      {tickets?.map((item) => {
 
-        const closedStatus = item?.ticket_status == "Closed" || item?.ticket_status == "closed" || item?.ticket_status == "Cancelled" || item?.ticket_status == "cancelled"
-        const priorityHigh = item?.ticket_priority == "High" || item?.ticket_priority == "high" || item?.ticket_priority == "Urgent" || item?.ticket_priority == "urgent"
+        const closedStatus = item?.ticket_status?.name == "Closed" || item?.ticket_status?.name == "closed" || item?.ticket_status?.name == "Cancelled" || item?.ticket_status?.name == "cancelled"
+        const priorityHigh = item?.ticket_priority?.name == "High" || item?.ticket_priority?.name == "high" || item?.ticket_priority?.name == "Urgent" || item?.ticket_priority?.name == "urgent"
 
         return (
-        <Link href={`${closedStatus? "" : `/support-tickets/${item?.id}`}`} key={item?.id}>
-          <TableRow
-            as="a"
-            href={`${closedStatus? "" : `/support-tickets/${item?.id}`}`}
-            my="1rem"
-            padding="15px 24px"
-            style={{cursor:  closedStatus && "no-drop"}}
-          >
-            <div>
-              <span>{item?.subject}</span>
-              <FlexBox alignItems="center" flexWrap="wrap" pt="0.5rem" m="-6px">
-                <Chip p="0.25rem 1rem" bg={priorityHigh? "primary.light" : "success.light"} m="6px">
-                  <Small color={priorityHigh? "primary.main" : "success.main"}>{item?.ticket_priority}</Small>
-                </Chip>
-                <Chip p="0.25rem 1rem" bg={closedStatus? "primary.light" : "success.light"} m="6px">
-                  <Small color={closedStatus? "primary.main" : "success.main"}>{item?.ticket_status}</Small>
-                </Chip>
-                <SemiSpan className="pre" m="6px">
-                  {format(new Date(item?.created_at), "MMM dd, yyyy")}
-                </SemiSpan>
-                <SemiSpan m="6px">Website Problem</SemiSpan>
-              </FlexBox>
-            </div>
+          <Link href={`${closedStatus ? "" : `/support-tickets/${item?.id}`}`} key={item?.id}>
+            <TableRow
+              as="a"
+              href={`${closedStatus ? "" : `/support-tickets/${item?.id}`}`}
+              my="1rem"
+              padding="15px 24px"
+              style={{ cursor: closedStatus && "no-drop" }}
+            >
+              <div>
+                <span>{item?.subject}</span>
+                <FlexBox alignItems="center" flexWrap="wrap" pt="0.5rem" m="-6px">
+                  <Chip p="0.25rem 1rem" bg={priorityHigh ? "primary.light" : "success.light"} m="6px">
+                    <Small color={priorityHigh ? "primary.main" : "success.main"}>{item?.ticket_priority?.name || ""}</Small>
+                  </Chip>
+                  <Chip p="0.25rem 1rem" bg={closedStatus ? "primary.light" : "success.light"} m="6px">
+                    <Small color={closedStatus ? "primary.main" : "success.main"}>{item?.ticket_status?.name || ""}</Small>
+                  </Chip>
+                  <SemiSpan className="pre" m="6px">
+                    {format(new Date(item?.created_at), "MMM dd, yyyy")}
+                  </SemiSpan>
+                  {/* <SemiSpan m="6px">Website Problem</SemiSpan> */}
+                </FlexBox>
+              </div>
 
-            <Hidden flex="0 0 0 !important" down={769}>
-              <Typography textAlign="center" color="text.muted">
-                <IconButton size="small" style={{cursor: closedStatus && "no-drop"}}>
-                  <Icon variant="small" defaultcolor="currentColor">
-                    arrow-right
-                  </Icon>
-                </IconButton>
-              </Typography>
-            </Hidden>
-          </TableRow>
-        </Link>
-      )}
+              <Hidden flex="0 0 0 !important" down={769}>
+                <Typography textAlign="center" color="text.muted">
+                  <IconButton size="small" style={{ cursor: closedStatus && "no-drop" }}>
+                    <Icon variant="small" defaultcolor="currentColor">
+                      arrow-right
+                    </Icon>
+                  </IconButton>
+                </Typography>
+              </Hidden>
+            </TableRow>
+          </Link>
+        )
+      }
       )}
 
       <FlexBox

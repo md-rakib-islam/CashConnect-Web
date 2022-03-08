@@ -14,7 +14,7 @@ interface Section2Props {
 }
 
 const Section2: React.FC<Section2Props> = ({ flashDealsList }) => {
-  const [flashDealsListLists, setFlashDealsListLists] = useState(flashDealsList)
+  const [flashDealsListLists, setFlashDealsListLists] = useFormattedProductData([])
   const [page, setPage] = useState(1)
   const [pageEnd, setpageEnd] = useState(false)
   const [visibleSlides, setVisibleSlides] = useState(6);
@@ -27,6 +27,10 @@ const Section2: React.FC<Section2Props> = ({ flashDealsList }) => {
     else setVisibleSlides(6);
   }, [width]);
 
+  useEffect(() => {
+    setFlashDealsListLists(flashDealsList)
+  }, [])
+
   const getMoreItem = () => {
 
     if (!pageEnd) {
@@ -34,12 +38,10 @@ const Section2: React.FC<Section2Props> = ({ flashDealsList }) => {
       axios.get(`${Product_Flash_Deals}?page=${page + 1}&size=${6}`).then(res => {
 
         if (res.data.total_pages > 1) {
-          const [flashDealsList] = useFormattedProductData(res.data.products)
 
           const flashDealsListState = flashDealsListLists
-          var flashDealsListAll = flashDealsListState.concat(flashDealsList)
-          setFlashDealsListLists(flashDealsListAll)
-          console.log(flashDealsListAll)
+          setFlashDealsListLists(flashDealsListState.concat(res.data.products))
+
           setPage(page + 1)
         }
         if (res.data.total_pages == (page + 1)) {
@@ -65,8 +67,8 @@ const Section2: React.FC<Section2Props> = ({ flashDealsList }) => {
       seeMoreLink="product/search/flash_deals_all"
     >
       <Box mt="-0.25rem" mb="-0.25rem">
-        <Carousel totalSlides={flashDealsList?.length} visibleSlides={visibleSlides} step={visibleSlides} getMoreItem={getMoreItem}>
-          {flashDealsList?.map((item) => (
+        <Carousel totalSlides={flashDealsListLists?.length} visibleSlides={visibleSlides} step={visibleSlides} getMoreItem={getMoreItem}>
+          {flashDealsListLists?.map((item) => (
             <Box py="0.25rem" key={item.id}>
               <ProductCard1
                 id={item.id}

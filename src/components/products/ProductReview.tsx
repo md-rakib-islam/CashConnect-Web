@@ -1,5 +1,5 @@
 import useUserInf from "@customHook/useUserInf";
-import { Review_By_Product_Id, Review_Create } from "@data/constants";
+import { Review_By_Product_Id, Review_Create, Review_Permission } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
@@ -14,14 +14,16 @@ import { H2, H5 } from "../Typography";
 import ProductComment from "./ProductComment";
 
 export interface ProductReviewProps {
-  productId: string | number;
+  product_id: string | number;
   setReviews: any;
 }
 
-const ProductReview: React.FC<ProductReviewProps> = ({ productId, setReviews }) => {
+const ProductReview: React.FC<ProductReviewProps> = ({ product_id, setReviews }) => {
 
   const [commentList, setCommentList] = useState([])
   const [reloadreviews, setReloadreviews] = useState(0)
+  const [reviewPermission, setReviewPermission] = useState(false)
+  const [reCheackReviewPermission, setReCheackReviewPermission] = useState(0)
 
   const { user_id, authTOKEN, isLogin } = useUserInf()
 
@@ -33,17 +35,21 @@ const ProductReview: React.FC<ProductReviewProps> = ({ productId, setReviews }) 
     console.log(values);
 
     if (isLogin) {
-      const reviewData = {
-        ...values,
-        user: user_id,
-        product: productId,
+      if (reviewPermission) {
+        setReCheackReviewPermission(Math.random())
+        const reviewData = {
+          ...values,
+          user: user_id,
+          product: product_id,
+        }
+        console.log("reviewData", reviewData)
+        axios.post(`${Review_Create}`, reviewData, authTOKEN).then(res => {
+          setReCheackReviewPermission(Math.random())
+          console.log("reviewCreateRe", res)
+          resetForm();
+          setReloadreviews(Math.random())
+        })
       }
-      console.log("reviewData", reviewData)
-      axios.post(`${Review_Create}`, reviewData, authTOKEN).then(res => {
-        console.log("reviewCreateRe", res)
-        resetForm();
-        setReloadreviews(Math.random())
-      })
     }
     else {
       push("/login")
@@ -52,12 +58,22 @@ const ProductReview: React.FC<ProductReviewProps> = ({ productId, setReviews }) 
   };
 
   useEffect(() => {
-    axios.get(`${Review_By_Product_Id}${productId}`).then(res => {
+    axios.get(`${Review_By_Product_Id}${product_id}`).then(res => {
       console.log("ReviewAllRes", res)
       setCommentList(res?.data)
       setReviews(res?.data?.length)
     }).catch((err) => { console.log("error", err) })
   }, [reloadreviews, query])
+
+  useEffect(() => {
+    if (authTOKEN) {
+      axios.post(`${Review_Permission}`, { product_id }, authTOKEN).then(res => {
+        console.log("reviewPermissionRes", res)
+        const canReview = res.data.can_user_review_and_rating === "no" ? false : true
+        setReviewPermission(canReview)
+      })
+    }
+  }, [authTOKEN, reCheackReviewPermission])
 
   const {
     values,
@@ -78,7 +94,7 @@ const ProductReview: React.FC<ProductReviewProps> = ({ productId, setReviews }) 
   return (
     <Box>
       {commentList.map((item, ind) => (
-        <ProductComment {...item} key={ind} />
+        <ProductComment {...item} key={item?.id || ind} />
       ))}
 
       <H2 fontWeight="600" mt="55px" mb="20">
@@ -130,7 +146,7 @@ const ProductReview: React.FC<ProductReviewProps> = ({ productId, setReviews }) 
           color="primary"
           size="small"
           type="submit"
-          disabled={!(dirty && isValid)}
+          disabled={!(dirty && isValid) || !reviewPermission}
         >
           Submit
         </Button>

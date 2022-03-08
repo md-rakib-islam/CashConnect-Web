@@ -3,7 +3,7 @@ import LoginPopup from "@component/LoginPopup";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import {
-  BASE_URL, Brand_By_Id, Check_Stock, Customer_decrease_Quantity,
+  BASE_URL, Check_Stock, Customer_decrease_Quantity,
   Customer_Increase_Quantity,
   Customer_Order_Create,
   Customer_Order_Item_By_Product_Id,
@@ -34,6 +34,8 @@ export interface ProductIntroProps {
   brand?: string | number;
   reviewCount?: string | number;
   rating?: number;
+  condition: string;
+  orginalrice?: number;
 }
 
 const ProductIntro: React.FC<ProductIntroProps> = ({
@@ -44,9 +46,10 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   brand,
   reviewCount,
   rating,
+  condition,
+  orginalrice
 }) => {
   const [selectedImage, setSelectedImage] = useState(0);
-  const [brandName, setbrandName] = useState(brand);
 
   const { state, dispatch } = useAppContext();
   const router = useRouter();
@@ -63,6 +66,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
   const cartCanged = state.cart.chartQuantity;
 
+  const { user_id, order_Id, isLogin, authTOKEN } = useUserInf()
 
   const width = useWindowSize();
   const isMobile = width < 769;
@@ -102,8 +106,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   }, [imgUrl])
 
   useEffect(() => {
-    const { order_Id } = useUserInf()
-
     if (id) {
       if (order_Id) {
         axios
@@ -116,27 +118,13 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
           .catch(() => setCartQuantity(0));
       }
     }
-  }, [getItemId, id, cartCanged]);
-
-  useEffect(() => {
-    if (typeof brand == "number") {
-      fetch(`${Brand_By_Id}${brand}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setbrandName(data.name);
-        })
-        .catch(() => {
-          setbrandName("Not Found");
-        });
-    }
-  }, [brand]);
+  }, [order_Id, getItemId, id, cartCanged]);
 
   const handleImageClick = (ind) => () => {
     setSelectedImage(ind);
   };
 
   const handleCartAmountChange = (amount, action) => {
-    const { user_id, order_Id, isLogin } = useUserInf()
 
     if (isLogin) {
       const dateObj: any = new Date();
@@ -148,18 +136,18 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
         dateObj.getDate().toString().padStart(2, 0);
 
       const orderData = {
-        product_id: id || routerId,
+        product: id || routerId,
         quantity: 1,
         price: price,
         order_date: currentDate,
-        branch_id: 1,
-        user_id: user_id,
+        branch: 4,
+        user: user_id,
       };
 
       //addToCart
       if (action == "addToCart") {
         console.log("orderData", orderData);
-        axios.post(`${Customer_Order_Create}`, orderData).then((res) => {
+        axios.post(`${Customer_Order_Create}`, orderData, authTOKEN).then((res) => {
           console.log("orderRes", res);
 
           localStorage.setItem("OrderId", res.data.order_details.id);
@@ -168,13 +156,22 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
             type: "CHANGE_CART_QUANTITY",
             payload: { chartQuantity: Math.random(), prductId: id || routerId },
           });
-        }).catch((err) => { console.log("error", err) });
+        }).catch(() => {
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alerType: "error",
+              alertValue: "something went wrong",
+            }
+          })
+
+        });
       }
 
       //increase quantity
       else if (action == "increase") {
         axios
-          .put(`${Customer_Increase_Quantity}${order_Id}/${itemId}`, orderData)
+          .put(`${Customer_Increase_Quantity}${order_Id}/${itemId}`, orderData, authTOKEN)
           .then((res) => {
             console.log("increaseRes", res);
             setGetItemId(Math.random());
@@ -188,8 +185,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               payload: {
                 alerType: "error",
                 alertValue: "something went wrong",
-                alertShow: true,
-                alertChanged: Math.random()
               }
             })
           });
@@ -198,7 +193,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       //remove
       else if (amount == 0 && action == "decrease") {
         axios
-          .delete(`${Customer_Order_Remove_Item}${order_Id}/${itemId}`)
+          .delete(`${Customer_Order_Remove_Item}${order_Id}/${itemId}`, authTOKEN)
           .then((res) => {
             console.log("removeRes", res);
             setGetItemId(Math.random());
@@ -212,8 +207,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               payload: {
                 alerType: "error",
                 alertValue: "something went wrong",
-                alertShow: true,
-                alertChanged: Math.random()
               }
             })
           });
@@ -222,7 +215,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       //decrease quantity
       else if (action == "decrease") {
         axios
-          .put(`${Customer_decrease_Quantity}${order_Id}/${itemId}`, orderData)
+          .put(`${Customer_decrease_Quantity}${order_Id}/${itemId}`, orderData, authTOKEN)
           .then((res) => {
             console.log("decreaseRes", res);
             setGetItemId(Math.random());
@@ -236,8 +229,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               payload: {
                 alerType: "error",
                 alertValue: "something went wrong",
-                alertShow: true,
-                alertChanged: Math.random()
               }
             })
           });
@@ -317,11 +308,16 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
           </Grid>
 
           <Grid item md={6} xs={12} alignItems="center">
-            <H1 mb="1rem">{title}</H1>
+            <H1 mb="0.8rem">{title}</H1>
+
+            <FlexBox alignItems="center" mb="1rem">
+              <SemiSpan>Condition:</SemiSpan>
+              <H6 ml="8px">{condition || "_"}</H6>
+            </FlexBox>
 
             <FlexBox alignItems="center" mb="1rem">
               <SemiSpan>Brand:</SemiSpan>
-              <H6 ml="8px">{brandName || "Unknown"}</H6>
+              <H6 ml="8px">{brand || ""}</H6>
             </FlexBox>
 
             <FlexBox alignItems="center" mb="1rem">
@@ -333,8 +329,13 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
             </FlexBox>
 
             <Box mb="24px">
+              {!!orginalrice && (
+                <H2 color="text.muted" mb="4px" lineHeight="1">
+                  <del><Currency>{orginalrice}</Currency></del>
+                </H2>
+              )}
               <H2 color="primary.main" mb="4px" lineHeight="1">
-                <Currency>{price}</Currency>
+                <Currency>{Number(price).toFixed(2)}</Currency>
               </H2>
               {stock ? (
                 <SemiSpan color="inherit">Stock Available</SemiSpan>
@@ -392,7 +393,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               <Link href="/shop/fdfdsa">
                 <a>
                   <H6 lineHeight="1" ml="8px">
-                    Mobile Store
+                    Local Store
                   </H6>
                 </a>
               </Link>

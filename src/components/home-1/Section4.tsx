@@ -25,7 +25,7 @@ const Section4 = ({ topRatedList, featuredBrandList }) => {
               <Card p="1rem">
                 <Grid container spacing={4}>
                   {topRatedList?.slice(0, 4)?.map((item, key) => (
-                    <Grid item md={3} sm={6} xs={6} key={key}>
+                    <Grid item md={3} sm={6} xs={6} key={item?.id || key}>
                       <Link href={item.productUrl}>
                         <a>
                           <ProductCard4 {...item} />

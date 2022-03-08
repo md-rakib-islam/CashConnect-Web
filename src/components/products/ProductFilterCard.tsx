@@ -1,5 +1,5 @@
-import useFormattedNavigationData from "@customHook/useFormattedCategoryData";
-import { Brand_All, Category_All_With_Child } from "@data/constants";
+import useFormattedCategoryData from "@customHook/useFormattedCategoryData";
+import { Brands_By_Category, Brand_All, Category_All_With_Child } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
 import _ from "lodash";
@@ -21,11 +21,9 @@ const ProductFilterCard = () => {
   const [brandlist, setBrandlist] = useState([])
   const [brandIds, setBrandIds] = useState({})
   const [ratingIds, setRatingIds] = useState({})
-  const [categoryId, setCategoryId] = useState<string | number>("")
+  const [categoryId, setCategoryId] = useState<any>("")
 
-  const [categoryData, setCategoryData] = useState([]);
-  const [formattedCategoryData] =
-    useFormattedNavigationData(categoryData);
+  const [formattedCategoryData, setFormattedCategoryData] = useFormattedCategoryData();
 
   const router = useRouter()
 
@@ -85,18 +83,26 @@ const ProductFilterCard = () => {
   }
 
   useEffect(() => {
-    axios.get(`${Brand_All}`).then(res => {
-      console.log("brands", res.data.brands)
-      setBrandlist(res.data.brands)
-    }).catch((err) => { console.log("error", err) })
-
     axios.get(`${Category_All_With_Child}`).then(res => {
-      setCategoryData(res.data.categories)
+      setFormattedCategoryData(res.data.categories)
     }).catch((err) => { console.log("error", err) })
   }, [])
 
   useEffect(() => {
+    if (router.query.categoryId) {
+      setCategoryId(router.query.categoryId)
 
+      axios.get(`${Brands_By_Category}${router.query.categoryId}`).then(res => {
+        console.log("brandBasedCategory", res.data.brands)
+        setBrandlist(res.data.brands)
+      }).catch((err) => { console.log("error", err) })
+    }
+    else {
+      axios.get(`${Brand_All}`).then(res => {
+        console.log("brandAll", res.data.brands)
+        setBrandlist(res.data.brands)
+      }).catch((err) => { console.log("error", err) })
+    }
   }, [router.query])
 
   console.log("categoryId", categoryId)
@@ -129,7 +135,7 @@ const ProductFilterCard = () => {
               >
                 <SemiSpan className="cursor-pointer" mr="9px"
                   // onClick={(e) => filterProduct("category", e, item.id)}
-                  bg={`${categoryId === item.id && "#d4d4d4"}`}
+                  bg={`${categoryId == item.id && "#d4d4d4"}`}
                   onClick={(e) => filterProduct("category", e, item.id)}
                 >
                   {item.title}
@@ -147,7 +153,7 @@ const ProductFilterCard = () => {
                     >
                       <SemiSpan className="cursor-pointer" mr="9px"
                         // onClick={(e) => filterProduct("category", e, category.id)}
-                        bg={`${categoryId === category.id && "#d4d4d4"}`}
+                        bg={`${categoryId == category.id && "#d4d4d4"}`}
                         onClick={(e) => filterProduct("category", e, category.id)}
                       >
 
@@ -162,7 +168,7 @@ const ProductFilterCard = () => {
                         pl="22px"
                         py="6px"
                         borderRadius={5}
-                        bg={`${categoryId === subCaterory.id && "#d4d4d4"}`}
+                        bg={`${categoryId == subCaterory.id && "#d4d4d4"}`}
                         key={subCaterory.id}
                         onClick={(e) => filterProduct("category", e, subCaterory.id)}
                       >
@@ -180,7 +186,7 @@ const ProductFilterCard = () => {
                       pl="22px"
                       py="6px"
                       borderRadius={5}
-                      bg={`${categoryId === category.id && "#d4d4d4"}`}
+                      bg={`${categoryId == category.id && "#d4d4d4"}`}
                       key={category.id}
                       onClick={(e) => filterProduct("category", e, category.id)}
                     >
@@ -197,7 +203,7 @@ const ProductFilterCard = () => {
               py="6px"
               key={item.id}
               borderRadius={5}
-              bg={`${categoryId === item.id && "#d4d4d4"}`}
+              bg={`${categoryId == item.id && "#d4d4d4"}`}
               onClick={(e) => filterProduct("category", e, item.id)}
             >
               {item.title}
@@ -219,9 +225,14 @@ const ProductFilterCard = () => {
           type="number"
           fullwidth
           onChange={(e) => {
-            filterProduct("min_price", e);
             handleChange(e);
           }}
+          onKeyDown={(e: any) => {
+            if (e.key === "Enter") {
+              filterProduct("min_price", e);
+            }
+          }}
+          // onBlur={(e) => filterProduct("min_price", e)}
           value={values.min_price || ""}
           errorText={touched.min_price && errors.min_price}
         />
@@ -232,12 +243,18 @@ const ProductFilterCard = () => {
           name="max_price"
           placeholder="250"
           type="number"
-          fullwidth onChange={(e) => {
-            filterProduct("max_price", e);
+          onChange={(e) => {
             handleChange(e)
           }}
+          onKeyDown={(e: any) => {
+            if (e.key === "Enter") {
+              filterProduct("max_price", e);
+            }
+          }}
+          onBlur={(e) => filterProduct("max_price", e)}
           value={values.max_price || ""}
           errorText={touched.max_price && errors.max_price}
+          fullwidth
         />
       </FlexBox>
 

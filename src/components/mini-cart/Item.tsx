@@ -80,7 +80,7 @@ const Item: React.FC<ItemProps> = ({ item, handleCartAmountChange }) => {
                         </a>
                     </Link>
                     <Tiny color="text.muted" key={item.id}>
-                        <Currency>{Number(item.product?.unit_price).toFixed(2)}</Currency> x{" "}
+                        <Currency>{Number(item?.price).toFixed(2)}</Currency> x{" "}
                         {item.quantity}
                     </Tiny>
                     <Typography
@@ -89,7 +89,7 @@ const Item: React.FC<ItemProps> = ({ item, handleCartAmountChange }) => {
                         color="primary.main"
                         mt={stock ? "4px" : "0px"}
                     >
-                        <Currency>{(item.quantity * item.product?.unit_price).toFixed(2)}</Currency>
+                        <Currency>{Number((item.quantity * item?.price)).toFixed(2)}</Currency>
                     </Typography>
 
                     {stock || (<SemiSpan fontWeight="bold" color="primary.main" mt="0px">Out Of Stock</SemiSpan>)}

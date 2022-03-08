@@ -27,15 +27,17 @@ const Profile = () => {
   const { user_id, authTOKEN } = useUserInf()
 
   useEffect(() => {
-    axios.get(`${Customer_By_Id}${user_id}`, authTOKEN).then((user) => {
-      const { data } = user;
-      setpreViewImg(`${BASE_URL}${data.image}`);
-      setfirst_name(data.first_name);
-      setlast_name(data.last_name);
-      setemail(data.email);
-      setphone(data.primary_phone);
-      setbirth_day(data.date_of_birth);
-    }).catch((err) => { console.log("error", err) });
+    if (user_id) {
+      axios.get(`${Customer_By_Id}${user_id}`, authTOKEN).then((user) => {
+        const { data } = user;
+        setpreViewImg(`${BASE_URL}${data.image}`);
+        setfirst_name(data.first_name);
+        setlast_name(data.last_name);
+        setemail(data.email);
+        setphone(data.primary_phone);
+        setbirth_day(data.date_of_birth);
+      }).catch((err) => { console.log("error", err) });
+    }
   }, [user_id]);
   return (
     <div>
@@ -88,8 +90,8 @@ const Profile = () => {
 
           <Grid item lg={6} md={6} sm={12} xs={12}>
             <Grid container spacing={4}>
-              {infoList.map((item) => (
-                <Grid item lg={3} sm={6} xs={6} key={item.subtitle}>
+              {infoList.map((item, idx) => (
+                <Grid item lg={3} sm={6} xs={6} key={idx}>
                   <FlexBox
                     as={Card}
                     flexDirection="column"

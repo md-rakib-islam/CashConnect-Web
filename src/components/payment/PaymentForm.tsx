@@ -42,6 +42,8 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
 
   const router = useRouter()
 
+  const { user_id, authTOKEN, order_Id, isLogin } = useUserInf()
+
   const cardNumberRef = useRef();
   const cardHolderRef = useRef();
   const cvcCodeRef = useRef();
@@ -69,14 +71,13 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
   }
 
   useEffect(() => {
-    const { user_id } = useUserInf()
-    // if (user_id) {
-    axios.get(`${User_By_Id}${user_id}`).then(res => {
-      console.log("resUseer", res)
-      setuserName(res?.data?.username)
-    }).catch((err) => { console.log("error", err) })
-    // }
-  }, [])
+    if (user_id) {
+      axios.get(`${User_By_Id}${user_id}`).then(res => {
+        console.log("resUseer", res)
+        setuserName(res?.data?.username)
+      }).catch((err) => { console.log("error", err) })
+    }
+  }, [user_id])
 
   useLayoutEffect(() => {
     cardNumberRef.current = values.card_number;
@@ -132,8 +133,6 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
 
   const handleFormSubmit = async (values) => {
     console.log(values);
-
-    const { user_id, authTOKEN, order_Id, isLogin } = useUserInf()
 
     if (isLogin) {
 
@@ -196,35 +195,35 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
         axios
           .post(`${Customer_Order_Confirm}${order_Id}`, confirmData, authTOKEN)
           .then((res) => {
-
-            const user_type = localStorage.getItem("userType")
-            console.log("confirmOrderRes", res);
-            confirmedOrderRes.current = true;
-            for (let key in useKeys) {
-              localStorage.removeItem(`${key}`);
-            }
-            dispatch({
-              type: "CHANGE_CART_QUANTITY",
-              payload: { chartQuantity: Math.random() },
-            });
-
-            dispatch({
-              type: "CHANGE_ALERT",
-              payload: {
-                alertValue: "your order has been success...",
-                alerType: "success",
-                alertShow: true,
-                alertChanged: Math.random(),
+            if (res?.data?.data?.order?.id) {
+              const user_type = localStorage.getItem("userType")
+              console.log("confirmOrderRes", res);
+              confirmedOrderRes.current = true;
+              for (let key in useKeys) {
+                localStorage.removeItem(`${key}`);
               }
-            });
+              dispatch({
+                type: "CHANGE_CART_QUANTITY",
+                payload: { chartQuantity: Math.random() },
+              });
 
-            localStorage.removeItem("OrderId")
+              dispatch({
+                type: "CHANGE_ALERT",
+                payload: {
+                  alertValue: "your order has been success...",
+                }
+              });
 
-            if (user_type == "3") {
-              router.push("/orders")
-            }
-            else if (user_type == "2") {
-              router.push("/vendor/orders")
+              localStorage.removeItem("OrderId")
+
+
+              if (user_type == "customer") {
+                router.push("/orders")
+              }
+              else if (user_type == "vendor") {
+                router.push("/vendor/orders")
+
+              }
             }
 
           }).catch((err) => { console.log("error", err) });

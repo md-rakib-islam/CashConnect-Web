@@ -2,11 +2,11 @@ import Alert from "@component/alert/alert";
 import LoginPopup from "@component/LoginPopup";
 import { CountryCodeSelect } from "@component/Select";
 import { useAppContext } from "@context/app/AppContext";
-import useCheckValidation from "@customHook/useCheckValidation";
 import { Customer_Create, Vendor_Create } from "@data/constants";
 import { country_codes } from "@data/country_code";
 import axios from "axios";
 import { useFormik } from "formik";
+import checkValidation from "helper/checkValidation";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import * as yup from "yup";
@@ -68,14 +68,13 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
 
   const handleFormSubmit = async (values) => {
 
-    const { userNameExist, isValid, emailExist, primaryPhoneExist } = await useCheckValidation({ username: values.username, email: values.email, primaryPhone: values.primary_phone })
+    const { userNameExist, isValid, emailExist, primaryPhoneExist } = await checkValidation({ username: values.username, email: values.email, primaryPhone: values.primary_phone })
 
     console.log("isValid", isValid)
     if (isValid) {
       const data = {
         ...values,
         primary_phone: `${values.primary_phone}`,
-        user_type,
       };
 
       if (user_type == 3) {
@@ -87,9 +86,6 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
               type: "CHANGE_ALERT",
               payload: {
                 alertValue: "sugnup success...",
-                alerType: "success",
-                alertShow: true,
-                alertChanged: Math.random(),
               }
             });
           } else {
@@ -98,9 +94,6 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
               type: "CHANGE_ALERT",
               payload: {
                 alertValue: "sugnup success...",
-                alerType: "success",
-                alertShow: true,
-                alertChanged: Math.random(),
               }
             });
           }
@@ -110,8 +103,6 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             payload: {
               alertValue: "someting went wrong",
               alerType: "error",
-              alertShow: true,
-              alertChanged: Math.random(),
             }
           });
         })
@@ -126,9 +117,6 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
               type: "CHANGE_ALERT",
               payload: {
                 alertValue: "sugnup success...",
-                alerType: "success",
-                alertShow: true,
-                alertChanged: Math.random(),
               }
             });
           } else {
@@ -137,9 +125,6 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
               type: "CHANGE_ALERT",
               payload: {
                 alertValue: "sugnup success...",
-                alerType: "success",
-                alertShow: true,
-                alertChanged: Math.random(),
               }
             });
           }
@@ -149,8 +134,6 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             payload: {
               alertValue: "someting went wrong",
               alerType: "error",
-              alertShow: true,
-              alertChanged: Math.random(),
             }
           });
         });
@@ -294,9 +277,9 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             errorText={touched.email && errors.email}
           />
 
-          <div style={{ display: "flex", alignItems: "flex-end" }}>
+          <div style={{ display: "flex", alignItems: "flex-start" }}>
             <CountryCodeSelect
-            mb="0.75rem"
+              mb="0.75rem"
               mt="1rem"
               label="Country"
               width="40%"

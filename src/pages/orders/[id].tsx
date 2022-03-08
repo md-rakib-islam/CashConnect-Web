@@ -7,24 +7,27 @@ import Divider from "@component/Divider";
 import FlexBox from "@component/FlexBox";
 import Grid from "@component/grid/Grid";
 import Icon from "@component/icon/Icon";
-import DashboardLayout from "@component/layout/CustomerDashboardLayout";
+import CustomerDashboardLayout from "@component/layout/CustomerDashboardLayout";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
+import VendorDashboardLayout from "@component/layout/VendorDashboardLayout";
 import TableRow from "@component/TableRow";
 import Typography, { H5, H6, Paragraph } from "@component/Typography";
 import { Customer_order_Details_For_Status } from "@data/constants";
 import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
 import { format } from "date-fns";
+import addDays from "date-fns/addDays";
 import { useRouter } from "next/router";
 import React, { Fragment, useEffect, useState } from "react";
 import Item from "./Item";
-import addDays from "date-fns/addDays"
 
 
-type OrderStatus = "packaging" | "shipping" | "delivering" | "complete";
+// type OrderStatus = "packaging" | "shipping" | "delivering" | "complete";
 
 const OrderDetails = () => {
-  const orderStatus: OrderStatus = "shipping";
+
+  const [orderStatus, setorderStatus] = useState<any>("packaging")
+
   const orderStatusList = ["packaging", "shipping", "delivering", "complete"];
   const stepIconList = ["package-box", "truck-1", "delivery"];
 
@@ -43,23 +46,43 @@ const OrderDetails = () => {
   const [placedOn, setPlacedOn] = useState("")
   const [shippingAddress, setshippingAddress] = useState("")
 
+
   const router = useRouter()
   const order_id = router.query?.id
+
+
+  const getStatus = (status) => {
+    switch (status) {
+      case ("pending" || "Pending"):
+        return "packaging";
+      case ("processing" || "Processing"):
+        return "shipping";
+      case ("cancelled" || "Cancelled"):
+        return "packaging";
+      case ("delivered" || "Delivered"):
+        return "complete";
+      case ("on_the_way" || "on the way" || "Nn the way" || "On The Way"):
+        return "delivering";
+      default:
+        return "";
+    }
+  };
 
   useEffect(() => {
     if (order_id) {
       axios.get(`${Customer_order_Details_For_Status}${order_id}`).then((res) => {
         console.log("CorderDetailsRes", res.data);
-        setProductList(res.data.order?.order_items);
-        setSubTotal(res.data.order?.net_amount);
+        setProductList(res.data.order?.order_items || []);
+        setSubTotal(res.data.order?.net_amount || 0);
         setTotal(res.data.order?.net_amount);
-        setShippingFee(res.data.order?.shipping_price)
-        setDiscount(res.data.order?.discount_amount)
-        setPaid_by(res.data.order?.payment_method)
-        setOrderId(res.data.order?.id)
-        setDeliveredOn(res.data.order?.delivered_at)
-        setPlacedOn(res.data.order?.created_at)
-        setshippingAddress(res.data.order?.shipping_address?.street_address)
+        setShippingFee(res.data.order?.shipping_price || 0)
+        setDiscount(res.data.order?.discount_amount || 0)
+        setPaid_by(res.data.order?.payment_method?.name || "_")
+        setOrderId(res.data.order?.id || 0)
+        setDeliveredOn(res.data.order?.delivered_at || "")
+        setPlacedOn(res.data.order?.created_at || "")
+        setshippingAddress(res.data.order?.shipping_address?.street_address || "")
+        setorderStatus(getStatus(res.data.order?.order_status?.name || ""))
       }).catch((err) => { console.log("error", err) });
     }
   }, [order_id]);
@@ -161,7 +184,7 @@ const OrderDetails = () => {
         </TableRow>
 
         <Box py="0.5rem">
-          {productList.map((item) => <Item item={item}></Item>)}
+          {productList.map((item) => <Item item={item} key={item?.id}></Item>)}
         </Box>
       </Card>
 
@@ -230,6 +253,12 @@ const OrderDetails = () => {
   );
 };
 
-OrderDetails.layout = DashboardLayout;
+try {
+  var user_type: string = localStorage.getItem("userType")
+} catch (err) {
+  var user_type = "";
+}
+
+OrderDetails.layout = user_type === "vendor" ? VendorDashboardLayout : CustomerDashboardLayout;
 
 export default OrderDetails;

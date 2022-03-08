@@ -33,8 +33,9 @@ const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
   ]
 
   useEffect(() => {
-    axios
-      .get(`${orders_By_Customer_Id}${user_id}?size=${size || 10}&page=${page || 1}`, authTOKEN)
+    if (user_id) {
+      axios
+        .get(`${orders_By_Customer_Id}${user_id}?size=${size || 10}&page=${page || 1}`, authTOKEN)
       .then((orders: any) => {
         console.log("orderRes", orders);
         let Orders = [];
@@ -42,7 +43,7 @@ const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
           let Order: any = {};
           Order.order_no = order.order_no;
           Order.order_status = order.order_status;
-          Order.paid_at = order.paid_at;
+          Order.created_at = order.created_at;
           Order.net_amount = order.net_amount;
           Order.href = `/orders/${order.id}`;
 
@@ -53,7 +54,8 @@ const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
         setTotalPage(orders?.data?.total_pages);
         console.log("Orders", orders?.data?.orders);
       }).catch((err) => { console.log("error", err) });
-  }, [user_id, size, page]);
+    }
+  }, [user_id, authTOKEN, size, page]);
 
   console.log("ordersList", ordersList);
   return (
@@ -84,7 +86,7 @@ const CustomerOrderList: React.FC<CustomerOrderListProps> = () => {
       </Hidden>
 
       {ordersList?.map((item, ind) => (
-        <OrderRow item={item} key={ind} />
+        <OrderRow item={item} key={item?.id || ind} />
       ))}
 
       <FlexBox

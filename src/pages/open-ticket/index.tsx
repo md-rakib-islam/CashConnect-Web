@@ -10,11 +10,12 @@ import TextField from "@component/text-field/TextField";
 import TextArea from "@component/textarea/TextArea";
 import Typography from '@component/Typography';
 import { useAppContext } from '@context/app/AppContext';
-import useJsonToFormData from '@customHook/useJsonToFormData';
 import useUserInf from '@customHook/useUserInf';
 import { Ticket_Create, Ticket_Department_All, Ticket_Priority_All, User_By_Id } from '@data/constants';
+import { ticketfileExtension } from '@data/data';
 import axios from 'axios';
 import { useFormik } from "formik";
+import jsonToFormData from 'helper/jsonToFormData';
 import Link from "next/link";
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -39,10 +40,10 @@ function OpenTicket() {
                 ...values,
                 ticket_department: typeof values.ticket_department != "object" ? values?.ticket_department : values?.ticket_department?.id,
                 ticket_priority: typeof values.ticket_priority != "object" ? values?.ticket_priority : values?.ticket_priority?.id,
-                user: user_id,
+                // user: user_id,
                 file: attachment,
             }
-            const [ticketFormData] = useJsonToFormData(data)
+            const [ticketFormData] = jsonToFormData(data)
 
             setLoading(true)
 
@@ -54,9 +55,6 @@ function OpenTicket() {
                         type: "CHANGE_ALERT",
                         payload: {
                             alertValue: "success...",
-                            alerType: "success",
-                            alertShow: true,
-                            alertChanged: Math.random()
                         }
                     })
                     router.push("/support-tickets")
@@ -67,8 +65,6 @@ function OpenTicket() {
                         payload: {
                             alertValue: "something went wrong",
                             alerType: "error",
-                            alertShow: true,
-                            alertChanged: Math.random()
                         }
                     })
                 }
@@ -80,8 +76,6 @@ function OpenTicket() {
                     payload: {
                         alertValue: "something went wrong",
                         alerType: "error",
-                        alertShow: true,
-                        alertChanged: Math.random()
                     }
                 })
                 console.log("data", data);
@@ -90,22 +84,24 @@ function OpenTicket() {
     };
 
     useEffect(() => {
-        axios.get(`${User_By_Id}${user_id}`).then(res => {
-            console.log("userInf", res)
-            setFieldValue("name", `${res?.data?.first_name}${' '}${res?.data?.last_name}`)
-            setFieldValue("email", res?.data?.email)
-        }).catch((err) => { console.log("error", err) })
+        if (user_id) {
+            axios.get(`${User_By_Id}${user_id}`).then(res => {
+                console.log("userInf", res)
+                setFieldValue("name", `${res?.data?.first_name}${' '}${res?.data?.last_name}`)
+                setFieldValue("email", res?.data?.email)
+            }).catch((err) => { console.log("error", err) })
 
-        axios.get(`${Ticket_Department_All}`).then(res => {
-            console.log("departmets", res)
-            setDepartmets(res?.data?.ticket_departments)
-        }).catch((err) => { console.log("error", err) })
+            axios.get(`${Ticket_Department_All}`).then(res => {
+                console.log("departmets", res)
+                setDepartmets(res?.data?.ticket_departments)
+            }).catch((err) => { console.log("error", err) })
 
-        axios.get(`${Ticket_Priority_All}`).then(res => {
-            console.log("priorities", res)
-            setPriorities(res?.data?.ticket_priorities)
-        }).catch((err) => { console.log("error", err) })
-    }, [])
+            axios.get(`${Ticket_Priority_All}`).then(res => {
+                console.log("priorities", res)
+                setPriorities(res?.data?.ticket_priorities)
+            }).catch((err) => { console.log("error", err) })
+        }
+    }, [user_id])
 
 
     const {
@@ -121,9 +117,6 @@ function OpenTicket() {
         validationSchema: checkoutSchema,
         onSubmit: handleFormSubmit,
     });
-
-    console.log("isValidCapha", isValidCapha)
-
 
     return (
         <>
@@ -278,12 +271,12 @@ function OpenTicket() {
                                         // onChange(file);
                                     }}
                                     id="profile-image"
-                                    accept=".jpg, .jpeg, .png, .doc, .pdf, .txt, .docs"
+                                    accept={ticketfileExtension}
                                     type="file"
                                 />
 
                                 <Typography mt="5px" mb="5px">
-                                    (Allowed File Extensions: jpg, jpeg, png, doc, pdf, txt, docs)
+                                    {`(Allowed File Extensions: ${ticketfileExtension.replace(/\./g, "")}`}
                                 </Typography>
 
                             </Box>

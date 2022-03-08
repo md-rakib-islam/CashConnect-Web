@@ -21,21 +21,16 @@ const MobileCategoryNav = () => {
   const [suggestedList, setSuggestedList] = useState([]);
   const [subCategoryList, setSubCategoryList] = useState([]);
 
-
-  const [navigationData, setNavigationData] = useState([]);
-  const [formattedCategoryData] =
-    useFormattedCategoryData(navigationData);
+  const [formattedCategoryData, setFormattedCategoryData] = useFormattedCategoryData();
 
   useEffect(() => {
     fetch(`${Category_All_With_Child}`)
       .then((res) => res.json())
       .then((data) => {
         console.log("category", data.categories);
-        setNavigationData(data.categories);
+        setFormattedCategoryData(data.categories);
       }).catch((err) => { console.log("error", err) });
   }, []);
-
-  console.log("mobileCategory", navigationData)
 
   const handleCategoryClick = (cat) => () => {
     let menuData = cat.menuData;
@@ -60,7 +55,7 @@ const MobileCategoryNav = () => {
             className="main-category-box"
             borderLeft={`${category?.href === item.href ? "3" : "0"}px solid`}
             onClick={handleCategoryClick(item)}
-            key={item.title}
+            key={item?.id || item.title}
           >
             <Icon size="28px" mb="0.5rem" src={item.icon}></Icon>
             <Typography
@@ -81,7 +76,7 @@ const MobileCategoryNav = () => {
         <Box mb="2rem">
           <Grid container spacing={3}>
             {suggestedList.map((item, ind) => (
-              <Grid item lg={1} md={2} sm={3} xs={4} key={ind}>
+              <Grid item lg={1} md={2} sm={3} xs={4} key={item?.id || ind}>
                 <Link href={`/product/search/product_by_category?categoryId=${item.id}`}>
                   <a>
                     <MobileCategoryImageBox title={item?.name} imgUrl={`${BASE_URL}${item?.image}`} />
@@ -95,7 +90,7 @@ const MobileCategoryNav = () => {
         {category?.menuComponent === "MegaMenu1" ? (
           subCategoryList.map((item, ind) => {
             return !_.isEmpty(item.subCategories) ? (
-              <Fragment key={ind}>
+              <Fragment key={item?.id || ind}>
                 <Divider />
                 <Accordion>
                   <AccordionHeader px="0px" py="10px">
@@ -106,7 +101,7 @@ const MobileCategoryNav = () => {
                   <Box mb="2rem" mt="0.5rem">
                     <Grid container spacing={3}>
                       {item.subCategories?.map((item, ind) => (
-                        <Grid item lg={1} md={2} sm={3} xs={4} key={ind}>
+                        <Grid item lg={1} md={2} sm={3} xs={4} key={item?.id || ind}>
                           <Link href={item?.href}>
                             <a>
                               <MobileCategoryImageBox {...item} />
@@ -119,7 +114,7 @@ const MobileCategoryNav = () => {
                 </Accordion>
               </Fragment>
             ) : (
-              <Link href={item.href} key={ind}>
+              <Link href={item.href} key={item?.id || ind}>
                 <Paragraph
                   className="cursor-pointer"
                   fontSize="14px"
@@ -136,7 +131,7 @@ const MobileCategoryNav = () => {
           <Box mb="2rem">
             <Grid container spacing={3}>
               {subCategoryList.map((item, ind) => (
-                <Grid item lg={1} md={2} sm={3} xs={4} key={ind}>
+                <Grid item lg={1} md={2} sm={3} xs={4} key={item?.id || ind}>
                   <Link href={item?.href}>
                     <a>
                       <MobileCategoryImageBox {...item} />

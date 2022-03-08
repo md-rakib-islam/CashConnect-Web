@@ -48,7 +48,6 @@ const Capcha: React.FC<CapchaProps> = ({ setValid }) => {
 
     const {
         values,
-        errors,
         // touched,
         handleChange,
         handleBlur,
@@ -60,7 +59,6 @@ const Capcha: React.FC<CapchaProps> = ({ setValid }) => {
         onSubmit: handleFormSubmit,
     });
 
-    console.log("valid", errors.capcha)
 
     return (
         <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", width: "fit-content" }}>

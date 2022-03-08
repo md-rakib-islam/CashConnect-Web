@@ -1,6 +1,9 @@
 import Alert from "@component/alert/alert";
 import SignupPopup from "@component/SignupPopup";
 import { useAppContext } from "@context/app/AppContext";
+import useUserInf from "@customHook/useUserInf";
+import { Get_Pending_Order_After_Login } from "@data/constants";
+import axios from "axios";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import React, { useCallback, useState } from "react";
@@ -28,6 +31,7 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
 
   const [openSignup, setOpenSignup] = useState(false)
 
+  const { authTOKEN } = useUserInf()
 
   const closeSignupTab = () => {
     setOpenSignup(false)
@@ -55,17 +59,24 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
       (user) => {
         console.log("user", user);
 
+        axios.get(`${Get_Pending_Order_After_Login}`, authTOKEN).then(res => {
+          console.log("order_Id_res", res)
+          if (res.data.id) {
+            localStorage.setItem("OrderId", res.data.id)
+          }
+          else {
+            localStorage.removeItem("OrderId")
+          }
+        }).catch(() => localStorage.removeItem("OrderId"))
+
         dispatch({
           type: "CHANGE_ALERT",
           payload: {
             alertValue: "login success...",
-            alerType: "success",
-            alertShow: true,
-            alertChanged: Math.random(),
           }
         });
 
-        if (user.user_type == 3) {
+        if (user.user_type === "customer") {
 
           if (type != "popup") {
             const backUrl = localStorage.getItem("backAfterLogin");
@@ -81,7 +92,7 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
           }
 
         }
-        else if (user.user_type == 2) {
+        else if (user.user_type == "vendor") {
 
           if (type != "popup") {
             const backUrl = localStorage.getItem("backAfterLogin");
@@ -104,8 +115,6 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
           payload: {
             alertValue: "something went wrong",
             alerType: "error",
-            alertShow: true,
-            alertChanged: Math.random(),
           }
         });
         if (type != "popup") {

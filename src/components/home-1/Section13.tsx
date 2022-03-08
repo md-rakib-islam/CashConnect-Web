@@ -14,9 +14,10 @@ import _ from "lodash";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import CategorySectionCreator from "../CategorySectionCreator";
+import { Chip } from "../Chip";
 
 const Section13 = ({ bigDiscountList }) => {
-  const [bigDiscountLists, setbigDiscountLists] = useState(bigDiscountList)
+  const [bigDiscountLists, setbigDiscountLists] = useFormattedProductData(bigDiscountList, "bigdiscount")
   const [page, setPage] = useState(1)
   const [pageEnd, setpageEnd] = useState(false)
   const [visibleSlides, setVisibleSlides] = useState(6);
@@ -35,11 +36,8 @@ const Section13 = ({ bigDiscountList }) => {
       axios.get(`${Product_Discount}?page=${page + 1}&size=${6}`).then(res => {
 
         if (res.data.total_pages > 1) {
-          const [bigDiscountList] = useFormattedProductData(res.data.products, "bigdiscount")
-          const bigDiscountListState = bigDiscountLists
-          var bigDiscountListAll = bigDiscountListState.concat(bigDiscountList)
-          setbigDiscountLists(bigDiscountListAll)
-          console.log(bigDiscountListAll)
+          setbigDiscountLists(bigDiscountLists.concat(res.data.products), "bigdiscount")
+          console.log(bigDiscountLists)
           setPage(page + 1)
         }
         if (res.data.total_pages == (page + 1)) {
@@ -61,15 +59,32 @@ const Section13 = ({ bigDiscountList }) => {
     <CategorySectionCreator
       iconName="gift"
       title="Big Discounts"
-      seeMoreLink="product/search/big_discounts_all"
+      // seeMoreLink="product/search/big_discounts_all"
+      seeMoreLink=""
     >
       <Box my="-0.25rem">
         <Carousel totalSlides={bigDiscountLists?.length} visibleSlides={visibleSlides} step={visibleSlides} getMoreItem={getMoreItem}>
           {bigDiscountLists?.map((item) => (
-            <Box py="0.25rem" key={item.id}>
-              <Card p="1rem">
+            <Box py="0.25rem" key={item.id} style={{ height: "100%" }}>
+              <Card p="1rem" style={{ height: "100%" }}>
                 <Link href={`/product/${item.id}`}>
-                  <a>
+                  <a style={{ position: "relative" }}>
+                    {!!item?.off && (
+                      <Chip
+                        position="absolute"
+                        bg="primary.main"
+                        color="primary.text"
+                        fontSize="10px"
+                        fontWeight="600"
+                        p="5px 10px"
+                        top="10px"
+                        left="10px"
+                        zIndex={1}
+                      >
+                        {/* {item?.off}% off */}
+                        <pre style={{ margin: "0px" }}>{`${item?.off}% off`}</pre>
+                      </Chip>
+                    )}
                     <HoverBox borderRadius={8} mb="0.5rem">
                       <LazyImage
                         src={item.imgUrl}
@@ -95,9 +110,19 @@ const Section13 = ({ bigDiscountList }) => {
                       </H4>
 
                       <H4 fontWeight="600" fontSize="14px" color="text.muted">
-                        <del><Currency>{Math.ceil(item.oldPrice).toLocaleString()}</Currency></del>
+                        <del><Currency>{Math.ceil(item.orginalPrice).toLocaleString()}</Currency></del>
                       </H4>
                     </FlexBox>
+
+
+                    <H4
+                      display="flex"
+                      className="title"
+                      fontSize="14px"
+                      fontWeight="600"
+                      color={(item?.condition === "new" || item?.condition === "New" || item?.condition === "NEW") ? "primary.main" : "secondary.main"}
+                    >{item?.condition || ""}
+                    </H4>
                   </a>
                 </Link>
               </Card>
@@ -108,7 +133,7 @@ const Section13 = ({ bigDiscountList }) => {
     </CategorySectionCreator>
   );
 
-  const returnableData = _.isEmpty(bigDiscountList) ? null : big_discount_list
+  const returnableData = _.isEmpty(bigDiscountLists) ? null : big_discount_list
 
   return returnableData
 };

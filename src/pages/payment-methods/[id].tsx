@@ -11,11 +11,11 @@ import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import TextField from "@component/text-field/TextField";
 import Typography from "@component/Typography";
 import { useAppContext } from "@context/app/AppContext";
-import useJsonToFormData from "@customHook/useJsonToFormData";
 import useUserInf from "@customHook/useUserInf";
 import { BASE_URL, Customer_Payment_Maythod_By_Id, Customer_Payment_Method_Create, Customer_Payment_Method_Update } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
+import jsonToFormData from "helper/jsonToFormData";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -34,7 +34,7 @@ const PaymentMethodEditor = () => {
   const [image, setImage] = useState<any>("");
 
   useEffect(() => {
-    if (id) {
+    if (id && authTOKEN) {
       if (id !== "add") {
         axios.get(`${Customer_Payment_Maythod_By_Id}${id}`, authTOKEN).then(res => {
           console.log("paymentDetailsRes", res)
@@ -43,7 +43,7 @@ const PaymentMethodEditor = () => {
         })
       }
     }
-  }, [id])
+  }, [authTOKEN, id])
 
   const handleFormSubmit = async (values) => {
 
@@ -52,7 +52,7 @@ const PaymentMethodEditor = () => {
       customer: user_id,
       image: image || previewImage,
     }
-    const [saveData] = useJsonToFormData(data)
+    const [saveData] = jsonToFormData(data)
 
     if (id === "add") {
       axios.post(`${Customer_Payment_Method_Create}`, saveData, authTOKEN).then(res => {
@@ -65,9 +65,6 @@ const PaymentMethodEditor = () => {
             type: "CHANGE_ALERT",
             payload: {
               alertValue: "payment method added",
-              alerType: "success",
-              alertShow: true,
-              alertChanged: Math.random()
             }
           })
         }
@@ -77,8 +74,6 @@ const PaymentMethodEditor = () => {
             payload: {
               alertValue: "sumthing went wrong",
               alerType: "error",
-              alertShow: true,
-              alertChanged: Math.random()
             }
           })
         }
@@ -89,8 +84,6 @@ const PaymentMethodEditor = () => {
           payload: {
             alertValue: "sumthing went wrong",
             alerType: "error",
-            alertShow: true,
-            alertChanged: Math.random()
           }
         })
       })
@@ -103,19 +96,14 @@ const PaymentMethodEditor = () => {
           type: "CHANGE_ALERT",
           payload: {
             alertValue: "payment method updated",
-            alerType: "success",
-            alertShow: true,
-            alertChanged: Math.random()
           }
         })
       }).catch(() => {
         dispatch({
           type: "CHANGE_ALERT",
           payload: {
-            alertValue: "sumthing went wrong",
+            alertValue: "something went wrong",
             alerType: "error",
-            alertShow: true,
-            alertChanged: Math.random()
           }
         })
       })

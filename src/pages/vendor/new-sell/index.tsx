@@ -14,13 +14,13 @@ import Radio from "@component/radio/Radio";
 import TextField from "@component/text-field/TextField";
 import Typography from "@component/Typography";
 import { useAppContext } from "@context/app/AppContext";
-import useJsonToFormData from "@customHook/useJsonToFormData";
 import useUserInf from "@customHook/useUserInf";
-import { Purshase_Create, Vendor_By_Id } from "@data/constants";
+import { Purshase_Create, User_By_Id } from "@data/constants";
 import { requred } from "@data/data";
 import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
 import { useFormik } from "formik";
+import jsonToFormData from "helper/jsonToFormData";
 import _ from "lodash";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -44,6 +44,8 @@ function newPurchase() {
 
   const router = useRouter()
 
+  const { user_id } = useUserInf()
+
   useEffect(() => {
     images.map((img, id) => {
       if (_.isEmpty(img)) {
@@ -56,19 +58,16 @@ function newPurchase() {
   }, [images]);
 
   useEffect(() => {
-    const { user_id } = useUserInf()
-    axios.get(`${Vendor_By_Id}${user_id}`).then(res => {
-      console.log("vendorRes", res)
-      // first_name: "",
-      //   last_name: "",
-      //     contact_no: "+880",
-      //       email: "",
-      setFieldValue("first_name", res?.data?.first_name)
-      setFieldValue("last_name", res?.data?.last_name)
-      setFieldValue("email", res?.data?.email)
-      setFieldValue("contact_no", res?.data?.primary_phone)
-    }).catch((err) => { console.log("error", err) })
-  }, [])
+    if (user_id) {
+      axios.get(`${User_By_Id}${user_id}`).then(res => {
+        console.log("vendorRes", res)
+        setFieldValue("first_name", res?.data?.first_name)
+        setFieldValue("last_name", res?.data?.last_name)
+        setFieldValue("email", res?.data?.email)
+        setFieldValue("contact_no", res?.data?.primary_phone)
+      }).catch((err) => { console.log("error", err) })
+    }
+  }, [user_id])
 
   //submit purchase data
   const handleFormSubmit = async (values) => {
@@ -96,7 +95,8 @@ function newPurchase() {
     });
     purchaseData.items = Items;
 
-    const [PurchaseDataToFormData] = useJsonToFormData(purchaseData);
+    const [PurchaseDataToFormData] = jsonToFormData(purchaseData);
+
 
     setLoading(true)
 
@@ -106,7 +106,8 @@ function newPurchase() {
         console.log("purchaserequestRes", res);
         setLoading(false)
         if (res?.data?.data?.purchase_request_items?.length) {
-          router.push("/vendor/new-sell/success")
+          const user_type = localStorage.getItem("userType")
+          router.push(`${user_type === "vendor" ? "/vendor/new-sell/success" : "/new-sell/success"}`)
         }
         else if (res?.data?.user_exists) {
           dispatch({
@@ -114,8 +115,6 @@ function newPurchase() {
             payload: {
               alertValue: `${values.email} is already exist`,
               alerType: "warning",
-              alertShow: true,
-              alertChanged: Math.random()
             }
           })
         }
@@ -125,8 +124,6 @@ function newPurchase() {
             payload: {
               alertValue: "someting went wrong",
               alerType: "error",
-              alertShow: true,
-              alertChanged: Math.random()
             }
           })
         }
@@ -137,8 +134,6 @@ function newPurchase() {
           payload: {
             alertValue: "someting went wrong",
             alerType: "error",
-            alertShow: true,
-            alertChanged: Math.random()
           }
         })
       });
@@ -503,7 +498,6 @@ function newPurchase() {
                     </Box>
                     <Box width="80%" mt="25px">
                       <TextField
-                        type="number"
                         name={`item_price${idx}`}
                         label="Item Price"
                         fullwidth

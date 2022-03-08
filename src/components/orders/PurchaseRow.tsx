@@ -1,10 +1,8 @@
 
 import Currency from "@component/Currency";
-import { Purchase_Status_all } from "@data/constants";
-import axios from "axios";
 import { format } from "date-fns";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useMemo } from "react";
 import Box from "../Box";
 import IconButton from "../buttons/IconButton";
 import { Chip } from "../Chip";
@@ -17,22 +15,27 @@ import Typography, { H5, Small } from "../Typography";
 export interface PurchaseRowProps {
     item: {
         id?: any;
-        purchase_status?: string;
-        request_date?: string;
+        purchase_status?: { name: string };
+        created_at?: string;
         total_price?: number | string;
         href?: string;
+        invoice_no?: string;
     };
 }
 
 const PurchaseRow: React.FC<PurchaseRowProps> = ({ item }) => {
-    const [orderStatus, setOrderStatus] = useState([]);
+
     const getColor = (status) => {
+
+        console.log("status", status)
         switch (status) {
-            case "pending":
+            case ("pending" || "Pending"):
                 return "secondary";
-            case "processing":
+            case ("processing" || "Processing"):
                 return "secondary";
-            case "delivered":
+            case ("submitted" || "Submitted"):
+                return "success";
+            case ("verified" || "Verified"):
                 return "success";
             case "cancelled":
                 return "error";
@@ -41,52 +44,43 @@ const PurchaseRow: React.FC<PurchaseRowProps> = ({ item }) => {
         }
     };
 
-    try {
-        var authTOKEN = {
-            headers: {
-                "Content-type": "application/json",
-                Authorization: localStorage.getItem("jwt_access_token"),
-            },
-        };
-    } catch (err) {
-        authTOKEN = null;
-    }
 
-    useEffect(() => {
-        axios.get(`${Purchase_Status_all}`, authTOKEN).then((order_statuss) => {
-            setOrderStatus(order_statuss?.data?.purchase_statuses);
-        }).catch((err) => { console.log("error", err) });
-    }, []);
+    const memoizedGetColor = (status) => useMemo(() => getColor(status), []);
+
+
+    try {
+        var user_type: string = localStorage.getItem("userType")
+    } catch (err) {
+        var user_type = "";
+    }
 
 
     return (
-        <Link href={`/vendor/sells/${item?.id}`}>
+        <Link href={`${user_type === "vendor" ? `/vendor/sells/${item?.id}` : `/sells/${item?.id}`}`}>
             <TableRow as="a" href={item.href} my="1rem" padding="6px 18px">
                 <H5 m="6px" textAlign="left">
-                    {item.id}
+                    {item.invoice_no}
                 </H5>
                 <Box m="6px">
                     <Chip
                         p="0.25rem 1rem"
-                        bg={`${getColor(
-                            orderStatus.find((orders) => item.purchase_status == orders.id)?.name
+                        bg={`${memoizedGetColor(
+                            item.purchase_status?.name
                         )}.light`}
                     >
                         <Small
-                            color={`${getColor(
-                                orderStatus.find((orders) => item.purchase_status == orders.id)
-                                    ?.name
+                            color={`${memoizedGetColor(
+                                item.purchase_status?.name
                             )}.main`}
                         >
                             {
-                                orderStatus.find((orders) => item.purchase_status == orders.id)
-                                    ?.name
+                                item.purchase_status?.name
                             }
                         </Small>
                     </Chip>
                 </Box>
                 <Typography className="flex-grow pre" m="6px" textAlign="left">
-                    {format(new Date(item?.request_date), "MMM dd, yyyy")}
+                    {item?.created_at && format(new Date(item?.created_at), "MMM dd, yyyy")}
                 </Typography>
                 <Typography m="6px" textAlign="left">
                     <Currency>{Number(item.total_price).toFixed(2)}</Currency>

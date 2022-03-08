@@ -1,5 +1,5 @@
-import NavbarLayout from '@component/layout/NavbarLayout';
-import Success from 'pages/sell/youritems/success'
+import VendorDashboardLayout from '@component/layout/VendorDashboardLayout';
+import Success from 'pages/sell/youritems/success';
 
 function success() {
     return (
@@ -7,6 +7,6 @@ function success() {
     )
 }
 
-success.layout = NavbarLayout;
+success.layout = VendorDashboardLayout;
 
 export default success

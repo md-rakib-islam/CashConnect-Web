@@ -13,6 +13,7 @@ import useUserInf from "@customHook/useUserInf";
 import { BASE_URL, Purchase_Products_By_Vendor_Id } from "@data/constants";
 import axios from "axios";
 import { format } from "date-fns";
+import _ from "lodash";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
@@ -24,15 +25,18 @@ const Products = () => {
   const router = useRouter()
   const { page, size } = router.query
 
+  const { user_id, authTOKEN } = useUserInf()
+
   useEffect(() => {
-    const { user_id, authTOKEN } = useUserInf()
-    axios.get(`${Purchase_Products_By_Vendor_Id}${user_id}?size=${size || 10}&page=${page || 1}`, authTOKEN).then(res => {
-      console.log("Purchase_Items_By_Purchase_Id", res)
-      setProductList(res?.data?.purchase_request_items)
-      setTotalPage(res?.data?.total_pages)
-      setTotalProduct(res?.data?.total_elements)
-    }).catch((err) => { console.log("error", err) })
-  }, [size, page])
+    if (user_id) {
+      axios.get(`${Purchase_Products_By_Vendor_Id}${user_id}?size=${size || 10}&page=${page || 1}`, authTOKEN).then(res => {
+        console.log("Purchase_Products_By_Vendor_Id", res)
+        setProductList(res?.data?.purchase_request_items)
+        setTotalPage(res?.data?.total_pages)
+        setTotalProduct(res?.data?.total_elements)
+      }).catch((err) => { console.log("error", err) })
+    }
+  }, [user_id, size, page])
 
   return (
     <div>
@@ -85,7 +89,7 @@ const Products = () => {
               {item?.purchase_req}
             </Typography>
             <Typography textAlign="center" mr="30px" flexWrap="nowrap">
-              {format(new Date(item?.created_at), "MMM dd, yyyy")}
+              {item?.created_at && format(new Date(item?.created_at), "MMM dd, yyyy")}
             </Typography>
           </div>
           <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "space-between", alignItems: "center", minHeight: "36px", padding: "6px 0px", flexBasis: "40%" }}>
@@ -103,7 +107,7 @@ const Products = () => {
             <div style={{ minWidth: "80px" }}>
               <Typography textAlign="center" mr="10px">
                 {/* {item?.name} */}
-                {item?.status ? item?.status : "_"}
+                {_.isObject(item?.status) ? item?.status?.name : item?.status || "_"}
               </Typography>
             </div>
           </div>

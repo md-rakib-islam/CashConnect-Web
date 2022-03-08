@@ -22,16 +22,14 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
 
   const [increaseWidth, setIncreaseWidth] = useState(false)
 
-  const [navigationData, setNavigationData] = useState([]);
-  const [formattedCategoryData] =
-    useFormattedCategoryData(navigationData);
+  const [formattedCategoryData, setFormattedCategoryData] = useFormattedCategoryData();
 
   useEffect(() => {
     fetch(`${Category_All_With_Child}`)
       .then((res) => res.json())
       .then((data) => {
         console.log("category", data.categories);
-        setNavigationData(data.categories);
+        setFormattedCategoryData(data.categories);
       }).catch((err) => { console.log("error", err) });
   }, []);
 
@@ -39,7 +37,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
     setIncreaseWidth(action)
   }
 
-  console.log("formatedCategory", navigationData);
+  // console.log("formatedCategory", navigationData);
   return (
     <>
       {!_.isEmpty(formattedCategoryData) && (<StyledCategoryDropdown open={open} position={position} increaseWidth={increaseWidth}>
@@ -56,7 +54,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
                 href={item.href}
                 icon={item.icon}
                 menuData={item.menuData}
-                key={item.title}
+                key={item?.id || item.title}
                 // setIncreaseWidth={setIncreaseWidthMethod}
                 setIncreaseWidthMethod={setIncreaseWidthMethod}
               >

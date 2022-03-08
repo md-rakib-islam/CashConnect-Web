@@ -1,8 +1,8 @@
 import Section13 from "@component/home-1/Section13";
-import useFormattedProductData from "@customHook/useFormattedProductData";
 import { Brand_Featured, Category_Top_All, Category_With_Product_Brand, Category_Wth_Name_Img, Product_Arrival, Product_Discount, Product_Flash_Deals, Product_For_You, Product_Top_Rated, Slider_All } from "@data/constants";
+import getFormattedProductData from "@helper/getFormattedProductData";
 import axios from "axios";
-import { GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 import Section1 from "../components/home-1/Section1";
 import Section10 from "../components/home-1/Section10";
 import Section11 from "../components/home-1/Section11";
@@ -46,7 +46,7 @@ IndexPage.layout = AppLayout;
 
 export default IndexPage;
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
 
   try {
     var sliderRes = await axios.get(`${Slider_All}`)
@@ -60,7 +60,7 @@ export const getStaticProps: GetStaticProps = async () => {
   try {
     var flashDealsRes = await axios.get(`${Product_Flash_Deals}?page=${1}&size=${6}`)
     var flashDealsLists: any[] = await flashDealsRes.data.products
-    var [flashDealsList] = await useFormattedProductData(flashDealsLists);
+    var flashDealsList = await getFormattedProductData(flashDealsLists);
   } catch (err) {
     var flashDealsList = []
   }
@@ -75,7 +75,7 @@ export const getStaticProps: GetStaticProps = async () => {
   try {
     var topRatedRes = await axios.get(`${Product_Top_Rated}?page=${1}&size=${4}`)
     var topRatedLists: any[] = await topRatedRes.data.products
-    var [topRatedList] = useFormattedProductData(topRatedLists, "TopRated")
+    var topRatedList = getFormattedProductData(topRatedLists, "TopRated")
   } catch (err) {
     var topRatedList = []
   }
@@ -83,7 +83,7 @@ export const getStaticProps: GetStaticProps = async () => {
   try {
     const res = await axios.get(`${Brand_Featured}?page=${1}&size=${2}`)
     var featuredBrandLists: any[] = await res.data.brands
-    var [featuredBrandList] = useFormattedProductData(featuredBrandLists, "FeaturedBrands")
+    var featuredBrandList = getFormattedProductData(featuredBrandLists, "FeaturedBrands")
 
   } catch (err) {
     var featuredBrandList = []
@@ -92,7 +92,7 @@ export const getStaticProps: GetStaticProps = async () => {
   try {
     var newArrivalRes = await axios.get(`${Product_Arrival}?page=${1}&size=${6}`)
     var newArrivalLists: any[] = await newArrivalRes.data.products
-    var [newArrivalList] = useFormattedProductData(newArrivalLists, "Arrivals")
+    var newArrivalList = getFormattedProductData(newArrivalLists, "Arrivals")
   } catch (err) {
     var newArrivalList = []
   }
@@ -100,7 +100,9 @@ export const getStaticProps: GetStaticProps = async () => {
   try {
     var bigDiscountRes = await axios.get(`${Product_Discount}?page=${1}&size=${6}`)
     var bigDiscountLists: any[] = await bigDiscountRes.data.products
-    var [bigDiscountList] = useFormattedProductData(bigDiscountLists, "bigdiscount")
+
+    console.log("bigDiscountLists", bigDiscountLists)
+    var bigDiscountList = getFormattedProductData(bigDiscountLists, "bigdiscount")
   } catch (err) {
     var bigDiscountList = []
   }
@@ -115,7 +117,7 @@ export const getStaticProps: GetStaticProps = async () => {
   try {
     var moreForYouRes = await axios.get(`${Product_For_You}?page=${1}&size=${12}`)
     var moreForYouLists: any[] = await moreForYouRes.data.products
-    var [moreForYouList] = useFormattedProductData(moreForYouLists)
+    var moreForYouList = getFormattedProductData(moreForYouLists)
   } catch (err) {
     var moreForYouList = []
   }
@@ -140,7 +142,6 @@ export const getStaticProps: GetStaticProps = async () => {
       categoriesList,
       moreForYouList,
       categoryWithProductBrandList,
-    },
-    revalidate: 30,
+    }
   }
 }

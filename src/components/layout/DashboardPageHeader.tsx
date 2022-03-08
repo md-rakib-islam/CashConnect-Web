@@ -23,10 +23,10 @@ const DashboardPageHeader: React.FC<DashboardPageHeaderProps> = ({
   const width = useWindowSize();
   const isTablet = width < 1025;
 
-  try{
-  var user_type: string = localStorage.getItem("userType")
-  }catch (error) {
-    var user_type: string = "3"
+  try {
+    var user_type: string = localStorage.getItem("userType")
+  } catch (error) {
+    var user_type: string = "customer"
   }
 
   return (
@@ -41,7 +41,7 @@ const DashboardPageHeader: React.FC<DashboardPageHeaderProps> = ({
 
         {isTablet && (
           <Sidenav position="left" handle={<Icon mx="1rem">menu</Icon>}>
-            {user_type == "3" ? (<CustomerDashboardNavigation />) : (<VendorDashboardNavigation/>)}
+            {user_type == "customer" ? (<CustomerDashboardNavigation />) : (<VendorDashboardNavigation />)}
           </Sidenav>
         )}
 

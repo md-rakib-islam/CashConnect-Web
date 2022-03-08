@@ -7,17 +7,17 @@ import Hidden from "@component/hidden/Hidden";
 import Icon from "@component/icon/Icon";
 import NavbarLayout from "@component/layout/NavbarLayout";
 import Radio from "@component/radio/Radio";
-import  { CountryCodeSelect } from "@component/Select";
+import { CountryCodeSelect } from "@component/Select";
 import TextField from "@component/text-field/TextField";
 import Typography from "@component/Typography";
 import { useAppContext } from "@context/app/AppContext";
-import useJsonToFormData from "@customHook/useJsonToFormData";
 import { Purshase_Create } from "@data/constants";
 import { country_codes } from "@data/country_code";
 import { requred } from "@data/data";
 import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
 import { useFormik } from "formik";
+import jsonToFormData from "helper/jsonToFormData";
 import _ from "lodash";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -77,7 +77,7 @@ function onlineSell() {
     });
     purchaseData.items = Items;
 
-    const [PurchaseDataToFormData] = useJsonToFormData(purchaseData);
+    const [PurchaseDataToFormData] = jsonToFormData(purchaseData);
 
     setLoading(true)
 
@@ -89,14 +89,12 @@ function onlineSell() {
         if (res?.data?.data?.purchase_request_items?.length) {
           router.push("/sell/youritems/success")
         }
-        else if(res?.data?.user_exists){
+        else if (res?.data?.user_exists) {
           dispatch({
             type: "CHANGE_ALERT",
             payload: {
               alertValue: `${values.email} is already exist`,
               alerType: "warning",
-              alertShow: true,
-              alertChanged: Math.random()
             }
           })
         }
@@ -106,8 +104,6 @@ function onlineSell() {
             payload: {
               alertValue: "someting went wrong",
               alerType: "error",
-              alertShow: true,
-              alertChanged: Math.random()
             }
           })
         }
@@ -119,8 +115,6 @@ function onlineSell() {
           payload: {
             alertValue: "someting went wrong",
             alerType: "error",
-            alertShow: true,
-            alertChanged: Math.random()
           }
         })
       });
@@ -323,7 +317,7 @@ function onlineSell() {
             <Grid item md={6} xs={12}>
 
 
-              <div style={{ display: "flex", alignItems: "flex-end" }}>
+              <div style={{ display: "flex", alignItems: "flex-start" }}>
                 <CountryCodeSelect
                   mt="1.03rem"
                   label="Country"
@@ -476,7 +470,6 @@ function onlineSell() {
                   </Box>
                   <Box width="80%" mt="25px">
                     <TextField
-                      type="number"
                       name={`item_price${idx}`}
                       label="Item Price"
                       fullwidth
