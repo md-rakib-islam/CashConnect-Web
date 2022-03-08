@@ -27,6 +27,8 @@ const Item: React.FC<ItemProps> = ({ item, handleCartAmountChange }) => {
         }).catch((err) => { console.log("error", err) })
     }, [])
 
+    console.log('item',item)
+
     return (
         <Fragment key={item.id}>
             <div className="cart-item">
