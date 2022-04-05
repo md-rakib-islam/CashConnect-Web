@@ -15,8 +15,8 @@ const alertErrorType = "error"
 export type AlertValueType = {
     alertValue?: string;
     alerType?: typeof alertSuccessType | typeof alertWarningType | typeof alertErrorType;
-    alertChanged: number;
-    alertShow: boolean;
+    alertChanged?: number;
+    alertShow?: boolean;
 };
 
 export type alertStateType = AlertValueType
@@ -41,9 +41,9 @@ export const alertReducer: React.Reducer<alertStateType, alertActionType> = (
 
       return {
         alertValue: alertpayload.alertValue || alertValueState,
-        alerType: alertpayload.alerType || alertTypeState,
-        alertChanged: alertpayload.alertChanged,
-        alertShow: alertpayload.alertShow,
+        alerType: alertpayload.alerType || "success",
+        alertChanged: Math.random(),
+        alertShow: alertpayload.alertShow == undefined? true : alertpayload.alertShow,
       };
 
     default: {

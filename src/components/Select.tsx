@@ -1,5 +1,6 @@
 import React, { InputHTMLAttributes } from "react";
 import ReactSelect from "react-select";
+import styled from "styled-components";
 import { SpaceProps } from "styled-system";
 import { colors } from "../utils/themeColors";
 import Box from "./Box";
@@ -9,7 +10,7 @@ type SelectOption = {
   label?: number | string;
   value?: string | number;
   name?: string | number;
-  id?: number;
+  id?: number | string;
 };
 
 interface SelectProps
@@ -62,6 +63,7 @@ const Select: React.FC<SelectProps> = ({
         // isSearchable={isSearchable}
         // menuIsOpen={true}
         // name="color"
+
         options={options}
         getOptionLabel={
           getOptionLabelBy
@@ -103,7 +105,7 @@ const Select: React.FC<SelectProps> = ({
 };
 
 const customStyles = {
-  input: (styles) => ({ ...styles, height: 30 }),
+  input: (styles) => ({ ...styles, height: 30, boxShadow: "0px 0px 10px #ababab" }),
   option: (provided, state) => ({
     ...provided,
     color: "inherit",
@@ -111,5 +113,11 @@ const customStyles = {
     cursor: "pointer",
   }),
 };
+
+
+
+export const CountryCodeSelect = styled(Select)`
+    min-width: 70px
+`;
 
 export default Select;

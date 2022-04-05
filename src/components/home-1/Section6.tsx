@@ -21,6 +21,7 @@ const Section6: React.FC<Section6Props> = ({ data }) => {
 
   const [productList] = useFormattedProductData(data.products)
 
+
   const handleCategoryClick = ({ target: { id: brand } }) => {
     if (selected.match(brand)) {
       setSelected("");
@@ -33,7 +34,7 @@ const Section6: React.FC<Section6Props> = ({ data }) => {
       <FlexBox>
         <Hidden down={768} mr="1.75rem">
           <Box shadow={6} borderRadius={10} padding="1.25rem" bg="white">
-            {data?.brands?.map((brand) => (
+            {data?.brands?.slice(0, 10)?.map((brand) => (
               <StyledProductCategory
                 key={brand?.id}
                 id={brand?.id}
@@ -72,8 +73,8 @@ const Section6: React.FC<Section6Props> = ({ data }) => {
         <Box flex="1 1 0" minWidth="0px">
           <CategorySectionHeader title={data?.category?.name} categoryId={data?.category?.id} />
           <Grid container spacing={6}>
-            {productList.map((item, ind) => (
-              <Grid item lg={4} sm={6} xs={12} key={ind}>
+            {productList?.slice(0, 12)?.map((item, ind) => (
+              <Grid item lg={3} sm={4} xs={12} key={ind}>
                 <ProductCard1 hoverEffect {...item} />
               </Grid>
             ))}

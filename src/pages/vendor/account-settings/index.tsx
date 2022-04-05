@@ -7,25 +7,22 @@ import Hidden from "@component/hidden/Hidden";
 import Icon from "@component/icon/Icon";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import VendorDashboardLayout from "@component/layout/VendorDashboardLayout";
-import Select from "@component/Select";
+import Select, { CountryCodeSelect } from "@component/Select";
 import TextField from "@component/text-field/TextField";
 import { useAppContext } from "@context/app/AppContext";
-import useCheckValidation from "@customHook/useCheckValidation";
-import useJsonToFormData from "@customHook/useJsonToFormData";
 import useUserInf from "@customHook/useUserInf";
 import {
-  BASE_URL,
-  Branch_All,
-  City_All,
-  Country_All, Role_All,
-  Thana_All,
+  BASE_URL, City_All,
+  Country_All, Thana_All,
   Vendor_By_Id,
   Vendor_Update
 } from "@data/constants";
 import { country_codes } from "@data/country_code";
-import { requred } from "@data/data";
+import { genders, requred } from "@data/data";
 import axios from "axios";
 import { useFormik } from "formik";
+import checkValidation from "helper/checkValidation";
+import jsonToFormData from "helper/jsonToFormData";
 import React, { useEffect, useState } from "react";
 import * as yup from "yup";
 
@@ -35,92 +32,80 @@ type TIMG = any;
 const AccountSettings = () => {
   const [previewImage, setPreviewImage] = useState<Timage>();
   const [image, setImage] = useState<TIMG>("");
-  const [roles, setRoles] = useState([]);
   const [thanas, setThanas] = useState([]);
   const [cities, setCities] = useState([]);
   const [countries, setCountries] = useState([]);
-  const [branches, setBranches] = useState([]);
 
   const [updated, setUpdated] = useState(0)
 
   const { dispatch } = useAppContext()
 
-  const genders = [
-    { label: "Male", value: "male" },
-    { label: "Female", value: "female" },
-    { label: "Others", value: "others" },
-  ];
-
   const { user_id, authTOKEN } = useUserInf()
 
   useEffect(() => {
-    fetch(`${Role_All}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setRoles(data.roles);
-      }).catch(() => { });
 
     fetch(`${City_All}`)
       .then((res) => res.json())
       .then((data) => {
         setCities(data.cities);
-      }).catch(() => { });
+      }).catch((err) => { console.log("error", err) });
 
     fetch(`${Thana_All}`)
       .then((res) => res.json())
       .then((data) => {
         setThanas(data.thanas);
-      }).catch(() => { });
+      }).catch((err) => { console.log("error", err) });
 
     fetch(`${Country_All}`)
       .then((res) => res.json())
       .then((data) => {
         setCountries(data.countries);
-      }).catch(() => { });
+      }).catch((err) => { console.log("error", err) });
 
-    fetch(`${Branch_All}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setBranches(data.branches);
-      }).catch(() => { });
+    // fetch(`${Branch_All}`)
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     setBranches(data.branches);
+    //   }).catch((err) => { console.log("error", err) });
   }, []);
 
 
   useEffect(() => {
-    axios.get(`${Vendor_By_Id}${user_id}`, authTOKEN).then((datas) => {
-      console.log("VendorEditDetails", datas.data);
-      const { data } = datas;
+    if (user_id) {
+      axios.get(`${Vendor_By_Id}${user_id}`, authTOKEN).then((datas) => {
+        console.log("VendorEditDetails", datas.data);
+        const { data } = datas;
 
-      setPreviewImage(`${BASE_URL}${data.image}`);
+        setPreviewImage(`${BASE_URL}${data.image}`);
 
-      for (let key in data) {
+        resetForm({
+          values: {
+            ...values,
+            ...data,
+            primary_phone: data?.primary_phone || "+880",
+            secondary_phone: data?.secondary_phone || "+880"
+          }
+        })
 
-        setFieldValue(`${key}`, data[key]);
-      }
-
-      setFieldValue("gender", {
-        value: data.gender,
-        label: genders.find((gender: any) => gender?.value == data.gender)
-          ?.label,
-      });
-    }).catch(() => { });
+      }).catch((err) => { console.log("error", err) });
+    }
   }, [user_id, updated]);
 
   const handleFormSubmit = async (values) => {
 
-    const { isValid, userNameExist, emailExist, primaryPhoneExist, SecondaryPhoneExist } = await useCheckValidation({ username: values.username, email: values.email, primaryPhone: values.primary_phone, secondaryPhone: values.secondary_phone, userId: user_id })
+    const { isValid, userNameExist, emailExist, primaryPhoneExist, SecondaryPhoneExist } = await checkValidation({ username: values.username, email: values.email, primaryPhone: values.primary_phone, secondaryPhone: values.secondary_phone, userId: user_id })
 
     if (isValid) {
 
       const data = {
         ...values,
         primary_phone: `${values.primary_phone}`,
-        secondary_phone: `${values.secondary_phone}`,
+        secondary_phone: values.secondary_phone === "+880" ? "" : values.secondary_phone || "",
         image: image,
         gender:
           typeof values.gender != "object"
             ? values?.gender
-            : values?.gender?.value,
+            : values?.gender?.id,
         role: typeof values.role != "object" ? values?.role : values?.role?.id,
         thana:
           typeof values.thana != "object" ? values?.thana : values?.thana?.id,
@@ -133,35 +118,39 @@ const AccountSettings = () => {
           typeof values.branch != "object" ? values?.branch : values?.branch?.id,
       };
 
-      const [vendorEditData] = useJsonToFormData(data);
+      const [vendorEditData] = jsonToFormData(data);
 
       console.log("data", data)
 
       axios
         .put(`${Vendor_Update}${user_id}`, vendorEditData, authTOKEN)
-        .then((data) => {
+        .then(({ data }) => {
           console.log("VenderUpdatedRes", data);
 
-          dispatch({
-            type: "CHANGE_ALERT",
-            payload: {
-              alerType: "success",
-              alertValue: "update sussess...",
-              alertShow: true,
-              alertChanged: Math.random()
-            }
-          })
-
-          setUpdated(Math.random())
-
+          if (data?.id) {
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alertValue: "update sussess...",
+              }
+            })
+            setUpdated(Math.random())
+          }
+          else {
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alerType: "error",
+                alertValue: "someting went wrong",
+              }
+            })
+          }
         }).catch(() => {
           dispatch({
             type: "CHANGE_ALERT",
             payload: {
               alerType: "error",
               alertValue: "someting went wrong",
-              alertShow: true,
-              alertChanged: Math.random()
             }
           })
         });
@@ -187,6 +176,7 @@ const AccountSettings = () => {
     handleBlur,
     handleSubmit,
     setFieldValue,
+    resetForm,
   } = useFormik({
     initialValues: initialValues,
     validationSchema: accountSchema,
@@ -203,6 +193,8 @@ const AccountSettings = () => {
       </div>
     ) : null;
   }
+
+  console.log("values", values)
 
 
   return (
@@ -336,7 +328,9 @@ const AccountSettings = () => {
                   label="User Name"
                   fullwidth
                   onBlur={handleBlur}
-                  onChange={handleChange}
+                  onChange={(e: any,) => {
+                    setFieldValue("username", e.target.value.trim());
+                  }}
                   value={values.username || ""}
                   errorText={touched.username && errors.username}
                 />
@@ -361,8 +355,6 @@ const AccountSettings = () => {
                   label="Gender"
                   placeholder="Select Gender"
                   options={genders}
-                  getOptionLabelBy="label"
-                  getOptionValueBy="value"
                   value={values.gender || ""}
                   onChange={(gender) => {
                     setFieldValue("gender", gender);
@@ -386,8 +378,8 @@ const AccountSettings = () => {
 
               <Grid item md={6} xs={12}>
 
-                <div style={{ display: "flex" }}>
-                  <Select
+                <div style={{ display: "flex", alignItems: "flex-start" }}>
+                  <CountryCodeSelect
                     mb="1rem"
                     mt="1rem"
                     label="Country"
@@ -406,6 +398,7 @@ const AccountSettings = () => {
                   />
                   <TextField
                     mt="1rem"
+                    mb="1rem"
                     name="primary_phone"
                     label="Primary Phone"
                     fullwidth
@@ -419,8 +412,8 @@ const AccountSettings = () => {
 
               <Grid item md={6} xs={12}>
 
-                <div style={{ display: "flex" }}>
-                  <Select
+                <div style={{ display: "flex", alignItems: "flex-start" }}>
+                  <CountryCodeSelect
                     mb="1rem"
                     mt="1rem"
                     label="Country"
@@ -439,12 +432,13 @@ const AccountSettings = () => {
                   />
                   <TextField
                     mt="1rem"
+                    mb="1rem"
                     name="secondary_phone"
                     label="Secondary Phone"
                     fullwidth
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    value={values.secondary_phone || ""}
+                    value={values.secondary_phone}
                     errorText={touched.secondary_phone && errors.secondary_phone}
                   />
                 </div>
@@ -476,20 +470,6 @@ const AccountSettings = () => {
                   errorText={
                     touched.street_address_two && errors.street_address_two
                   }
-                />
-              </Grid>
-
-              <Grid item md={6} xs={12}>
-                <Select
-                  mb="1rem"
-                  label="Role"
-                  placeholder="Select Role"
-                  options={roles}
-                  value={values.role || ""}
-                  onChange={(role) => {
-                    setFieldValue("role", role);
-                  }}
-                  errorText={touched.role && errors.role}
                 />
               </Grid>
 
@@ -559,7 +539,7 @@ const AccountSettings = () => {
                 />
               </Grid>
 
-              <Grid item md={6} xs={12}>
+              {/* <Grid item md={6} xs={12}>
                 <Select
                   mb="1rem"
                   label="Branch"
@@ -587,7 +567,7 @@ const AccountSettings = () => {
                     errors.customer_credit_limit
                   }
                 />
-              </Grid>
+              </Grid> */}
 
               <Grid item md={6} xs={12}>
                 <TextField
@@ -649,7 +629,7 @@ const accountSchema = yup.object().shape({
   email: yup.string().email("invalid email").required("required").nullable(requred),
   date_of_birth: yup.date().required("invalid date").nullable(requred),
   primary_phone: yup.string().required("primary_phone required").nullable(requred),
-  secondary_phone: yup.string().required("secondary_phone required").nullable(requred),
+  // secondary_phone: yup.string().required("secondary_phone required").nullable(requred),
 });
 
 AccountSettings.layout = VendorDashboardLayout;

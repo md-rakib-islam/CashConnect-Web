@@ -6,6 +6,7 @@ interface StyledSidenavProps {
   open: boolean;
   width?: number;
   scroll?: boolean;
+  padding?: number;
 }
 
 export const StyledSidenav = styled.div<StyledSidenavProps>`
@@ -34,6 +35,7 @@ export const StyledSidenav = styled.div<StyledSidenavProps>`
     height: 100%;
     overflow: ${({ scroll }) => (scroll ? "auto" : "hidden")};
     animation: slide 250ms linear;
+    padding: ${(props) => props.padding}px;
   }
 
   & ~ .cursor-pointer {

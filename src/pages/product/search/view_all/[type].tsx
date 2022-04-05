@@ -10,8 +10,8 @@ import ShowingItemNumber from "@component/pagination/ShowingItemNumber";
 import ProductCard5 from "@component/product-cards/ProductCard5";
 import ProductCard6 from "@component/product-cards/ProductCard6";
 import Typography, { SemiSpan } from "@component/Typography";
-import useFormattedProductData from "@customHook/useFormattedProductData";
 import { BASE_URL, Brand_Featured, Category_Top_All, Category_Wth_Name_Img } from "@data/constants";
+import getFormattedProductData from "@helper/getFormattedProductData";
 import axios from "axios";
 import { GetServerSideProps } from 'next';
 import React from "react";
@@ -92,8 +92,8 @@ const ViewAll = ({ topCategoryLists, CategoryLists, featuredBrandLists, type, to
             </Grid>)}
             {type === "featured_brands" && (<Card p="1rem">
                 <Grid container spacing={4}>
-                    {featuredBrandLists.map((item, key) => (
-                        <Grid item sm={3} xs={12} key={key}>
+                    {featuredBrandLists.map((item) => (
+                        <Grid item sm={3} xs={12} key={item.id}>
                             {/* <Link href={item.productUrl}> */}
                             <a>
                                 <ProductCard5 {...item} />
@@ -105,7 +105,7 @@ const ViewAll = ({ topCategoryLists, CategoryLists, featuredBrandLists, type, to
             </Card>)}
             <FlexBox
                 flexWrap="wrap"
-                justifyContent="space-between"
+                justifyContent="space-around"
                 alignItems="center"
                 mt="32px"
             >
@@ -165,7 +165,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
         try {
             const res = await axios.get(`${Brand_Featured}?page=${query.page || 1}&size=${query.size || 16}`)
             var featuredBrandList: any[] = await res.data.brands
-            var [featuredBrandLists] = useFormattedProductData(featuredBrandList, "FeaturedBrands")
+            var featuredBrandLists = getFormattedProductData(featuredBrandList, "FeaturedBrands")
             var totalPage: number = await res.data.total_pages
             var totalProduct: number = await res.data.total_elements
             var type = "featured_brands"

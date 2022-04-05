@@ -1,3 +1,4 @@
+import Currency from "@component/Currency";
 import React from "react";
 import Button from "../buttons/Button";
 import { Card1 } from "../Card1";
@@ -25,7 +26,7 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
         <Typography color="text.hint">Subtotal:</Typography>
         <FlexBox alignItems="flex-end">
           <Typography fontSize="18px" fontWeight="600" lineHeight="1">
-            {Subtotal ? `$${Subtotal}` : `_`}
+            {Subtotal ? (<Currency>{Subtotal}</Currency>) : `_`}
           </Typography>
           <Typography fontWeight="600" fontSize="14px" lineHeight="1">
             {/* 00 */}
@@ -36,7 +37,7 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
         <Typography color="text.hint">Shipping:</Typography>
         <FlexBox alignItems="flex-end">
           <Typography fontSize="18px" fontWeight="600" lineHeight="1">
-            {Shipping ? `$${Shipping}` : `_`}
+            {Shipping ? (<Currency>{Shipping}</Currency>) : `_`}
           </Typography>
         </FlexBox>
       </FlexBox>
@@ -44,7 +45,7 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
         <Typography color="text.hint">Tax:</Typography>
         <FlexBox alignItems="flex-end">
           <Typography fontSize="18px" fontWeight="600" lineHeight="1">
-            {Tax ? `$${Tax}` : `_`}
+            {Tax ? (<Currency>{Tax}</Currency>) : `_`}
           </Typography>
           <Typography fontWeight="600" fontSize="14px" lineHeight="1">
             {/* 00 */}
@@ -55,7 +56,7 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
         <Typography color="text.hint">Discount:</Typography>
         <FlexBox alignItems="flex-end">
           <Typography fontSize="18px" fontWeight="600" lineHeight="1">
-            {Discount ? `$${Discount}` : `_`}
+            {Discount ? (<Currency>{Discount}</Currency>) : `_`}
           </Typography>
         </FlexBox>
       </FlexBox>
@@ -69,7 +70,7 @@ const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
         textAlign="right"
         mb="1.5rem"
       >
-        {Subtotal ? `$${Subtotal}` : `_`}
+        {Subtotal ? (<Currency>{Subtotal}</Currency>) : `_`}
       </Typography>
 
       <TextField placeholder="Voucher" fullwidth />

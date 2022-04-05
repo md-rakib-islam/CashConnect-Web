@@ -1,13 +1,17 @@
 import styled from "styled-components";
 import { getTheme } from "../../../utils/utils";
 
-export const StyledMegaMenu1 = styled.div`
+interface StyledMegaMenu1Props {
+  index: number;
+}
+
+export const StyledMegaMenu1 = styled.div<StyledMegaMenu1Props>`
   display: none;
   position: absolute;
-  left: 100%;
+  left: 300px;
   right: auto;
-  top: 0;
   z-index: 99;
+  top: ${({ index }) => index ? `${index * 40 + 5}px` : "0px"};
 
   .title-link,
   .child-link {

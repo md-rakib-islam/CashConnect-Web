@@ -2,23 +2,32 @@ import Avatar from "@component/avatar/Avatar";
 import Box from "@component/Box";
 import Button from "@component/buttons/Button";
 import Card from "@component/Card";
+import Currency from "@component/Currency";
 import Divider from "@component/Divider";
 import FlexBox from "@component/FlexBox";
 import Grid from "@component/grid/Grid";
 import Icon from "@component/icon/Icon";
-import DashboardLayout from "@component/layout/CustomerDashboardLayout";
+import CustomerDashboardLayout from "@component/layout/CustomerDashboardLayout";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
+import VendorDashboardLayout from "@component/layout/VendorDashboardLayout";
 import TableRow from "@component/TableRow";
 import Typography, { H5, H6, Paragraph } from "@component/Typography";
-import productDatabase from "@data/product-database";
+import { Customer_order_Details_For_Status } from "@data/constants";
 import useWindowSize from "@hook/useWindowSize";
+import axios from "axios";
 import { format } from "date-fns";
-import React, { Fragment } from "react";
+import addDays from "date-fns/addDays";
+import { useRouter } from "next/router";
+import React, { Fragment, useEffect, useState } from "react";
+import Item from "./Item";
 
-type OrderStatus = "packaging" | "shipping" | "delivering" | "complete";
+
+// type OrderStatus = "packaging" | "shipping" | "delivering" | "complete";
 
 const OrderDetails = () => {
-  const orderStatus: OrderStatus = "shipping";
+
+  const [orderStatus, setorderStatus] = useState<any>("packaging")
+
   const orderStatusList = ["packaging", "shipping", "delivering", "complete"];
   const stepIconList = ["package-box", "truck-1", "delivery"];
 
@@ -26,6 +35,59 @@ const OrderDetails = () => {
   const width = useWindowSize();
   const breakpoint = 350;
 
+  const [productList, setProductList] = useState([])
+  const [subTotal, setSubTotal] = useState(0)
+  const [shippingFee, setShippingFee] = useState(0)
+  const [discount, setDiscount] = useState(0)
+  const [total, setTotal] = useState(0)
+  const [paid_by, setPaid_by] = useState("Credit/Debit Card")
+  const [orderId, setOrderId] = useState(0)
+  const [DeliveredOn, setDeliveredOn] = useState("")
+  const [placedOn, setPlacedOn] = useState("")
+  const [shippingAddress, setshippingAddress] = useState("")
+
+
+  const router = useRouter()
+  const order_id = router.query?.id
+
+
+  const getStatus = (status) => {
+    switch (status) {
+      case ("pending" || "Pending"):
+        return "packaging";
+      case ("processing" || "Processing"):
+        return "shipping";
+      case ("cancelled" || "Cancelled"):
+        return "packaging";
+      case ("delivered" || "Delivered"):
+        return "complete";
+      case ("on_the_way" || "on the way" || "Nn the way" || "On The Way"):
+        return "delivering";
+      default:
+        return "";
+    }
+  };
+
+  useEffect(() => {
+    if (order_id) {
+      axios.get(`${Customer_order_Details_For_Status}${order_id}`).then((res) => {
+        console.log("CorderDetailsRes", res.data);
+        setProductList(res.data.order?.order_items || []);
+        setSubTotal(res.data.order?.net_amount || 0);
+        setTotal(res.data.order?.net_amount);
+        setShippingFee(res.data.order?.shipping_price || 0)
+        setDiscount(res.data.order?.discount_amount || 0)
+        setPaid_by(res.data.order?.payment_method?.name || "_")
+        setOrderId(res.data.order?.id || 0)
+        setDeliveredOn(res.data.order?.delivered_at || "")
+        setPlacedOn(res.data.order?.created_at || "")
+        setshippingAddress(res.data.order?.shipping_address?.street_address || "")
+        setorderStatus(getStatus(res.data.order?.order_status?.name || ""))
+      }).catch((err) => { console.log("error", err) });
+    }
+  }, [order_id]);
+
+  // console.log("productList", productList)
   return (
     <div>
       <DashboardPageHeader
@@ -88,7 +150,9 @@ const OrderDetails = () => {
             color="primary.main"
             textAlign="center"
           >
-            Estimated Delivery Date <b>4th October</b>
+            Estimated Delivery Date <b>
+              {placedOn && addDays(new Date(placedOn), 3,)?.toString()?.slice(0, 15)}
+            </b>
           </Typography>
         </FlexBox>
       </Card>
@@ -99,14 +163,14 @@ const OrderDetails = () => {
             <Typography fontSize="14px" color="text.muted" mr="4px">
               Order ID:
             </Typography>
-            <Typography fontSize="14px">9001997718074513</Typography>
+            <Typography fontSize="14px">{orderId}</Typography>
           </FlexBox>
           <FlexBox className="pre" m="6px" alignItems="center">
             <Typography fontSize="14px" color="text.muted" mr="4px">
               Placed on:
             </Typography>
             <Typography fontSize="14px">
-              {format(new Date(), "dd MMM, yyyy")}
+              {placedOn && format(new Date(placedOn), "MMM dd, yyyy")}
             </Typography>
           </FlexBox>
           <FlexBox className="pre" m="6px" alignItems="center">
@@ -114,41 +178,13 @@ const OrderDetails = () => {
               Delivered on:
             </Typography>
             <Typography fontSize="14px">
-              {format(new Date(), "dd MMM, yyyy")}
+              {DeliveredOn && format(new Date(DeliveredOn), "MMM dd, yyyy")}
             </Typography>
           </FlexBox>
         </TableRow>
 
         <Box py="0.5rem">
-          {productDatabase.slice(179, 182).map((item) => (
-            <FlexBox
-              px="1rem"
-              py="0.5rem"
-              flexWrap="wrap"
-              alignItems="center"
-              key={item.id}
-            >
-              <FlexBox flex="2 2 260px" m="6px" alignItems="center">
-                <Avatar src={item?.imgUrl} size={64} />
-                <Box ml="20px">
-                  <H6 my="0px">{item?.title}</H6>
-                  <Typography fontSize="14px" color="text.muted">
-                    ${item?.price} x 1
-                  </Typography>
-                </Box>
-              </FlexBox>
-              <FlexBox flex="1 1 260px" m="6px" alignItems="center">
-                <Typography fontSize="14px" color="text.muted">
-                  Product properties: Black, L
-                </Typography>
-              </FlexBox>
-              <FlexBox flex="160px" m="6px" alignItems="center">
-                <Button variant="text" color="primary">
-                  <Typography fontSize="14px">Write a Review</Typography>
-                </Button>
-              </FlexBox>
-            </FlexBox>
-          ))}
+          {productList.map((item) => <Item item={item} key={item?.id}></Item>)}
         </Box>
       </Card>
 
@@ -159,7 +195,7 @@ const OrderDetails = () => {
               Shipping Address
             </H5>
             <Paragraph fontSize="14px" my="0px">
-              Kelly Williams 777 Brockton Avenue, Abington MA 2351
+              {shippingAddress}
             </Paragraph>
           </Card>
         </Grid>
@@ -176,7 +212,7 @@ const OrderDetails = () => {
               <Typography fontSize="14px" color="text.hint">
                 Subtotal:
               </Typography>
-              <H6 my="0px">$335</H6>
+              <H6 my="0px">{subTotal ? (<Currency>{subTotal}</Currency>) : "-"}</H6>
             </FlexBox>
             <FlexBox
               justifyContent="space-between"
@@ -186,7 +222,7 @@ const OrderDetails = () => {
               <Typography fontSize="14px" color="text.hint">
                 Shipping fee:
               </Typography>
-              <H6 my="0px">$10</H6>
+              <H6 my="0px">{shippingFee ? (<Currency>{shippingFee}</Currency>) : "-"}</H6>
             </FlexBox>
             <FlexBox
               justifyContent="space-between"
@@ -196,7 +232,7 @@ const OrderDetails = () => {
               <Typography fontSize="14px" color="text.hint">
                 Discount:
               </Typography>
-              <H6 my="0px">-$30</H6>
+              <H6 my="0px">{discount ? (<Currency>{discount}</Currency>) : "-"}</H6>
             </FlexBox>
 
             <Divider mb="0.5rem" />
@@ -207,9 +243,9 @@ const OrderDetails = () => {
               mb="1rem"
             >
               <H6 my="0px">Total</H6>
-              <H6 my="0px">$315</H6>
+              <H6 my="0px">{total ? (<Currency>{total}</Currency>) : "-"}</H6>
             </FlexBox>
-            <Typography fontSize="14px">Paid by Credit/Debit Card</Typography>
+            <Typography fontSize="14px">Paid by {paid_by}</Typography>
           </Card>
         </Grid>
       </Grid>
@@ -217,6 +253,12 @@ const OrderDetails = () => {
   );
 };
 
-OrderDetails.layout = DashboardLayout;
+try {
+  var user_type: string = localStorage.getItem("userType")
+} catch (err) {
+  var user_type = "";
+}
+
+OrderDetails.layout = user_type === "vendor" ? VendorDashboardLayout : CustomerDashboardLayout;
 
 export default OrderDetails;

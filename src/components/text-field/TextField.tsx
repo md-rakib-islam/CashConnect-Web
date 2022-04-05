@@ -13,11 +13,12 @@ export interface TextFieldProps {
   boxShadow?: boolean;
   endAdornment?: any;
   onChange?: any;
+  errorColor?: string;
 }
 
 const TextField: React.FC<
   InputHTMLAttributes<HTMLInputElement> & TextFieldProps & SpaceProps
-> = ({ id, label, errorText, labelColor, endAdornment, ...props }) => {
+> = ({ id, label, errorText, labelColor, endAdornment, errorColor, ...props }) => {
   const [textId, setTextId] = useState(id);
 
   // extract spacing props
@@ -35,6 +36,7 @@ const TextField: React.FC<
     <TextFieldWrapper
       color={labelColor && `${labelColor}.main`}
       fullwidth={props.fullwidth}
+      errorColor={errorColor}
       {...spacingProps}
     >
       {label && <label htmlFor={textId}>{label}</label>}

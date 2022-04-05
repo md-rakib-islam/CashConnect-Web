@@ -1,12 +1,12 @@
 import Alert from "@component/alert/alert";
 import LoginPopup from "@component/LoginPopup";
-import Select from "@component/Select";
+import { CountryCodeSelect } from "@component/Select";
 import { useAppContext } from "@context/app/AppContext";
-import useCheckValidation from "@customHook/useCheckValidation";
 import { Customer_Create, Vendor_Create } from "@data/constants";
 import { country_codes } from "@data/country_code";
 import axios from "axios";
 import { useFormik } from "formik";
+import checkValidation from "helper/checkValidation";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import * as yup from "yup";
@@ -18,7 +18,7 @@ import Divider from "../Divider";
 import FlexBox from "../FlexBox";
 import Icon from "../icon/Icon";
 import TextField from "../text-field/TextField";
-import { H3, H5, H6, SemiSpan, Small, Span } from "../Typography";
+import { H3, H5, H6, SemiSpan, Span } from "../Typography";
 import { StyledSessionCard } from "./SessionStyle";
 
 interface SignupProps {
@@ -68,14 +68,13 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
 
   const handleFormSubmit = async (values) => {
 
-    const { userNameExist, isValid, emailExist, primaryPhoneExist } = await useCheckValidation({ username: values.username, email: values.email, primaryPhone: values.primary_phone })
+    const { userNameExist, isValid, emailExist, primaryPhoneExist } = await checkValidation({ username: values.username, email: values.email, primaryPhone: values.primary_phone })
 
     console.log("isValid", isValid)
     if (isValid) {
       const data = {
         ...values,
         primary_phone: `${values.primary_phone}`,
-        user_type,
       };
 
       if (user_type == 3) {
@@ -87,9 +86,6 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
               type: "CHANGE_ALERT",
               payload: {
                 alertValue: "sugnup success...",
-                alerType: "success",
-                alertShow: true,
-                alertChanged: Math.random(),
               }
             });
           } else {
@@ -98,9 +94,6 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
               type: "CHANGE_ALERT",
               payload: {
                 alertValue: "sugnup success...",
-                alerType: "success",
-                alertShow: true,
-                alertChanged: Math.random(),
               }
             });
           }
@@ -110,8 +103,6 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             payload: {
               alertValue: "someting went wrong",
               alerType: "error",
-              alertShow: true,
-              alertChanged: Math.random(),
             }
           });
         })
@@ -126,9 +117,6 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
               type: "CHANGE_ALERT",
               payload: {
                 alertValue: "sugnup success...",
-                alerType: "success",
-                alertShow: true,
-                alertChanged: Math.random(),
               }
             });
           } else {
@@ -137,9 +125,6 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
               type: "CHANGE_ALERT",
               payload: {
                 alertValue: "sugnup success...",
-                alerType: "success",
-                alertShow: true,
-                alertChanged: Math.random(),
               }
             });
           }
@@ -149,8 +134,6 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             payload: {
               alertValue: "someting went wrong",
               alerType: "error",
-              alertShow: true,
-              alertChanged: Math.random(),
             }
           });
         });
@@ -274,7 +257,9 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             label="User Name"
             fullwidth
             onBlur={handleBlur}
-            onChange={handleChange}
+            onChange={(e: any,) => {
+              setFieldValue("username", e.target.value.trim());
+            }}
             value={values.username || ""}
             errorText={touched.username && errors.username}
           />
@@ -292,9 +277,9 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             errorText={touched.email && errors.email}
           />
 
-          <div style={{ display: "flex" }}>
-            <Select
-              mb="1rem"
+          <div style={{ display: "flex", alignItems: "flex-start" }}>
+            <CountryCodeSelect
+              mb="0.75rem"
               mt="1rem"
               label="Country"
               width="40%"
@@ -414,7 +399,7 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             </FlexBox>
           </Box>
 
-          <FlexBox
+          {/* <FlexBox
             justifyContent="center"
             alignItems="center"
             bg="#3B5998"
@@ -444,11 +429,11 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
               google-1
             </Icon>
             <Small fontWeight="600">Continue with Google</Small>
-          </FlexBox>
+          </FlexBox> */}
         </form>
         <FlexBox justifyContent="center" bg="gray.200" py="19px">
           <SemiSpan>Already have account?</SemiSpan>
-          <H6 style={{ cursor: "pointer" }} onClick={gotologin} ml="0.5rem" borderBottom="1px solid" borderColor="gray.900">
+          <H6 style={{ cursor: "pointer" }} onClick={gotologin} ml="0.5rem" color="primary.main" borderBottom="1px solid #e94560" borderColor="primary.main">
             Log in
           </H6>
         </FlexBox>

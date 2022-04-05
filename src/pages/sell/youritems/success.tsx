@@ -1,5 +1,5 @@
 import Box from '@component/Box';
-import NavbarLayout from '@component/layout/NavbarLayout';
+import CustomerDashboardLayout from '@component/layout/CustomerDashboardLayout';
 import React from 'react';
 
 function success() {
@@ -18,5 +18,5 @@ function success() {
     )
 }
 
-success.layout = NavbarLayout;
+success.layout = CustomerDashboardLayout;
 export default success

@@ -1,7 +1,7 @@
-import { order_Status_All } from "@data/constants";
-import axios from "axios";
+import Currency from "@component/Currency";
+import { format } from "date-fns";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useMemo } from "react";
 import Box from "../Box";
 import IconButton from "../buttons/IconButton";
 import { Chip } from "../Chip";
@@ -13,49 +13,31 @@ import Typography, { H5, Small } from "../Typography";
 export interface OrderRowProps {
   item: {
     order_no?: any;
-    order_status?: string;
-    paid_at?: string;
+    order_status?: { name: string };
+    created_at?: string;
     net_amount?: number | string;
     href?: string;
   };
 }
 
 const OrderRow: React.FC<OrderRowProps> = ({ item }) => {
-  const [orderStatus, setOrderStatus] = useState([]);
   const getColor = (status) => {
     switch (status) {
-      case "pending":
+      case ("pending" || "Pending"):
         return "secondary";
-      case "processing":
+      case ("processing" || "Processing"):
         return "secondary";
-      case "delivered":
-        return "success";
-      case "cancelled":
+      case ("cancelled" || "Cancelled"):
         return "error";
+      case ("delivered" || "Delivered" || "on_the_way" || "on the way" || "Nn the way" || "On The Way"):
+        return "success";
       default:
         return "";
     }
   };
 
-  try {
-    var authTOKEN = {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: localStorage.getItem("jwt_access_token"),
-      },
-    };
-  } catch (err) {
-    authTOKEN = null;
-  }
+  const memoizedGetColor = (status) => useMemo(() => getColor(status), []);
 
-  useEffect(() => {
-    axios.get(`${order_Status_All}`, authTOKEN).then((order_statuss) => {
-      console.log("order_status", order_statuss.data.orderstatuses);
-      console.log("ord_status", item.order_status);
-
-      setOrderStatus(order_statuss.data.orderstatuses);
-    }).catch(() => { });
-  }, []);
 
   return (
     <Link href={item.href}>
@@ -66,28 +48,26 @@ const OrderRow: React.FC<OrderRowProps> = ({ item }) => {
         <Box m="6px">
           <Chip
             p="0.25rem 1rem"
-            bg={`${getColor(
-              orderStatus.find((orders) => item.order_status == orders.id)?.name
+            bg={`${memoizedGetColor(
+              item.order_status?.name
             )}.light`}
           >
             <Small
-              color={`${getColor(
-                orderStatus.find((orders) => item.order_status == orders.id)
-                  ?.name
+              color={`${memoizedGetColor(
+                item.order_status?.name
               )}.main`}
             >
               {
-                orderStatus.find((orders) => item.order_status == orders.id)
-                  ?.name
+                item.order_status?.name
               }
             </Small>
           </Chip>
         </Box>
         <Typography className="flex-grow pre" m="6px" textAlign="left">
-          {item?.paid_at?.slice(0, 10)}
+          {item?.created_at && format(new Date(item?.created_at), "MMM dd, yyyy")}
         </Typography>
         <Typography m="6px" textAlign="left">
-          ${Number(item.net_amount).toFixed(2)}
+          <Currency>{Number(item.net_amount).toFixed(2)}</Currency>
         </Typography>
 
         <Hidden flex="0 0 0 !important" down={769}>

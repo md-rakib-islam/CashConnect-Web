@@ -2,6 +2,7 @@ import Avatar from "@component/avatar/Avatar";
 import Box from "@component/Box";
 import Button from "@component/buttons/Button";
 import Card from "@component/Card";
+import Currency from "@component/Currency";
 import FlexBox from "@component/FlexBox";
 import Grid from "@component/grid/Grid";
 import DashboardLayout from "@component/layout/CustomerDashboardLayout";
@@ -11,6 +12,7 @@ import Typography, { H3, H5, Small } from "@component/Typography";
 import useUserInf from "@customHook/useUserInf";
 import { BASE_URL, Customer_By_Id } from "@data/constants";
 import axios from "axios";
+import { format } from "date-fns";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
@@ -25,15 +27,17 @@ const Profile = () => {
   const { user_id, authTOKEN } = useUserInf()
 
   useEffect(() => {
-    axios.get(`${Customer_By_Id}${user_id}`, authTOKEN).then((user) => {
-      const { data } = user;
-      setpreViewImg(`${BASE_URL}${data.image}`);
-      setfirst_name(data.first_name);
-      setlast_name(data.last_name);
-      setemail(data.email);
-      setphone(data.primary_phone);
-      setbirth_day(data.date_of_birth);
-    }).catch(() => { });
+    if (user_id) {
+      axios.get(`${Customer_By_Id}${user_id}`, authTOKEN).then((user) => {
+        const { data } = user;
+        setpreViewImg(`${BASE_URL}${data.image}`);
+        setfirst_name(data.first_name);
+        setlast_name(data.last_name);
+        setemail(data.email);
+        setphone(data.primary_phone);
+        setbirth_day(data.date_of_birth);
+      }).catch((err) => { console.log("error", err) });
+    }
   }, [user_id]);
   return (
     <div>
@@ -67,7 +71,7 @@ const Profile = () => {
                         Balance:
                       </Typography>
                       <Typography ml="4px" fontSize="14px" color="primary.main">
-                        $500
+                        <Currency>{500}</Currency>
                       </Typography>
                     </FlexBox>
                   </div>
@@ -86,8 +90,8 @@ const Profile = () => {
 
           <Grid item lg={6} md={6} sm={12} xs={12}>
             <Grid container spacing={4}>
-              {infoList.map((item) => (
-                <Grid item lg={3} sm={6} xs={6} key={item.subtitle}>
+              {infoList.map((item, idx) => (
+                <Grid item lg={3} sm={6} xs={6} key={idx}>
                   <FlexBox
                     as={Card}
                     flexDirection="column"
@@ -140,7 +144,7 @@ const Profile = () => {
           </Small>
           <span className="pre">
             {/* {format(new Date(1996 / 11 / 16), "dd MMM, yyyy")} */}
-            {birth_day}
+            {birth_day && format(new Date(birth_day), "dd MMM, yyyy")}
           </span>
         </FlexBox>
       </TableRow>

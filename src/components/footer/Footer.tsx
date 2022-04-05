@@ -51,7 +51,7 @@ const Footer: React.FC = () => {
       newIconList.push({ iconName: "twitter", url: data?.twitter_url })
       newIconList.push({ iconName: "instagram", url: data?.instagram_url })
       setIconList(newIconList)
-    }).catch(() => { })
+    }).catch((err) => { console.log("error", err) })
   }, [])
 
   return (

@@ -8,9 +8,11 @@ export const StyledCategoryMenuItem = styled.div`
     align-items: center;
     padding: 0px 1rem;
     height: 40px;
-    min-width: 278px;
+    width: 280px;
+    direction: ltr;
     white-space: pre;
     transition: all 250ms ease-in-out;
+    background-color: ${getTheme("colors.body.paper")};
 
     .title {
       padding-left: 0.75rem;

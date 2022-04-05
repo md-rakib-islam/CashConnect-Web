@@ -6,7 +6,7 @@ const navbarNavigations = [
   },
   {
     title: "About Us",
-    url: "/about",
+    url: "",
   },
   {
     title: "Shop Now",

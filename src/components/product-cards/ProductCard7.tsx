@@ -1,23 +1,25 @@
 import Box from "@component/Box";
+import Currency from "@component/Currency";
 import Image from "@component/Image";
 import LoginPopup from "@component/LoginPopup";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import {
   BASE_URL,
+  Check_Stock,
   Customer_decrease_Quantity,
   Customer_Increase_Quantity,
   Customer_Order_Remove_Item
 } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { SpaceProps } from "styled-system";
 import Button from "../buttons/Button";
 import IconButton from "../buttons/IconButton";
 import FlexBox from "../FlexBox";
 import Icon from "../icon/Icon";
-import Typography from "../Typography";
+import Typography, { H4, SemiSpan } from "../Typography";
 import { StyledProductCard7 } from "./ProductCardStyle";
 
 export interface ProductCard7Props {
@@ -25,6 +27,7 @@ export interface ProductCard7Props {
   quantity: any;
   price: number;
   product: any;
+  condition: string;
   runReloadCart: () => void;
 }
 
@@ -33,12 +36,24 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
   quantity,
   price,
   product,
+  condition,
   runReloadCart,
   ...props
 }) => {
   const { dispatch } = useAppContext();
 
   const [openLogin, setOpenLogin] = useState(false)
+  const [stock, setStock] = useState(true)
+
+  const { user_id, order_Id, isLogin, authTOKEN } = useUserInf()
+
+  useEffect(() => {
+    axios.get(`${Check_Stock}${product?.id}`).then(res => {
+      if (!res.data.is_in_stock) {
+        setStock(false)
+      }
+    }).catch((err) => { console.log("error", err) })
+  }, [])
 
   const closeLoginTab = () => {
     setOpenLogin(false)
@@ -46,8 +61,6 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
 
   const handleCartAmountChange = useCallback(
     (action) => () => {
-      const { user_id, order_Id, isLogin } = useUserInf()
-
       if (isLogin) {
 
         const item_id = id;
@@ -63,7 +76,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
 
         if (action == "remove") {
           axios
-            .delete(`${Customer_Order_Remove_Item}${order_Id}/${item_id}`)
+            .delete(`${Customer_Order_Remove_Item}${order_Id}/${item_id}`, authTOKEN)
             .then((res) => {
               console.log("CproductDeleteRes", res);
               runReloadCart();
@@ -71,24 +84,24 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
                 type: "CHANGE_CART_QUANTITY",
                 payload: { chartQuantity: Math.random() },
               });
-            }).catch(() => { });
+            }).catch((err) => { console.log("error", err) });
 
         } else if (action == "increase") {
           console.log("increaseData", orderData);
           axios
-            .put(`${Customer_Increase_Quantity}${order_Id}/${item_id}`, orderData)
+            .put(`${Customer_Increase_Quantity}${order_Id}/${item_id}`, orderData, authTOKEN)
             .then((res) => {
               console.log("itemIncreaseRes", res);
               runReloadCart();
-            }).catch(() => { });
+            }).catch((err) => { console.log("error", err) });
 
         } else if (action == "decrease") {
           axios
-            .put(`${Customer_decrease_Quantity}${order_Id}/${item_id}`, orderData)
+            .put(`${Customer_decrease_Quantity}${order_Id}/${item_id}`, orderData, authTOKEN)
             .then((res) => {
               console.log("itemDecreaseRes", res);
               runReloadCart();
-            }).catch(() => { });
+            }).catch((err) => { console.log("error", err) });
         }
       }
       else {
@@ -97,7 +110,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
 
     },
 
-    []
+    [user_id, order_Id, isLogin, authTOKEN]
   );
 
   return (
@@ -140,17 +153,29 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
             </IconButton>
           </Box>
 
+          <H4
+            display="flex"
+            className="title"
+            fontSize="13px"
+            fontWeight="600"
+            color={(condition === "new" || condition === "New" || condition === "NEW") ? "primary.main" : "secondary.main"}
+          >{condition || ""}
+          </H4>
+
+          {stock || (<SemiSpan fontWeight="bold" color="primary.main" ml="1px">Out Of Stock</SemiSpan>)}
+
           <FlexBox
             // width="100%"
             justifyContent="space-between"
             alignItems="flex-end"
           >
+
             <FlexBox flexWrap="wrap" alignItems="center">
-              <Typography color="gray.600" mr="0.5rem">
-                ${Number(price).toFixed(2)} x {quantity}
+              <Typography color="gray.600" mr="0.5rem" display="flex">
+                <Currency>{Number(price).toFixed(2)}</Currency> x {quantity}
               </Typography>
               <Typography fontWeight={600} color="primary.main" mr="1rem">
-                ${(price * quantity).toFixed(2)}
+                <Currency>{(price * quantity).toFixed(2)}</Currency>
               </Typography>
             </FlexBox>
 
@@ -175,6 +200,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
                 padding="5px"
                 size="none"
                 borderColor="primary.light"
+                disabled={!stock}
                 onClick={handleCartAmountChange("increase")}
               >
                 <Icon variant="small">plus</Icon>

@@ -5,19 +5,20 @@ import StyledIcon from "./IconStyle";
 
 export interface IconProps {
   size?: string;
-  children: string;
+  children?: string;
   transform?: string;
   variant?: "small" | "medium" | "large";
   color?: colorOptions;
   defaultcolor?: "currentColor" | "auto";
+  src?: string;
 }
 
 const Icon: React.FC<
   IconProps & SpaceProps & ButtonHTMLAttributes<IconProps>
-> = ({ children, ...props }: IconProps) => {
+> = ({ children, src, ...props }: IconProps) => {
   return (
     <StyledIcon
-      src={`/assets/images/icons/${children}.svg`}
+      src={src? src : `/assets/images/icons/${children}.svg`}
       fallback={() => <span>{children?.trim()}</span>}
       {...props}
     />

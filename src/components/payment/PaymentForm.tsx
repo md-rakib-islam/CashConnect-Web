@@ -1,7 +1,7 @@
 import LoginPopup from "@component/LoginPopup";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
-import { Customer_Order_Confirm } from "@data/constants";
+import { Customer_Order_Confirm, User_By_Id } from "@data/constants";
 import { requred } from "@data/data";
 import axios from "axios";
 import { useFormik } from "formik";
@@ -34,12 +34,15 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [setInRef, setSetInRef] = useState(0);
   const [openLogin, setOpenLogin] = useState(false)
+  const [userName, setuserName] = useState("")
   const { dispatch } = useAppContext();
 
   const width = useWindowSize();
   const isMobile = width < 769;
 
   const router = useRouter()
+
+  const { user_id, authTOKEN, order_Id, isLogin } = useUserInf()
 
   const cardNumberRef = useRef();
   const cardHolderRef = useRef();
@@ -66,6 +69,15 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
   const closeLoginTab = () => {
     setOpenLogin(false)
   }
+
+  useEffect(() => {
+    if (user_id) {
+      axios.get(`${User_By_Id}${user_id}`).then(res => {
+        console.log("resUseer", res)
+        setuserName(res?.data?.username)
+      }).catch((err) => { console.log("error", err) })
+    }
+  }, [user_id])
 
   useLayoutEffect(() => {
     cardNumberRef.current = values.card_number;
@@ -122,8 +134,6 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
   const handleFormSubmit = async (values) => {
     console.log(values);
 
-    const { user_id, authTOKEN, order_Id, isLogin } = useUserInf()
-
     if (isLogin) {
 
       if (order_Id) {
@@ -132,6 +142,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
         if (paymentMethod === "card") {
           var confirmData: any = {
             user_id,
+            username: userName,
             pay_amount,
             payment_method: paymentMethod,
             card_number: values.card_number,
@@ -142,6 +153,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
         } else if (paymentMethod === "paypal") {
           var confirmData: any = {
             user_id,
+            username: userName,
             pay_amount,
             payment_method: paymentMethod,
             email: values.email,
@@ -149,6 +161,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
         } else if (paymentMethod === "bkash") {
           var confirmData: any = {
             user_id,
+            username: userName,
             pay_amount,
             payment_method: paymentMethod,
             bkash: values.bkash,
@@ -156,6 +169,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
         } else if (paymentMethod === "rocket") {
           var confirmData: any = {
             user_id,
+            username: userName,
             pay_amount,
             payment_method: paymentMethod,
             rocket: values.rocket,
@@ -163,6 +177,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
         } else if (paymentMethod === "nagad") {
           var confirmData: any = {
             user_id,
+            username: userName,
             pay_amount,
             payment_method: paymentMethod,
             nagad: values.nagad,
@@ -170,6 +185,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
         } else if (paymentMethod === "cash") {
           var confirmData: any = {
             user_id,
+            username: userName,
             pay_amount,
             payment_method: paymentMethod,
           };
@@ -179,38 +195,38 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
         axios
           .post(`${Customer_Order_Confirm}${order_Id}`, confirmData, authTOKEN)
           .then((res) => {
-
-            const user_type = localStorage.getItem("userType")
-            console.log("confirmOrderRes", res);
-            confirmedOrderRes.current = true;
-            for (let key in useKeys) {
-              localStorage.removeItem(`${key}`);
-            }
-            dispatch({
-              type: "CHANGE_CART_QUANTITY",
-              payload: { chartQuantity: Math.random() },
-            });
-
-            dispatch({
-              type: "CHANGE_ALERT",
-              payload: {
-                alertValue: "your order has been success...",
-                alerType: "success",
-                alertShow: true,
-                alertChanged: Math.random(),
+            if (res?.data?.is_confirmed) {
+              const user_type = localStorage.getItem("userType")
+              console.log("confirmOrderRes", res);
+              confirmedOrderRes.current = true;
+              for (let key in useKeys) {
+                localStorage.removeItem(`${key}`);
               }
-            });
+              dispatch({
+                type: "CHANGE_CART_QUANTITY",
+                payload: { chartQuantity: Math.random() },
+              });
 
-            localStorage.removeItem("OrderId")
+              dispatch({
+                type: "CHANGE_ALERT",
+                payload: {
+                  alertValue: "your order has been success...",
+                }
+              });
 
-            if (user_type == "3") {
-              router.push("/orders")
+              localStorage.removeItem("OrderId")
+
+
+              if (user_type == "customer") {
+                router.push("/orders")
+              }
+              else if (user_type == "vendor") {
+                router.push("/vendor/orders")
+
+              }
             }
-            else if (user_type == "2") {
-              router.push("/vendor/orders")
-            }
 
-          }).catch(() => { });
+          }).catch((err) => { console.log("error", err) });
       }
     }
     else {

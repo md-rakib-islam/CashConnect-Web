@@ -1,39 +1,23 @@
-import { BASE_URL } from "@data/constants";
-function useFormattedProductData(productData, type?: string) {
+import getFormattedProductData from '@helper/getFormattedProductData';
+import _ from "lodash";
+import { useEffect, useState } from "react";
+function useFormattedProductData(productData = [], type?: string) {
 
-    if (typeof productData === "object") {
+    const [formmattedData, setFormmattedData] = useState([])
 
-        var formattedProductData: any[] = productData?.map(data => {
-
-            let productUrl = {}
-            if (type == "Arrivals") {
-                productUrl = { productUrl: `/product/${data?.id}` };
-            }
-            else if (type == "TopRated") {
-                productUrl = { productUrl: `/product/${data?.id}` };
-            }
-            else if (type == "FeaturedBrands") {
-                productUrl = { productUrl: `/product/${data?.id}` };
-            }
-            return {
-                ...productUrl,
-                id: data?.id,
-                price: Number(data?.unit_price),
-                title: data?.name,
-                imgUrl: `${BASE_URL}${data?.thumbnail || data?.image}`,
-                category: data?.category || null,
-                brand: data?.brand || null,
-                rating: data?.rating || null,
-                reviewCount: data?.num_reviews || null,
-            }
+    useEffect(() => {
+        if (!_.isEmpty(productData) && _.isArray(productData)) {
+            setFormmattedData(getFormattedProductData(productData, type || ""))
         }
-        )
-    }
-    else {
-        var formattedProductData = []
+    }, [productData])
+
+    const setFormattedProductData: any = (data: any[], type?: string) => {
+        if (_.isArray(data) && !_.isEmpty(data)) {
+            setFormmattedData(getFormattedProductData(data, type || ""))
+        }
     }
 
-    return [formattedProductData];
+    return [formmattedData, setFormattedProductData];
 }
 
 export default useFormattedProductData;

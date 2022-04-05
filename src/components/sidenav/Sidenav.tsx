@@ -9,6 +9,7 @@ export interface SidenavProps {
   scroll?: boolean;
   handle: React.ReactElement;
   toggleSidenav?: () => void;
+  padding?: number;
 }
 
 const Sidenav: React.FC<SidenavProps> = ({
@@ -18,6 +19,7 @@ const Sidenav: React.FC<SidenavProps> = ({
   scroll,
   handle,
   children,
+  padding,
   toggleSidenav,
 }) => {
   const [sidenavOpen, setSidenavOpen] = useState(open);
@@ -50,6 +52,7 @@ const Sidenav: React.FC<SidenavProps> = ({
             width={width}
             position={position}
             scroll={scroll}
+            padding={padding}
             onClick={toggleSidenav || handleToggleSidenav}
           >
             <div className="sidenav-content" onClick={handleModalContentClick}>

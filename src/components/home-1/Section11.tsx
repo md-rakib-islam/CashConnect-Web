@@ -12,7 +12,7 @@ const Section11 = ({ moreForYouList }) => {
       <CategorySectionHeader title="More For You" seeMoreLink="product/search/more_for_you_all" />
       <Grid container spacing={6}>
         {moreForYouList.map((item, ind) => (
-          <Grid item lg={3} md={4} sm={6} xs={12} key={ind}>
+          <Grid item lg={2} md={3} sm={4} xs={12} key={item?.id || ind}>
             <ProductCard1 off={0} hoverEffect {...item} />
           </Grid>
         ))}

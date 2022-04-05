@@ -5,7 +5,7 @@ import {
   ButtonNext,
   DotGroup,
   Slide,
-  Slider,
+  Slider
 } from "pure-react-carousel";
 import "pure-react-carousel/dist/react-carousel.es.css";
 import React, { Fragment } from "react";
@@ -13,6 +13,7 @@ import { CSSProperties } from "styled-components";
 import IconButton from "../buttons/IconButton";
 import Icon from "../icon/Icon";
 import { StyledCarousel } from "./CarouselStyle";
+
 
 export interface CarouselProps {
   naturalSlideWidth?: number;
@@ -39,6 +40,7 @@ export interface CarouselProps {
   rightButtonClass?: string;
   leftButtonStyle?: CSSProperties;
   rightButtonStyle?: CSSProperties;
+  getMoreItem?: () => void;
 }
 
 const Carousel: React.FC<CarouselProps> = ({
@@ -67,6 +69,7 @@ const Carousel: React.FC<CarouselProps> = ({
   rightButtonClass,
   leftButtonStyle,
   rightButtonStyle,
+  getMoreItem,
 }) => {
   return (
     <StyledCarousel
@@ -120,7 +123,7 @@ const Carousel: React.FC<CarouselProps> = ({
             color={arrowButtonColor}
             style={rightButtonStyle || {}}
           >
-            <Icon variant="small" defaultcolor="currentColor">
+            <Icon variant="small" defaultcolor="currentColor" onClick={() => { getMoreItem && getMoreItem() }}>
               arrow-right
             </Icon>
           </IconButton>

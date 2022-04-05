@@ -18,7 +18,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({ relatedProduct }) => 
       <H3 mb="1.5rem">Realted Products</H3>
       <Grid container spacing={8}>
         {relatedProducts?.map((item, ind) => (
-          <Grid item lg={3} md={4} sm={6} xs={12} key={ind}>
+          <Grid item lg={3} md={3} sm={4} xs={12} key={item?.id || ind}>
             <ProductCard1 {...item} hoverEffect />
           </Grid>
         ))}

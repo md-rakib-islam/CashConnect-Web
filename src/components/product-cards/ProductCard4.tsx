@@ -1,4 +1,5 @@
 import Box from "@component/Box";
+import Currency from "@component/Currency";
 import HoverBox from "@component/HoverBox";
 import LazyImage from "@component/LazyImage";
 import { H4, Small } from "@component/Typography";
@@ -15,6 +16,7 @@ export interface ProductCard4Props {
   title: string;
   price: number | string;
   reviewCount: number;
+  condition: string
 }
 
 const ProductCard4: React.FC<ProductCard4Props> = ({
@@ -23,6 +25,7 @@ const ProductCard4: React.FC<ProductCard4Props> = ({
   title,
   price,
   reviewCount,
+  condition
 }) => {
   return (
     <Box>
@@ -48,7 +51,6 @@ const ProductCard4: React.FC<ProductCard4Props> = ({
       <H4
         fontWeight="600"
         fontSize="14px"
-        textAlign="center"
         mb="0.25rem"
         title={title}
         ellipsis
@@ -61,7 +63,15 @@ const ProductCard4: React.FC<ProductCard4Props> = ({
         textAlign="center"
         color="primary.main"
       >
-        ${Number(price).toFixed(2)}
+        <Currency>{Number(price).toFixed(2)}</Currency>
+      </H4>
+      <H4
+        display="flex"
+        className="title"
+        fontSize="13px"
+        fontWeight="600"
+        color={(condition === "new" || condition === "New" || condition === "NEW") ? "primary.main" : "secondary.main"}
+      >{condition || ""}
       </H4>
     </Box>
   );

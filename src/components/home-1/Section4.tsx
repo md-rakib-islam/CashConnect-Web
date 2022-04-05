@@ -25,7 +25,7 @@ const Section4 = ({ topRatedList, featuredBrandList }) => {
               <Card p="1rem">
                 <Grid container spacing={4}>
                   {topRatedList?.slice(0, 4)?.map((item, key) => (
-                    <Grid item md={3} sm={6} xs={6} key={key}>
+                    <Grid item md={3} sm={6} xs={6} key={item?.id || key}>
                       <Link href={item.productUrl}>
                         <a>
                           <ProductCard4 {...item} />
@@ -47,11 +47,11 @@ const Section4 = ({ topRatedList, featuredBrandList }) => {
                 <Grid container spacing={4}>
                   {featuredBrandList.map((item, key) => (
                     <Grid item sm={6} xs={12} key={key}>
-                      {/* <Link href={item.productUrl}> */}
-                      <a>
-                        <ProductCard5 {...item} />
-                      </a>
-                      {/* </Link> */}
+                      <Link href={`product/search/product_by_brand?brandId=${item?.id}`} key={item?.id}>
+                        <a>
+                          <ProductCard5 {...item} />
+                        </a>
+                      </Link>
                     </Grid>
                   ))}
                 </Grid>

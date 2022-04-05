@@ -1,5 +1,6 @@
 import Avatar from "@component/avatar/Avatar";
 import Card from "@component/Card";
+import Currency from "@component/Currency";
 import VendorAnalyticsChart from "@component/dashboard/VendorAnalyticsChart";
 import FlexBox from "@component/FlexBox";
 import Grid from "@component/grid/Grid";
@@ -21,7 +22,9 @@ const VendorDashboard = () => {
                 {item.title}
               </H5>
               <H1 color="gray.700" mb="4px" lineHeight="1.3">
-                {item.amount}
+                <div style={{display: "flex", justifyContent: "center"}}>
+                <Currency>{item.amount}</Currency>
+                </div>
               </H1>
               <Paragraph color="text.muted">{item.subtitle}</Paragraph>
             </Typography>
@@ -49,7 +52,7 @@ const VendorDashboard = () => {
                   <Avatar src={item.flagUrl} size={30} mr="8px" />
                   <span>{item.name}</span>
                 </FlexBox>
-                <H5>${item.amount}</H5>
+                <H5><Currency>{item.amount}</Currency></H5>
               </FlexBox>
             ))}
           </Card>
@@ -62,12 +65,12 @@ const VendorDashboard = () => {
 const cardList = [
   {
     title: "Earnings (before taxes)",
-    amount: "$30450.00",
+    amount: "30450.00",
     subtitle: "after associated vendor fees",
   },
   {
     title: "Your balance",
-    amount: "$4000.00",
+    amount: "4000.00",
     subtitle: "Will be processed on Feb 15, 2021",
   },
   {

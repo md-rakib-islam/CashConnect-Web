@@ -3,9 +3,7 @@ import useUserInf from "@customHook/useUserInf";
 import {
   City_All,
   Country_All,
-  Customer_Order_Shipping_Address,
-  Shipping_Address_Delete,
-  Shipping_Adress_By_Order_Id,
+  Customer_Order_Shipping_Address, Shipping_Adress_By_Order_Id,
   Thana_All
 } from "@data/constants";
 import { requred } from "@data/data";
@@ -27,19 +25,19 @@ const CheckoutForm = () => {
   const [sameAsProfile, setSameAsProfile] = useState(false);
   const router = useRouter();
 
-  const [shippingId, setShippingId] = useState(0);
+  // const [_shippingId, setShippingId] = useState(0);
   const [thanas, setThanas] = useState([]);
   const [cities, setCities] = useState([]);
   const [countries, setCountries] = useState([]);
   const [openLogin, setOpenLogin] = useState(false)
+
+  const { user_id, authTOKEN, order_Id, isLogin } = useUserInf()
 
   const closeLoginTab = () => {
     setOpenLogin(false)
   }
 
   const handleFormSubmit = async (values) => {
-    const { user_id, authTOKEN, order_Id, isLogin } = useUserInf()
-
     if (isLogin) {
       if (!sameAsProfile) {
         console.log(values);
@@ -71,22 +69,32 @@ const CheckoutForm = () => {
             console.log("shipingRes", res);
             router.push("/payment");
           })
-          .catch(() => { })
-      } else if (shippingId) {
-        const authTOKEN = {
-          headers: {
-            "Content-type": "application/json",
-            Authorization: localStorage.getItem("jwt_access_token"),
-          },
-        };
+          .catch((err) => { console.log("error", err) })
+      }
+      // else if (shippingId) {
+      //   const authTOKEN = {
+      //     headers: {
+      //       "Content-type": "application/json",
+      //       Authorization: localStorage.getItem("jwt_access_token"),
+      //     },
+      //   };
+      //   axios
+      //     .delete(`${Shipping_Address_Delete}${shippingId}`, authTOKEN)
+      //     .then((res) => {
+      //       console.log("shppingDeleteRes", res);
+      //       router.push("/payment");
+      //     }).catch((err) => {console.log("error", err)})
+      // } 
+      else {
         axios
-          .delete(`${Shipping_Address_Delete}${shippingId}`, authTOKEN)
-          .then((res) => {
-            console.log("shppingDeleteRes", res);
+          .post(
+            `${Customer_Order_Shipping_Address}${order_Id}`,
+            { user_id, same_as_profile: true },
+            authTOKEN
+          ).then(res => {
+            console.log("shippingRes", res)
             router.push("/payment");
-          }).catch(() => { })
-      } else {
-        router.push("/payment");
+          })
       }
     } else {
       setOpenLogin(true)
@@ -102,12 +110,11 @@ const CheckoutForm = () => {
       };
 
   useEffect(() => {
-    const { order_Id } = useUserInf()
     if (order_Id) {
       axios.get(`${Shipping_Adress_By_Order_Id}${order_Id}`).then((res) => {
         console.log("shippingDetailsRes", res);
         const { data } = res;
-        setShippingId(data.id);
+        // setShippingId(data.id);
         for (let key in data) {
           if (key == "country") {
             setFieldValue(`country_id`, data[key]);
@@ -119,26 +126,26 @@ const CheckoutForm = () => {
             setFieldValue(`${key}`, data[key]);
           }
         }
-      }).catch(() => { })
+      }).catch((err) => { console.log("error", err) })
     }
 
     fetch(`${City_All}`)
       .then((res) => res.json())
       .then((data) => {
         setCities(data.cities);
-      }).catch(() => { });
+      }).catch((err) => { console.log("error", err) });
 
     fetch(`${Thana_All}`)
       .then((res) => res.json())
       .then((data) => {
         setThanas(data.thanas);
-      }).catch(() => { });
+      }).catch((err) => { console.log("error", err) });
 
     fetch(`${Country_All}`)
       .then((res) => res.json())
       .then((data) => {
         setCountries(data.countries);
-      }).catch(() => { });
+      }).catch((err) => { console.log("error", err) });
   }, []);
 
   if (sameAsProfile) {

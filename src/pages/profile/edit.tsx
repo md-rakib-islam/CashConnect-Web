@@ -8,26 +8,21 @@ import Hidden from "@component/hidden/Hidden";
 import Icon from "@component/icon/Icon";
 import DashboardLayout from "@component/layout/CustomerDashboardLayout";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
-import Select from "@component/Select";
+import Select, { CountryCodeSelect } from "@component/Select";
 import TextField from "@component/text-field/TextField";
 import { useAppContext } from "@context/app/AppContext";
-import useCheckValidation from "@customHook/useCheckValidation";
-import useJsonToFormData from "@customHook/useJsonToFormData";
 import useUserInf from "@customHook/useUserInf";
 import {
-  BASE_URL,
-  Branch_All,
-  City_All,
+  BASE_URL, City_All,
   Country_All,
-  Customer_By_Id,
-  Customer_type_All,
-  Customer_Update, Role_All,
-  Thana_All
+  Customer_By_Id, Customer_Update, Thana_All
 } from "@data/constants";
 import { country_codes } from "@data/country_code";
-import { requred } from "@data/data";
+import { genders, requred } from "@data/data";
 import axios from "axios";
 import { useFormik } from "formik";
+import checkValidation from "helper/checkValidation";
+import jsonToFormData from "helper/jsonToFormData";
 import Link from "next/link";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
@@ -41,18 +36,9 @@ const ProfileEditor = ({
   const [previewImage, setPreviewImage] = useState<Iimage>();
   const [image, setImage] = useState<TIMG>("");
 
-  const [roles, setRoles] = useState([]);
   const [thanas, setThanas] = useState([]);
   const [cities, setCities] = useState([]);
   const [countries, setCountries] = useState([]);
-  const [branches, setBranches] = useState([]);
-  const [customer_types, setCustomer_types] = useState([]);
-
-  const genders = [
-    { label: "Male", value: "male" },
-    { label: "Female", value: "female" },
-    { label: "Others", value: "others" },
-  ];
 
   const { user_id, authTOKEN } = useUserInf()
 
@@ -60,18 +46,18 @@ const ProfileEditor = ({
 
   const handleFormSubmit = async (values) => {
 
-    const { isValid, userNameExist, emailExist, primaryPhoneExist, SecondaryPhoneExist } = await useCheckValidation({ username: values.username, email: values.email, primaryPhone: values.primary_phone, secondaryPhone: values.secondary_phone, userId: user_id })
+    const { isValid, userNameExist, emailExist, primaryPhoneExist, SecondaryPhoneExist } = await checkValidation({ username: values.username, email: values.email, primaryPhone: values.primary_phone, secondaryPhone: values.secondary_phone, userId: user_id })
 
     if (isValid) {
       const data = {
         ...values,
         primary_phone: `${values.primary_phone}`,
-        secondary_phone: `${values.secondary_phone}`,
+        secondary_phone: values.secondary_phone === "+880" ? "" : values.secondary_phone || "",
         image: image,
         gender:
           typeof values.gender != "object"
             ? values?.gender
-            : values?.gender?.value,
+            : values?.gender?.id,
         role: typeof values.role != "object" ? values?.role : values?.role?.id,
         thana:
           typeof values.thana != "object" ? values?.thana : values?.thana?.id,
@@ -88,30 +74,38 @@ const ProfileEditor = ({
             : values?.cusotmer_type?.id,
       };
 
-      const [customerEditData] = useJsonToFormData(data);
-
+      const [customerEditData] = jsonToFormData(data);
+      console.log(data)
       axios
         .put(`${Customer_Update}${user_id}`, customerEditData, authTOKEN)
-        .then((data) => {
-          console.log("updatedRes", data);
-          router.push("/profile");
-          dispatch({
-            type: "CHANGE_ALERT",
-            payload: {
-              alerType: "success",
-              alertValue: "update sussess...",
-              alertShow: true,
-              alertChanged: Math.random()
-            }
-          })
+        .then((res) => {
+          console.log("updatedRes", res.data);
+
+          if (res?.data?.id) {
+            router.push("/profile");
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alerType: "success",
+                alertValue: "update sussess...",
+              }
+            })
+          }
+          else {
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alerType: "error",
+                alertValue: "someting went wrong",
+              }
+            })
+          }
         }).catch(() => {
           dispatch({
             type: "CHANGE_ALERT",
             payload: {
               alerType: "error",
               alertValue: "someting went wrong",
-              alertShow: true,
-              alertChanged: Math.random()
             }
           })
         })
@@ -129,61 +123,56 @@ const ProfileEditor = ({
 
 
   useEffect(() => {
-    axios.get(`${Customer_By_Id}${user_id}`, authTOKEN).then((datas) => {
-      console.log("EditDetails", datas.data);
-      const { data } = datas;
+    if (user_id && authTOKEN) {
+      axios.get(`${Customer_By_Id}${user_id}`, authTOKEN).then((datas) => {
+        console.log("EditDetails", datas.data);
+        const { data } = datas;
 
-      setPreviewImage(`${BASE_URL}${data.image}`);
+        console.log("secondary_phone", data?.secondary_phone)
 
-      for (let key in data) {
+        resetForm({
+          values: {
+            ...values,
+            ...data,
+            primary_phone: data?.primary_phone || "+880",
+            secondary_phone: data?.secondary_phone || "+880"
+          }
+        })
 
-        // setFieldValue(`${key}`, _.isNull(data[key]) ? "" : data[key]);
-        setFieldValue(`${key}`, data[key]);
-      }
-      setFieldValue("gender", {
-        value: data.gender,
-        label: genders.find((gender: any) => gender?.value == data.gender)
-          ?.label,
-      });
-    }).catch(() => { });
-  }, [user_id]);
+        setPreviewImage(`${BASE_URL}${data.image}`);
+
+        for (let key in data) {
+
+          // setFieldValue(`${key}`, _.isNull(data[key]) ? "" : data[key]);
+          setFieldValue(`${key}`, data[key]);
+        }
+        setFieldValue("gender", {
+          id: data.gender,
+          name: genders.find((gender: any) => gender?.id == data.gender)
+            ?.name,
+        });
+      }).catch((err) => { console.log("error", err) });
+    }
+  }, [user_id, authTOKEN]);
 
   useEffect(() => {
-    fetch(`${Role_All}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setRoles(data.roles);
-      }).catch(() => { });
-
     fetch(`${City_All}`)
       .then((res) => res.json())
       .then((data) => {
         setCities(data.cities);
-      }).catch(() => { });
+      }).catch((err) => { console.log("error", err) });
 
     fetch(`${Thana_All}`)
       .then((res) => res.json())
       .then((data) => {
         setThanas(data.thanas);
-      }).catch(() => { });
+      }).catch((err) => { console.log("error", err) });
 
     fetch(`${Country_All}`)
       .then((res) => res.json())
       .then((data) => {
         setCountries(data.countries);
-      }).catch(() => { });
-
-    fetch(`${Branch_All}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setBranches(data.branches);
-      }).catch(() => { });
-
-    fetch(`${Customer_type_All}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setCustomer_types(data.customer_types);
-      }).catch(() => { });
+      }).catch((err) => { console.log("error", err) });
   }, []);
 
   const {
@@ -195,6 +184,7 @@ const ProfileEditor = ({
     handleSubmit,
     setFieldValue,
     setErrors,
+    resetForm,
   } = useFormik({
     initialValues: initialValues,
     validationSchema: checkoutSchema,
@@ -306,7 +296,9 @@ const ProfileEditor = ({
                   label="User Name"
                   fullwidth
                   onBlur={handleBlur}
-                  onChange={handleChange}
+                  onChange={(e: any,) => {
+                    setFieldValue("username", e.target.value.trim());
+                  }}
                   value={values.username || ""}
                   errorText={touched.username && errors.username}
                 />
@@ -331,8 +323,6 @@ const ProfileEditor = ({
                   label="Gender"
                   placeholder="Select Gender"
                   options={genders}
-                  getOptionLabelBy="label"
-                  getOptionValueBy="value"
                   value={values.gender || ""}
                   onChange={(gender) => {
                     setFieldValue("gender", gender);
@@ -356,8 +346,8 @@ const ProfileEditor = ({
 
               <Grid item md={6} xs={12}>
 
-                <div style={{ display: "flex" }}>
-                  <Select
+                <div style={{ display: "flex", alignItems: "flex-start" }}>
+                  <CountryCodeSelect
                     mb="1rem"
                     mt="1rem"
                     label="Country"
@@ -376,6 +366,7 @@ const ProfileEditor = ({
                   />
                   <TextField
                     mt="1rem"
+                    mb="1rem"
                     name="primary_phone"
                     label="Primary Phone"
                     fullwidth
@@ -389,8 +380,8 @@ const ProfileEditor = ({
 
               <Grid item md={6} xs={12}>
 
-                <div style={{ display: "flex" }}>
-                  <Select
+                <div style={{ display: "flex", alignItems: "flex-start" }}>
+                  <CountryCodeSelect
                     mb="1rem"
                     mt="1rem"
                     label="Country"
@@ -409,12 +400,13 @@ const ProfileEditor = ({
                   />
                   <TextField
                     mt="1rem"
+                    mb="1rem"
                     name="secondary_phone"
                     label="Secondary Phone"
                     fullwidth
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    value={values.secondary_phone || ""}
+                    value={values?.secondary_phone}
                     errorText={touched.secondary_phone && errors.secondary_phone}
                   />
                 </div>
@@ -448,19 +440,7 @@ const ProfileEditor = ({
                 />
               </Grid>
 
-              <Grid item md={6} xs={12}>
-                <Select
-                  mb="1rem"
-                  label="Role"
-                  placeholder="Select Role"
-                  options={roles}
-                  value={values.role || ""}
-                  onChange={(role) => {
-                    setFieldValue("role", role);
-                  }}
-                  errorText={touched.role && errors.role}
-                />
-              </Grid>
+
 
               <Grid item md={6} xs={12}>
                 <Select
@@ -528,7 +508,7 @@ const ProfileEditor = ({
                 />
               </Grid>
 
-              <Grid item md={6} xs={12}>
+              {/* <Grid item md={6} xs={12}>
                 <Select
                   mb="1rem"
                   label="Branch"
@@ -570,7 +550,7 @@ const ProfileEditor = ({
                     errors.customer_credit_limit
                   }
                 />
-              </Grid>
+              </Grid> */}
             </Grid>
           </Box>
 
@@ -611,7 +591,7 @@ const checkoutSchema = yup.object().shape({
   email: yup.string().email("invalid email").required("required").nullable(requred),
   date_of_birth: yup.date().required("invalid date").nullable(requred),
   primary_phone: yup.string().required("primary_phone required").nullable(requred),
-  secondary_phone: yup.string().required("secondary_phone required").nullable(requred),
+  // secondary_phone: yup.string().required("secondary_phone required").nullable(requred),
 });
 
 ProfileEditor.layout = DashboardLayout;

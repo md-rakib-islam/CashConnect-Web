@@ -1,3 +1,4 @@
+import Currency from "@component/Currency";
 import LoginPopup from "@component/LoginPopup";
 import TextArea from "@component/textarea/TextArea";
 import useUserInf from "@customHook/useUserInf";
@@ -24,6 +25,7 @@ type CartItem = {
   quantity: any;
   price: any;
   product: any;
+  condition: string;
 };
 
 const Cart = () => {
@@ -63,7 +65,7 @@ const Cart = () => {
           .then((res) => {
             console.log("comentRes", res);
             router.push("/checkout")
-          }).catch(() => { });
+          }).catch((err) => { console.log("error", err) });
       }
     }
     else {
@@ -72,12 +74,14 @@ const Cart = () => {
   };
 
   useEffect(() => {
-    axios.get(`${Customer_Order_Pending_Details}${order_Id}`).then((res) => {
-      console.log("CorderDetailsRes", res);
-      setCartProductList(res.data.order?.order_items);
-      setFieldValue("comment", res.data.order?.comment);
-    }).catch(() => { });
-  }, [reloadCart]);
+    if (order_Id) {
+      axios.get(`${Customer_Order_Pending_Details}${order_Id}`).then((res) => {
+        console.log("CorderDetailsRes", res);
+        setCartProductList(res.data.order?.order_items);
+        setFieldValue("comment", res.data.order?.comment);
+      }).catch((err) => { console.log("error", err) });
+    }
+  }, [order_Id, reloadCart]);
 
   const runReloadCart = () => {
     setReloadCart(Math.random());
@@ -127,7 +131,7 @@ const Cart = () => {
               <Typography color="gray.600">Total:</Typography>
               <FlexBox alignItems="flex-end">
                 <Typography fontSize="18px" fontWeight="600" lineHeight="1">
-                  ${getTotalPrice().toFixed(2)}
+                  <Currency>{getTotalPrice().toFixed(2)}</Currency>
                 </Typography>
                 <Typography fontWeight="600" fontSize="14px" lineHeight="1">
                   00

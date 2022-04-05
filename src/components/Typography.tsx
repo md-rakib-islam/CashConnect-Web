@@ -1,6 +1,7 @@
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import { Customer_Order_Pending_Details } from "@data/constants";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled, { CSSProperties } from "styled-components";
 import {
@@ -114,17 +115,17 @@ export const Tiny2: React.FC<CustomProps> = (props) => {
   const [productQuantity, setProductQuantity] = useState(0);
   const { state } = useAppContext();
   const cartCanged = state.cart.chartQuantity;
-  useEffect(() => {
-    const { order_Id } = useUserInf()
 
+  const { order_Id } = useUserInf()
+
+  useEffect(() => {
     if (order_Id) {
-      fetch(`${Customer_Order_Pending_Details}${order_Id}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setProductQuantity(data?.order?.order_items?.length);
-        }).catch(() => { });
+      axios.get(`${Customer_Order_Pending_Details}${order_Id}`)
+        .then((res) => {
+          setProductQuantity(res?.data?.order?.order_items?.length);
+        }).catch((err) => { console.log("error", err) });
     }
-  }, [cartCanged]);
+  }, [cartCanged, order_Id]);
 
   return (
     <Typography as="span" fontSize="10px" {...props}>
