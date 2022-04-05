@@ -195,7 +195,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
         axios
           .post(`${Customer_Order_Confirm}${order_Id}`, confirmData, authTOKEN)
           .then((res) => {
-            if (res?.data?.data?.order?.id) {
+            if (res?.data?.is_confirmed) {
               const user_type = localStorage.getItem("userType")
               console.log("confirmOrderRes", res);
               confirmedOrderRes.current = true;

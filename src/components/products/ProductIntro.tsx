@@ -140,7 +140,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
         quantity: 1,
         price: price,
         order_date: currentDate,
-        branch: 4,
+        branch: 1,
         user: user_id,
       };
 
@@ -151,6 +151,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
           console.log("orderRes", res);
 
           localStorage.setItem("OrderId", res.data.order_details.id);
+          window.dispatchEvent(new CustomEvent('storage', { detail: { name: 'setted order id' } }));
           setGetItemId(Math.random());
           dispatch({
             type: "CHANGE_CART_QUANTITY",
