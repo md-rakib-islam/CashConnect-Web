@@ -93,7 +93,7 @@ const AccountSettings = () => {
 
   const handleFormSubmit = async (values) => {
 
-    const { isValid, userNameExist, emailExist, primaryPhoneExist, SecondaryPhoneExist } = await checkValidation({ username: values.username, email: values.email, primaryPhone: values.primary_phone, secondaryPhone: values.secondary_phone, userId: user_id })
+    const { isValid, emailExist, primaryPhoneExist, SecondaryPhoneExist } = await checkValidation({  email: values.email, primaryPhone: values.primary_phone, secondaryPhone: values.secondary_phone, userId: user_id })
 
     if (isValid) {
 
@@ -159,7 +159,7 @@ const AccountSettings = () => {
     else {
       setErrors({
         ...errors,
-        username: userNameExist ? "user name already exist" : "",
+        // username: userNameExist ? "user name already exist" : "",
         email: emailExist ? "email already exist" : "",
         primary_phone: primaryPhoneExist ? "primary phone already exist" : "",
         secondary_phone: SecondaryPhoneExist ? "secondary phone already exist" : "",
@@ -322,7 +322,7 @@ const AccountSettings = () => {
                   errorText={touched.last_name && errors.last_name}
                 />
               </Grid>
-              <Grid item md={6} xs={12}>
+              {/* <Grid item md={6} xs={12}>
                 <TextField
                   name="username"
                   label="User Name"
@@ -334,7 +334,7 @@ const AccountSettings = () => {
                   value={values.username || ""}
                   errorText={touched.username && errors.username}
                 />
-              </Grid>
+              </Grid> */}
 
               <Grid item md={6} xs={12}>
                 <TextField

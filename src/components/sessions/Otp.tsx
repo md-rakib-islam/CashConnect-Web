@@ -8,7 +8,7 @@ import axios from "axios";
 import { useFormik } from "formik";
 import checkValidation from "helper/checkValidation";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as yup from "yup";
 import Box from "../Box";
 import Button from "../buttons/Button";
@@ -26,7 +26,7 @@ interface SignupProps {
   closeSignupDialog?: any,
 }
 
-const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog }) => {
+const Otp: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog }) => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const [customerVariant, setCustomerVariant] = useState("contained");
   const [vendorVariant, setvendorVariant] = useState("outlined");
@@ -68,92 +68,16 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
 
   const handleFormSubmit = async (values) => {
 
-    const { isValid, emailExist, primaryPhoneExist } = await checkValidation({  email: values.email, primaryPhone: values.primary_phone })
+    console.log('values.otp',values.otp)
 
-    console.log("isValid", isValid)
-    if (isValid) {
-      const data = {
-        ...values,
-        primary_phone: `${values.primary_phone}`,
-      };
+  };
+  const handleOtpSubmit = async () => {
 
-      if (user_type == 3) {
-        axios.post(`${Customer_Create}`, data).then((data) => {
-          console.log("createdCustomerRes", data);
-          if (type == "SignupPage") {
-            router.push({
-              pathname: `/opt/${values.primary_phone}`,
-              
-            });
-                   
-            dispatch({
-              type: "CHANGE_ALERT",
-              payload: {
-                alertValue: "sugnup success...",
-              }
-            });
-          } else {
-            closeSignupDialog()
-            dispatch({
-              type: "CHANGE_ALERT",
-              payload: {
-                alertValue: "sugnup success...",
-              }
-            });
-          }
-        }).catch(() => {
-          dispatch({
-            type: "CHANGE_ALERT",
-            payload: {
-              alertValue: "someting went wrong",
-              alerType: "error",
-            }
-          });
-        })
-      }
+    axios.post(`/customer/api/v1/customer/verify_primary_phone/?primary_phone${values.primary_phone}phone_otp${values.otp}`).then(res=>{
+      console.log("otpResponse",res)
+    })
 
-      else if (user_type == 2) {
-        axios.post(`${Vendor_Create}`, data).then((data) => {
-          console.log("createdVendorRes", data);
-          if (type == "SignupPage") {
-            router.push({
-              pathname: `/opt/${values.primary_phone}`,
-
-            });
-            dispatch({
-              type: "CHANGE_ALERT",
-              payload: {
-                alertValue: "sugnup success...",
-              }
-            });
-          } else {
-            closeSignupDialog()
-            dispatch({
-              type: "CHANGE_ALERT",
-              payload: {
-                alertValue: "sugnup success...",
-              }
-            });
-          }
-        }).catch(() => {
-          dispatch({
-            type: "CHANGE_ALERT",
-            payload: {
-              alertValue: "someting went wrong",
-              alerType: "error",
-            }
-          });
-        });
-      }
-    }
-    else {
-      setErrors({
-        ...errors,
-        // username: userNameExist ? "user name already exist" : "",
-        email: emailExist ? "email already exist" : "",
-        primary_phone: primaryPhoneExist ? "phone no already exist" : "",
-      })
-    }
+    console.log('values.otp',values.otp)
 
   };
 
@@ -164,6 +88,16 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
       initialValues,
       validationSchema: formSchema,
     });
+    const phoneNumber = router.query?.phoneNumber
+  
+    useEffect(() => {
+      if (phoneNumber){
+
+        setFieldValue('primary_phone',phoneNumber)
+
+      }
+
+    }, [phoneNumber]);
 
 
   const CustomOption = ({ innerProps, isDisabled, data }) => {
@@ -198,43 +132,14 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
           Please fill all forms to continued
         </H5>
 
-        <div
-          className="content"
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            paddingTop: "0px",
-          }}
-        >
-          <Button
-            mb="1.65rem"
-            size="large"
-            variant={customerVariant}
-            color="secondary"
-            width="50%"
-            onClick={singUpAsCustomer}
-          >
-            Customer
-          </Button>
-
-          <Button
-            mb="1.65rem"
-            size="large"
-            variant={vendorVariant}
-            color="secondary"
-            width="50%"
-            onClick={singUpAsVendor}
-          >
-            Vendor
-          </Button>
-        </div>
+    
 
         <form
           className="content"
           style={{ paddingTop: "0px" }}
           onSubmit={handleSubmit}
         >
-          <TextField
+          {/* <TextField
             mb="0.75rem"
             name="first_name"
             label="First Name"
@@ -243,7 +148,6 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             onBlur={handleBlur}
             onChange={handleChange}
             value={values.first_name || ""}
-            errorText={touched.first_name && errors.first_name}
           />
 
           <TextField
@@ -257,6 +161,7 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             value={values.last_name || ""}
             errorText={touched.last_name && errors.last_name}
           />
+            errorText={touched.first_name && errors.first_name} */}
 
           {/* <TextField
             mb="0.75rem"
@@ -271,7 +176,7 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             errorText={touched.username && errors.username}
           /> */}
 
-          <TextField
+          {/* <TextField
             mb="0.75rem"
             name="email"
             placeholder="exmple@mail.com"
@@ -282,10 +187,10 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             onChange={handleChange}
             value={values.email || ""}
             errorText={touched.email && errors.email}
-          />
+          /> */}
 
           <div style={{ display: "flex", alignItems: "flex-start" }}>
-            <CountryCodeSelect
+            {/* <CountryCodeSelect
               mb="0.75rem"
               mt="1rem"
               label="Country"
@@ -301,7 +206,7 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
                 setFieldValue("primary_phone", `${value.value}`);
               }}
               errorText={touched.country_code && errors.country_code}
-            />
+            /> */}
             <TextField
               mb="0.75rem"
               mt="1rem"
@@ -309,6 +214,7 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
               // placeholder="Obtional"
               label="Phone Number"
               fullwidth
+              readOnly
               onBlur={handleBlur}
               onChange={handleChange}
               value={`${values.primary_phone || ""}`}
@@ -317,6 +223,19 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
           </div>
 
           <TextField
+            mb="0.75rem"
+            name="otp"
+            label="OTP"
+            type="number"
+            placeholder="12345"
+            fullwidth
+            onBlur={handleBlur}
+            onChange={(e)=>setFieldValue('otp', e.target.value)}
+            value={values.otp || ""}
+            // errorText={touched.last_name && errors.last_name}
+          />
+
+          {/* <TextField
             mb="0.75rem"
             name="password"
             placeholder="*********"
@@ -341,8 +260,8 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             onChange={handleChange}
             value={values.password || ""}
             errorText={touched.password && errors.password}
-          />
-          <TextField
+          /> */}
+          {/* <TextField
             mb="1rem"
             name="re_password"
             placeholder="*********"
@@ -367,7 +286,7 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             onChange={handleChange}
             value={values.re_password || ""}
             errorText={touched.re_password && errors.re_password}
-          />
+          /> */}
 
           <CheckBox
             mb="1.75rem"
@@ -391,8 +310,8 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
             mb="1.65rem"
             variant="contained"
             color="primary"
-            type="submit"
             fullwidth
+            onClick={handleOtpSubmit}
           >
             Create Account
           </Button>
@@ -450,42 +369,15 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
 };
 
 const initialValues = {
-  first_name: "",
-  last_name: "",
-  username: "",
-  primary_phone: "+880",
-  email: "",
-  password: "",
-  re_password: "",
-  country_code: {
-    code: "BD",
-    label: "Bangladesh",
-    value: "+880"
-  },
-  agreement: false,
+  otp: "",
+  
+  
 };
 
 const formSchema = yup.object().shape({
-  first_name: yup.string().required("first name is required"),
-  last_name: yup.string().required("last name is required"),
-  // username: yup.string().required("user name is required"),
-  primary_phone: yup.string().required("phone number is required"),
-  email: yup.string().email("invalid email").required("email is required"),
-  password: yup.string().required("password is required"),
-  country_code: yup.object().required("requred"),
-  re_password: yup
-    .string()
-    .oneOf([yup.ref("password"), null], "Passwords must match")
-    .required("Please re-type password"),
-  agreement: yup
-    .bool()
-    .test(
-      "agreement",
-      "You have to agree with our Terms and Conditions!",
-      (value) => value === true
-    )
-    .required("You have to agree with our Terms and Conditions!"),
+  Otp: yup.string().required("otp is required"),
+  
 });
 
-export default Signup;
+export default Otp;
 

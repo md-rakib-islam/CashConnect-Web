@@ -153,7 +153,7 @@ const CheckoutForm = () => {
   } else {
     var checkoutSchema: any = yup.object().shape({
       company: yup.string().required("company is required").nullable(requred),
-      name: yup.string().required("name is required").nullable(requred),
+      name: yup.string().required("   is required").nullable(requred),
       email: yup.string().required("email is required").nullable(requred),
       phone: yup.string().required("phone is required").nullable(requred),
       zip_code: yup.string().required("zip_code is required").nullable(requred),
