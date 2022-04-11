@@ -2,7 +2,7 @@ import Alert from "@component/alert/alert";
 import LoginPopup from "@component/LoginPopup";
 import { CountryCodeSelect } from "@component/Select";
 import { useAppContext } from "@context/app/AppContext";
-import { Customer_Create, Vendor_Create } from "@data/constants";
+import { BASE_URL, Customer_Create, Vendor_Create } from "@data/constants";
 import { country_codes } from "@data/country_code";
 import axios from "axios";
 import { useFormik } from "formik";
@@ -73,11 +73,46 @@ const Otp: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog }) 
   };
   const handleOtpSubmit = async () => {
 
-    axios.post(`/customer/api/v1/customer/verify_primary_phone/?primary_phone${values.primary_phone}phone_otp${values.otp}`).then(res=>{
+
+    axios.get(`${BASE_URL}/customer/api/v1/customer/verify_primary_phone/?primary_phone=${values.primary_phone}&phone_otp=${values.otp}`).then(res=>{
       console.log("otpResponse",res)
+      if (res.status ===200){
+        router.push("/login")
+        dispatch({
+          type: "CHANGE_ALERT",
+          payload: {
+            alertValue: res.data.detail,
+          }
+        });
+      }
+      else {
+        
+        dispatch({
+          type: "CHANGE_ALERT",
+          payload: {
+            alertValue: res.data.detail,
+          }
+        });
+      }
+      // else if (res.status !== 200){
+      //   dispatch({
+      //     type: "CHANGE_ALERT",
+      //     payload: {
+      //       alertValue: res.data.detail,
+      //     }
+      //   });
+      // }
+      // else {
+      //     dispatch({
+      //     type: "CHANGE_ALERT",
+      //     payload: {
+      //       alertValue: res.data.detail,
+      //     }
+      //   });
+      // }
     })
 
-    console.log('values.otp',values.otp)
+    
 
   };
 
@@ -224,7 +259,7 @@ const Otp: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog }) 
 
           <TextField
             mb="0.75rem"
-            name="otp"
+            name="phone_otp"
             label="OTP"
             type="number"
             placeholder="12345"
@@ -232,7 +267,7 @@ const Otp: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog }) 
             onBlur={handleBlur}
             onChange={(e)=>setFieldValue('otp', e.target.value)}
             value={values.otp || ""}
-            // errorText={touched.last_name && errors.last_name}
+            errorText={touched.phone_otp && errors.phone_otp}
           />
 
           {/* <TextField

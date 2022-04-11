@@ -75,6 +75,7 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
       const data = {
         ...values,
         primary_phone: `${values.primary_phone}`,
+        phone_otp: `${values.otp}`
       };
 
       if (user_type == 3) {
