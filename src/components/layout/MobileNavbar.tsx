@@ -106,7 +106,20 @@ const linkLists = [
   },
   {
     title: "Shop Now",
-    href: "/",
+    list: [
+      {
+        href: "/",
+        title: "Shop By Store",
+      },
+      {
+        href: "/",
+        title: "New",
+      },
+      {
+        href: "/",
+        title: "Old",
+      }
+    ],
   },
   {
     title: "Sell",

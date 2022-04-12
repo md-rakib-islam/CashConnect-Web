@@ -10,7 +10,21 @@ const navbarNavigations = [
   },
   {
     title: "Shop Now",
-    url: "/",
+    child: [
+      {
+       
+        title: "Shop By Store",
+        url: "/",
+      },
+      {
+        title: "New",
+        url: "/",
+      },
+      {
+        title: "Old",
+        url: "/",
+      }
+    ],
   },
   {
     title: "Sell",
