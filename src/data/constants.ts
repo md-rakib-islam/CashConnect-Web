@@ -206,3 +206,11 @@ export const Vendor_Create = `${BASE_URL}/vendor/api/v1/vendor/create/`;
 export const Vendor_Update = `${BASE_URL}/vendor/api/v1/vendor/update/`;
 
 export const Vendor_By_Id = `${BASE_URL}/vendor/api/v1/vendor/`;
+
+
+
+export const New_product_using = `${BASE_URL}/product/api/v1/new_product_using_category_nested/`;
+export const Used_product_using = `${BASE_URL}/product/api/v1/used_product_using_category_nested/`;
+
+
+

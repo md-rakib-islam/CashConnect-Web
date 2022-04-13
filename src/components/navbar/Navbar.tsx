@@ -43,6 +43,7 @@ const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
       if (isRoot) {
         if (nav.url && nav.extLink)
           return (
+            <>
             <NavLink
               className="nav-link"
               href={nav.url}
@@ -57,6 +58,7 @@ const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
             >
               {nav.title}
             </NavLink>
+            </>
           );
         else if (nav.url)
           return (

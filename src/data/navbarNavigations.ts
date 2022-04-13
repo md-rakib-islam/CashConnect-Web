@@ -15,6 +15,21 @@ const navbarNavigations = [
        
         title: "Shop By Store",
         url: "/",
+         child: [
+      {
+       
+        title: "Shop By Store",
+        url: "/",
+      },
+      {
+        title: "New",
+        url: "/",
+      },
+      {
+        title: "Old",
+        url: "/",
+      }
+    ],
       },
       {
         title: "New",

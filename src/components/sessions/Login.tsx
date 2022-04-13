@@ -124,7 +124,6 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
     );
   };
 
-
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
       onSubmit: handleFormSubmit,
