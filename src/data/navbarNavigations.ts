@@ -8,39 +8,7 @@ const navbarNavigations = [
     title: "About Us",
     url: "",
   },
-  {
-    title: "Shop Now",
-    child: [
-      {
-       
-        title: "Shop By Store",
-        url: "/",
-         child: [
-      {
-       
-        title: "Shop By Store",
-        url: "/",
-      },
-      {
-        title: "New",
-        url: "/",
-      },
-      {
-        title: "Old",
-        url: "/",
-      }
-    ],
-      },
-      {
-        title: "New",
-        url: "/",
-      },
-      {
-        title: "Old",
-        url: "/",
-      }
-    ],
-  },
+ 
   {
     title: "Sell",
     child: [

@@ -4,6 +4,7 @@ import MenuItem from "@component/MenuItem";
 import navbarNavigations from "@data/navbarNavigations";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import styled from "styled-components";
 import Button from "../buttons/Button";
 import Categories from "../categories/Categories";
 import Container from "../Container";
@@ -23,6 +24,18 @@ interface Nav {
   child: Nav[];
   extLink?: boolean;
 }
+
+const Dropdown = styled.div`
+
+  
+:hover{
+ 
+ display: block;
+
+     
+  }
+ 
+`;
 
 const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
 
@@ -177,7 +190,34 @@ const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
             </Button>
           </Categories>
 
-          <FlexBox>{renderNestedNav(navbarNavigations, true)}</FlexBox>
+          <FlexBox>
+            <div >
+              <a href="#" className="dropbtn">Dropdown</a>
+              <Dropdown className="dropdown-content" 
+              style={{display: 'none',
+                    position: 'absolute',
+                    minWidth: '160px',
+                    boxShadow: '0px 8px 16px 0px rgba(0,0,0,0.2)',
+                    zIndex: 1}}>
+                <a href="#" style={{color: 'black',
+                      padding: '12px 16px',
+                      textDecoration: "none",
+                      display: 'block'}}>Link 1</a>
+                <a href="#" style={{color: 'black',
+                      padding: '12px 16px',
+                      textDecoration: "none",
+                      display: 'block'}}>Link 2</a>
+                <a href="#" style={{color: 'black',
+                      padding: '12px 16px',
+                      textDecoration: "none",
+                      display: 'block'}}>Link 3</a>
+                
+              </Dropdown>
+          </div>
+           
+            
+            
+            {renderNestedNav(navbarNavigations, true)}</FlexBox>
         </Container>
       </StyledNavbar>
     </>
