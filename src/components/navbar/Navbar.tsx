@@ -1,9 +1,13 @@
 import Box from "@component/Box";
 import Card from "@component/Card";
 import MenuItem from "@component/MenuItem";
+import { Get_all_parent_category_without_pagination } from "@data/constants";
 import navbarNavigations from "@data/navbarNavigations";
+import axios from "axios";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import styled from "styled-components";
 import Button from "../buttons/Button";
 import Categories from "../categories/Categories";
 import Container from "../Container";
@@ -11,8 +15,8 @@ import FlexBox from "../FlexBox";
 import Icon from "../icon/Icon";
 import NavLink from "../nav-link/NavLink";
 import Typography, { Span } from "../Typography";
+import DropDownStyle from "./DropDown.module.css";
 import StyledNavbar from "./NavbarStyle";
-
 export interface NavbarProps {
   navListOpen?: boolean;
 }
@@ -24,47 +28,68 @@ interface Nav {
   extLink?: boolean;
 }
 
+const div = styled.div`
+  :hover {
+    display: block;
+  }
+`;
+
 const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
+  const [loading, setLoading] = useState(false);
 
-  const [loading, setLoading] = useState(false)
-
-  const router = useRouter()
+  const router = useRouter();
 
   const handleLoadingComplete = () => {
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
+  // top Category
+  const [topCategory, setTopCategory] = useState([]);
   useEffect(() => {
-    router.events.on('routeChangeComplete', handleLoadingComplete)
-  }, [router.events])
+    axios.get(Get_all_parent_category_without_pagination).then((res) => {
+      console.log("topCategory", res.data);
+
+      setTopCategory(res.data.parent_categories);
+    });
+  }, []);
+  useEffect(() => {
+    router.events.on("routeChangeComplete", handleLoadingComplete);
+  }, [router.events]);
 
   const renderNestedNav = (list: any[], isRoot = false) => {
     return list?.map((nav: Nav) => {
       if (isRoot) {
         if (nav.url && nav.extLink)
           return (
+            <>
+              <NavLink
+                className="nav-link"
+                href={nav.url}
+                key={nav.title}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => {
+                  if (nav?.title === "Home") {
+                    setLoading(true);
+                  }
+                }}
+              >
+                {nav.title}
+              </NavLink>
+            </>
+          );
+        else if (nav.url)
+          return (
             <NavLink
               className="nav-link"
               href={nav.url}
               key={nav.title}
-              target="_blank"
-              rel="noopener noreferrer"
               onClick={() => {
                 if (nav?.title === "Home") {
-                  setLoading(true)
+                  setLoading(true);
                 }
               }}
             >
-              {nav.title}
-            </NavLink>
-          );
-        else if (nav.url)
-          return (
-            <NavLink className="nav-link" href={nav.url} key={nav.title} onClick={() => {
-              if (nav?.title === "Home") {
-                setLoading(true)
-              }
-            }}>
               {nav.title}
             </NavLink>
           );
@@ -130,24 +155,28 @@ const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
   return (
     <>
       {loading && (
-        <div style={{
-          position: 'fixed',
-          height: '100%',
-          width: '100%',
-          top: '0px',
-          left: '0px',
-          display: 'flex',
-          justifyContent: "center",
-          backgroundColor: " rgb(0 0 0 / 50%)",
-          alignItems: "center",
-          zIndex: 100,
-        }}>
-          <img style={{
-            height: "50px",
-            width: "50px",
-            marginTop: "100pz"
+        <div
+          style={{
+            position: "fixed",
+            height: "100%",
+            width: "100%",
+            top: "0px",
+            left: "0px",
+            display: "flex",
+            justifyContent: "center",
+            backgroundColor: " rgb(0 0 0 / 50%)",
+            alignItems: "center",
+            zIndex: 100,
           }}
-            src="/assets/images/gif/loading.gif" />
+        >
+          <img
+            style={{
+              height: "50px",
+              width: "50px",
+              marginTop: "100pz",
+            }}
+            src="/assets/images/gif/loading.gif"
+          />
         </div>
       )}
       <StyledNavbar>
@@ -158,7 +187,12 @@ const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
           height="100%"
         >
           <Categories open={navListOpen}>
-            <Button width="278px" height="40px" bg="body.default" variant="text">
+            <Button
+              width="278px"
+              height="40px"
+              bg="body.default"
+              variant="text"
+            >
               <Icon>categories</Icon>
               <Typography
                 fontWeight="600"
@@ -175,7 +209,52 @@ const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
             </Button>
           </Categories>
 
-          <FlexBox>{renderNestedNav(navbarNavigations, true)}</FlexBox>
+          <FlexBox>
+            <div className={DropDownStyle.dropdown}>
+              <button className={DropDownStyle.dropbtn}>Dropdown</button>
+              <div className={DropDownStyle.dropdown_content}>
+                <div className={DropDownStyle.dropdown2}>
+                  <button className={DropDownStyle.dropbtn2}>Shop now</button>
+                  <div className={DropDownStyle.dropdown_content2}>
+                    {/* {topCategory.map((n) => (
+                      <Link
+                        href={`/product/search/shop_now?condition=new&categoryId=${n.id}`}
+                      >
+                        <a>{n.name}</a>
+                      </Link>
+                    ))} */}
+                  </div>
+                </div>
+
+                <div className={DropDownStyle.dropdown2}>
+                  <button className={DropDownStyle.dropbtn2}>New</button>
+                  <div className={DropDownStyle.dropdown_content2}>
+                    {topCategory.map((n) => (
+                      <Link
+                        href={`/product/search/shop_now?condition=new&categoryId=${n.id}`}
+                      >
+                        <a>{n.name}</a>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+                <div className={DropDownStyle.dropdown2}>
+                  <button className={DropDownStyle.dropbtn2}>Old</button>
+                  <div className={DropDownStyle.dropdown_content2}>
+                    {topCategory.map((n) => (
+                      <Link
+                        href={`/product/search/shop_now?condition=old&categoryId=${n.id}`}
+                      >
+                        <a>{n.name}</a>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {renderNestedNav(navbarNavigations, true)}
+          </FlexBox>
         </Container>
       </StyledNavbar>
     </>

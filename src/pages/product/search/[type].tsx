@@ -12,7 +12,7 @@ import ProductFilterCard from "@component/products/ProductFilterCard";
 import Select from "@component/Select";
 import Sidenav from "@component/sidenav/Sidenav";
 import { H5, Paragraph } from "@component/Typography";
-import { Category_All_Without_Pg, Product_Arrival, Product_By_BrandId, product_by_categoryId, Product_Discount, Product_Filter, Product_Flash_Deals, Product_For_You, Product_High_To_Low, Product_Low_To_High, Product_Search, Product_Top_Rated } from "@data/constants";
+import { Category_All_Without_Pg, New_product_using, Product_Arrival, Product_By_BrandId, product_by_categoryId, Product_Discount, Product_Filter, Product_Flash_Deals, Product_For_You, Product_High_To_Low, Product_Low_To_High, Product_Search, Product_Top_Rated, Used_product_using } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
 import _ from "lodash";
@@ -236,6 +236,7 @@ export default ProductSearchResult;
 export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
 
   const category: any = query.categoryId
+        console.log('type', params.type)
 
   if ((params.type === "product_by_category") || (params.type === "search_for")) {
 
@@ -405,6 +406,41 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
       var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
       var totalPage: number = await res.data.total_pages
+
+    } catch (error) {
+      var data = []
+      var totalProduct = 0
+      var totalPage = 0
+    }
+  }
+
+   else if (params.type === "shop_now") {
+      console.log('shop_now')
+    try {
+     
+      if(query.condition === "new"){
+        console.log('new')
+        const res = await axios.get(`${New_product_using}${category}?page=${query.page || 1}&size=${query.size || 12}`)
+          console.log('New_product_using', res.data)
+        var data: any[] = await res.data.products
+      var totalProduct: number = await res.data.total_elements
+      var totalPage: number = await res.data.total_pages
+
+      }
+      else if(query.condition === "old"){
+        const res = await axios.get(`${Used_product_using}${category}?page=${query.page || 1}&size=${query.size || 12}`)
+                console.log('Old_product_using', res.data)
+
+        var data: any[] = await res.data.products
+      var totalProduct: number = await res.data.total_elements
+      var totalPage: number = await res.data.total_pages
+
+      }
+      else{
+        var data = []
+      var totalProduct = 0
+      var totalPage = 0
+      }
 
     } catch (error) {
       var data = []

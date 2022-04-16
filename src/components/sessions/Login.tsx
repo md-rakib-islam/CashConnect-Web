@@ -113,7 +113,7 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
         dispatch({
           type: "CHANGE_ALERT",
           payload: {
-            alertValue: "something went wrong",
+            alertValue: "Email and Password is wrong",
             alerType: "error",
           }
         });
@@ -123,7 +123,6 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
       }
     );
   };
-
 
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({

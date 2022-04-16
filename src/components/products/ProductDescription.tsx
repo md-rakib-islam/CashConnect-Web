@@ -14,7 +14,7 @@ const ProductDescription: React.FC<ProductDescriptionProps> = ({ fullDes }) => {
     <Box>
       <H3 mb="1rem">Specification:</H3>
       <Typography>
-        <pre>{parse(fullDes)}</pre>
+        {parse(fullDes)}
       </Typography>
     </Box>
   );
