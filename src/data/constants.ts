@@ -2,13 +2,9 @@
 //http://api.cashconnectbd.com
 
 //base url
-<<<<<<< HEAD
-// export const BASE_URL = "http://192.168.0.200:8001";
-export const BASE_URL = "http://api.cashconnectbd.com";
-=======
 export const BASE_URL = "http://192.168.0.200:8001";
 // export const BASE_URL = "http://api.cashconnectbd.com";
->>>>>>> 81edae27b36ace260e819dfb3cd6f19d80de57ed
+
 
 //branch api
 export const Branch_All = `${BASE_URL}/branch/api/v1/branch/all/`;
@@ -213,16 +209,7 @@ export const Vendor_Update = `${BASE_URL}/vendor/api/v1/vendor/update/`;
 
 export const Vendor_By_Id = `${BASE_URL}/vendor/api/v1/vendor/`;
 
-<<<<<<< HEAD
 export const New_product_using = `${BASE_URL}/product/api/v1/new_product_using_category_nested/`;
 export const Used_product_using = `${BASE_URL}/product/api/v1/used_product_using_category_nested/`;
 export const Get_all_parent_category_without_pagination = `${BASE_URL}/category/api/v1/category/get_all_parent_category_without_pagination/`;
-=======
 
-
-export const New_product_using = `${BASE_URL}/product/api/v1/new_product_using_category_nested/`;
-export const Used_product_using = `${BASE_URL}/product/api/v1/used_product_using_category_nested/`;
-
-
-
->>>>>>> 81edae27b36ace260e819dfb3cd6f19d80de57ed

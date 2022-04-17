@@ -28,24 +28,6 @@ interface Nav {
   extLink?: boolean;
 }
 
-<<<<<<< HEAD
-const div = styled.div`
-  :hover {
-    display: block;
-  }
-=======
-const Dropdown = styled.div`
-
-  
-:hover{
- 
- display: block;
-
-     
-  }
- 
->>>>>>> 81edae27b36ace260e819dfb3cd6f19d80de57ed
-`;
 
 const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
   const [loading, setLoading] = useState(false);
@@ -75,7 +57,6 @@ const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
         if (nav.url && nav.extLink)
           return (
             <>
-<<<<<<< HEAD
               <NavLink
                 className="nav-link"
                 href={nav.url}
@@ -94,8 +75,6 @@ const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
           );
         else if (nav.url)
           return (
-=======
->>>>>>> 81edae27b36ace260e819dfb3cd6f19d80de57ed
             <NavLink
               className="nav-link"
               href={nav.url}
@@ -108,7 +87,6 @@ const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
             >
               {nav.title}
             </NavLink>
-            </>
           );
         if (nav.child)
           return (
@@ -227,9 +205,8 @@ const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
           </Categories>
 
           <FlexBox>
-<<<<<<< HEAD
             <div className={DropDownStyle.dropdown}>
-              <button className={DropDownStyle.dropbtn}>Dropdown</button>
+              <a className={DropDownStyle.dropbtn}>Shop now</a>
               <div className={DropDownStyle.dropdown_content}>
                 <div className={DropDownStyle.dropdown2}>
                   <button className={DropDownStyle.dropbtn2}>Shop now</button>
@@ -273,35 +250,6 @@ const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
 
             {renderNestedNav(navbarNavigations, true)}
           </FlexBox>
-=======
-            <div >
-              <a href="#" className="dropbtn">Dropdown</a>
-              <Dropdown className="dropdown-content" 
-              style={{display: 'none',
-                    position: 'absolute',
-                    minWidth: '160px',
-                    boxShadow: '0px 8px 16px 0px rgba(0,0,0,0.2)',
-                    zIndex: 1}}>
-                <a href="#" style={{color: 'black',
-                      padding: '12px 16px',
-                      textDecoration: "none",
-                      display: 'block'}}>Link 1</a>
-                <a href="#" style={{color: 'black',
-                      padding: '12px 16px',
-                      textDecoration: "none",
-                      display: 'block'}}>Link 2</a>
-                <a href="#" style={{color: 'black',
-                      padding: '12px 16px',
-                      textDecoration: "none",
-                      display: 'block'}}>Link 3</a>
-                
-              </Dropdown>
-          </div>
-           
-            
-            
-            {renderNestedNav(navbarNavigations, true)}</FlexBox>
->>>>>>> 81edae27b36ace260e819dfb3cd6f19d80de57ed
         </Container>
       </StyledNavbar>
     </>
