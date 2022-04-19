@@ -7,7 +7,6 @@ import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import Button from "../buttons/Button";
 import Categories from "../categories/Categories";
 import Container from "../Container";

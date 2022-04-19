@@ -6,7 +6,7 @@ import { Get_Pending_Order_After_Login } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import * as yup from "yup";
 import jwtService from "../../services/jwtService";
 import Box from "../Box";
@@ -33,6 +33,17 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
 
   const { authTOKEN } = useUserInf()
 
+  const [loading, setLoading] = useState(false)
+
+
+  const handleLoadingComplete = () => {
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    router.events.on('routeChangeComplete', handleLoadingComplete)
+  }, [router.events])
+
   const closeSignupTab = () => {
     setOpenSignup(false)
   }
@@ -52,11 +63,13 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
 
   const handleFormSubmit = async (values) => {
     console.log(values);
+      setLoading(true)
 
     const { email, password } = values;
 
     return jwtService.signInWithEmailAndPassword(email, password).then(
       (user) => {
+
         console.log("user", user);
 
         axios.get(`${Get_Pending_Order_After_Login}`, authTOKEN).then(res => {
@@ -134,6 +147,27 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
   return (
     <>
       <SignupPopup open={openSignup} closeSignupDialog={closeSignupTab} />
+      {loading && (
+        <div style={{
+          position: 'fixed',
+          height: '100%',
+          width: '100%',
+          top: '0px',
+          left: '0px',
+          display: 'flex',
+          justifyContent: "center",
+          backgroundColor: " rgb(0 0 0 / 50%)",
+          alignItems: "center",
+          zIndex: 100,
+        }}>
+          <img style={{
+            height: "50px",
+            width: "50px",
+            marginTop: "100pz"
+          }}
+            src="/assets/images/gif/loading.gif" />
+        </div>
+      )}
       <StyledSessionCard mx="auto" my="2rem" boxShadow="large">
         <form className="content" onSubmit={handleSubmit}>
           {type === "loginPage" && (<Alert onLogin />)}

@@ -40,6 +40,16 @@ const Otp: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog }) 
   const closeLoginTab = () => {
     setOpenLogin(false)
   }
+  const [loading, setLoading] = useState(false)
+
+
+  const handleLoadingComplete = () => {
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    router.events.on('routeChangeComplete', handleLoadingComplete)
+  }, [router.events])
 
   const gotologin = () => {
     if (type == "SignupPage") {
@@ -73,9 +83,11 @@ const Otp: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog }) 
   };
   const handleOtpSubmit = async () => {
 
+    setLoading(true)
 
     axios.get(`${BASE_URL}/customer/api/v1/customer/verify_primary_phone/?primary_phone=${values.primary_phone}&phone_otp=${values.otp}`).then(res=>{
       console.log("otpResponse",res)
+      
       if (res.status ===200){
         router.push("/login")
         dispatch({
@@ -151,6 +163,27 @@ const Otp: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog }) 
   return (
     <>
       <LoginPopup open={openLogin} closeLoginDialog={closeLoginTab} />
+      {loading && (
+        <div style={{
+          position: 'fixed',
+          height: '100%',
+          width: '100%',
+          top: '0px',
+          left: '0px',
+          display: 'flex',
+          justifyContent: "center",
+          backgroundColor: " rgb(0 0 0 / 50%)",
+          alignItems: "center",
+          zIndex: 100,
+        }}>
+          <img style={{
+            height: "50px",
+            width: "50px",
+            marginTop: "100pz"
+          }}
+            src="/assets/images/gif/loading.gif" />
+        </div>
+      )}
 
       <StyledSessionCard mx="auto" my="2rem" boxShadow="large">
       <H3 textAlign="center" mb="0.5rem" mt="2.5rem">

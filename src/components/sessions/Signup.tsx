@@ -8,7 +8,7 @@ import axios from "axios";
 import { useFormik } from "formik";
 import checkValidation from "helper/checkValidation";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as yup from "yup";
 import Box from "../Box";
 import Button from "../buttons/Button";
@@ -32,8 +32,19 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
   const [vendorVariant, setvendorVariant] = useState("outlined");
   const [user_type, setUser_type] = useState(3);
   const [openLogin, setOpenLogin] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const router = useRouter();
+
+
+
+  const handleLoadingComplete = () => {
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    router.events.on('routeChangeComplete', handleLoadingComplete)
+  }, [router.events])
 
   const { dispatch } = useAppContext()
 
@@ -86,7 +97,8 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
               pathname: `/opt/${values.primary_phone}`,
               
             });
-                   
+            setLoading(true)
+       
             dispatch({
               type: "CHANGE_ALERT",
               payload: {
@@ -121,6 +133,8 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
               pathname: `/opt/${values.primary_phone}`,
 
             });
+            setLoading(true)
+
             dispatch({
               type: "CHANGE_ALERT",
               payload: {
@@ -183,6 +197,29 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
   return (
     <>
       <LoginPopup open={openLogin} closeLoginDialog={closeLoginTab} />
+
+      {loading && (
+        <div style={{
+          position: 'fixed',
+          height: '100%',
+          width: '100%',
+          top: '0px',
+          left: '0px',
+          display: 'flex',
+          justifyContent: "center",
+          backgroundColor: " rgb(0 0 0 / 50%)",
+          alignItems: "center",
+          zIndex: 100,
+        }}>
+          <img style={{
+            height: "50px",
+            width: "50px",
+            marginTop: "100pz"
+          }}
+            src="/assets/images/gif/loading.gif" />
+        </div>
+      )}
+
 
       <StyledSessionCard mx="auto" my="2rem" boxShadow="large">
         {type === "SignupPage" && (<Alert onSignup />)}
