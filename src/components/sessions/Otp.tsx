@@ -1,24 +1,15 @@
-import Alert from "@component/alert/alert";
 import LoginPopup from "@component/LoginPopup";
-import { CountryCodeSelect } from "@component/Select";
 import { useAppContext } from "@context/app/AppContext";
-import { BASE_URL, Customer_Create, Vendor_Create } from "@data/constants";
-import { country_codes } from "@data/country_code";
+import { BASE_URL } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
-import checkValidation from "helper/checkValidation";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import * as yup from "yup";
-import Box from "../Box";
 import Button from "../buttons/Button";
-import IconButton from "../buttons/IconButton";
-import CheckBox from "../CheckBox";
-import Divider from "../Divider";
-import FlexBox from "../FlexBox";
-import Icon from "../icon/Icon";
+
 import TextField from "../text-field/TextField";
-import { H3, H5, H6, SemiSpan, Span } from "../Typography";
+import { H3, H5} from "../Typography";
 import { StyledSessionCard } from "./SessionStyle";
 
 interface SignupProps {
@@ -26,11 +17,8 @@ interface SignupProps {
   closeSignupDialog?: any,
 }
 
-const Otp: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog }) => {
-  const [passwordVisibility, setPasswordVisibility] = useState(false);
-  const [customerVariant, setCustomerVariant] = useState("contained");
-  const [vendorVariant, setvendorVariant] = useState("outlined");
-  const [user_type, setUser_type] = useState(3);
+const Otp: React.FC<SignupProps> = () => {
+
   const [openLogin, setOpenLogin] = useState(false)
 
   const router = useRouter();
@@ -51,30 +39,9 @@ const Otp: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog }) 
     router.events.on('routeChangeComplete', handleLoadingComplete)
   }, [router.events])
 
-  const gotologin = () => {
-    if (type == "SignupPage") {
-      router.push("/login")
-    }
-    else {
-      setOpenLogin(true)
-    }
-  }
+ 
 
-  const togglePasswordVisibility = () => {
-    setPasswordVisibility((visible) => !visible);
-  };
 
-  const singUpAsCustomer = () => {
-    setUser_type(3);
-    setCustomerVariant("contained");
-    setvendorVariant("outlined");
-  };
-
-  const singUpAsVendor = () => {
-    setvendorVariant("contained");
-    setCustomerVariant("outlined");
-    setUser_type(2);
-  };
 
   const handleFormSubmit = async (values) => {
 
@@ -129,7 +96,7 @@ const Otp: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog }) 
   };
 
 
-  const { setErrors, values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue } =
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue } =
     useFormik({
       onSubmit: handleFormSubmit,
       initialValues,
@@ -147,17 +114,7 @@ const Otp: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog }) 
     }, [phoneNumber]);
 
 
-  const CustomOption = ({ innerProps, isDisabled, data }) => {
 
-    console.log(`https://flagcdn.com/w20/${data.code.toLowerCase()}.png`)
-    return !isDisabled ? (
-      <div {...innerProps}
-        style={{ cursor: "pointer", width: "180px" }}
-      ><img src={`https://flagcdn.com/w20/${data.code.toLowerCase()}.png`}></img>
-        {' ' + data.label}
-      </div>
-    ) : null;
-  }
 
 
   return (
