@@ -194,7 +194,7 @@ Carousel.defaultProps = {
   interval: 2000,
   showDots: false,
   showArrow: true,
-  dotGroupMarginTop: "2rem",
+  dotGroupMarginTop: "-2.5rem",
   spacing: "1.5rem",
   arrowButtonColor: "secondary",
 };

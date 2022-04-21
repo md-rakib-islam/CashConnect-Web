@@ -19,7 +19,8 @@ export const StyledCarouselCard1 = styled.div`
     position: relative;
     //   width: 50%;
     img {
-      width: 100%;
+      height: 400px;
+      width: 600px;
     }
   }
 
@@ -30,6 +31,13 @@ export const StyledCarouselCard1 = styled.div`
     .title {
       font-size: 32px;
     }
+    .image-holder {
+    position: relative;
+    //   width: 50%;
+    img {
+      width: 100%;
+    }
+  }
   }
 
   @media only screen and (max-width: 425px) {
@@ -42,6 +50,12 @@ export const StyledCarouselCard1 = styled.div`
     .button-link {
       padding: 0.66rem 0.95rem;
       font-size: 13px;
+    }
+    .image-holder {
+    position: relative;
+    //   width: 50%;
+    img {
+      width: 100%;
     }
   }
 `;
