@@ -2,8 +2,9 @@ import styled from "styled-components";
 
 export const StyledCarouselCard1 = styled.div`
   text-align: left;
-  margin-left: 280px;
+  // margin-left: 280px;
   display: flex;
+  margin: 0px;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 0 1rem 2rem;
@@ -20,7 +21,7 @@ export const StyledCarouselCard1 = styled.div`
     //   width: 50%;
     img {
       height: 400px;
-      width: 600px;
+      width: 650px;
     }
   }
 
@@ -41,20 +42,26 @@ export const StyledCarouselCard1 = styled.div`
   }
 
   @media only screen and (max-width: 425px) {
+    margin-left: 0px;
+    padding-left: 0px;
     .title {
-      font-size: 16px;
+      display: none;
     }
     .title + * {
-      font-size: 13px;
+      display: none;
     }
     .button-link {
-      padding: 0.66rem 0.95rem;
-      font-size: 13px;
+      display: none;
+     
     }
     .image-holder {
+
     position: relative;
+    
     //   width: 50%;
     img {
+
+      height: 180px;
       width: 100%;
     }
   }
