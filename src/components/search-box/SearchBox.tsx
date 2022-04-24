@@ -44,10 +44,10 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
     })
   }
 
-  const handleCategoryChange = (cat) => () => {
-    setCategory(cat.name);
-    setCategoryId(cat.id);
-  };
+  // const handleCategoryChange = (cat) => () => {
+  //   setCategory(cat.name);
+  //   setCategoryId(cat.id);
+  // };
 
 
   const hanldeSearch = useCallback((event) => {
@@ -74,7 +74,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
     axios.get(`${Category_All_With_Child}`).then(res => {
       console.log("Category_All_With_Child", res.data.categories)
       let Categoriess = res.data.categories
-      Categoriess?.unshift({ id: 0, name: "All Categories" })
+      // Categoriess?.unshift({ id: 0, name: "All Categories" })
       setCategories(Categoriess)
     }).catch((err) => { console.log("error", err) })
 
@@ -130,10 +130,18 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
               </FlexBox>
             }
           >
-            {categories?.map((item, key) => (
-              <MenuItem key={item?.id || key} onClick={handleCategoryChange(item)}>
-                {item?.name}
-              </MenuItem>
+            {categories?.map((item) => (
+              <Link href={
+                {
+                  pathname: '/product/search/product_by_category',
+                  query: { categoryId: item?.id },
+                }
+              }>
+
+                <MenuItem key={item?.id}>
+                  {item?.name}
+                </MenuItem>
+              </Link>
             ))}
           </Menu>
         </StyledSearchBox>
