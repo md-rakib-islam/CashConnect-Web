@@ -79,6 +79,8 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
 
   const handleFormSubmit = async (values) => {
 
+    setLoading(true)
+
     const { isValid, emailExist, primaryPhoneExist } = await checkValidation({  email: values.email, primaryPhone: values.primary_phone })
 
     console.log("isValid", isValid)
@@ -97,7 +99,6 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
               pathname: `/opt/${values.primary_phone}`,
               
             });
-            setLoading(true)
        
             dispatch({
               type: "CHANGE_ALERT",
@@ -504,12 +505,12 @@ const initialValues = {
 };
 
 const formSchema = yup.object().shape({
-  first_name: yup.string().required("first name is required"),
-  last_name: yup.string().required("last name is required"),
+  first_name: yup.string().required("First name is required"),
+  last_name: yup.string().required("Last name is required"),
   // username: yup.string().required("user name is required"),
-  primary_phone: yup.string().required("phone number is required"),
-  email: yup.string().email("invalid email").required("email is required"),
-  password: yup.string().required("password is required"),
+  primary_phone: yup.string().required("Phone number is required"),
+  email: yup.string().email("invalid email").required("Email is required"),
+  password: yup.string().required("Password is required"),
   country_code: yup.object().required("requred"),
   re_password: yup
     .string()
