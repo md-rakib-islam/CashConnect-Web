@@ -28,8 +28,10 @@ export const StyledCarousel = styled(
   // min-height: 420px;
 
   .custom-slider {
-    margin-left: calc(-1 * ${({ spacing }) => spacing || "0px"} / 2);
-    margin-right: calc(-1 * ${({ spacing }) => spacing || "0px"} / 2);
+    // margin-left: calc(-1 * ${({ spacing }) => spacing || "0px"} / 2);
+    // margin-right: calc(-1 * ${({ spacing }) => spacing || "0px"} / 2);
+    margin-left: 0px;
+    margin-right: 0px
   }
 
   .carousel__inner-slide {

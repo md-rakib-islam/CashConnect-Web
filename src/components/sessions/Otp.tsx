@@ -1,6 +1,6 @@
 import LoginPopup from "@component/LoginPopup";
 import { useAppContext } from "@context/app/AppContext";
-import { BASE_URL } from "@data/constants";
+import {Get_phone_varification_code_by_customer } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
@@ -20,6 +20,7 @@ interface SignupProps {
 const Otp: React.FC<SignupProps> = () => {
 
   const [openLogin, setOpenLogin] = useState(false)
+  const [otpError, setOtpError] = useState('')
 
   const router = useRouter();
 
@@ -52,7 +53,7 @@ const Otp: React.FC<SignupProps> = () => {
 
     setLoading(true)
 
-    axios.get(`${BASE_URL}/customer/api/v1/customer/verify_primary_phone/?primary_phone=${values.primary_phone}&phone_otp=${values.otp}`).then(res=>{
+    axios.get(`${Get_phone_varification_code_by_customer}?primary_phone=${values.primary_phone}&phone_otp=${values.otp}`).then(res=>{
       console.log("otpResponse",res)
       
       if (res.status ===200){
@@ -73,23 +74,19 @@ const Otp: React.FC<SignupProps> = () => {
           }
         });
       }
-      // else if (res.status !== 200){
-      //   dispatch({
-      //     type: "CHANGE_ALERT",
-      //     payload: {
-      //       alertValue: res.data.detail,
-      //     }
-      //   });
-      // }
-      // else {
-      //     dispatch({
-      //     type: "CHANGE_ALERT",
-      //     payload: {
-      //       alertValue: res.data.detail,
-      //     }
-      //   });
-      // }
+      
+    }).catch(error =>{
+      setLoading(false)
+
+       if (error.response.status !== 200) {
+      // The request was made and the server responded with a status code
+      setOtpError(error.response.data.detail)
+      console.log('error.response.data.detail',error.response.data.detail);
+      console.log(error.response.status);
+       }
     })
+    
+    
 
     
 
@@ -190,7 +187,7 @@ const Otp: React.FC<SignupProps> = () => {
             onBlur={handleBlur}
             onChange={(e)=>setFieldValue('otp', e.target.value)}
             value={values.otp || ""}
-            errorText={touched.phone_otp && errors.phone_otp}
+            errorText={otpError ||''}
           />
 
        

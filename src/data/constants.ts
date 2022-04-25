@@ -213,3 +213,7 @@ export const New_product_using = `${BASE_URL}/product/api/v1/new_product_using_c
 export const Used_product_using = `${BASE_URL}/product/api/v1/used_product_using_category_nested/`;
 export const Get_all_parent_category_without_pagination = `${BASE_URL}/category/api/v1/category/get_all_parent_category_without_pagination/`;
 
+// OTP
+export const Get_phone_varification_code_by_customer = `${BASE_URL}/customer/api/v1/customer/verify_primary_phone/`;
+export const Get_phone_varification_code_by_vendor = `${BASE_URL}/vendor/api/v1/vendor/verify_primary_phone/`;
+

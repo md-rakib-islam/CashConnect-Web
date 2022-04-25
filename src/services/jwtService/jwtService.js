@@ -3,6 +3,7 @@ import { LOGIN_URL } from "@data/constants";
 import axios from "axios";
 
 class JwtService {
+
   init() {
     this.setInterceptors();
     this.handleAuthentication();
@@ -36,7 +37,15 @@ class JwtService {
           }
         })
         .catch((rer) => {
-          reject(rer);
+          if (rer.response.status == 403){
+            reject(rer);
+
+          }
+          else{
+             reject(rer);
+          }
+          console.log('rer.response.status',rer.response.status)
+         
         });
     });
   };
