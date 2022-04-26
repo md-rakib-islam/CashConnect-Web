@@ -28,10 +28,8 @@ export const StyledCarousel = styled(
   // min-height: 420px;
 
   .custom-slider {
-    // margin-left: calc(-1 * ${({ spacing }) => spacing || "0px"} / 2);
-    // margin-right: calc(-1 * ${({ spacing }) => spacing || "0px"} / 2);
-    margin-left: 0px;
-    margin-right: 0px
+    margin-left: calc(-1 * ${({ spacing }) => spacing || "0px"} / 2);
+    margin-right: calc(-1 * ${({ spacing }) => spacing || "0px"} / 2);
   }
 
   .carousel__inner-slide {
@@ -112,7 +110,7 @@ export const StyledCarousel = styled(
     border-radius: 300px;
     transform: translate(-50%, -50%) scaleX(0);
     background: ${({ dotColor }) =>
-    dotColor || getTheme("colors.secondary.main")};
+      dotColor || getTheme("colors.secondary.main")};
   }
   .dot-active:after {
     transform: translate(-50%, -50%) scaleX(1);

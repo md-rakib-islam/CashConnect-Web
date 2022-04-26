@@ -2,9 +2,8 @@
 //http://api.cashconnectbd.com
 
 //base url
-export const BASE_URL = "http://192.168.0.200:8001";
-// export const BASE_URL = "http://api.cashconnectbd.com";
-
+// export const BASE_URL = "http://192.168.0.200:8001";
+export const BASE_URL = "http://api.cashconnectbd.com";
 
 //branch api
 export const Branch_All = `${BASE_URL}/branch/api/v1/branch/all/`;
@@ -216,4 +215,3 @@ export const Get_all_parent_category_without_pagination = `${BASE_URL}/category/
 // OTP
 export const Get_phone_varification_code_by_customer = `${BASE_URL}/customer/api/v1/customer/verify_primary_phone/`;
 export const Get_phone_varification_code_by_vendor = `${BASE_URL}/vendor/api/v1/vendor/verify_primary_phone/`;
-

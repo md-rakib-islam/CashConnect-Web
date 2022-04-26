@@ -11,6 +11,7 @@ export const StyledCarouselCard1 = styled.div`
   // padding: 1rem 0 0.65rem 0;
 
   .title {
+    flex-grow: 1;
     font-size: 50px;
     margin-top: 0px;
     margin-bottom: 1.35rem;
@@ -18,11 +19,13 @@ export const StyledCarouselCard1 = styled.div`
   }
 
   .image-holder {
+    flex-grow: 1;
+
     position: relative;
     //   width: 50%;
     img {
       height: 400px;
-      width: 650px;
+      width: 100%;
     }
   }
 

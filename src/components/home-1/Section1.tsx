@@ -6,12 +6,11 @@ import Navbar from "@component/navbar/Navbar";
 import React, { Fragment } from "react";
 
 const Section1 = ({ sliderList }) => {
-
   return (
     <Fragment>
       <Navbar navListOpen={false} />
       <Box bg="gray.white" mb="3.75rem">
-        <Container pb="2rem">
+        <Container slider pb="2rem">
           <Carousel
             totalSlides={sliderList?.length}
             visibleSlides={1}
@@ -21,7 +20,14 @@ const Section1 = ({ sliderList }) => {
             showArrow={false}
             spacing="0px"
           >
-            {sliderList.map((data) => <CarouselCard1 title={data.title} details={data.details} link={data.link} image={data.image} />)}
+            {sliderList.map((data) => (
+              <CarouselCard1
+                title={data.title}
+                details={data.details}
+                link={data.link}
+                image={data.image}
+              />
+            ))}
           </Carousel>
         </Container>
       </Box>
