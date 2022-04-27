@@ -88,7 +88,7 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
             alertValue: "login success...",
           }
         });
-
+        // router.push("/");
         if (user.user_type === "customer") {
 
           if (type != "popup") {
@@ -120,11 +120,12 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
             localStorage.removeItem("backAfterLogin")
           }
         }
+
       },
       (_errors) => {
         console.log("login failed", _errors.response.status);
 
-        if(_errors.response.status ==403){
+        if(_errors.response.status == 403){
           dispatch({
           type: "CHANGE_ALERT",
           payload: {
@@ -147,6 +148,8 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
         }
       }
     );
+            setLoading(false)
+
   };
 
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =

@@ -186,6 +186,8 @@ export const Ticket_Details_All = `${BASE_URL}/ticket_detail/api/v1/ticket_detai
 
 //user api
 export const User_By_Id = `${BASE_URL}/user/api/v1/user/`;
+export const User_Details = `${BASE_URL}/user/api/v1/get_balance_orderstatus_count_by_userid/`;
+
 
 export const Check_Email = `${BASE_URL}/user/api/v1/user/check_email_when_create/`;
 export const Check_Email_When_Update = `${BASE_URL}/user/api/v1/user/check_email_when_update/`;
