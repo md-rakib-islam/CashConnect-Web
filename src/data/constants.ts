@@ -7,6 +7,7 @@ export const BASE_URL = "http://192.168.0.200:8001";
 
 //branch api
 export const Branch_All = `${BASE_URL}/branch/api/v1/branch/all/`;
+export const User_Details = `${BASE_URL}/user/api/v1/get_balance_orderstatus_count_by_userid/`;
 
 //brand api
 export const Brand_By_Id = `${BASE_URL}/brand/api/v1/brand/`;

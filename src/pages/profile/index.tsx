@@ -2,7 +2,6 @@ import Avatar from "@component/avatar/Avatar";
 import Box from "@component/Box";
 import Button from "@component/buttons/Button";
 import Card from "@component/Card";
-import Currency from "@component/Currency";
 import FlexBox from "@component/FlexBox";
 import Grid from "@component/grid/Grid";
 import DashboardLayout from "@component/layout/CustomerDashboardLayout";
@@ -10,7 +9,7 @@ import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import TableRow from "@component/TableRow";
 import Typography, { H3, H5, Small } from "@component/Typography";
 import useUserInf from "@customHook/useUserInf";
-import { BASE_URL, Customer_By_Id } from "@data/constants";
+import { BASE_URL, Customer_By_Id, User_Details } from "@data/constants";
 import axios from "axios";
 import { format } from "date-fns";
 import Link from "next/link";
@@ -23,6 +22,11 @@ const Profile = () => {
   const [email, setemail] = useState("");
   const [phone, setphone] = useState("");
   const [birth_day, setbirth_day] = useState("");
+  const [balance, setBalance]= useState([])
+  const [total_orders, setTotal_orders]= useState([])
+  const [pending_orders, setPending_orders]= useState([])
+  const [unpaid_orders, setUnpaid_orders]= useState([])
+  const [deliverable_orders, setDeliverable_orders]= useState([])
 
   const { user_id, authTOKEN } = useUserInf()
 
@@ -36,6 +40,18 @@ const Profile = () => {
         setemail(data.email);
         setphone(data.primary_phone);
         setbirth_day(data.date_of_birth);
+      }).catch((err) => { console.log("error", err) });
+    }
+  }, [user_id]);
+  useEffect(() => {
+    if (user_id) {
+      axios.get(`${User_Details}${user_id}`, authTOKEN).then((user) => {
+        console.log('userDetails', user.data)
+        setBalance(user.data.balance);
+        setTotal_orders(user.data.total_orders);
+        setPending_orders(user.data.pending_orders);
+        setUnpaid_orders(user.data.unpaid_orders);
+        setDeliverable_orders(user.data.deliverable_orders);
       }).catch((err) => { console.log("error", err) });
     }
   }, [user_id]);
@@ -68,10 +84,10 @@ const Profile = () => {
                     <H5 my="0px">{`${first_name} ${last_name}`}</H5>
                     <FlexBox alignItems="center">
                       <Typography fontSize="14px" color="text.hint">
-                        Balance:
+                        Balance:  
                       </Typography>
                       <Typography ml="4px" fontSize="14px" color="primary.main">
-                        <Currency>{500}</Currency>
+                            <span style={{fontWeight: 800,}}>৳</span> {balance}
                       </Typography>
                     </FlexBox>
                   </div>
@@ -90,8 +106,7 @@ const Profile = () => {
 
           <Grid item lg={6} md={6} sm={12} xs={12}>
             <Grid container spacing={4}>
-              {infoList.map((item, idx) => (
-                <Grid item lg={3} sm={6} xs={6} key={idx}>
+                <Grid item lg={3} sm={6} xs={6}>
                   <FlexBox
                     as={Card}
                     flexDirection="column"
@@ -99,15 +114,47 @@ const Profile = () => {
                     height="100%"
                     p="1rem 1.25rem"
                   >
-                    <H3 color="primary.main" my="0px" fontWeight="600">
-                      {item.title}
-                    </H3>
-                    <Small color="text.muted" textAlign="center">
-                      {item.subtitle}
-                    </Small>
+                    <H3 color="primary.main" my="0px" fontWeight="600">{total_orders}</H3>
+                    <Small color="text.muted" textAlign="center">Total Orders</Small>
                   </FlexBox>
                 </Grid>
-              ))}
+                <Grid item lg={3} sm={6} xs={6}>
+                  <FlexBox
+                    as={Card}
+                    flexDirection="column"
+                    alignItems="center"
+                    height="100%"
+                    p="1rem 1.25rem"
+                  >
+                    <H3 color="primary.main" my="0px" fontWeight="600">{pending_orders}</H3>
+                    <Small color="text.muted" textAlign="center">Pending Orders</Small>
+                  </FlexBox>
+                </Grid>
+                <Grid item lg={3} sm={6} xs={6}>
+                  <FlexBox
+                    as={Card}
+                    flexDirection="column"
+                    alignItems="center"
+                    height="100%"
+                    p="1rem 1.25rem"
+                  >
+                    <H3 color="primary.main" my="0px" fontWeight="600">{unpaid_orders}</H3>
+                    <Small color="text.muted" textAlign="center">Unpaid Orders</Small>
+                  </FlexBox>
+                </Grid>
+                <Grid item lg={3} sm={6} xs={6}>
+                  <FlexBox
+                    as={Card}
+                    flexDirection="column"
+                    alignItems="center"
+                    height="100%"
+                    p="1rem 1.25rem"
+                  >
+                    <H3 color="primary.main" my="0px" fontWeight="600">{deliverable_orders}</H3>
+                    <Small color="text.muted" textAlign="center">Delivered Orders</Small>
+                  </FlexBox>
+                </Grid>
+              
             </Grid>
           </Grid>
         </Grid>
@@ -152,24 +199,7 @@ const Profile = () => {
   );
 };
 
-const infoList = [
-  {
-    title: "16",
-    subtitle: "All Orders",
-  },
-  {
-    title: "02",
-    subtitle: "Awaiting Payments",
-  },
-  {
-    title: "00",
-    subtitle: "Awaiting Shipment",
-  },
-  {
-    title: "01",
-    subtitle: "Awaiting Delivery",
-  },
-];
+
 
 Profile.layout = DashboardLayout;
 
