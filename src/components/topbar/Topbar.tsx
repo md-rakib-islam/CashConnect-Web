@@ -48,11 +48,11 @@ const Topbar: React.FC = () => {
           <div className="logo">
             <img src={`${BASE_URL}${logo}`} alt="logo" height="30" width="auto" style={{ borderRadius: "50%" }} />
           </div>
-          <FlexBox alignItems="center">
+          <FlexBox className="phone" alignItems="center">
             <Icon size="14px">phone-call</Icon>
             <span>{phone}</span>
           </FlexBox>
-          <FlexBox alignItems="center" ml="20px">
+          <FlexBox className="email" alignItems="center" ml="20px">
             <Icon size="14px">mail</Icon>
             <span>{email}</span>
           </FlexBox>

@@ -22,9 +22,20 @@ const StyledTopbar = styled.div`
       .logo {
         display: block;
       }
-      *:not(.logo) {
+      span {
+      margin-left: 0px;
+      }
+      .phone{
+        margin-left: 200px
+
+      }
+      .email{
         display: none;
       }
+      
+    }
+  
+     
     }
   }
 

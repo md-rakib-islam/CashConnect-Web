@@ -1,26 +1,35 @@
 import styled from "styled-components";
 
 export const StyledCarouselCard1 = styled.div`
+  position: relative;
   text-align: left;
   // margin-left: 280px;
-  display: flex;
-  margin: 0px;
+  // display: flex;
+  margin-left: 1rem;
   width: 100%
   justify-content: space-between;
   align-items: center;
   // padding: 1rem 0 0.65rem 0;
 
+  .sliderInfo{
+    position: relative;
+    position: absolute;
+    top: 100px;
+    left: 16px;
+
+  }
   .title {
-    flex-grow: 1;
+    // flex-grow: 1;
     font-size: 50px;
     margin-top: 0px;
     margin-bottom: 1.35rem;
     line-height: 1.2;
+    color: whitesmoke;
   }
 
   .image-holder {
-    flex-grow: 1;
-
+    // flex-grow: 1;
+    
     position: relative;
     //   width: 50%;
     img {
