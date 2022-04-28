@@ -75,6 +75,8 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
         alertValue: "logout success",
       }
     })
+    Router.push("/")
+
   }
 
   const Router = useRouter()
