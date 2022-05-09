@@ -90,11 +90,12 @@ const Footer: React.FC = () => {
                 </Typography>
 
                 <div>
-                  {aboutLinks.map((item, ind) => (
-                    <Link href="/" key={ind}>
-                      <StyledLink>{item}</StyledLink>
+                   <Link href="/careers" >
+                  <StyledLink> 
+                     Careers 
+                  </StyledLink>
                     </Link>
-                  ))}
+                 
                 </div>
               </Grid>
 
@@ -167,13 +168,13 @@ const Footer: React.FC = () => {
   );
 };
 
-const aboutLinks = [
-  "Careers",
-  "Our Stores",
-  "Our Cares",
-  "Terms & Conditions",
-  "Privacy Policy",
-];
+// const aboutLinks = [
+//   "Careers",
+//   "Our Stores",
+//   "Our Cares",
+//   "Terms & Conditions",
+//   "Privacy Policy",
+// ];
 
 const customerCareLinks = [
   "Help Center",
