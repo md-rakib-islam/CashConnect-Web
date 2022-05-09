@@ -176,8 +176,8 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
           zIndex: 100,
         }}>
           <img style={{
-            height: "50px",
-            width: "50px",
+            height: "100px",
+            width: "100px",
             marginTop: "100pz"
           }}
             src="/assets/images/gif/loading.gif" />

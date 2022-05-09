@@ -15,6 +15,8 @@ const CustomerDashboardNavigation = () => {
   const { pathname } = useRouter();
 
   const { dispatch } = useAppContext()
+  
+  const Router = useRouter()
 
   const width = useWindowSize();
   const isMobile = width < 769;
@@ -32,6 +34,8 @@ const CustomerDashboardNavigation = () => {
         alertValue: "logout success",
       }
     })
+    Router.push("/")
+
   }
 
   return (
