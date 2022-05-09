@@ -90,6 +90,15 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
         const search_key: any = router.query.search_key
         setSearchingFor(search_key)
       }
+      else if (type === "shop_now") {
+        if(router.query.condition === 'new'){
+          setSearchingFor("New Product")
+        }
+        else {
+          setSearchingFor("Old Product")
+
+        }
+      }
       else if (type === "flash_deals_all") {
         setSearchingFor("Flash Deals")
       }
@@ -422,7 +431,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
         console.log('new')
         const res = await axios.get(`${New_product_using}${category}?page=${query.page || 1}&size=${query.size || 12}`)
           console.log('New_product_using', res.data)
-        var data: any[] = await res.data.products
+      var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
       var totalPage: number = await res.data.total_pages
 
@@ -431,7 +440,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
         const res = await axios.get(`${Used_product_using}${category}?page=${query.page || 1}&size=${query.size || 12}`)
                 console.log('Old_product_using', res.data)
 
-        var data: any[] = await res.data.products
+      var data: any[] = await res.data.products
       var totalProduct: number = await res.data.total_elements
       var totalPage: number = await res.data.total_pages
 
