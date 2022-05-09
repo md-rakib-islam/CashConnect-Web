@@ -213,8 +213,8 @@ const Signup: React.FC<SignupProps> = ({ type = "SignupPage", closeSignupDialog 
           zIndex: 100,
         }}>
           <img style={{
-            height: "50px",
-            width: "50px",
+            height: "100px",
+            width: "100px",
             marginTop: "100pz"
           }}
             src="/assets/images/gif/loading.gif" />

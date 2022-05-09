@@ -23,8 +23,8 @@ import StyledSearchBox from "./SearchBoxStyle";
 export interface SearchBoxProps { }
 
 const SearchBox: React.FC<SearchBoxProps> = () => {
-  const [category, setCategory] = useState("All Categories");
-  const [categoryId, setCategoryId] = useState(0)
+  const [category] = useState("All Categories");
+  const [categoryId] = useState(0)
   const [resultList, setResultList] = useState([]);
   const [categories, setCategories] = useState([])
 

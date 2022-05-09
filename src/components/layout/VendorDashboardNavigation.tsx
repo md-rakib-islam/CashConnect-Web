@@ -19,6 +19,7 @@ const VendorDashboardNavigation = () => {
 
   const width = useWindowSize();
   const isMobile = width < 769;
+  const Router = useRouter()
 
   const handleLogout = () => {
 
@@ -33,6 +34,8 @@ const VendorDashboardNavigation = () => {
         alertValue: "logout success",
       }
     })
+    Router.push("/")
+
   }
 
   return (
