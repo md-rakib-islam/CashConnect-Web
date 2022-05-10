@@ -5,7 +5,7 @@ import MenuItem from "@component/MenuItem";
 import Signup from "@component/sessions/Signup";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
-import { BASE_URL, Site_Setting_All } from "@data/constants";
+import { Site_Setting_All } from "@data/constants";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -33,7 +33,6 @@ type HeaderProps = {
 const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
   const [open, setOpen] = useState(false);
   const toggleSidenav = () => setOpen(!open);
-  const [logo, setLogo] = useState("")
   const [_reRender, setReRender] = useState(0)
 
   const { dispatch } = useAppContext()
@@ -55,7 +54,6 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
   useEffect(() => {
     fetch(`${Site_Setting_All}`).then(res => res.json()).then(res => {
       console.log("SiteSettingRes", res.general_settings[0])
-      setLogo(res.general_settings[0].logo)
     }).catch((err) => { console.log("error", err) })
   }, [])
 
@@ -159,7 +157,7 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
           <FlexBox className="logo" alignItems="center" mr="1rem">
             <Link href="/">
               <a onClick={() => setLoading(true)}>
-                <Image src={`${BASE_URL}${logo}`} alt="logo" height="60" width="auto" borderRadius={50} />
+                <Image src='/assets/images/logos/main_logo.png' alt="logo" height="60" width="auto"  />
               </a>
             </Link>
 

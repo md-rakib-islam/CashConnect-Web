@@ -12,7 +12,7 @@ const StyledTopbar = styled.div`
       display: none;
       img {
         display: block;
-        height: 36px;
+        height: 25px;
       }
     }
     span {

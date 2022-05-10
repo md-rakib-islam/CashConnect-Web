@@ -1,6 +1,6 @@
 import AppStore from "@component/AppStore";
 import Image from "@component/Image";
-import { BASE_URL, Site_Setting_All } from "@data/constants";
+import { Site_Setting_All } from "@data/constants";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
@@ -31,7 +31,6 @@ const initialIconLists = [
 ];
 
 const Footer: React.FC = () => {
-  const [logo, setLogo] = useState("")
   const [address, setAddress] = useState("")
   const [phone, setPhone] = useState("")
   const [email, setEmail] = useState("")
@@ -41,7 +40,6 @@ const Footer: React.FC = () => {
   useEffect(() => {
     fetch(`${Site_Setting_All}`).then(res => res.json()).then(res => {
       const data = res?.general_settings[0]
-      setLogo(data?.logo)
       setAddress(data?.address)
       setPhone(data?.phone)
       setEmail(data?.email)
@@ -65,7 +63,7 @@ const Footer: React.FC = () => {
                   <a>
                     <Image
                       mb="1.25rem"
-                      src={`${BASE_URL}${logo}`} alt="logo" height="50" width="auto" borderRadius={50}
+                      src='/assets/images/logos/footer.png' alt="logo" height="50" width="auto" 
                     />
                   </a>
                 </Link>
@@ -91,10 +89,21 @@ const Footer: React.FC = () => {
 
                 <div>
                    <Link href="/careers" >
-                  <StyledLink> 
-                     Careers 
-                  </StyledLink>
+                    <StyledLink> Careers </StyledLink>
                     </Link>
+
+                   <Link href="/story" >
+                    <StyledLink> Our Stories </StyledLink>
+                    </Link>
+
+                   <Link href="/terms" >
+                    <StyledLink> Terms & Conditions </StyledLink>
+                    </Link>
+                   <Link href="/policy" >
+                    <StyledLink>Privacy Policy</StyledLink>
+                    </Link>
+
+                  
                  
                 </div>
               </Grid>

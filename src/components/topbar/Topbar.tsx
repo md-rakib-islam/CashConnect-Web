@@ -1,4 +1,4 @@
-import { BASE_URL, Site_Setting_All } from '@data/constants';
+import {  Site_Setting_All } from '@data/constants';
 import React, { useEffect, useState } from 'react';
 import Container from '../Container';
 import FlexBox from '../FlexBox';
@@ -14,7 +14,6 @@ const Topbar: React.FC = () => {
   // const [currency, setCurrency] = useState(currencyList[0]);
   // const [language, setLanguage] = useState(languageList[0]);
 
-  const [logo, setLogo] = useState("")
   const [phone, setPhone] = useState("")
   const [email, setEmail] = useState("")
 
@@ -30,7 +29,6 @@ const Topbar: React.FC = () => {
   useEffect(() => {
     fetch(`${Site_Setting_All}`).then(res => res.json()).then(res => {
       const data = res?.general_settings[0]
-      setLogo(data?.logo)
       setPhone(data?.phone)
       setEmail(data?.email)
     }).catch((err) => { console.log("error", err) })
@@ -46,7 +44,7 @@ const Topbar: React.FC = () => {
       >
         <FlexBox className="topbar-left">
           <div className="logo">
-            <img src={`${BASE_URL}${logo}`} alt="logo" height="30" width="auto" style={{ borderRadius: "50%" }} />
+            <img src='/assets/images/logos/main_logo.png' alt="logo" height="25" width="auto"/>
           </div>
           <FlexBox className="phone" alignItems="center">
             <Icon size="14px">phone-call</Icon>
