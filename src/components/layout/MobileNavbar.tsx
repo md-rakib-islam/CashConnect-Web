@@ -139,8 +139,8 @@ const linkLists = [
     href: "/",
   },
   {
-    title: "Contact Us",
-    href: "/",
+    title: "Customer Care",
+    href: "/help",
   },
 ];
 

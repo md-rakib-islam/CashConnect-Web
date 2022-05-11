@@ -3,7 +3,7 @@ import FlexBox from "@component/FlexBox";
 import DashboardLayout from "@component/layout/FooterLayout";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import TableRow from "@component/TableRow";
-import   { H3 } from "@component/Typography";
+import   {  H4 } from "@component/Typography";
 
 import Link from "next/link";
 import React from "react";
@@ -30,11 +30,11 @@ const Profile = () => {
 
         <FlexBox  p="0.5rem">
         
-          <H3 color="primary.main" my="0px" fontWeight="600" style={{textAlign:'justify'}}> 
+          <H4 color="#0f3460" my="0px" fontWeight="600" style={{textAlign:'justify'}}> 
          
           Every business has an origin story worth telling, and usually, one that justifies why you even do business and have clients. 
           Some centennial enterprises have pages of content that can fit in this section,
-           while startups can tell the story of how the company was born, its challenges, and its vision for the future.</H3>
+           while startups can tell the story of how the company was born, its challenges, and its vision for the future.</H4>
          
          
         </FlexBox>
@@ -42,7 +42,7 @@ const Profile = () => {
        <Grid item lg={6} sm={12} xs={12}>
 
           <FlexBox  p="1.5rem">
-            <Image  src="/assets/images/story/story.png"
+            <Image  src="/assets/images/aboutUs/story/story.png"
           maxWidth="400px"
           width="100%"
           height="350px"

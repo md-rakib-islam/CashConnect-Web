@@ -27,8 +27,8 @@ const navbarNavigations = [
     url: "/",
   },
   {
-    title: "Contact Us",
-    url: "/",
+    title: "Customer Care",
+    url: "/help",
   },
   
 ];

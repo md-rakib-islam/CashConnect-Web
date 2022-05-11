@@ -44,7 +44,7 @@ const Topbar: React.FC = () => {
       >
         <FlexBox className="topbar-left">
           <div className="logo">
-            <img src='/assets/images/logos/main_logo.png' alt="logo" height="25" width="auto"/>
+            <img src='/assets/images/logos/footer.png' alt="logo" height="25" width="auto"/>
           </div>
           <FlexBox className="phone" alignItems="center">
             <Icon size="14px">phone-call</Icon>

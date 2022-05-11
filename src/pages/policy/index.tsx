@@ -35,7 +35,7 @@ const Profile = () => {
               <Grid item lg={6} md={6} sm={12} xs={12}>
 
               
-                <H6 p="2rem 2.75rem"  color="primary.main"  fontWeight="500" style={{textAlign:'justify'}} > 
+                <H6 p="2rem 2.75rem"  color="#0f3460"  fontWeight="500" style={{textAlign:'justify'}} > 
               
               <strong> CashConnect.com, </strong> respects your privacy. CashConnect knows that you care how information about you is used and shared,
                and we appreciate your trust that we will do so carefully and sensibly. <br/>
@@ -50,7 +50,7 @@ const Profile = () => {
               </Grid>
               <Grid item lg={6} md={6} sm={12} xs={12}>
 
-                  <Image  src="/assets/images/policy/policy.jpg"
+                  <Image  src="/assets/images/aboutUs/policy/policy.jpg"
                 width="100%"
                 p="2rem 2.75rem"
                 ></Image>
@@ -60,7 +60,7 @@ const Profile = () => {
                    <H2  p="0 1rem" style={{textAlign:"center"}} color="primary.main"  fontWeight="800" >We want you to</H2>
 
                    <Divider width="200px" mx="auto" /> 
-                  <H6 p="2rem 2.75rem"  color="primary.main" fontWeight="500" style={{textAlign:'justify'}}>
+                  <H6 p="2rem 2.75rem"  color="#0f3460" fontWeight="500" style={{textAlign:'justify'}}>
                     <ul>
                       <li>Feel our website trustworthy.</li>
                       <li>Feel comfortable using our website.</li>

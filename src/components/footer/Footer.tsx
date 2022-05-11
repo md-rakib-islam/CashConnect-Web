@@ -119,11 +119,21 @@ const Footer: React.FC = () => {
                 </Typography>
 
                 <div>
-                  {customerCareLinks.map((item, ind) => (
-                    <Link href="/" key={ind}>
-                      <StyledLink>{item}</StyledLink>
-                    </Link>
-                  ))}
+                  <Link href="/help" >
+                    <StyledLink> Help Center </StyledLink>
+                  </Link>
+                  <Link href="/buy_help" >
+                    <StyledLink> How to Buy </StyledLink>
+                  </Link>
+                  <Link href="/track" >
+                    <StyledLink> Track Your Order </StyledLink>
+                  </Link>
+                  <Link href="/purchasing" >
+                    <StyledLink> Corporate & Bulk Purchasing </StyledLink>
+                  </Link>
+                  <Link href="/returns" >
+                    <StyledLink> Returns & Refunds</StyledLink>
+                  </Link>
                 </div>
               </Grid>
 
@@ -185,12 +195,12 @@ const Footer: React.FC = () => {
 //   "Privacy Policy",
 // ];
 
-const customerCareLinks = [
-  "Help Center",
-  "How to Buy",
-  "Track Your Order",
-  "Corporate & Bulk Purchasing",
-  "Returns & Refunds",
-];
+// const customerCareLinks = [
+//   "Help Center",
+//   "How to Buy",
+//   "Track Your Order",
+//   "Corporate & Bulk Purchasing",
+//   "Returns & Refunds",
+// ];
 
 export default Footer;
