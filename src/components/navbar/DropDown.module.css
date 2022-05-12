@@ -1,3 +1,13 @@
+
+.link{
+  margin-right: 30px;
+  text-decoration: none;
+}
+.home{
+  color: #2B3445 !important;
+}
+
+
 .dropbtn {
   color: #2B3445;
   font-size: 14px;
@@ -42,6 +52,7 @@ grid-template-columns: repeat(3, 1fr);
 .dropdown:hover .dropbtn {
   color: #e94560;
 }
+
 
 .dropbtn2 {
   background-color: #FFFFFF;
@@ -94,3 +105,5 @@ grid-template-columns: repeat(3, 1fr);
   background-color: #F6F9FC
 }
  
+
+

@@ -149,28 +149,24 @@ const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
   return (
     <>
       {loading && (
-        <div
-          style={{
-            position: "fixed",
-            height: "100%",
-            width: "100%",
-            top: "0px",
-            left: "0px",
-            display: "flex",
-            justifyContent: "center",
-            backgroundColor: " rgb(0 0 0 / 50%)",
-            alignItems: "center",
-            zIndex: 100,
+         <div style={{
+          position: 'fixed',
+          height: '100%',
+          width: '100%',
+          top: '0px',
+          left: '0px',
+          display: 'flex',
+          justifyContent: "center",
+          backgroundColor: " rgb(0 0 0 / 50%)",
+          alignItems: "center",
+          zIndex: 100,
+        }}>
+          <img style={{
+            height: "100px",
+            width: "100px",
+            marginTop: "100pz"
           }}
-        >
-          <img
-            style={{
-              height: "50px",
-              width: "50px",
-              marginTop: "100pz",
-            }}
-            src="/assets/images/gif/loading.gif"
-          />
+            src="/assets/images/gif/loading.gif" />
         </div>
       )}
       <StyledNavbar>
@@ -204,8 +200,18 @@ const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
           </Categories>
 
           <FlexBox>
+      
+            <div className={DropDownStyle.link}> 
+            <NavLink
+              className={DropDownStyle.home}
+              href="/"
+              onClick={() =>  setLoading(true)}
+            >
+              Home
+            </NavLink></div>
+          
             <div className={DropDownStyle.dropdown}>
-              <a className={DropDownStyle.dropbtn}>Shop now</a>
+              <a className={DropDownStyle.dropbtn}>Shop Now</a>
               <div className={DropDownStyle.dropdown_content}>
                 <div className={DropDownStyle.dropdown2}>
                   <button className={DropDownStyle.dropbtn2}>Show Branch</button>

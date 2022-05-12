@@ -1,13 +1,13 @@
 const navbarNavigations = [
-  {
-    title: "Home",
-    url: "/",
-    child: [],
-  },
-  {
-    title: "About Us",
-    url: "",
-  },
+  // {
+  //   title: "Home",
+  //   url: "/",
+    
+  // },
+  // {
+  //   title: "About Us",
+  //   url: "",
+  // },
  
   {
     title: "Sell",

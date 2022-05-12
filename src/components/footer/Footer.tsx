@@ -122,15 +122,11 @@ const Footer: React.FC = () => {
                   <Link href="/help" >
                     <StyledLink> Help Center </StyledLink>
                   </Link>
-                  <Link href="/buy_help" >
-                    <StyledLink> How to Buy </StyledLink>
-                  </Link>
+                  
                   <Link href="/track" >
                     <StyledLink> Track Your Order </StyledLink>
                   </Link>
-                  <Link href="/purchasing" >
-                    <StyledLink> Corporate & Bulk Purchasing </StyledLink>
-                  </Link>
+                  
                   <Link href="/returns" >
                     <StyledLink> Returns & Refunds</StyledLink>
                   </Link>
