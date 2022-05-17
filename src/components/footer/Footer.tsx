@@ -92,6 +92,9 @@ const Footer: React.FC = () => {
                     <StyledLink> Careers </StyledLink>
                     </Link>
 
+                   <Link href="/branches" >
+                    <StyledLink> Our Branches </StyledLink>
+                    </Link>
                    <Link href="/story" >
                     <StyledLink> Our Stories </StyledLink>
                     </Link>

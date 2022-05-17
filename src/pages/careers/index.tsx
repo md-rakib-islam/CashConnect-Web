@@ -11,7 +11,7 @@ import  { Small } from "@component/Typography";
 import Link from "next/link";
 import React from "react";
 
-const Profile = () => {
+const Career = () => {
   // const [preViewImg, setpreViewImg] = useState("");
   // const [first_name, setfirst_name] = useState("");
   // const [last_name, setlast_name] = useState("");
@@ -243,6 +243,6 @@ const Profile = () => {
 
 
 
-Profile.layout = DashboardLayout;
+Career.layout = DashboardLayout;
 
-export default Profile;
+export default Career;

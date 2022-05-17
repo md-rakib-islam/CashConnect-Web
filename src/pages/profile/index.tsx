@@ -114,7 +114,7 @@ const Profile = () => {
                     height="100%"
                     p="1rem 1.25rem"
                   >
-                    <H3 color="primary.main" my="0px" fontWeight="600">{total_orders}</H3>
+                    <H3 color="primary.main" my="0px" fontWeight="600">{total_orders || 0}</H3>
                     <Small color="text.muted" textAlign="center">Total Orders</Small>
                   </FlexBox>
                 </Grid>
@@ -126,7 +126,7 @@ const Profile = () => {
                     height="100%"
                     p="1rem 1.25rem"
                   >
-                    <H3 color="primary.main" my="0px" fontWeight="600">{pending_orders}</H3>
+                    <H3 color="primary.main" my="0px" fontWeight="600">{pending_orders || 0}</H3>
                     <Small color="text.muted" textAlign="center">Pending Orders</Small>
                   </FlexBox>
                 </Grid>
@@ -138,7 +138,7 @@ const Profile = () => {
                     height="100%"
                     p="1rem 1.25rem"
                   >
-                    <H3 color="primary.main" my="0px" fontWeight="600">{unpaid_orders}</H3>
+                    <H3 color="primary.main" my="0px" fontWeight="600">{unpaid_orders || 0}</H3>
                     <Small color="text.muted" textAlign="center">Unpaid Orders</Small>
                   </FlexBox>
                 </Grid>
@@ -150,7 +150,7 @@ const Profile = () => {
                     height="100%"
                     p="1rem 1.25rem"
                   >
-                    <H3 color="primary.main" my="0px" fontWeight="600">{deliverable_orders}</H3>
+                    <H3 color="primary.main" my="0px" fontWeight="600">{deliverable_orders || 0}</H3>
                     <Small color="text.muted" textAlign="center">Delivered Orders</Small>
                   </FlexBox>
                 </Grid>
