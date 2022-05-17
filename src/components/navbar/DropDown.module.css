@@ -4,12 +4,18 @@
   text-decoration: none;
 }
 .home{
-  color: #2B3445 !important;
+  color: #ffffff !important;
+  font-weight: 800;
+}
+.link:hover a{
+  color:rgba(15, 52, 96, 1) !important;
+  font-weight: 800;
+
 }
 
-
 .dropbtn {
-  color: #2B3445;
+  color: #ffffff;
+  font-weight: 800;
   font-size: 14px;
   margin-right: 32px;
   cursor: pointer;
@@ -19,6 +25,19 @@
   position: relative;
   display: inline-block;
 }
+/* .dropdown a{
+  color: #ffffff !important;
+    font-weight: 800;
+} */
+.dropbtn:hover{
+  color:rgba(15, 52, 96, 1) !important;
+  font-weight: 800;
+}
+
+.dropdown:hover .dropbtn {
+  color: rgba(15, 52, 96, 1) !important;
+    font-weight: 800;
+  }
 
 .dropdown_content {
   display: none;
@@ -49,9 +68,7 @@ grid-template-columns: repeat(3, 1fr);
 }
 
 
-.dropdown:hover .dropbtn {
-  color: #e94560;
-}
+
 
 
 .dropbtn2 {

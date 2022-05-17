@@ -4,15 +4,18 @@ import { getTheme } from "../../utils/utils";
 const StyledNavbar = styled.div`
   position: relative;
   height: 60px;
-  background: ${getTheme("colors.body.paper")};
+  background: rgb(247 111 133);
   box-shadow: ${getTheme("shadows.regular")};
 
   .nav-link {
     font-size: 14px;
     margin-right: 32px;
+    font-weight: 800;
+    color: #ffffff;
     cursor: pointer;
     :hover {
-      color: ${getTheme("colors.primary.main")};
+    font-weight: 800;
+    color: rgba(15,52,96,1) !important;
     }
   }
   .nav-link:last-child {

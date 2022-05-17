@@ -208,7 +208,8 @@ const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
               onClick={() =>  setLoading(true)}
             >
               Home
-            </NavLink></div>
+            </NavLink>
+            </div>
           
             <div className={DropDownStyle.dropdown}>
               <a className={DropDownStyle.dropbtn}>Shop Now</a>
