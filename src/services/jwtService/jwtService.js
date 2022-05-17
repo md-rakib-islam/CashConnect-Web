@@ -41,6 +41,10 @@ class JwtService {
             reject(rer);
 
           }
+          else if(rer.response.status == 401){
+            reject(rer);
+
+          }
           else{
              reject(rer);
           }

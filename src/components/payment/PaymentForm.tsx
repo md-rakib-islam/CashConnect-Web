@@ -36,6 +36,8 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
   const [openLogin, setOpenLogin] = useState(false)
   const [userName, setuserName] = useState("")
   const { dispatch } = useAppContext();
+  const [loading, setLoading] = useState(false)
+
 
   const width = useWindowSize();
   const isMobile = width < 769;
@@ -54,6 +56,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
   const nagadNoRef = useRef();
   const confirmedOrderRes = useRef(false);
 
+
   const useKeys = {
     payment_mathod: null,
     card_number: null,
@@ -65,6 +68,12 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
     rocket: null,
     nagad: null,
   };
+ const handleLoadingComplete = () => {
+    setLoading(false)
+  }
+  useEffect(() => {
+    router.events.on('routeChangeComplete', handleLoadingComplete)
+  }, [router.events])
 
   const closeLoginTab = () => {
     setOpenLogin(false)
@@ -133,6 +142,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
 
   const handleFormSubmit = async (values) => {
     console.log(values);
+    setLoading(true)
 
     if (isLogin) {
 
@@ -214,6 +224,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
                 }
               });
 
+
               localStorage.removeItem("OrderId")
 
 
@@ -284,6 +295,27 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
   return (
     <Fragment>
       <LoginPopup open={openLogin} closeLoginDialog={closeLoginTab} />
+         {loading && (
+        <div style={{
+          position: 'fixed',
+          height: '100%',
+          width: '100%',
+          top: '0px',
+          left: '0px',
+          display: 'flex',
+          justifyContent: "center",
+          backgroundColor: " rgb(0 0 0 / 50%)",
+          alignItems: "center",
+          zIndex: 100,
+        }}>
+          <img style={{
+            height: "100px",
+            width: "100px",
+            marginTop: "100pz"
+          }}
+            src="/assets/images/gif/loading.gif" />
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <Card1 mb="2rem">
           <Radio

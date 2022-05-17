@@ -124,15 +124,24 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
       (_errors) => {
         console.log("login failed", _errors.response.status);
 
-        if(_errors.response.status ==403){
+        if(_errors.response.status == 403){
           dispatch({
           type: "CHANGE_ALERT",
           payload: {
             alertValue: "Phone number is not verified",
             alerType: "error",
           }
-        });
-        } else{
+        })
+        } else if (_errors.response.status == 401){
+          dispatch({
+          type: "CHANGE_ALERT",
+          payload: {
+            alertValue: "Email or Password is wrong",
+            alerType: "error",
+          }
+        })
+        }
+        else{
           dispatch({
           type: "CHANGE_ALERT",
           payload: {
