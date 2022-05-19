@@ -26,7 +26,7 @@ const StyledTopbar = styled.div`
       margin-left: 0px;
       }
       .phone{
-        margin-left: 200px
+        margin-left: 100px;
 
       }
       .email{

@@ -4,7 +4,7 @@ import { getTheme } from "../../utils/utils";
 const StyledNavbar = styled.div`
   position: relative;
   height: 60px;
-  background: rgb(247 111 133);
+  background: rgb(232 66 98);
   box-shadow: ${getTheme("shadows.regular")};
 
   .nav-link {

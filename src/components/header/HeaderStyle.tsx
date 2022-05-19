@@ -34,7 +34,7 @@ const StyledHeader = styled.header`
   }
 
   @media only screen and (max-width: 900px) {
-    background:rgb(247 111 133);    
+    background:rgb(232 66 98);    
     height: ${layoutConstant.mobileHeaderHeight};
 
     .logo,

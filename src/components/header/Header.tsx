@@ -157,7 +157,7 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
           <FlexBox className="logo" alignItems="center" mr="1rem">
             <Link href="/">
               <a onClick={() => setLoading(true)}>
-                <Image src='/assets/images/logos/main_logo.png' alt="logo" height="45" width="auto"  />
+                <Image src='/assets/images/logos/main_logo.png' alt="logo" height="45" width="160px"  />
               </a>
             </Link>
 

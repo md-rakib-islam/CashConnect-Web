@@ -44,7 +44,7 @@ const Branches = () => {
               
                 <H1 p="2rem 2.75rem"  color="#0f3460"  fontWeight="800" style={{textAlign:'justify'}} > 
               
-                  FIND OUR <br/>  NEAREST <span style={{color:"rgb(247 111 133)"}}> BRANCH </span>
+                  FIND OUR <br/>  NEAREST <span style={{color:"rgb(232 66 98)"}}> BRANCH </span>
                 </H1>       
               </Grid>
               <Grid item lg={6} md={6} sm={12} xs={12}>

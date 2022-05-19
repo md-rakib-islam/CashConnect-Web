@@ -63,7 +63,7 @@ const Footer: React.FC = () => {
                   <a>
                     <Image
                       mb="1.25rem"
-                      src='/assets/images/logos/footer.png' alt="logo" height="50" width="auto" 
+                      src='/assets/images/logos/footer.png' alt="logo" height="50" width="160px" 
                     />
                   </a>
                 </Link>
@@ -95,9 +95,9 @@ const Footer: React.FC = () => {
                    <Link href="/branches" >
                     <StyledLink> Our Branches </StyledLink>
                     </Link>
-                   <Link href="/story" >
+                   {/* <Link href="/story" >
                     <StyledLink> Our Stories </StyledLink>
-                    </Link>
+                    </Link> */}
 
                    <Link href="/terms" >
                     <StyledLink> Terms & Conditions </StyledLink>
