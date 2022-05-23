@@ -1,3 +1,4 @@
+import Button from "@component/buttons/Button";
 import Footer from "@component/footer/Footer";
 import Header from "@component/header/Header";
 import MobileNavigationBar from "@component/mobile-navigation/MobileNavigationBar";
@@ -19,6 +20,20 @@ const AppLayout: React.FC<Props> = ({
 }) => {
 
   const [title, setTitle] = useState("Cash Connect")
+
+  
+   
+  useEffect(() => {
+     var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+      (function () {
+        var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = 'https://embed.tawk.to/628b0c2db0d10b6f3e738588/1g3nif59d';
+        s1.charset = 'UTF-8';
+        s1.setAttribute('crossorigin', '*');
+        s0.parentNode.insertBefore(s1, s0);
+      })();
+  }, [])
 
   useEffect(() => {
     fetch(`${Site_Setting_All}`).then(res => res.json()).then(res => {
@@ -43,14 +58,19 @@ const AppLayout: React.FC<Props> = ({
         <Header />
       </Sticky>
 
+ 
       {navbar && <div className="section-after-sticky">{navbar}</div>}
       {!navbar ? (
         <div className="section-after-sticky">{children}</div>
       ) : (
         children
       )}
+        
 
       <MobileNavigationBar />
+      
+      
+      
       <Footer />
     </StyledAppLayout>
   )
