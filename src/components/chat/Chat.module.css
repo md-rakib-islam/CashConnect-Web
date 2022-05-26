@@ -1,0 +1,91 @@
+/* body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+} */
+
+/* Button used to open the chat form - fixed at the bottom of the page */
+.open_button {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 16px 20px;
+    border: none;
+    cursor: pointer;
+    opacity: 0.8;
+    position: fixed;
+    bottom: 23px;
+    right: 28px;
+    height: 80px;
+    width: 80px;
+}
+
+/* The popup chat - hidden by default */
+.chat_popup {
+    display: none;
+    position: fixed;
+    bottom: 50px;
+    right: 15px;
+    border: 3px solid #f1f1f1;
+    z-index: 9;
+}
+
+/* Add styles to the form container */
+.form_container {
+    max-width: 350px;
+    padding: 10px;
+    background-color: white;
+}
+
+/* Full-width .textArea */
+.form_container .textArea {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    border: none;
+    background: #f1f1f1;
+    resize: none;
+    height: 200px;
+}
+
+/* When the .textArea gets focus, do something */
+.form_container .textArea:focus {
+    background-color: #ddd;
+    outline: none;
+}
+
+/* Set a style for the submit/send button */
+.form_container .btn {
+    background-color: #04AA6D;
+    color: white;
+    padding: 16px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 10px;
+    opacity: 0.8;
+}
+
+/* Add a red background color to the cancel button */
+.form_container .cancel {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 16px 20px;
+    border: none;
+    cursor: pointer;
+    opacity: 0.8;
+    position: fixed;
+    bottom: 12px;
+    right: 28px;
+    height: 80px;
+    width: 80px;
+}
+
+/* Add some hover effects to buttons */
+.form_container .btn:hover,
+.open_button:hover {
+    opacity: 1;
+}
