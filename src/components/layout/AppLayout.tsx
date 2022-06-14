@@ -1,4 +1,3 @@
-import Chat from "@component/chat/Chat";
 import Footer from "@component/footer/Footer";
 import Header from "@component/header/Header";
 import MobileNavigationBar from "@component/mobile-navigation/MobileNavigationBar";
@@ -14,15 +13,9 @@ type Props = {
   navbar?: React.ReactChild;
 };
 
-const AppLayout: React.FC<Props> = ({
-  children,
-  navbar,
-}) => {
+const AppLayout: React.FC<Props> = ({ children, navbar }) => {
+  const [title, setTitle] = useState("Cash Connect");
 
-  const [title, setTitle] = useState("Cash Connect")
-
-  
-   
   // useEffect(() => {
   //    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
   //     (function () {
@@ -36,13 +29,16 @@ const AppLayout: React.FC<Props> = ({
   // }, [])
 
   useEffect(() => {
-    fetch(`${Site_Setting_All}`).then(res => res.json()).then(res => {
-      const data = res?.general_settings[0]
-      setTitle(data.title)
-    }
-    ).catch((err) => { console.log("error", err) })
-  }, [])
-
+    fetch(`${Site_Setting_All}`)
+      .then((res) => res.json())
+      .then((res) => {
+        const data = res?.general_settings[0];
+        setTitle(data.title);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  }, []);
 
   return (
     <StyledAppLayout>
@@ -58,22 +54,19 @@ const AppLayout: React.FC<Props> = ({
         <Header />
       </Sticky>
 
- 
       {navbar && <div className="section-after-sticky">{navbar}</div>}
       {!navbar ? (
         <div className="section-after-sticky">{children}</div>
       ) : (
         children
       )}
-        
 
       <MobileNavigationBar />
-      
-      
-      <Chat/>
+
+      {/* <Chat/> */}
       <Footer />
     </StyledAppLayout>
-  )
+  );
 };
 
 export default AppLayout;
