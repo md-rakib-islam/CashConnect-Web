@@ -3,19 +3,22 @@ import LoginPopup from "@component/LoginPopup";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import {
-  BASE_URL, Check_Stock, Customer_decrease_Quantity,
+  BASE_URL,
+  Check_Stock,
+  Customer_decrease_Quantity,
   Customer_Increase_Quantity,
   Customer_Order_Create,
   Customer_Order_Item_By_Product_Id,
   Customer_Order_Remove_Item,
-  Multiple_Image_By_Id
+  Multiple_Image_By_Id,
+  Product_Detail_By_Id,
 } from "@data/constants";
 import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import ReactImageMagnify from 'react-image-magnify';
+import ReactImageMagnify from "react-image-magnify";
 import styled from "styled-components";
 import Avatar from "../avatar/Avatar";
 import Box from "../Box";
@@ -47,7 +50,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   reviewCount,
   rating,
   condition,
-  orginalrice
+  orginalrice,
 }) => {
   const [selectedImage, setSelectedImage] = useState(0);
 
@@ -59,51 +62,74 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   const [cartQuantity, setCartQuantity] = useState(0);
   const [itemId, setItemId] = useState(0);
   const [getItemId, setGetItemId] = useState(0);
-  const [openLogin, setOpenLogin] = useState(false)
-  const [multipleUmg, setMultipleUmg] = useState(imgUrl)
-  const [stock, setStock] = useState(true)
-  const [_reRender, setreRender] = useState(0)
+  const [openLogin, setOpenLogin] = useState(false);
+  const [multipleUmg, setMultipleUmg] = useState(imgUrl);
+  const [stock, setStock] = useState(true);
+  const [productCode, setProductCode] = useState("");
+  const [_reRender, setreRender] = useState(0);
 
   const cartCanged = state.cart.chartQuantity;
 
-  const { user_id, order_Id, isLogin, authTOKEN } = useUserInf()
+  const { user_id, order_Id, isLogin, authTOKEN } = useUserInf();
 
   const width = useWindowSize();
   const isMobile = width < 769;
 
   const closeLoginTab = () => {
-    setOpenLogin(false)
-  }
+    setOpenLogin(false);
+  };
 
   useEffect(() => {
-    axios.get(`${Check_Stock}${id}`).then(res => {
-      console.log("res.data.is_in_stock", res.data.is_in_stock)
-      if (!res.data.is_in_stock) {
-        setStock(false)
-      }
-    }).catch(() => { console.log("errr") })
-  }, [])
-
-  useEffect(() => {
-    setMultipleUmg(imgUrl)
-    setreRender(Math.random())
-  }, [imgUrl])
-
-  useEffect(() => {
-    axios.get(`${Multiple_Image_By_Id}${id}`).then(res => {
-      console.log("multipleImage", res.data?.product_images)
-      let images = []
-
-      images.push(imgUrl)
-
-      res.data?.product_images?.map(data => {
-        if (data?.image) {
-          images.push(`${BASE_URL}${data?.image}`)
+    axios
+      .get(`${Check_Stock}${id}`)
+      .then((res) => {
+        console.log("res.data.is_in_stock", res.data.is_in_stock);
+        if (!res.data.is_in_stock) {
+          setStock(false);
         }
       })
-      setMultipleUmg(images)
-    }).catch((err) => { console.log("error", err) })
-  }, [imgUrl])
+      .catch(() => {
+        console.log("errr");
+      });
+  }, []);
+  useEffect(() => {
+    axios
+      .get(`${Product_Detail_By_Id}${id}`)
+      .then((res) => {
+        console.log("res.data.code", res.data.product_code);
+
+        setProductCode(res.data.product_code);
+      })
+      .catch(() => {
+        console.log("errr");
+      });
+  }, []);
+
+  useEffect(() => {
+    setMultipleUmg(imgUrl);
+    setreRender(Math.random());
+  }, [imgUrl]);
+
+  useEffect(() => {
+    axios
+      .get(`${Multiple_Image_By_Id}${id}`)
+      .then((res) => {
+        console.log("multipleImage", res.data?.product_images);
+        let images = [];
+
+        images.push(imgUrl);
+
+        res.data?.product_images?.map((data) => {
+          if (data?.image) {
+            images.push(`${BASE_URL}${data?.image}`);
+          }
+        });
+        setMultipleUmg(images);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  }, [imgUrl]);
 
   useEffect(() => {
     if (id) {
@@ -125,7 +151,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   };
 
   const handleCartAmountChange = (amount, action) => {
-
     if (isLogin) {
       const dateObj: any = new Date();
       const currentDate =
@@ -147,106 +172,134 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       //addToCart
       if (action == "addToCart") {
         console.log("orderData", orderData);
-        axios.post(`${Customer_Order_Create}`, orderData, authTOKEN).then((res) => {
-          console.log("orderRes", res);
-
-          localStorage.setItem("OrderId", res.data.order_details.id);
-          window.dispatchEvent(new CustomEvent('storage', { detail: { name: 'setted order id' } }));
-          setGetItemId(Math.random());
-          dispatch({
-            type: "CHANGE_CART_QUANTITY",
-            payload: { chartQuantity: Math.random(), prductId: id || routerId },
-          });
-        }).catch(() => {
-          dispatch({
-            type: "CHANGE_ALERT",
-            payload: {
-              alerType: "error",
-              alertValue: "something went wrong",
-            }
-          })
-
-        });
-      }
-
-      //increase quantity
-      else if (action == "increase") {
         axios
-          .put(`${Customer_Increase_Quantity}${order_Id}/${itemId}`, orderData, authTOKEN)
+          .post(`${Customer_Order_Create}`, orderData, authTOKEN)
           .then((res) => {
-            console.log("increaseRes", res);
+            console.log("orderRes", res);
+
+            localStorage.setItem("OrderId", res.data.order_details.id);
+            window.dispatchEvent(
+              new CustomEvent("storage", {
+                detail: { name: "setted order id" },
+              })
+            );
             setGetItemId(Math.random());
             dispatch({
               type: "CHANGE_CART_QUANTITY",
-              payload: { chartQuantity: Math.random(), prductId: id || routerId },
+              payload: {
+                chartQuantity: Math.random(),
+                prductId: id || routerId,
+              },
             });
-          }).catch(() => {
+          })
+          .catch(() => {
             dispatch({
               type: "CHANGE_ALERT",
               payload: {
                 alerType: "error",
                 alertValue: "something went wrong",
-              }
-            })
+              },
+            });
+          });
+      }
+
+      //increase quantity
+      else if (action == "increase") {
+        axios
+          .put(
+            `${Customer_Increase_Quantity}${order_Id}/${itemId}`,
+            orderData,
+            authTOKEN
+          )
+          .then((res) => {
+            console.log("increaseRes", res);
+            setGetItemId(Math.random());
+            dispatch({
+              type: "CHANGE_CART_QUANTITY",
+              payload: {
+                chartQuantity: Math.random(),
+                prductId: id || routerId,
+              },
+            });
+          })
+          .catch(() => {
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alerType: "error",
+                alertValue: "something went wrong",
+              },
+            });
           });
       }
 
       //remove
       else if (amount == 0 && action == "decrease") {
         axios
-          .delete(`${Customer_Order_Remove_Item}${order_Id}/${itemId}`, authTOKEN)
+          .delete(
+            `${Customer_Order_Remove_Item}${order_Id}/${itemId}`,
+            authTOKEN
+          )
           .then((res) => {
             console.log("removeRes", res);
             setGetItemId(Math.random());
             dispatch({
               type: "CHANGE_CART_QUANTITY",
-              payload: { chartQuantity: Math.random(), prductId: id || routerId },
+              payload: {
+                chartQuantity: Math.random(),
+                prductId: id || routerId,
+              },
             });
-          }).catch(() => {
+          })
+          .catch(() => {
             dispatch({
               type: "CHANGE_ALERT",
               payload: {
                 alerType: "error",
                 alertValue: "something went wrong",
-              }
-            })
+              },
+            });
           });
       }
 
       //decrease quantity
       else if (action == "decrease") {
         axios
-          .put(`${Customer_decrease_Quantity}${order_Id}/${itemId}`, orderData, authTOKEN)
+          .put(
+            `${Customer_decrease_Quantity}${order_Id}/${itemId}`,
+            orderData,
+            authTOKEN
+          )
           .then((res) => {
             console.log("decreaseRes", res);
             setGetItemId(Math.random());
             dispatch({
               type: "CHANGE_CART_QUANTITY",
-              payload: { chartQuantity: Math.random(), prductId: id || routerId },
+              payload: {
+                chartQuantity: Math.random(),
+                prductId: id || routerId,
+              },
             });
-          }).catch(() => {
+          })
+          .catch(() => {
             dispatch({
               type: "CHANGE_ALERT",
               payload: {
                 alerType: "error",
                 alertValue: "something went wrong",
-              }
-            })
+              },
+            });
           });
       }
-
-    }
-    else {
+    } else {
       if (isMobile) {
         localStorage.setItem("backAfterLogin", `/product/${id}`);
-        router.push("/login")
-      }
-      else {
-        setOpenLogin(true)
+        router.push("/login");
+      } else {
+        setOpenLogin(true);
       }
     }
   };
-
 
   return (
     <>
@@ -255,31 +308,32 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
         <Grid container justifyContent="center" spacing={16}>
           <Grid item md={6} xs={12} alignItems="center">
             <Box>
-              <FlexBox justifyContent="center" mb="50px" >
+              <FlexBox justifyContent="center" mb="50px">
                 <div style={{ width: "300px", height: "auto" }}>
-                  <StyledReactImageMagnify {...{
-                    smallImage: {
-                      alt: 'Wristwatch by Ted Baker London',
-                      isFluidWidth: true,
-                      src: multipleUmg[selectedImage],
-                    },
-                    largeImage: {
-                      src: multipleUmg[selectedImage],
-                      width: 2000,
-                      height: 2000,
-                      style: { backgroundColor: "black" },
-                    },
-                    enlargedImageContainerDimensions: {
-                      width: '250%',
-                      height: '150%',
-                    },
-                    enlargedImageContainerStyle: {
-                      zIndex: "100",
-                    },
-                    enlargedImageClassName: "largeImageContainer"
-                  }} />
+                  <StyledReactImageMagnify
+                    {...{
+                      smallImage: {
+                        alt: "Wristwatch by Ted Baker London",
+                        isFluidWidth: true,
+                        src: multipleUmg[selectedImage],
+                      },
+                      largeImage: {
+                        src: multipleUmg[selectedImage],
+                        width: 1000,
+                        height: 1000,
+                        style: { backgroundColor: "black" },
+                      },
+                      enlargedImageContainerDimensions: {
+                        width: "250%",
+                        height: "150%",
+                      },
+                      enlargedImageContainerStyle: {
+                        zIndex: "100",
+                      },
+                      enlargedImageClassName: "largeImageContainer",
+                    }}
+                  />
                 </div>
-
               </FlexBox>
               <FlexBox overflow="auto">
                 {multipleUmg.map((url, ind) => (
@@ -312,6 +366,10 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
             <H1 mb="0.8rem">{title}</H1>
 
             <FlexBox alignItems="center" mb="1rem">
+              <SemiSpan>Code:</SemiSpan>
+              <H6 ml="8px">{productCode || "_"}</H6>
+            </FlexBox>
+            <FlexBox alignItems="center" mb="1rem">
               <SemiSpan>Condition:</SemiSpan>
               <H6 ml="8px">{condition || "_"}</H6>
             </FlexBox>
@@ -332,7 +390,9 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
             <Box mb="24px">
               {!!orginalrice && (
                 <H2 color="text.muted" mb="4px" lineHeight="1">
-                  <del><Currency>{orginalrice}</Currency></del>
+                  <del>
+                    <Currency>{orginalrice}</Currency>
+                  </del>
                 </H2>
               )}
               <H2 color="primary.main" mb="4px" lineHeight="1">
@@ -341,9 +401,10 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               {stock ? (
                 <SemiSpan color="inherit">Stock Available</SemiSpan>
               ) : (
-                <SemiSpan fontWeight="bold" ml="5px" color="primary.main">Out Of Stock</SemiSpan>
+                <SemiSpan fontWeight="bold" ml="5px" color="primary.main">
+                  Out Of Stock
+                </SemiSpan>
               )}
-
             </Box>
 
             {!cartQuantity ? (
@@ -410,7 +471,7 @@ export const StyledReactImageMagnify = styled(ReactImageMagnify)`
   .largeImageContainer {
     background: white;
   }
-  `
+`;
 
 // ProductIntro.defaultProps = {
 //   imgUrl: [
