@@ -6,36 +6,52 @@ import ProductIntro from "@component/products/ProductIntro";
 import ProductReview from "@component/products/ProductReview";
 import RelatedProducts from "@component/products/RelatedProducts";
 import { H5 } from "@component/Typography";
-import { BASE_URL, product_by_categoryId, Product_by_id } from "@data/constants";
+import {
+  BASE_URL,
+  product_by_categoryId,
+  Product_by_id,
+} from "@data/constants";
 import axios from "axios";
 import _ from "lodash";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
-const ProductDetails = ({ id, title, price, imgUrl, brand, rating, initialReviewsQuantity, fullDes, relatedProduct, condition, orginalrice }) => {
-
-  const [_reviewsQuantity, setreviewsQuantity] = useState(initialReviewsQuantity)
+const ProductDetails = ({
+  id,
+  title,
+  price,
+  imgUrl,
+  brand,
+  rating,
+  initialReviewsQuantity,
+  fullDes,
+  relatedProduct,
+  condition,
+  orginalrice,
+}) => {
+  const [_reviewsQuantity, setreviewsQuantity] = useState(
+    initialReviewsQuantity
+  );
 
   const setNumOfReviews = (quantity = 0) => {
-    setreviewsQuantity(quantity)
-  }
+    setreviewsQuantity(quantity);
+  };
 
   const [selectedOption, setSelectedOption] = useState("description");
 
-  const router = useRouter()
-  const review = router.query?.review
+  const router = useRouter();
+  const review = router.query?.review;
 
   useEffect(() => {
     if (review) {
-      setSelectedOption("review")
+      setSelectedOption("review");
     }
-  }, [review])
+  }, [review]);
 
   const handleOptionClick = (opt) => () => {
     setSelectedOption(opt);
   };
-
 
   return (
     <div>
@@ -83,8 +99,12 @@ const ProductDetails = ({ id, title, price, imgUrl, brand, rating, initialReview
       </FlexBox>
 
       <Box mb="50px">
-        {selectedOption === "description" && <ProductDescription fullDes={fullDes} />}
-        {selectedOption === "review" && <ProductReview product_id={id} setReviews={setNumOfReviews} />}
+        {selectedOption === "description" && (
+          <ProductDescription fullDes={fullDes} parse={""} />
+        )}
+        {selectedOption === "review" && (
+          <ProductReview product_id={id} setReviews={setNumOfReviews} />
+        )}
       </Box>
 
       <RelatedProducts relatedProduct={relatedProduct} />
@@ -97,38 +117,39 @@ ProductDetails.layout = NavbarLayout;
 export default ProductDetails;
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-
   try {
-    const res = await axios.get(`${Product_by_id}${params.id}`)
-    var data: any = await res.data
-  }
-  catch (err) {
-    var data: any = {}
+    const res = await axios.get(`${Product_by_id}${params.id}`);
+    var data: any = await res.data;
+  } catch (err) {
+    var data: any = {};
   }
 
   try {
-    const relatedProductRes = await fetch(`${product_by_categoryId}${data.category}?size=12`)
-    var relatedProductjson = await relatedProductRes.json()
-    var relatedProduct: any[] = await relatedProductjson.products
-  }
-  catch (err) {
-    var relatedProduct = []
+    const relatedProductRes = await fetch(
+      `${product_by_categoryId}${data.category}?size=12`
+    );
+    var relatedProductjson = await relatedProductRes.json();
+    var relatedProduct: any[] = await relatedProductjson.products;
+  } catch (err) {
+    var relatedProduct = [];
   }
 
-  console.log("product_Data", data)
+  console.log("product_Data", data);
   return {
     props: {
       id: params.id,
       title: data.name,
       price: data?.product_discount?.discounted_price || data?.unit_price,
-      orginalrice: data?.product_discount?.discounted_price ? data?.unit_price : null,
+      orginalrice: data?.product_discount?.discounted_price
+        ? data?.unit_price
+        : null,
       imgUrl: `${BASE_URL}${data?.thumbnail}`,
       brand: _.isObject(data?.brand) ? data?.brand?.name : data?.brand || "",
       fullDes: data?.full_desc,
       initialReviewsQuantity: data?.num_reviews,
       rating: data?.rating,
       condition: data?.condition,
-      relatedProduct
+      relatedProduct,
     },
-  }
-}
+  };
+};
