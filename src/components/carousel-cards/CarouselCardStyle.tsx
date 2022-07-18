@@ -5,7 +5,7 @@ export const StyledCarouselCard1 = styled.div`
   text-align: left;
   // margin-left: 280px;
   // display: flex;
-  margin-left: 1rem;
+  // margin-left: 1rem;
   width: 100%
   justify-content: space-between;
   align-items: center;
