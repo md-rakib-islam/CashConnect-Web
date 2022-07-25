@@ -20,77 +20,79 @@ import { H3, H5, H6, SemiSpan, Span } from "../Typography";
 import { StyledSessionCard } from "./SessionStyle";
 
 interface LoginProps {
-  type?: string,
-  closeLoginDialog?: any,
+  type?: string;
+  closeLoginDialog?: any;
 }
 
-const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) => {
+const Login: React.FC<LoginProps> = ({
+  type = "loginPage",
+  closeLoginDialog,
+}) => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const router = useRouter();
   const { dispatch } = useAppContext();
 
-  const [openSignup, setOpenSignup] = useState(false)
+  const [openSignup, setOpenSignup] = useState(false);
 
-  const { authTOKEN } = useUserInf()
+  const { authTOKEN } = useUserInf();
 
-  const [loading, setLoading] = useState(false)
-
+  const [loading, setLoading] = useState(false);
 
   const handleLoadingComplete = () => {
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   useEffect(() => {
-    router.events.on('routeChangeComplete', handleLoadingComplete)
-  }, [router.events])
+    router.events.on("routeChangeComplete", handleLoadingComplete);
+  }, [router.events]);
 
   const closeSignupTab = () => {
-    setOpenSignup(false)
-  }
+    setOpenSignup(false);
+  };
 
   const gotosingup = () => {
     if (type == "loginPage") {
-      router.push("/signup")
+      router.push("/signup");
+    } else {
+      setOpenSignup(true);
     }
-    else {
-      setOpenSignup(true)
-    }
-  }
+  };
 
   const togglePasswordVisibility = useCallback(() => {
     setPasswordVisibility((visible) => !visible);
   }, []);
 
   const handleFormSubmit = async (values) => {
+    setLoading(true);
+
+    const { password } = values;
+    const newValue = "+88" + values.primary_phone;
     console.log(values);
-      setLoading(true)
 
-    const { email, password } = values;
-
-    return jwtService.signInWithEmailAndPassword(email, password).then(
+    return jwtService.signInWithEmailAndPassword(newValue, password).then(
       (user) => {
-
         console.log("user", user);
 
-        axios.get(`${Get_Pending_Order_After_Login}`, authTOKEN).then(res => {
-          console.log("order_Id_res", res)
-          if (res.data.id) {
-            localStorage.setItem("OrderId", res.data.id)
-          }
-          else {
-            localStorage.removeItem("OrderId")
-          }
-        }).catch(() => localStorage.removeItem("OrderId"))
+        axios
+          .get(`${Get_Pending_Order_After_Login}`, authTOKEN)
+          .then((res) => {
+            console.log("order_Id_res", res);
+            if (res.data.id) {
+              localStorage.setItem("OrderId", res.data.id);
+            } else {
+              localStorage.removeItem("OrderId");
+            }
+          })
+          .catch(() => localStorage.removeItem("OrderId"));
 
         dispatch({
           type: "CHANGE_ALERT",
           payload: {
             alertValue: "login success...",
-          }
+          },
         });
 
         if (user.user_type === "customer") {
-
           if (type != "popup") {
             const backUrl = localStorage.getItem("backAfterLogin");
             if (backUrl) {
@@ -100,13 +102,10 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
               router.push("/profile");
             }
           } else {
-            closeLoginDialog()
-            localStorage.removeItem("backAfterLogin")
+            closeLoginDialog();
+            localStorage.removeItem("backAfterLogin");
           }
-
-        }
-        else if (user.user_type == "vendor") {
-
+        } else if (user.user_type == "vendor") {
           if (type != "popup") {
             const backUrl = localStorage.getItem("backAfterLogin");
             if (backUrl) {
@@ -116,41 +115,40 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
               router.push("/vendor/dashboard");
             }
           } else {
-            closeLoginDialog()
-            localStorage.removeItem("backAfterLogin")
+            closeLoginDialog();
+            localStorage.removeItem("backAfterLogin");
           }
         }
       },
       (_errors) => {
         console.log("login failed", _errors.response.status);
 
-        if(_errors.response.status == 403){
+        if (_errors.response.status == 403) {
           dispatch({
-          type: "CHANGE_ALERT",
-          payload: {
-            alertValue: "Phone number is not verified",
-            alerType: "error",
-          }
-        })
-        } else if (_errors.response.status == 401){
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: "Phone number is not verified",
+              alerType: "error",
+            },
+          });
+        } else if (_errors.response.status == 401) {
           dispatch({
-          type: "CHANGE_ALERT",
-          payload: {
-            alertValue: "Email or Password is wrong",
-            alerType: "error",
-          }
-        })
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: "Email or Password is wrong",
+              alerType: "error",
+            },
+          });
+        } else {
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: "Email and Password is wrong",
+              alerType: "error",
+            },
+          });
         }
-        else{
-          dispatch({
-          type: "CHANGE_ALERT",
-          payload: {
-            alertValue: "Email and Password is wrong",
-            alerType: "error",
-          }
-        });
-        }
-        
+
         if (type != "popup") {
           router.push("/login");
         }
@@ -169,31 +167,45 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
     <>
       <SignupPopup open={openSignup} closeSignupDialog={closeSignupTab} />
       {loading && (
-        <div style={{
-          position: 'fixed',
-          height: '100%',
-          width: '100%',
-          top: '0px',
-          left: '0px',
-          display: 'flex',
-          justifyContent: "center",
-          backgroundColor: " rgb(0 0 0 / 50%)",
-          alignItems: "center",
-          zIndex: 100,
-        }}>
-          <img style={{
-            height: "100px",
-            width: "100px",
-            marginTop: "100pz"
+        <div
+          style={{
+            position: "fixed",
+            height: "100%",
+            width: "100%",
+            top: "0px",
+            left: "0px",
+            display: "flex",
+            justifyContent: "center",
+            backgroundColor: " rgb(0 0 0 / 50%)",
+            alignItems: "center",
+            zIndex: 100,
           }}
-            src="/assets/images/gif/loading.gif" />
+        >
+          <img
+            style={{
+              height: "100px",
+              width: "100px",
+              marginTop: "100pz",
+            }}
+            src="/assets/images/gif/loading.gif"
+          />
         </div>
       )}
       <StyledSessionCard mx="auto" my="2rem" boxShadow="large">
         <form className="content" onSubmit={handleSubmit}>
-          {type === "loginPage" && (<Alert onLogin />)}
+          {type === "loginPage" && <Alert onLogin />}
+          <img
+            style={{
+              width: "80px",
+              display: "block",
+              marginRight: "auto",
+              marginLeft: "auto",
+            }}
+            src="assets/images/logos/footer.png"
+            alt="logo"
+          />
           <H3 textAlign="center" mb="0.5rem">
-            Welcome To Ecommerce
+            Welcome To CashConnect
           </H3>
           <H5
             fontWeight="600"
@@ -202,20 +214,20 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
             textAlign="center"
             mb="2.25rem"
           >
-            Log in with email & password
+            Please Login Your Account
           </H5>
 
           <TextField
             mb="0.75rem"
-            name="email"
+            name="primary_phone"
             placeholder="exmple@mail.com"
             label="Email or Phone Number"
-            type="email"
+            type="primary_phone"
             fullwidth
             onBlur={handleBlur}
             onChange={handleChange}
-            value={values.email || ""}
-            errorText={touched.email && errors.email}
+            value={values.primary_phone || ""}
+            errorText={touched.primary_phone && errors.primary_phone}
           />
           <TextField
             mb="1rem"
@@ -298,7 +310,14 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
 
           <FlexBox justifyContent="center" mb="1.25rem">
             <SemiSpan>Don’t have account?</SemiSpan>
-            <H6 color="primary.main" style={{ cursor: "pointer" }} onClick={gotosingup} ml="0.5rem" borderColor="primary.main" borderBottom="1px solid #e94560">
+            <H6
+              color="primary.main"
+              style={{ cursor: "pointer" }}
+              onClick={gotosingup}
+              ml="0.5rem"
+              borderColor="primary.main"
+              borderBottom="1px solid #e94560"
+            >
               Sign Up
             </H6>
           </FlexBox>
@@ -320,12 +339,16 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
 };
 
 const initialValues = {
-  email: "",
+  primary_phone: "",
   password: "",
 };
 
 const formSchema = yup.object().shape({
-  email: yup.string().email("invalid email").required("${path} is required"),
+  primary_phone: yup
+    .string()
+    .required("${path} is required")
+    .min(11, "Please remove country code")
+    .max(11, "Please remove country code"),
   password: yup.string().required("${path} is required"),
 });
 

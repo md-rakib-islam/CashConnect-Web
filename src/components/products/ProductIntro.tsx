@@ -300,6 +300,68 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       }
     }
   };
+  const handleBuyNow = (action) => {
+    if (isLogin) {
+      const dateObj: any = new Date();
+      const currentDate =
+        dateObj.getFullYear() +
+        "-" +
+        (dateObj.getMonth() + 1).toString().padStart(2, 0) +
+        "-" +
+        dateObj.getDate().toString().padStart(2, 0);
+
+      const orderData = {
+        product: id || routerId,
+        quantity: 1,
+        price: price,
+        order_date: currentDate,
+        branch: 1,
+        user: user_id,
+      };
+
+      //addToCart
+      if (action == "addToCart") {
+        console.log("orderData", orderData);
+        axios
+          .post(`${Customer_Order_Create}`, orderData, authTOKEN)
+          .then((res) => {
+            console.log("orderRes", res);
+
+            localStorage.setItem("OrderId", res.data.order_details.id);
+            window.dispatchEvent(
+              new CustomEvent("storage", {
+                detail: { name: "setted order id" },
+              })
+            );
+            setGetItemId(Math.random());
+            dispatch({
+              type: "CHANGE_CART_QUANTITY",
+              payload: {
+                chartQuantity: Math.random(),
+                prductId: id || routerId,
+              },
+            });
+            router.push("/checkout");
+          })
+          .catch(() => {
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alerType: "error",
+                alertValue: "something went wronggggggggg",
+              },
+            });
+          });
+      }
+    } else {
+      if (isMobile) {
+        localStorage.setItem("backAfterLogin", `/product/${id}`);
+        router.push("/login");
+      } else {
+        setOpenLogin(true);
+      }
+    }
+  };
 
   return (
     <>
@@ -408,16 +470,29 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
             </Box>
 
             {!cartQuantity ? (
-              <Button
-                disabled={!stock}
-                variant="contained"
-                size="small"
-                color="primary"
-                mb="36px"
-                onClick={() => handleCartAmountChange(1, "addToCart")}
-              >
-                Add to Cart
-              </Button>
+              <FlexBox alignItems="center" mb="36px">
+                <Button
+                  disabled={!stock}
+                  variant="contained"
+                  size="small"
+                  color="primary"
+                  mb="36px"
+                  onClick={() => handleCartAmountChange(1, "addToCart")}
+                >
+                  Add to Cart
+                </Button>
+                <Button
+                  disabled={!stock}
+                  variant="contained"
+                  size="small"
+                  color="primary"
+                  marginLeft="15px"
+                  mb="36px"
+                  onClick={() => handleBuyNow("addToCart")}
+                >
+                  Buy Now
+                </Button>
+              </FlexBox>
             ) : (
               <FlexBox alignItems="center" mb="36px">
                 <Button

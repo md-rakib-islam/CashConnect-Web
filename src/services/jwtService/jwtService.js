@@ -1,20 +1,20 @@
-
 import { LOGIN_URL } from "@data/constants";
 import axios from "axios";
 
 class JwtService {
-
   init() {
     this.setInterceptors();
     this.handleAuthentication();
   }
 
-
-  signInWithEmailAndPassword = (email, password) => {
+  signInWithEmailAndPassword = (primary_phone, password) => {
     return new Promise((resolve, reject) => {
       console.log(LOGIN_URL);
       axios
-        .post(`${LOGIN_URL}`, { email: email, password: password })
+        .post(`${LOGIN_URL}`, {
+          primary_phone: primary_phone,
+          password: password,
+        })
         .then((response) => {
           console.log("loginRes", response);
           if (response) {
@@ -27,6 +27,7 @@ class JwtService {
             this.setSession(`Bearer ${response.data.access}`);
             const user = {
               email: response.data.email,
+              primary_phone: response.data.primary_phone,
               displayName: response.data.username,
               photoURL: response.data.image,
               role: response.data.role,
@@ -37,23 +38,17 @@ class JwtService {
           }
         })
         .catch((rer) => {
-          if (rer.response.status == 403){
+          if (rer.response.status == 403) {
             reject(rer);
-
-          }
-          else if(rer.response.status == 401){
+          } else if (rer.response.status == 401) {
             reject(rer);
-
+          } else {
+            reject(rer);
           }
-          else{
-             reject(rer);
-          }
-          console.log('rer.response.status',rer.response.status)
-         
+          console.log("rer.response.status", rer.response.status);
         });
     });
   };
-
 
   setSession = (access_token) => {
     if (access_token) {
@@ -68,7 +63,6 @@ class JwtService {
   logout = () => {
     this.setSession(null);
   };
-
 }
 
 const instance = new JwtService();
