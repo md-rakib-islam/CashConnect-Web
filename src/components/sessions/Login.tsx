@@ -221,7 +221,7 @@ const Login: React.FC<LoginProps> = ({
             mb="0.75rem"
             name="primary_phone"
             placeholder="exmple@mail.com"
-            label="Email or Phone Number"
+            label="Phone Number"
             type="primary_phone"
             fullwidth
             onBlur={handleBlur}

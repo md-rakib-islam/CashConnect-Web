@@ -1,5 +1,4 @@
 import Box from "@component/Box";
-import { useAppContext } from "@context/app/AppContext";
 import useWindowSize from "@hook/useWindowSize";
 import { useRouter } from "next/router";
 import React, { Fragment } from "react";
@@ -8,35 +7,31 @@ import Icon from "../icon/Icon";
 import Typography from "../Typography";
 import {
   DashboardNavigationWrapper,
-  StyledDashboardNav
+  StyledDashboardNav,
 } from "./DashboardStyle";
 
 const CustomerDashboardNavigation = () => {
   const { pathname } = useRouter();
 
-  const { dispatch } = useAppContext()
-  
-  const Router = useRouter()
+  const Router = useRouter();
 
   const width = useWindowSize();
   const isMobile = width < 769;
 
   const handleLogout = () => {
+    localStorage.removeItem("UserId");
+    localStorage.removeItem("jwt_access_token");
+    localStorage.removeItem("OrderId");
+    localStorage.removeItem("userType");
 
-    localStorage.removeItem("UserId")
-    localStorage.removeItem("jwt_access_token")
-    localStorage.removeItem("OrderId")
-    localStorage.removeItem("userType")
-
-    dispatch({
-      type: "CHANGE_ALERT",
-      payload: {
-        alertValue: "logout success",
-      }
-    })
-    Router.push("/")
-
-  }
+    // dispatch({
+    //   type: "CHANGE_ALERT",
+    //   payload: {
+    //     alertValue: "logout success",
+    //   }
+    // })
+    Router.push("/");
+  };
 
   return (
     <DashboardNavigationWrapper px="0px" pb="1.5rem" color="gray.900">
@@ -46,9 +41,7 @@ const CustomerDashboardNavigation = () => {
             {item.title}
           </Typography>
           {item.list.map((item) => {
-
-            return (!isMobile && item.title === "Log Out") ? null : (
-
+            return !isMobile && item.title === "Log Out" ? null : (
               <StyledDashboardNav
                 isCurrentPath={pathname.includes(item.href)}
                 href={item.href}
@@ -57,7 +50,7 @@ const CustomerDashboardNavigation = () => {
                 mb="1.25rem"
                 onClick={() => {
                   if (item.title === "Log Out") {
-                    handleLogout()
+                    handleLogout();
                   }
                 }}
               >
@@ -71,9 +64,8 @@ const CustomerDashboardNavigation = () => {
                 </FlexBox>
                 {/* <span>{item.count}</span> */}
               </StyledDashboardNav>
-            )
-          }
-          )}
+            );
+          })}
         </Fragment>
       ))}
     </DashboardNavigationWrapper>

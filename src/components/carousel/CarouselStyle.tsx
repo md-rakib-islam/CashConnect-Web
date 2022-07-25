@@ -1,7 +1,6 @@
 import { deviceSize } from "@utils/constants";
 import { CarouselProvider, CarouselProviderProps } from "pure-react-carousel";
 import styled from "styled-components";
-import { getTheme } from "../../utils/utils";
 
 type StyledCarouselProps = {
   showDots?: boolean;
@@ -25,7 +24,7 @@ export const StyledCarousel = styled(
 )`
   position: relative;
   min-width: 100%;
-  // min-height: 420px;
+  min-height: 100%;
 
   .custom-slider {
     margin-left: calc(-1 * ${({ spacing }) => spacing || "0px"} / 2);
@@ -97,8 +96,7 @@ export const StyledCarousel = styled(
     border-radius: 300px;
     margin: 0.25rem;
     cursor: pointer;
-    border: 1px solid
-      ${({ dotColor }) => dotColor || getTheme("colors.secondary.main")};
+    border: 1px solid #e94560;
   }
   .dot:after {
     position: absolute;
@@ -109,8 +107,7 @@ export const StyledCarousel = styled(
     left: 50%;
     border-radius: 300px;
     transform: translate(-50%, -50%) scaleX(0);
-    background: ${({ dotColor }) =>
-      dotColor || getTheme("colors.secondary.main")};
+    background: #e94560;
   }
   .dot-active:after {
     transform: translate(-50%, -50%) scaleX(1);

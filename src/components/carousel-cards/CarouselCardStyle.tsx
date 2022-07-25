@@ -33,15 +33,15 @@ export const StyledCarouselCard1 = styled.div`
     position: relative;
     //   width: 50%;
     img {
-      height: 400px;
+     height: 100%;
       width: 100%;
     }
   }
 
-  @media only screen and (max-width: 900px) {
-    margin-left: 0px;
+  @media only screen and (max-width: 869px) {
+  margin-left: 0px;
+    margin-right: 0px;
     padding-left: 0px;
-
     .title {
       font-size: 32px;
     }
@@ -49,6 +49,7 @@ export const StyledCarouselCard1 = styled.div`
     position: relative;
     //   width: 50%;
     img {
+      height: 100%;
       width: 100%;
     }
   }
@@ -56,6 +57,7 @@ export const StyledCarouselCard1 = styled.div`
 
   @media only screen and (max-width: 425px) {
     margin-left: 0px;
+    margin-right: 0px;
     padding-left: 0px;
     .title {
       display: none;
@@ -74,7 +76,7 @@ export const StyledCarouselCard1 = styled.div`
     //   width: 50%;
     img {
 
-      height: 180px;
+      height: 100%;
       width: 100%;
     }
   }

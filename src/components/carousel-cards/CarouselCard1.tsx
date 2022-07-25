@@ -1,8 +1,8 @@
 import { BASE_URL } from "@data/constants";
-import Link from "next/link";
+//import Link from "next/link";
 import React from "react";
-import Button from "../buttons/Button";
-import Typography from "../Typography";
+//import Button from "../buttons/Button";
+//import Typography from "../Typography";
 import { StyledCarouselCard1 } from "./CarouselCardStyle";
 
 export interface CarouselCard1Props {
@@ -12,16 +12,18 @@ export interface CarouselCard1Props {
   image: string;
 }
 
-const CarouselCard1: React.FC<CarouselCard1Props> = ({ title, details, link, image }) => {
+const CarouselCard1: React.FC<CarouselCard1Props> = ({
+  //title,
+  // details,
+  // link,
+  image,
+}) => {
   return (
     <StyledCarouselCard1>
       <div>
         <div className="image-holder">
-        <img
-          src={`${BASE_URL}${image}`}
-          alt="Not found"
-        />
-          <div className="sliderInfo">
+          <img src={`${BASE_URL}${image}`} alt="Not found" />
+          {/* <div className="sliderInfo">
               <h1 className="title">{title}</h1>
             <Typography style={{color: 'whitesmoke',fontWeight: 'bold'}} color="secondary.main" mb="1.35rem">{details}</Typography>
             <Link href={link || "/"}>
@@ -34,12 +36,9 @@ const CarouselCard1: React.FC<CarouselCard1Props> = ({ title, details, link, ima
                 Visit Collections
               </Button>
             </Link>
-          </div>
+          </div> */}
         </div>
-      
       </div>
-
-     
     </StyledCarouselCard1>
   );
 };
