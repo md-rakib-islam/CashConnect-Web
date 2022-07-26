@@ -96,7 +96,7 @@ export const StyledCarousel = styled(
     border-radius: 300px;
     margin: 0.25rem;
     cursor: pointer;
-    border: 1px solid #e94560;
+    border: 1px solid rgb(15 52 96);
   }
   .dot:after {
     position: absolute;
