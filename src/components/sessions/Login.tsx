@@ -57,6 +57,9 @@ const Login: React.FC<LoginProps> = ({
       setOpenSignup(true);
     }
   };
+  const gotoreset = () => {
+    router.push("/sendOtp");
+  };
 
   const togglePasswordVisibility = useCallback(() => {
     setPasswordVisibility((visible) => !visible);
@@ -256,9 +259,18 @@ const Login: React.FC<LoginProps> = ({
             value={values.password || ""}
             errorText={touched.password && errors.password}
           />
+          <SemiSpan
+            fullwidth
+            ml="0px"
+            style={{ cursor: "pointer" }}
+            onClick={gotoreset}
+          >
+            Forgot password?
+          </SemiSpan>
 
           <Button
             mb="1.65rem"
+            mt="1rem"
             variant="contained"
             color="primary"
             type="submit"
@@ -309,7 +321,9 @@ const Login: React.FC<LoginProps> = ({
           </FlexBox> */}
 
           <FlexBox justifyContent="center" mb="1.25rem">
-            <SemiSpan>Don’t have account?</SemiSpan>
+            <SemiSpan style={{ cursor: "pointer" }} onClick={gotosingup}>
+              Don’t have account?
+            </SemiSpan>
             <H6
               color="primary.main"
               style={{ cursor: "pointer" }}

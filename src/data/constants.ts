@@ -220,5 +220,10 @@ export const Get_all_parent_category_without_pagination = `${BASE_URL}/category/
 export const Get_phone_varification_code_by_customer = `${BASE_URL}/customer/api/v1/customer/verify_primary_phone/`;
 export const Get_phone_varification_code_by_vendor = `${BASE_URL}/vendor/api/v1/vendor/verify_primary_phone/`;
 
+// resetPasswordOtp
+export const Get_phone_varification_code_for_reset_password = `${BASE_URL}/user/api/v1/user/get_phone_otp/`;
+// resetPassword
+export const Reset_password_with_otp_code = `${BASE_URL}/user/api/v1/user/reset_password/`;
+
 // Message
 export const Create_message = `${BASE_URL}/message/api/v1/message/create/`;

@@ -1,18 +1,17 @@
 import FlexBox from "@component/FlexBox";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
-import Otp from "@component/sessions/Otp";
 import React from "react";
 import DashboardLayout from "@component/layout/FooterLayout";
+import ResetPassword from "@component/sessions/ResetPassword";
 
-const OptPage = () => {
+const resetPassword = () => {
   return (
     <FlexBox flexDirection="column" alignItems="center" justifyContent="center">
       <DashboardPageHeader />
-
-      <Otp />
+      <ResetPassword />
     </FlexBox>
   );
 };
-OptPage.layout = DashboardLayout;
+resetPassword.layout = DashboardLayout;
 
-export default OptPage;
+export default resetPassword;
