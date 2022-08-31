@@ -10,7 +10,7 @@ const Section1 = ({ sliderList }) => {
     <Fragment>
       <Navbar navListOpen={false} />
       <Box bg="gray.white" mb="3.75rem">
-        <Container slider pb="2rem">
+        <Container slider>
           <Carousel
             totalSlides={sliderList?.length}
             visibleSlides={1}
