@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
 import * as yup from "yup";
 import jwtService from "../../services/jwtService";
+import authService from "../../services/authService";
 import Box from "../Box";
 import Button from "../buttons/Button";
 import IconButton from "../buttons/IconButton";
@@ -16,8 +17,9 @@ import Divider from "../Divider";
 import FlexBox from "../FlexBox";
 import Icon from "../icon/Icon";
 import TextField from "../text-field/TextField";
-import { H3, H5, H6, SemiSpan, Span } from "../Typography";
+import { H3, H5, H6, SemiSpan, Small, Span } from "../Typography";
 import { StyledSessionCard } from "./SessionStyle";
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 
 interface LoginProps {
   type?: string;
@@ -159,9 +161,103 @@ const Login: React.FC<LoginProps> = ({
     );
   };
 
+  // facebook
+  const responseFacebook = (response) => {
+    console.log("response", response);
+    console.log("name", response.name);
+    const auth_token = response.accessToken;
+
+    // return authService.signInWithFacebook(auth_token).then(
+    //   (user) => {
+    //     console.log("userFacebook", user);
+
+    //     axios
+    //       .get(`${Get_Pending_Order_After_Login}`, authTOKEN)
+    //       .then((res) => {
+    //         console.log("order_Id_res", res);
+    //         if (res.data.id) {
+    //           localStorage.setItem("OrderId", res.data.id);
+    //         } else {
+    //           localStorage.removeItem("OrderId");
+    //         }
+    //       })
+    //       .catch(() => localStorage.removeItem("OrderId"));
+
+    //     dispatch({
+    //       type: "CHANGE_ALERT",
+    //       payload: {
+    //         alertValue: "login success...",
+    //       },
+    //     });
+
+    //     if (user.user_type === "customer") {
+    //       if (type != "popup") {
+    //         const backUrl = localStorage.getItem("backAfterLogin");
+    //         if (backUrl) {
+    //           localStorage.removeItem("backAfterLogin");
+    //           router.push(`${backUrl}`);
+    //         } else {
+    //           router.push("/profile");
+    //         }
+    //       } else {
+    //         closeLoginDialog();
+    //         localStorage.removeItem("backAfterLogin");
+    //       }
+    //     } else if (user.user_type == "vendor") {
+    //       if (type != "popup") {
+    //         const backUrl = localStorage.getItem("backAfterLogin");
+    //         if (backUrl) {
+    //           localStorage.removeItem("backAfterLogin");
+    //           router.push(`${backUrl}`);
+    //         } else {
+    //           router.push("/vendor/dashboard");
+    //         }
+    //       } else {
+    //         closeLoginDialog();
+    //         localStorage.removeItem("backAfterLogin");
+    //       }
+    //     }
+    //   },
+    //   (_errors) => {
+    //     console.log("login failed", _errors.response.status);
+
+    //     if (_errors.response.status == 403) {
+    //       dispatch({
+    //         type: "CHANGE_ALERT",
+    //         payload: {
+    //           alertValue: "Phone number is not verified",
+    //           alerType: "error",
+    //         },
+    //       });
+    //     } else if (_errors.response.status == 401) {
+    //       dispatch({
+    //         type: "CHANGE_ALERT",
+    //         payload: {
+    //           alertValue: "Email or Password is wrong",
+    //           alerType: "error",
+    //         },
+    //       });
+    //     } else {
+    //       dispatch({
+    //         type: "CHANGE_ALERT",
+    //         payload: {
+    //           alertValue: "Email and Password is wrong",
+    //           alerType: "error",
+    //         },
+    //       });
+    //     }
+
+    //     if (type != "popup") {
+    //       router.push("/login");
+    //     }
+    //   }
+    // );
+  };
+
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
       onSubmit: handleFormSubmit,
+
       initialValues,
       validationSchema: formSchema,
     });
@@ -287,8 +383,9 @@ const Login: React.FC<LoginProps> = ({
               </Span>
             </FlexBox>
           </Box>
-
-          {/* <FlexBox
+        </form>
+        <form style={{ padding: "1rem 3.75rem 0px" }}>
+          <FlexBox
             justifyContent="center"
             alignItems="center"
             bg="#3B5998"
@@ -301,7 +398,29 @@ const Login: React.FC<LoginProps> = ({
             <Icon variant="small" defaultcolor="auto" mr="0.5rem">
               facebook-filled-white
             </Icon>
-            <Small fontWeight="600">Continue with Facebook</Small>
+            <FacebookLogin
+              appId="5515163185212209"
+              autoLoad
+              callback={responseFacebook}
+              render={(renderProps) => (
+                <>
+                  <Button
+                    style={{
+                      width: "50%",
+                      backgroundColor: "#3B5998",
+                      border: "none",
+                      color: "whitesmoke",
+                      textAlign: "left",
+                      fontWeight: 700,
+                      fontSize: "0.9375rem",
+                    }}
+                    onClick={renderProps.onClick}
+                  >
+                    Continue with Facebook
+                  </Button>
+                </>
+              )}
+            />
           </FlexBox>
 
           <FlexBox
@@ -318,7 +437,7 @@ const Login: React.FC<LoginProps> = ({
               google-1
             </Icon>
             <Small fontWeight="600">Continue with Google</Small>
-          </FlexBox> */}
+          </FlexBox>
 
           <FlexBox justifyContent="center" mb="1.25rem">
             <SemiSpan style={{ cursor: "pointer" }} onClick={gotosingup}>

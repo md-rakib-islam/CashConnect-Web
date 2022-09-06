@@ -80,6 +80,7 @@ export const Get_Pending_Order_After_Login = `${BASE_URL}/customerorder/api/v1/c
 
 //login api
 export const LOGIN_URL = `${BASE_URL}/user/api/v1/user/login/`;
+export const FACEBOOK_LOGIN_URL = `${BASE_URL}/social/auth/facebook/login/`;
 
 //order api
 export const order_Status_All = `${BASE_URL}/orderstatus/api/v1/orderstatus/all/`;
