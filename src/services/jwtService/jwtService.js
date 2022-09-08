@@ -7,12 +7,12 @@ class JwtService {
     this.handleAuthentication();
   }
 
-  signInWithEmailAndPassword = (primary_phone, password) => {
+  signInWithEmailAndPassword = (username, password) => {
     return new Promise((resolve, reject) => {
       console.log(LOGIN_URL);
       axios
         .post(`${LOGIN_URL}`, {
-          primary_phone: primary_phone,
+          username: username,
           password: password,
         })
         .then((response) => {
@@ -27,6 +27,7 @@ class JwtService {
             this.setSession(`Bearer ${response.data.access}`);
             const user = {
               email: response.data.email,
+              username: response.data.username,
               primary_phone: response.data.primary_phone,
               displayName: response.data.username,
               photoURL: response.data.image,

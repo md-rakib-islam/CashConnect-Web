@@ -2,9 +2,9 @@
 //http://api.cashconnectbd.com
 
 //base url
-// export const BASE_URL = "http://192.168.0.100:8001";
-// export const BASE_URL = "http://api.cashconnectbd.com";
-export const BASE_URL = "http://134.119.184.218:8000";
+export const BASE_URL = "http://192.168.0.151:8001";
+// export const BASE_URL = "http://api2.cashconnectbd.com";
+// export const BASE_URL = "http://134.119.184.218:8000";
 
 //branch api
 export const Branch_All = `${BASE_URL}/branch/api/v1/branch/all/`;
@@ -81,6 +81,7 @@ export const Get_Pending_Order_After_Login = `${BASE_URL}/customerorder/api/v1/c
 //login api
 export const LOGIN_URL = `${BASE_URL}/user/api/v1/user/login/`;
 export const FACEBOOK_LOGIN_URL = `${BASE_URL}/social/auth/facebook/login/`;
+export const GOOGLE_LOGIN_URL = `${BASE_URL}/social/atuh/google/login/`;
 
 //order api
 export const order_Status_All = `${BASE_URL}/orderstatus/api/v1/orderstatus/all/`;

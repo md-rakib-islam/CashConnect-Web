@@ -20,6 +20,7 @@ import TextField from "../text-field/TextField";
 import { H3, H5, H6, SemiSpan, Small, Span } from "../Typography";
 import { StyledSessionCard } from "./SessionStyle";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+import GoogleLogin from "react-google-login";
 
 interface LoginProps {
   type?: string;
@@ -70,25 +71,26 @@ const Login: React.FC<LoginProps> = ({
   const handleFormSubmit = async (values) => {
     setLoading(true);
 
-    const { password } = values;
-    const newValue = "+88" + values.primary_phone;
+    const { username, password } = values;
     console.log(values);
 
-    return jwtService.signInWithEmailAndPassword(newValue, password).then(
+    return jwtService.signInWithEmailAndPassword(username, password).then(
       (user) => {
         console.log("user", user);
 
         axios
           .get(`${Get_Pending_Order_After_Login}`, authTOKEN)
           .then((res) => {
-            console.log("order_Id_res", res);
+            console.log("order_Id_res", res, authTOKEN);
             if (res.data.id) {
               localStorage.setItem("OrderId", res.data.id);
             } else {
               localStorage.removeItem("OrderId");
             }
           })
-          .catch(() => localStorage.removeItem("OrderId"));
+          .catch(() => {
+            setLoading(false), localStorage.removeItem("OrderId");
+          });
 
         dispatch({
           type: "CHANGE_ALERT",
@@ -96,34 +98,46 @@ const Login: React.FC<LoginProps> = ({
             alertValue: "login success...",
           },
         });
-
-        if (user.user_type === "customer") {
-          if (type != "popup") {
-            const backUrl = localStorage.getItem("backAfterLogin");
-            if (backUrl) {
-              localStorage.removeItem("backAfterLogin");
-              router.push(`${backUrl}`);
-            } else {
-              router.push("/profile");
-            }
-          } else {
-            closeLoginDialog();
+        if (type != "popup") {
+          const backUrl = localStorage.getItem("backAfterLogin");
+          if (backUrl) {
             localStorage.removeItem("backAfterLogin");
-          }
-        } else if (user.user_type == "vendor") {
-          if (type != "popup") {
-            const backUrl = localStorage.getItem("backAfterLogin");
-            if (backUrl) {
-              localStorage.removeItem("backAfterLogin");
-              router.push(`${backUrl}`);
-            } else {
-              router.push("/vendor/dashboard");
-            }
+            router.push(`${backUrl}`);
           } else {
-            closeLoginDialog();
-            localStorage.removeItem("backAfterLogin");
+            router.push("/profile");
           }
+        } else {
+          closeLoginDialog();
+          localStorage.removeItem("backAfterLogin");
         }
+
+        // if (user.user_type === "customer") {
+        //   if (type != "popup") {
+        //     const backUrl = localStorage.getItem("backAfterLogin");
+        //     if (backUrl) {
+        //       localStorage.removeItem("backAfterLogin");
+        //       router.push(`${backUrl}`);
+        //     } else {
+        //       router.push("/profile");
+        //     }
+        //   } else {
+        //     closeLoginDialog();
+        //     localStorage.removeItem("backAfterLogin");
+        //   }
+        // } else if (user.user_type == "vendor") {
+        //   if (type != "popup") {
+        //     const backUrl = localStorage.getItem("backAfterLogin");
+        //     if (backUrl) {
+        //       localStorage.removeItem("backAfterLogin");
+        //       router.push(`${backUrl}`);
+        //     } else {
+        //       router.push("/vendor/dashboard");
+        //     }
+        //   } else {
+        //     closeLoginDialog();
+        //     localStorage.removeItem("backAfterLogin");
+        //   }
+        // }
       },
       (_errors) => {
         console.log("login failed", _errors.response.status);
@@ -163,95 +177,211 @@ const Login: React.FC<LoginProps> = ({
 
   // facebook
   const responseFacebook = (response) => {
-    console.log("response", response);
+    console.log("responseFacebook", response);
     console.log("name", response.name);
     const auth_token = response.accessToken;
 
-    // return authService.signInWithFacebook(auth_token).then(
-    //   (user) => {
-    //     console.log("userFacebook", user);
+    return authService.signInWithFacebook(auth_token).then(
+      (user) => {
+        console.log("userFacebook", user);
 
-    //     axios
-    //       .get(`${Get_Pending_Order_After_Login}`, authTOKEN)
-    //       .then((res) => {
-    //         console.log("order_Id_res", res);
-    //         if (res.data.id) {
-    //           localStorage.setItem("OrderId", res.data.id);
-    //         } else {
-    //           localStorage.removeItem("OrderId");
-    //         }
-    //       })
-    //       .catch(() => localStorage.removeItem("OrderId"));
+        axios
+          .get(`${Get_Pending_Order_After_Login}`, authTOKEN)
+          .then((res) => {
+            console.log("order_Id_res", res);
+            if (res.data.id) {
+              localStorage.setItem("OrderId", res.data.id);
+            } else {
+              localStorage.removeItem("OrderId");
+            }
+          })
+          .catch(() => localStorage.removeItem("OrderId"));
 
-    //     dispatch({
-    //       type: "CHANGE_ALERT",
-    //       payload: {
-    //         alertValue: "login success...",
-    //       },
-    //     });
+        dispatch({
+          type: "CHANGE_ALERT",
+          payload: {
+            alertValue: "login success...",
+          },
+        });
 
-    //     if (user.user_type === "customer") {
-    //       if (type != "popup") {
-    //         const backUrl = localStorage.getItem("backAfterLogin");
-    //         if (backUrl) {
-    //           localStorage.removeItem("backAfterLogin");
-    //           router.push(`${backUrl}`);
-    //         } else {
-    //           router.push("/profile");
-    //         }
-    //       } else {
-    //         closeLoginDialog();
-    //         localStorage.removeItem("backAfterLogin");
-    //       }
-    //     } else if (user.user_type == "vendor") {
-    //       if (type != "popup") {
-    //         const backUrl = localStorage.getItem("backAfterLogin");
-    //         if (backUrl) {
-    //           localStorage.removeItem("backAfterLogin");
-    //           router.push(`${backUrl}`);
-    //         } else {
-    //           router.push("/vendor/dashboard");
-    //         }
-    //       } else {
-    //         closeLoginDialog();
-    //         localStorage.removeItem("backAfterLogin");
-    //       }
-    //     }
-    //   },
-    //   (_errors) => {
-    //     console.log("login failed", _errors.response.status);
+        // if (user.user_type === "customer") {
+        //   if (type != "popup") {
+        //     const backUrl = localStorage.getItem("backAfterLogin");
+        //     if (backUrl) {
+        //       localStorage.removeItem("backAfterLogin");
+        //       router.push(`${backUrl}`);
+        //     } else {
+        //       router.push("/profile");
+        //     }
+        //   } else {
+        //     closeLoginDialog();
+        //     localStorage.removeItem("backAfterLogin");
+        //   }
+        // } else if (user.user_type == "vendor") {
+        //   if (type != "popup") {
+        //     const backUrl = localStorage.getItem("backAfterLogin");
+        //     if (backUrl) {
+        //       localStorage.removeItem("backAfterLogin");
+        //       router.push(`${backUrl}`);
+        //     } else {
+        //       router.push("/vendor/dashboard");
+        //     }
+        //   } else {
+        //     closeLoginDialog();
+        //     localStorage.removeItem("backAfterLogin");
+        //   }
+        // }
+        if (type != "popup") {
+          const backUrl = localStorage.getItem("backAfterLogin");
+          if (backUrl) {
+            localStorage.removeItem("backAfterLogin");
+            router.push(`${backUrl}`);
+          } else {
+            router.push("/profile");
+          }
+        } else {
+          closeLoginDialog();
+          localStorage.removeItem("backAfterLogin");
+        }
+      },
+      (_errors) => {
+        console.log("login failed", _errors.response.status);
 
-    //     if (_errors.response.status == 403) {
-    //       dispatch({
-    //         type: "CHANGE_ALERT",
-    //         payload: {
-    //           alertValue: "Phone number is not verified",
-    //           alerType: "error",
-    //         },
-    //       });
-    //     } else if (_errors.response.status == 401) {
-    //       dispatch({
-    //         type: "CHANGE_ALERT",
-    //         payload: {
-    //           alertValue: "Email or Password is wrong",
-    //           alerType: "error",
-    //         },
-    //       });
-    //     } else {
-    //       dispatch({
-    //         type: "CHANGE_ALERT",
-    //         payload: {
-    //           alertValue: "Email and Password is wrong",
-    //           alerType: "error",
-    //         },
-    //       });
-    //     }
+        if (_errors.response.status == 403) {
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: "Phone number is not verified",
+              alerType: "error",
+            },
+          });
+        } else if (_errors.response.status == 401) {
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: "Email or Password is wrong",
+              alerType: "error",
+            },
+          });
+        } else {
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: "Email and Password is wrong",
+              alerType: "error",
+            },
+          });
+        }
 
-    //     if (type != "popup") {
-    //       router.push("/login");
-    //     }
-    //   }
-    // );
+        if (type != "popup") {
+          router.push("/login");
+        }
+      }
+    );
+  };
+  // google
+  const responseGoogle = (response) => {
+    console.log("responseGoogle", response);
+    console.log("name", response.name);
+    const auth_token = response.id_token;
+
+    return authService.signInWithGoogle(auth_token).then(
+      (user) => {
+        console.log("userGoogle", user);
+
+        axios
+          .get(`${Get_Pending_Order_After_Login}`, authTOKEN)
+          .then((res) => {
+            console.log("order_Id_res", res);
+            if (res.data.id) {
+              localStorage.setItem("OrderId", res.data.id);
+            } else {
+              localStorage.removeItem("OrderId");
+            }
+          })
+          .catch(() => localStorage.removeItem("OrderId"));
+
+        dispatch({
+          type: "CHANGE_ALERT",
+          payload: {
+            alertValue: "login success...",
+          },
+        });
+
+        // if (user.user_type === "customer") {
+        //   if (type != "popup") {
+        //     const backUrl = localStorage.getItem("backAfterLogin");
+        //     if (backUrl) {
+        //       localStorage.removeItem("backAfterLogin");
+        //       router.push(`${backUrl}`);
+        //     } else {
+        //       router.push("/profile");
+        //     }
+        //   } else {
+        //     closeLoginDialog();
+        //     localStorage.removeItem("backAfterLogin");
+        //   }
+        // } else if (user.user_type == "vendor") {
+        //   if (type != "popup") {
+        //     const backUrl = localStorage.getItem("backAfterLogin");
+        //     if (backUrl) {
+        //       localStorage.removeItem("backAfterLogin");
+        //       router.push(`${backUrl}`);
+        //     } else {
+        //       router.push("/vendor/dashboard");
+        //     }
+        //   } else {
+        //     closeLoginDialog();
+        //     localStorage.removeItem("backAfterLogin");
+        //   }
+        // }
+        if (type != "popup") {
+          const backUrl = localStorage.getItem("backAfterLogin");
+          if (backUrl) {
+            localStorage.removeItem("backAfterLogin");
+            router.push(`${backUrl}`);
+          } else {
+            router.push("/profile");
+          }
+        } else {
+          closeLoginDialog();
+          localStorage.removeItem("backAfterLogin");
+        }
+      },
+      (_errors) => {
+        console.log("login failed", _errors.response.status);
+
+        if (_errors.response.status == 403) {
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: "Phone number is not verified",
+              alerType: "error",
+            },
+          });
+        } else if (_errors.response.status == 401) {
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: "Email or Password is wrong",
+              alerType: "error",
+            },
+          });
+        } else {
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: "Email and Password is wrong",
+              alerType: "error",
+            },
+          });
+        }
+
+        if (type != "popup") {
+          router.push("/login");
+        }
+      }
+    );
   };
 
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
@@ -318,15 +448,15 @@ const Login: React.FC<LoginProps> = ({
 
           <TextField
             mb="0.75rem"
-            name="primary_phone"
-            placeholder="exmple@mail.com"
-            label="Phone Number"
-            type="primary_phone"
+            name="username"
+            placeholder="User Name"
+            label="User Name"
+            type="username"
             fullwidth
             onBlur={handleBlur}
             onChange={handleChange}
-            value={values.primary_phone || ""}
-            errorText={touched.primary_phone && errors.primary_phone}
+            value={values.username || ""}
+            errorText={touched.username && errors.username}
           />
           <TextField
             mb="1rem"
@@ -385,45 +515,82 @@ const Login: React.FC<LoginProps> = ({
           </Box>
         </form>
         <form style={{ padding: "1rem 3.75rem 0px" }}>
-          <FlexBox
-            justifyContent="center"
-            alignItems="center"
-            bg="#3B5998"
-            borderRadius={5}
-            height="40px"
-            color="white"
-            cursor="pointer"
-            mb="0.75rem"
-          >
-            <Icon variant="small" defaultcolor="auto" mr="0.5rem">
-              facebook-filled-white
-            </Icon>
-            <FacebookLogin
-              appId="5515163185212209"
-              autoLoad
-              callback={responseFacebook}
-              render={(renderProps) => (
-                <>
-                  <Button
+          <FacebookLogin
+            appId="5515163185212209"
+            callback={responseFacebook}
+            render={(renderProps) => (
+              <>
+                <FlexBox
+                  justifyContent="center"
+                  alignItems="center"
+                  bg="#3B5998"
+                  borderRadius={5}
+                  height="40px"
+                  color="white"
+                  cursor="pointer"
+                  mb="0.75rem"
+                  onClick={renderProps.onClick}
+                >
+                  <Icon variant="small" defaultcolor="auto" mr="0.5rem">
+                    facebook-filled-white
+                  </Icon>
+                  <Small
+                    onClick={responseFacebook}
                     style={{
-                      width: "50%",
+                      width: "45%",
                       backgroundColor: "#3B5998",
                       border: "none",
                       color: "whitesmoke",
                       textAlign: "left",
-                      fontWeight: 700,
-                      fontSize: "0.9375rem",
+                      fontWeight: 600,
                     }}
-                    onClick={renderProps.onClick}
                   >
                     Continue with Facebook
-                  </Button>
-                </>
-              )}
-            />
-          </FlexBox>
+                  </Small>
+                </FlexBox>
+              </>
+            )}
+          />
+          <GoogleLogin
+            clientId="1082909611954-1akapcf4el2k71a8khthv8k6c3a1hchg.apps.googleusercontent.com"
+            buttonText="Login"
+            onSuccess={responseGoogle}
+            // onFailure={responseGoogle}
+            cookiePolicy={"single_host_origin"}
+            render={(renderProps) => (
+              <>
+                <FlexBox
+                  justifyContent="center"
+                  alignItems="center"
+                  bg="#4285F4"
+                  borderRadius={5}
+                  height="40px"
+                  color="white"
+                  cursor="pointer"
+                  mb="0.75rem"
+                  onClick={renderProps.onClick}
+                >
+                  <Icon variant="small" defaultcolor="auto" mr="0.5rem">
+                    google-1
+                  </Icon>
+                  <Small
+                    style={{
+                      width: "45%",
+                      backgroundColor: "#4285F4",
+                      border: "none",
+                      color: "whitesmoke",
+                      textAlign: "left",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Continue with Google
+                  </Small>
+                </FlexBox>
+              </>
+            )}
+          />
 
-          <FlexBox
+          {/* <FlexBox
             justifyContent="center"
             alignItems="center"
             bg="#4285F4"
@@ -437,7 +604,7 @@ const Login: React.FC<LoginProps> = ({
               google-1
             </Icon>
             <Small fontWeight="600">Continue with Google</Small>
-          </FlexBox>
+          </FlexBox> */}
 
           <FlexBox justifyContent="center" mb="1.25rem">
             <SemiSpan style={{ cursor: "pointer" }} onClick={gotosingup}>
@@ -472,16 +639,13 @@ const Login: React.FC<LoginProps> = ({
 };
 
 const initialValues = {
-  primary_phone: "",
+  username: "",
   password: "",
 };
 
 const formSchema = yup.object().shape({
-  primary_phone: yup
-    .string()
-    .required("${path} is required")
-    .min(11, "Please remove country code")
-    .max(11, "Please remove country code"),
+  username: yup.string().required("${path} is required"),
+
   password: yup.string().required("${path} is required"),
 });
 
