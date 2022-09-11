@@ -179,7 +179,9 @@ const Login: React.FC<LoginProps> = ({
   const responseFacebook = (response) => {
     console.log("responseFacebook", response);
     console.log("name", response.name);
-    const auth_token = response.accessToken;
+    const fb_auth_token = sessionStorage.getItem("fbssls_5515163185212209");
+
+    const auth_token = response.accessToken || fb_auth_token;
 
     return authService.signInWithFacebook(auth_token).then(
       (user) => {
