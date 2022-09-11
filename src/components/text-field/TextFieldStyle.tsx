@@ -23,7 +23,8 @@ export const SyledTextField = styled.input<
       boxShadow: props.boxShadow && "0px 0px 10px #ababab",
 
       "&:hover": {
-        borderColor: "gray.500",
+        borderColor: "primary.main",
+        // borderColor: "gray.500",
       },
       "&:focus": {
         outlineColor: "primary.main",
@@ -51,6 +52,7 @@ export const TextFieldWrapper = styled.div<TextFieldProps & SpaceProps>(
       small: {
         display: "block",
         color: props.errorColor ? props.errorColor : "error.main",
+        fontSize: "0.875rem",
         marginTop: "0.25rem",
         marginLeft: "0.25rem",
       },

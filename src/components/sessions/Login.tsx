@@ -249,34 +249,35 @@ const Login: React.FC<LoginProps> = ({
       (_errors) => {
         console.log("login failed", _errors.response.status);
 
-        if (_errors.response.status == 403) {
-          dispatch({
-            type: "CHANGE_ALERT",
-            payload: {
-              alertValue: "Phone number is not verified",
-              alerType: "error",
-            },
-          });
-        } else if (_errors.response.status == 401) {
-          dispatch({
-            type: "CHANGE_ALERT",
-            payload: {
-              alertValue: "Email or Password is wrong",
-              alerType: "error",
-            },
-          });
-        } else {
-          dispatch({
-            type: "CHANGE_ALERT",
-            payload: {
-              alertValue: "Email and Password is wrong",
-              alerType: "error",
-            },
-          });
-        }
+        // if (_errors.response.status == 400) {
+        //   dispatch({
+        //     type: "CHANGE_ALERT",
+        //     payload: {
+        //       alertValue: "Waiting...",
+        //     },
+        //   });
+        // }
+        // else if (_errors.response.status == 401) {
+        //   dispatch({
+        //     type: "CHANGE_ALERT",
+        //     payload: {
+        //       alertValue: "Email or Password is wrong",
+        //       alerType: "error",
+        //     },
+        //   });
+        // }
+        // else {
+        //   dispatch({
+        //     type: "CHANGE_ALERT",
+        //     payload: {
+        //       alertValue: "",
+        //       alerType: "error",
+        //     },
+        //   });
+        // }
 
         if (type != "popup") {
-          router.push("/login");
+          router.push("/login").then(() => window.location.reload());
         }
       }
     );
@@ -440,12 +441,12 @@ const Login: React.FC<LoginProps> = ({
           </H3>
           <H5
             fontWeight="600"
-            fontSize="12px"
+            fontSize="0.875rem"
             color="gray.800"
             textAlign="center"
             mb="2.25rem"
           >
-            Please Login Your Account
+            Please Login To Your Account
           </H5>
 
           <TextField
@@ -490,7 +491,7 @@ const Login: React.FC<LoginProps> = ({
           <SemiSpan
             fullwidth
             ml="0px"
-            style={{ cursor: "pointer" }}
+            style={{ cursor: "pointer", fontSize: "0.875rem" }}
             onClick={gotoreset}
           >
             Forgot password?
@@ -510,7 +511,12 @@ const Login: React.FC<LoginProps> = ({
           <Box mb="1rem">
             <Divider width="200px" mx="auto" />
             <FlexBox justifyContent="center" mt="-14px">
-              <Span color="text.muted" bg="body.paper" px="1rem">
+              <Span
+                fontSize="0.875rem"
+                color="text.muted"
+                bg="body.paper"
+                px="1rem"
+              >
                 on
               </Span>
             </FlexBox>

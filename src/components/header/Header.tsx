@@ -83,6 +83,13 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
       Router.push("/profile");
     }
   };
+  const login = () => {
+    router
+      .replace({
+        pathname: "/login",
+      })
+      .then(() => router.reload());
+  };
 
   try {
     var userID: string = localStorage.getItem("UserId");
@@ -181,11 +188,9 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
 
           <FlexBox className="header-right" alignItems="center">
             {!isLogin ? (
-              <Link href="/login">
-                <IconButton ml="1rem" bg="gray.200" p="8px">
-                  <Icon size="28px">user</Icon>
-                </IconButton>
-              </Link>
+              <IconButton onClick={login} ml="1rem" bg="gray.200" p="8px">
+                <Icon size="28px">user</Icon>
+              </IconButton>
             ) : (
               <>
                 <Menu
