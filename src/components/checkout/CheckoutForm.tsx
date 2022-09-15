@@ -3,8 +3,9 @@ import useUserInf from "@customHook/useUserInf";
 import {
   City_All,
   Country_All,
-  Customer_Order_Shipping_Address, Shipping_Adress_By_Order_Id,
-  Thana_All
+  Customer_Order_Shipping_Address,
+  Shipping_Adress_By_Order_Id,
+  Thana_All,
 } from "@data/constants";
 import { requred } from "@data/data";
 import axios from "axios";
@@ -29,13 +30,13 @@ const CheckoutForm = () => {
   const [thanas, setThanas] = useState([]);
   const [cities, setCities] = useState([]);
   const [countries, setCountries] = useState([]);
-  const [openLogin, setOpenLogin] = useState(false)
+  const [openLogin, setOpenLogin] = useState(false);
 
-  const { user_id, authTOKEN, order_Id, isLogin } = useUserInf()
+  const { user_id, authTOKEN, order_Id, isLogin } = useUserInf();
 
   const closeLoginTab = () => {
-    setOpenLogin(false)
-  }
+    setOpenLogin(false);
+  };
 
   const handleFormSubmit = async (values) => {
     if (isLogin) {
@@ -69,7 +70,9 @@ const CheckoutForm = () => {
             console.log("shipingRes", res);
             router.push("/payment");
           })
-          .catch((err) => { console.log("error", err) })
+          .catch((err) => {
+            console.log("error", err);
+          });
       }
       // else if (shippingId) {
       //   const authTOKEN = {
@@ -84,68 +87,82 @@ const CheckoutForm = () => {
       //       console.log("shppingDeleteRes", res);
       //       router.push("/payment");
       //     }).catch((err) => {console.log("error", err)})
-      // } 
+      // }
       else {
         axios
           .post(
             `${Customer_Order_Shipping_Address}${order_Id}`,
             { user_id, same_as_profile: true },
             authTOKEN
-          ).then(res => {
-            console.log("shippingRes", res)
+          )
+          .then((res) => {
+            console.log("shippingRes", res);
             router.push("/payment");
-          })
+          });
       }
     } else {
-      setOpenLogin(true)
+      router.push("/login").then(() => window.location.reload());
     }
-
   };
 
   const handleCheckboxChange =
     (setFieldValue) =>
-      ({ target: { checked } }) => {
-        setSameAsProfile(checked);
-        setFieldValue("same_as_profile_address", checked);
-      };
+    ({ target: { checked } }) => {
+      setSameAsProfile(checked);
+      setFieldValue("same_as_profile_address", checked);
+    };
 
   useEffect(() => {
     if (order_Id) {
-      axios.get(`${Shipping_Adress_By_Order_Id}${order_Id}`).then((res) => {
-        console.log("shippingDetailsRes", res);
-        const { data } = res;
-        // setShippingId(data.id);
-        for (let key in data) {
-          if (key == "country") {
-            setFieldValue(`country_id`, data[key]);
-          } else if (key == "city") {
-            setFieldValue(`city_id`, data[key]);
-          } else if (key == "thana") {
-            setFieldValue(`thana_id`, data[key]);
-          } else {
-            setFieldValue(`${key}`, data[key]);
+      axios
+        .get(`${Shipping_Adress_By_Order_Id}${order_Id}`)
+        .then((res) => {
+          console.log("shippingDetailsRes", res);
+          const { data } = res;
+          // setShippingId(data.id);
+          for (let key in data) {
+            if (key == "country") {
+              setFieldValue(`country_id`, data[key]);
+            } else if (key == "city") {
+              setFieldValue(`city_id`, data[key]);
+            } else if (key == "thana") {
+              setFieldValue(`thana_id`, data[key]);
+            } else {
+              setFieldValue(`${key}`, data[key]);
+            }
           }
-        }
-      }).catch((err) => { console.log("error", err) })
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
     }
 
     fetch(`${City_All}`)
       .then((res) => res.json())
       .then((data) => {
         setCities(data.cities);
-      }).catch((err) => { console.log("error", err) });
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
 
     fetch(`${Thana_All}`)
       .then((res) => res.json())
       .then((data) => {
         setThanas(data.thanas);
-      }).catch((err) => { console.log("error", err) });
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
 
     fetch(`${Country_All}`)
       .then((res) => res.json())
       .then((data) => {
         setCountries(data.countries);
-      }).catch((err) => { console.log("error", err) });
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
   }, []);
 
   if (sameAsProfile) {
@@ -157,10 +174,16 @@ const CheckoutForm = () => {
       email: yup.string().required("email is required").nullable(requred),
       phone: yup.string().required("phone is required").nullable(requred),
       zip_code: yup.string().required("zip_code is required").nullable(requred),
-      country_id: yup.string().required("country is required").nullable(requred),
+      country_id: yup
+        .string()
+        .required("country is required")
+        .nullable(requred),
       city_id: yup.string().required("city is required").nullable(requred),
       thana_id: yup.string().required("thana is required").nullable(requred),
-      street_address: yup.string().required("address is required").nullable(requred),
+      street_address: yup
+        .string()
+        .required("address is required")
+        .nullable(requred),
     });
   }
 
@@ -301,7 +324,12 @@ const CheckoutForm = () => {
         <Grid container spacing={7}>
           <Grid item sm={6} xs={12}>
             <Link href="/cart">
-              <Button variant="outlined" color="primary" type="button" fullwidth>
+              <Button
+                variant="outlined"
+                color="primary"
+                type="button"
+                fullwidth
+              >
                 Back to Cart
               </Button>
             </Link>

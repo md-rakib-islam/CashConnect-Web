@@ -58,7 +58,7 @@ const Signup: React.FC<SignupProps> = ({
 
   const gotologin = () => {
     if (type == "SignupPage") {
-      router.push("/login");
+      router.push("/login").then(() => window.location.reload());
     } else {
       setOpenLogin(true);
     }
@@ -175,6 +175,7 @@ const Signup: React.FC<SignupProps> = ({
         email: emailExist ? "email already exist" : "",
         primary_phone: primaryPhoneExist ? "phone no already exist" : "",
       });
+      setLoading(false);
     }
   };
 

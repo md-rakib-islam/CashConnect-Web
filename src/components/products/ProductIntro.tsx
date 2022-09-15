@@ -294,7 +294,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
     } else {
       if (isMobile) {
         localStorage.setItem("backAfterLogin", `/product/${id}`);
-        router.push("/login");
+        router.push("/login").then(() => window.location.reload());
       } else {
         setOpenLogin(true);
       }
@@ -356,7 +356,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
     } else {
       if (isMobile) {
         localStorage.setItem("backAfterLogin", `/product/${id}`);
-        router.push("/login");
+        router.push("/login").then(() => window.location.reload());
       } else {
         setOpenLogin(true);
       }

@@ -1,5 +1,9 @@
 import useUserInf from "@customHook/useUserInf";
-import { Review_By_Product_Id, Review_Create, Review_Permission } from "@data/constants";
+import {
+  Review_By_Product_Id,
+  Review_Create,
+  Review_Permission,
+} from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
@@ -18,62 +22,74 @@ export interface ProductReviewProps {
   setReviews: any;
 }
 
-const ProductReview: React.FC<ProductReviewProps> = ({ product_id, setReviews }) => {
+const ProductReview: React.FC<ProductReviewProps> = ({
+  product_id,
+  setReviews,
+}) => {
+  const [commentList, setCommentList] = useState([]);
+  const [reloadreviews, setReloadreviews] = useState(0);
+  const [reviewPermission, setReviewPermission] = useState(false);
+  const [reCheackReviewPermission, setReCheackReviewPermission] = useState(0);
 
-  const [commentList, setCommentList] = useState([])
-  const [reloadreviews, setReloadreviews] = useState(0)
-  const [reviewPermission, setReviewPermission] = useState(false)
-  const [reCheackReviewPermission, setReCheackReviewPermission] = useState(0)
+  const { user_id, authTOKEN, isLogin } = useUserInf();
 
-  const { user_id, authTOKEN, isLogin } = useUserInf()
+  const { query, push } = useRouter();
 
-  const { query, push } = useRouter()
-
-  const review = query?.review
+  const review = query?.review;
 
   const handleFormSubmit = async (values, { resetForm }) => {
     console.log(values);
 
     if (isLogin) {
       if (reviewPermission) {
-        setReCheackReviewPermission(Math.random())
+        setReCheackReviewPermission(Math.random());
         const reviewData = {
           ...values,
           user: user_id,
           product: product_id,
-        }
-        console.log("reviewData", reviewData)
-        axios.post(`${Review_Create}`, reviewData, authTOKEN).then(res => {
-          setReCheackReviewPermission(Math.random())
-          console.log("reviewCreateRe", res)
+        };
+        console.log("reviewData", reviewData);
+        axios.post(`${Review_Create}`, reviewData, authTOKEN).then((res) => {
+          setReCheackReviewPermission(Math.random());
+          console.log("reviewCreateRe", res);
           resetForm();
-          setReloadreviews(Math.random())
-        })
+          setReloadreviews(Math.random());
+        });
       }
-    }
-    else {
-      push("/login")
-      localStorage.setItem("backAfterLogin", `/product/${query?.id}?review=write`)
+    } else {
+      push("/login").then(() => window.location.reload());
+      localStorage.setItem(
+        "backAfterLogin",
+        `/product/${query?.id}?review=write`
+      );
     }
   };
 
   useEffect(() => {
-    axios.get(`${Review_By_Product_Id}${product_id}`).then(res => {
-      console.log("ReviewAllRes", res)
-      setCommentList(res?.data)
-      setReviews(res?.data?.length)
-    }).catch((err) => { console.log("error", err) })
-  }, [reloadreviews, query])
+    axios
+      .get(`${Review_By_Product_Id}${product_id}`)
+      .then((res) => {
+        console.log("ReviewAllRes", res);
+        setCommentList(res?.data);
+        setReviews(res?.data?.length);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  }, [reloadreviews, query]);
 
   useEffect(() => {
     if (authTOKEN) {
-      axios.post(`${Review_Permission}`, { product_id }, authTOKEN).then(res => {
-        console.log("reviewPermissionRes", res)
-        const canReview = res.data.can_user_review_and_rating === "no" ? false : true
-        setReviewPermission(canReview)
-      })
+      axios
+        .post(`${Review_Permission}`, { product_id }, authTOKEN)
+        .then((res) => {
+          console.log("reviewPermissionRes", res);
+          const canReview =
+            res.data.can_user_review_and_rating === "no" ? false : true;
+          setReviewPermission(canReview);
+        });
     }
-  }, [authTOKEN, reCheackReviewPermission])
+  }, [authTOKEN, reCheackReviewPermission]);
 
   const {
     values,
@@ -154,7 +170,6 @@ const ProductReview: React.FC<ProductReviewProps> = ({ product_id, setReviews })
     </Box>
   );
 };
-
 
 const initialValues = {
   rating: "",

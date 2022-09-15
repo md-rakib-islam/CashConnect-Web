@@ -166,7 +166,7 @@ const Login: React.FC<LoginProps> = ({
           dispatch({
             type: "CHANGE_ALERT",
             payload: {
-              alertValue: "Email and Password is wrong",
+              alertValue: `${_errors.response.data.detail}`,
               alerType: "error",
             },
           });
@@ -388,7 +388,7 @@ const Login: React.FC<LoginProps> = ({
         }
 
         if (type != "popup") {
-          router.push("/login");
+          router.push("/login").then(() => window.location.reload());
         }
       }
     );
@@ -541,14 +541,20 @@ const Login: React.FC<LoginProps> = ({
                 </FlexBox>
               }
             />
-            <SemiSpan
+            <H6
               fullwidth
               ml="0px"
-              style={{ cursor: "pointer", fontSize: "0.875rem" }}
+              style={{
+                cursor: "pointer",
+                fontSize: "0.875rem",
+                borderColor: "gray.900",
+                borderBottom: "1px solid",
+                alignItems: "flex-start",
+              }}
               onClick={gotoreset}
             >
               Forgot password?
-            </SemiSpan>
+            </H6>
           </FlexBox>
 
           <Button

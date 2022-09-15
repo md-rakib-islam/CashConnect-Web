@@ -3,10 +3,13 @@ import LazyImage from "@component/LazyImage";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import {
-  Check_Stock, Customer_decrease_Quantity,
+  Check_Stock,
+  Customer_decrease_Quantity,
   Customer_Increase_Quantity,
   Customer_Order_Create,
-  Customer_Order_Item_By_Product_Id, Customer_Order_Remove_Item, Product_Discount_By_Id
+  Customer_Order_Item_By_Product_Id,
+  Customer_Order_Remove_Item,
+  Product_Discount_By_Id,
 } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
@@ -53,9 +56,9 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 }) => {
   const [open, setOpen] = useState(false);
 
-  const [sellablePrice, setsellablePrice] = useState(Number(price))
-  const [orginalPrice, setorginalPrice] = useState(0)
-  const [discountedPercent, setdiscountedPercent] = useState(0)
+  const [sellablePrice, setsellablePrice] = useState(Number(price));
+  const [orginalPrice, setorginalPrice] = useState(0);
+  const [discountedPercent, setdiscountedPercent] = useState(0);
 
   const router = useRouter();
 
@@ -64,36 +67,40 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
   const [cartQuantity, setCartQuantity] = useState(0);
   const [itemId, setItemId] = useState(0);
   const [getItemId, setGetItemId] = useState(0);
-  const [getChartquantity, setGetChartquantity] = useState(0)
-  const [stock, setStock] = useState(true)
+  const [getChartquantity, setGetChartquantity] = useState(0);
+  const [stock, setStock] = useState(true);
 
   const cartCanged = state.cart.chartQuantity;
 
-  const { user_id, order_Id, authTOKEN } = useUserInf()
+  const { user_id, order_Id, authTOKEN } = useUserInf();
 
   const toggleDialog = useCallback(() => {
     setOpen((open) => !open);
   }, []);
 
+  useEffect(() => {
+    axios
+      .get(`${Check_Stock}${id}`)
+      .then((res) => {
+        if (!res.data.is_in_stock) {
+          setStock(false);
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  }, []);
 
   useEffect(() => {
-    axios.get(`${Check_Stock}${id}`).then(res => {
-      if (!res.data.is_in_stock) {
-        setStock(false)
-      }
-    }).catch((err) => { console.log("error", err) })
-  }, [])
-
-  useEffect(() => {
-    axios.get(`${Product_Discount_By_Id}${id}`).then(res => {
-      console.log("descountRes", res)
+    axios.get(`${Product_Discount_By_Id}${id}`).then((res) => {
+      console.log("descountRes", res);
       if (res.data.discounts?.discounted_price) {
-        setsellablePrice(res.data.discounts?.discounted_price)
-        setorginalPrice(Number(res.data.discounts?.product.unit_price))
-        setdiscountedPercent(res.data.discounts?.discount_percent)
+        setsellablePrice(res.data.discounts?.discounted_price);
+        setorginalPrice(Number(res.data.discounts?.product.unit_price));
+        setdiscountedPercent(res.data.discounts?.discount_percent);
       }
-    })
-  }, [])
+    });
+  }, []);
 
   useEffect(() => {
     if (order_Id) {
@@ -107,7 +114,6 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
     }
   }, [order_Id, getItemId, id, getChartquantity]);
 
-
   useEffect(() => {
     if (id && order_Id) {
       if (state.cart.prductId == id) {
@@ -117,10 +123,12 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
             setItemId(item?.data?.order_item?.id);
             setCartQuantity(item?.data?.order_item?.quantity);
           })
-          .catch(() => { setCartQuantity(0) });
+          .catch(() => {
+            setCartQuantity(0);
+          });
       }
     }
-  }, [order_Id, cartCanged])
+  }, [order_Id, cartCanged]);
 
   const handleCartAmountChange = (amount, action) => {
     const dateObj: any = new Date();
@@ -141,36 +149,49 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
     };
 
     //add to cart
-    if ((action == "increase") && (amount == 1)) {
+    if (action == "increase" && amount == 1) {
       if (user_id) {
         console.log("orderData", orderData);
-        axios.post(`${Customer_Order_Create}`, orderData, authTOKEN).then((res) => {
-          console.log("orderRes", res);
+        axios
+          .post(`${Customer_Order_Create}`, orderData, authTOKEN)
+          .then((res) => {
+            console.log("orderRes", res);
 
-          localStorage.setItem("OrderId", res.data.order_details.id);
-          setGetItemId(Math.random());
-          dispatch({
-            type: "CHANGE_CART_QUANTITY",
-            payload: { chartQuantity: Math.random() },
+            localStorage.setItem("OrderId", res.data.order_details.id);
+            setGetItemId(Math.random());
+            dispatch({
+              type: "CHANGE_CART_QUANTITY",
+              payload: { chartQuantity: Math.random() },
+            });
+          })
+          .catch((err) => {
+            console.log("error", err);
           });
-        }).catch((err) => { console.log("error", err) });
-
       } else {
         localStorage.setItem("backAfterLogin", `/product/${id}`);
-        router.push({
-          pathname: "/login",
-        });
+        router
+          .push({
+            pathname: "/login",
+          })
+          .then(() => router.reload());
       }
     }
 
     //increase
     else if (action == "increase") {
       axios
-        .put(`${Customer_Increase_Quantity}${order_Id}/${itemId}`, orderData, authTOKEN)
+        .put(
+          `${Customer_Increase_Quantity}${order_Id}/${itemId}`,
+          orderData,
+          authTOKEN
+        )
         .then((res) => {
           console.log("increaseRes", res);
-          setGetChartquantity(Math.random())
-        }).catch((err) => { console.log("error", err) });
+          setGetChartquantity(Math.random());
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
     }
 
     //romove
@@ -179,21 +200,28 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
         .delete(`${Customer_Order_Remove_Item}${order_Id}/${itemId}`, authTOKEN)
         .then((res) => {
           console.log("removeRes", res);
-          setGetChartquantity(Math.random())
+          setGetChartquantity(Math.random());
           dispatch({
             type: "CHANGE_CART_QUANTITY",
             payload: { chartQuantity: Math.random() },
           });
-        }).catch((err) => { console.log("error", err) });
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
     }
 
     //decrease
     else if (action == "decrease") {
       axios
-        .put(`${Customer_decrease_Quantity}${order_Id}/${itemId}`, orderData, authTOKEN)
+        .put(
+          `${Customer_decrease_Quantity}${order_Id}/${itemId}`,
+          orderData,
+          authTOKEN
+        )
         .then((res) => {
           console.log("decreaseRes", res);
-          setGetChartquantity(Math.random())
+          setGetChartquantity(Math.random());
         });
     }
   };
@@ -266,7 +294,11 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 
             <Rating value={rating || 0} outof={5} color="warn" readonly />
 
-            {stock || (<SemiSpan fontWeight="bold" color="primary.main" mt="2px">Out Of Stock</SemiSpan>)}
+            {stock || (
+              <SemiSpan fontWeight="bold" color="primary.main" mt="2px">
+                Out Of Stock
+              </SemiSpan>
+            )}
 
             <FlexBox alignItems="center" mt={stock ? "10px" : "0px"}>
               <SemiSpan pr="0.5rem" fontWeight="600" color="primary.main">
@@ -274,7 +306,9 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
               </SemiSpan>
               {!!orginalPrice && (
                 <SemiSpan color="text.muted" fontWeight="600">
-                  <del><Currency>{orginalPrice?.toFixed(2)}</Currency></del>
+                  <del>
+                    <Currency>{orginalPrice?.toFixed(2)}</Currency>
+                  </del>
                 </SemiSpan>
               )}
             </FlexBox>
@@ -283,9 +317,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
           <FlexBox
             flexDirection="column-reverse"
             alignItems="center"
-            justifyContent={
-              !!cartQuantity ? "space-between" : "flex-start"
-            }
+            justifyContent={!!cartQuantity ? "space-between" : "flex-start"}
             width="30px"
           >
             <Button
@@ -295,7 +327,9 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
               size="none"
               borderColor="primary.light"
               disabled={!stock}
-              onClick={() => handleCartAmountChange(cartQuantity + 1, "increase")}
+              onClick={() =>
+                handleCartAmountChange(cartQuantity + 1, "increase")
+              }
             >
               <Icon variant="small">plus</Icon>
             </Button>
@@ -312,14 +346,17 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
                   size="none"
                   borderColor="primary.light"
                   // disabled={!stock}
-                  onClick={() => handleCartAmountChange(cartQuantity - 1, "decrease")}
+                  onClick={() =>
+                    handleCartAmountChange(cartQuantity - 1, "decrease")
+                  }
                 >
                   <Icon variant="small">minus</Icon>
                 </Button>
               </Fragment>
-            ) : ""}
+            ) : (
+              ""
+            )}
           </FlexBox>
-
         </FlexBox>
 
         <H4
@@ -327,8 +364,13 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
           className="title"
           fontSize="13px"
           fontWeight="600"
-          color={(condition === "new" || condition === "New" || condition === "NEW") ? "primary.main" : "secondary.main"}
-        >{condition || ""}
+          color={
+            condition === "new" || condition === "New" || condition === "NEW"
+              ? "primary.main"
+              : "secondary.main"
+          }
+        >
+          {condition || ""}
         </H4>
       </div>
 
