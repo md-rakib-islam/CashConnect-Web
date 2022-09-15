@@ -20,7 +20,9 @@ import TextField from "../text-field/TextField";
 import { H3, H5, H6, SemiSpan, Small, Span } from "../Typography";
 import { StyledSessionCard } from "./SessionStyle";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
-import GoogleLogin from "react-google-login";
+import { useGoogleLogin } from "@react-oauth/google";
+import CheckBox from "@component/CheckBox";
+import Cookies from "js-cookie";
 
 interface LoginProps {
   type?: string;
@@ -40,6 +42,8 @@ const Login: React.FC<LoginProps> = ({
   const { authTOKEN } = useUserInf();
 
   const [loading, setLoading] = useState(false);
+  const [nameCookie, setNameCookie] = useState();
+  const [passwordCookie, setPasswordCookie] = useState();
 
   const handleLoadingComplete = () => {
     setLoading(false);
@@ -283,10 +287,13 @@ const Login: React.FC<LoginProps> = ({
     );
   };
   // google
+  const login = useGoogleLogin({
+    onSuccess: (tokenResponse) => responseGoogle(tokenResponse),
+  });
   const responseGoogle = (response) => {
     console.log("responseGoogle", response);
     console.log("name", response.name);
-    const auth_token = response.id_token;
+    const auth_token = response.access_token;
 
     return authService.signInWithGoogle(auth_token).then(
       (user) => {
@@ -387,14 +394,46 @@ const Login: React.FC<LoginProps> = ({
     );
   };
 
-  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
-    useFormik({
-      onSubmit: handleFormSubmit,
+  console.log("cookiesData", nameCookie, passwordCookie);
 
-      initialValues,
-      validationSchema: formSchema,
+  const {
+    values,
+    errors,
+    touched,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+    setFieldValue,
+  } = useFormik({
+    onSubmit: handleFormSubmit,
+
+    initialValues,
+    validationSchema: formSchema,
+  });
+
+  // set Cookeis for remember me
+  const setCookies = () => {
+    var username = values.username;
+    var password = values.password;
+
+    Cookies.set("UserName", `${username}`, {
+      expires: 7,
+      path: "http://localhost:4005",
     });
-
+    Cookies.set("UserPassword", `${password}`, {
+      expires: 7,
+      path: "http://localhost:4005",
+    });
+  };
+  //get Cookies
+  useEffect(() => {
+    setNameCookie(Cookies.get("UserName"));
+    setPasswordCookie(Cookies.get("UserPassword"));
+    setFieldValue("username", nameCookie);
+    setFieldValue("password", passwordCookie);
+    setFieldValue("remember", !passwordCookie ? false : true);
+  }, [nameCookie, passwordCookie]);
+  console.log("values", values);
   return (
     <>
       <SignupPopup open={openSignup} closeSignupDialog={closeSignupTab} />
@@ -488,14 +527,29 @@ const Login: React.FC<LoginProps> = ({
             value={values.password || ""}
             errorText={touched.password && errors.password}
           />
-          <SemiSpan
-            fullwidth
-            ml="0px"
-            style={{ cursor: "pointer", fontSize: "0.875rem" }}
-            onClick={gotoreset}
-          >
-            Forgot password?
-          </SemiSpan>
+          <FlexBox style={{ justifyContent: "space-between" }}>
+            <CheckBox
+              mb="1.75rem"
+              name="remember"
+              color="secondary"
+              checked={values.remember}
+              onClick={setCookies}
+              onChange={handleChange}
+              label={
+                <FlexBox>
+                  <SemiSpan>Remember me</SemiSpan>
+                </FlexBox>
+              }
+            />
+            <SemiSpan
+              fullwidth
+              ml="0px"
+              style={{ cursor: "pointer", fontSize: "0.875rem" }}
+              onClick={gotoreset}
+            >
+              Forgot password?
+            </SemiSpan>
+          </FlexBox>
 
           <Button
             mb="1.65rem"
@@ -559,45 +613,66 @@ const Login: React.FC<LoginProps> = ({
               </>
             )}
           />
-          <GoogleLogin
-            clientId="1082909611954-1akapcf4el2k71a8khthv8k6c3a1hchg.apps.googleusercontent.com"
-            buttonText="Login"
-            onSuccess={responseGoogle}
-            // onFailure={responseGoogle}
-            cookiePolicy={"single_host_origin"}
-            render={(renderProps) => (
-              <>
-                <FlexBox
-                  justifyContent="center"
-                  alignItems="center"
-                  bg="#4285F4"
-                  borderRadius={5}
-                  height="40px"
-                  color="white"
-                  cursor="pointer"
-                  mb="0.75rem"
-                  onClick={renderProps.onClick}
-                >
-                  <Icon variant="small" defaultcolor="auto" mr="0.5rem">
-                    google-1
-                  </Icon>
-                  <Small
-                    style={{
-                      width: "45%",
-                      backgroundColor: "#4285F4",
-                      border: "none",
-                      color: "whitesmoke",
-                      textAlign: "left",
-                      fontWeight: 600,
-                    }}
-                  >
-                    Continue with Google
-                  </Small>
-                </FlexBox>
-              </>
-            )}
-          />
+          <FlexBox
+            justifyContent="center"
+            alignItems="center"
+            bg="#4285F4"
+            borderRadius={5}
+            height="40px"
+            color="white"
+            cursor="pointer"
+            mb="0.75rem"
+            onClick={() => login()}
+          >
+            <Icon variant="small" defaultcolor="auto" mr="0.5rem">
+              google-1
+            </Icon>
+            <Small
+              style={{
+                width: "45%",
+                backgroundColor: "#4285F4",
+                border: "none",
+                color: "whitesmoke",
+                textAlign: "left",
+                fontWeight: 600,
+              }}
+            >
+              Continue with Google
+            </Small>
+          </FlexBox>
 
+          {/* render=
+          {(renderProps) => (
+            <>
+              <FlexBox
+                justifyContent="center"
+                alignItems="center"
+                bg="#4285F4"
+                borderRadius={5}
+                height="40px"
+                color="white"
+                cursor="pointer"
+                mb="0.75rem"
+                onClick={renderProps.onClick}
+              >
+                <Icon variant="small" defaultcolor="auto" mr="0.5rem">
+                  google-1
+                </Icon>
+                <Small
+                  style={{
+                    width: "45%",
+                    backgroundColor: "#4285F4",
+                    border: "none",
+                    color: "whitesmoke",
+                    textAlign: "left",
+                    fontWeight: 600,
+                  }}
+                >
+                  Continue with Google
+                </Small>
+              </FlexBox>
+            </>
+          )} */}
           {/* <FlexBox
             justifyContent="center"
             alignItems="center"
@@ -613,7 +688,6 @@ const Login: React.FC<LoginProps> = ({
             </Icon>
             <Small fontWeight="600">Continue with Google</Small>
           </FlexBox> */}
-
           <FlexBox justifyContent="center" mb="1.25rem">
             <SemiSpan style={{ cursor: "pointer" }} onClick={gotosingup}>
               Don’t have account?
@@ -649,6 +723,7 @@ const Login: React.FC<LoginProps> = ({
 const initialValues = {
   username: "",
   password: "",
+  remember: true,
 };
 
 const formSchema = yup.object().shape({

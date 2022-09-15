@@ -254,7 +254,7 @@ const Signup: React.FC<SignupProps> = ({
         </H3>
         <H5
           fontWeight="600"
-          fontSize="12px"
+          fontSize="0.875rem"
           color="gray.800"
           textAlign="center"
           mb="2.25rem"

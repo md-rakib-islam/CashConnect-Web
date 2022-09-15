@@ -6,6 +6,7 @@ import { ThemeProvider } from "styled-components";
 import { AppProvider } from "../contexts/app/AppContext";
 import { GlobalStyles } from "../utils/globalStyles";
 import { theme } from "../utils/theme";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 //Binding events.
 Router.events.on("routeChangeStart", () => NProgress.start());
@@ -55,11 +56,13 @@ const App = ({ Component, pageProps }: any) => {
         ></script>
       </Head>
       <GlobalStyles />
-      <AppProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </AppProvider>
+      <GoogleOAuthProvider clientId="1082909611954-d2cehkmk853q5643g2c1kibreq2a1e5e.apps.googleusercontent.com">
+        <AppProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </AppProvider>
+      </GoogleOAuthProvider>
     </ThemeProvider>
   );
 };
