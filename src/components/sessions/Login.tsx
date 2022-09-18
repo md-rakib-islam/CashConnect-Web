@@ -253,14 +253,14 @@ const Login: React.FC<LoginProps> = ({
       (_errors) => {
         console.log("login failed", _errors.response.status);
 
-        // if (_errors.response.status == 400) {
-        //   dispatch({
-        //     type: "CHANGE_ALERT",
-        //     payload: {
-        //       alertValue: "Waiting...",
-        //     },
-        //   });
-        // }
+        if (_errors.response.status == 400) {
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: "Waiting...",
+            },
+          });
+        }
         // else if (_errors.response.status == 401) {
         //   dispatch({
         //     type: "CHANGE_ALERT",
@@ -281,7 +281,7 @@ const Login: React.FC<LoginProps> = ({
         // }
 
         if (type != "popup") {
-          router.push("/login").then(() => window.location.reload());
+          router.push("/login");
         }
       }
     );
@@ -369,6 +369,14 @@ const Login: React.FC<LoginProps> = ({
               alerType: "error",
             },
           });
+        } else if (_errors.response.status == 400) {
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: "Email or Password is wrong",
+              alerType: "error",
+            },
+          });
         } else if (_errors.response.status == 401) {
           dispatch({
             type: "CHANGE_ALERT",
@@ -388,7 +396,7 @@ const Login: React.FC<LoginProps> = ({
         }
 
         if (type != "popup") {
-          router.push("/login").then(() => window.location.reload());
+          router.push("/login");
         }
       }
     );

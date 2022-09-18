@@ -208,7 +208,6 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
           .post(`${Customer_Order_Confirm}${order_Id}`, confirmData, authTOKEN)
           .then((res) => {
             if (res?.data?.is_confirmed) {
-              const user_type = localStorage.getItem("userType");
               console.log("confirmOrderRes", res);
               confirmedOrderRes.current = true;
               for (let key in useKeys) {
@@ -229,11 +228,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
 
               localStorage.removeItem("OrderId");
 
-              if (user_type == "customer") {
-                router.push("/orders");
-              } else if (user_type == "vendor") {
-                router.push("/vendor/orders");
-              }
+              router.push("/orders");
             }
           })
           .catch((err) => {
