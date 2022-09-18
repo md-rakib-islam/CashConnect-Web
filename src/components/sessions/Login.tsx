@@ -20,7 +20,7 @@ import TextField from "../text-field/TextField";
 import { H3, H5, H6, SemiSpan, Small, Span } from "../Typography";
 import { StyledSessionCard } from "./SessionStyle";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
-import { useGoogleLogin } from "@react-oauth/google";
+// import { useGoogleLogin } from "@react-oauth/google";
 import CheckBox from "@component/CheckBox";
 import Cookies from "js-cookie";
 
@@ -287,120 +287,120 @@ const Login: React.FC<LoginProps> = ({
     );
   };
   // google
-  const login = useGoogleLogin({
-    onSuccess: (tokenResponse) => responseGoogle(tokenResponse),
-  });
-  const responseGoogle = (response) => {
-    console.log("responseGoogle", response);
-    console.log("name", response.name);
-    const auth_token = response.access_token;
+  // const login = useGoogleLogin({
+  //   onSuccess: (tokenResponse) => responseGoogle(tokenResponse),
+  // });
+  // const responseGoogle = (response) => {
+  //   console.log("responseGoogle", response);
+  //   console.log("name", response.name);
+  //   const auth_token = response.access_token;
 
-    return authService.signInWithGoogle(auth_token).then(
-      (user) => {
-        console.log("userGoogle", user);
+  //   return authService.signInWithGoogle(auth_token).then(
+  //     (user) => {
+  //       console.log("userGoogle", user);
 
-        axios
-          .get(`${Get_Pending_Order_After_Login}`, authTOKEN)
-          .then((res) => {
-            console.log("order_Id_res", res);
-            if (res.data.id) {
-              localStorage.setItem("OrderId", res.data.id);
-            } else {
-              localStorage.removeItem("OrderId");
-            }
-          })
-          .catch(() => localStorage.removeItem("OrderId"));
+  //       axios
+  //         .get(`${Get_Pending_Order_After_Login}`, authTOKEN)
+  //         .then((res) => {
+  //           console.log("order_Id_res", res);
+  //           if (res.data.id) {
+  //             localStorage.setItem("OrderId", res.data.id);
+  //           } else {
+  //             localStorage.removeItem("OrderId");
+  //           }
+  //         })
+  //         .catch(() => localStorage.removeItem("OrderId"));
 
-        dispatch({
-          type: "CHANGE_ALERT",
-          payload: {
-            alertValue: "login success...",
-          },
-        });
+  //       dispatch({
+  //         type: "CHANGE_ALERT",
+  //         payload: {
+  //           alertValue: "login success...",
+  //         },
+  //       });
 
-        // if (user.user_type === "customer") {
-        //   if (type != "popup") {
-        //     const backUrl = localStorage.getItem("backAfterLogin");
-        //     if (backUrl) {
-        //       localStorage.removeItem("backAfterLogin");
-        //       router.push(`${backUrl}`);
-        //     } else {
-        //       router.push("/profile");
-        //     }
-        //   } else {
-        //     closeLoginDialog();
-        //     localStorage.removeItem("backAfterLogin");
-        //   }
-        // } else if (user.user_type == "vendor") {
-        //   if (type != "popup") {
-        //     const backUrl = localStorage.getItem("backAfterLogin");
-        //     if (backUrl) {
-        //       localStorage.removeItem("backAfterLogin");
-        //       router.push(`${backUrl}`);
-        //     } else {
-        //       router.push("/vendor/dashboard");
-        //     }
-        //   } else {
-        //     closeLoginDialog();
-        //     localStorage.removeItem("backAfterLogin");
-        //   }
-        // }
-        if (type != "popup") {
-          const backUrl = localStorage.getItem("backAfterLogin");
-          if (backUrl) {
-            localStorage.removeItem("backAfterLogin");
-            router.push(`${backUrl}`);
-          } else {
-            router.push("/profile");
-          }
-        } else {
-          closeLoginDialog();
-          localStorage.removeItem("backAfterLogin");
-        }
-      },
-      (_errors) => {
-        console.log("login failed", _errors.response.status);
+  //       // if (user.user_type === "customer") {
+  //       //   if (type != "popup") {
+  //       //     const backUrl = localStorage.getItem("backAfterLogin");
+  //       //     if (backUrl) {
+  //       //       localStorage.removeItem("backAfterLogin");
+  //       //       router.push(`${backUrl}`);
+  //       //     } else {
+  //       //       router.push("/profile");
+  //       //     }
+  //       //   } else {
+  //       //     closeLoginDialog();
+  //       //     localStorage.removeItem("backAfterLogin");
+  //       //   }
+  //       // } else if (user.user_type == "vendor") {
+  //       //   if (type != "popup") {
+  //       //     const backUrl = localStorage.getItem("backAfterLogin");
+  //       //     if (backUrl) {
+  //       //       localStorage.removeItem("backAfterLogin");
+  //       //       router.push(`${backUrl}`);
+  //       //     } else {
+  //       //       router.push("/vendor/dashboard");
+  //       //     }
+  //       //   } else {
+  //       //     closeLoginDialog();
+  //       //     localStorage.removeItem("backAfterLogin");
+  //       //   }
+  //       // }
+  //       if (type != "popup") {
+  //         const backUrl = localStorage.getItem("backAfterLogin");
+  //         if (backUrl) {
+  //           localStorage.removeItem("backAfterLogin");
+  //           router.push(`${backUrl}`);
+  //         } else {
+  //           router.push("/profile");
+  //         }
+  //       } else {
+  //         closeLoginDialog();
+  //         localStorage.removeItem("backAfterLogin");
+  //       }
+  //     },
+  //     (_errors) => {
+  //       console.log("login failed", _errors.response.status);
 
-        if (_errors.response.status == 403) {
-          dispatch({
-            type: "CHANGE_ALERT",
-            payload: {
-              alertValue: "Phone number is not verified",
-              alerType: "error",
-            },
-          });
-        } else if (_errors.response.status == 400) {
-          dispatch({
-            type: "CHANGE_ALERT",
-            payload: {
-              alertValue: "Email or Password is wrong",
-              alerType: "error",
-            },
-          });
-        } else if (_errors.response.status == 401) {
-          dispatch({
-            type: "CHANGE_ALERT",
-            payload: {
-              alertValue: "Email or Password is wrong",
-              alerType: "error",
-            },
-          });
-        } else {
-          dispatch({
-            type: "CHANGE_ALERT",
-            payload: {
-              alertValue: "Email and Password is wrong",
-              alerType: "error",
-            },
-          });
-        }
+  //       if (_errors.response.status == 403) {
+  //         dispatch({
+  //           type: "CHANGE_ALERT",
+  //           payload: {
+  //             alertValue: "Phone number is not verified",
+  //             alerType: "error",
+  //           },
+  //         });
+  //       } else if (_errors.response.status == 400) {
+  //         dispatch({
+  //           type: "CHANGE_ALERT",
+  //           payload: {
+  //             alertValue: "Email or Password is wrong",
+  //             alerType: "error",
+  //           },
+  //         });
+  //       } else if (_errors.response.status == 401) {
+  //         dispatch({
+  //           type: "CHANGE_ALERT",
+  //           payload: {
+  //             alertValue: "Email or Password is wrong",
+  //             alerType: "error",
+  //           },
+  //         });
+  //       } else {
+  //         dispatch({
+  //           type: "CHANGE_ALERT",
+  //           payload: {
+  //             alertValue: "Email and Password is wrong",
+  //             alerType: "error",
+  //           },
+  //         });
+  //       }
 
-        if (type != "popup") {
-          router.push("/login");
-        }
-      }
-    );
-  };
+  //       if (type != "popup") {
+  //         router.push("/login");
+  //       }
+  //     }
+  //   );
+  // };
 
   console.log("cookiesData", nameCookie, passwordCookie);
 
@@ -627,7 +627,7 @@ const Login: React.FC<LoginProps> = ({
               </>
             )}
           />
-          <FlexBox
+          {/* <FlexBox
             justifyContent="center"
             alignItems="center"
             bg="#4285F4"
@@ -653,7 +653,7 @@ const Login: React.FC<LoginProps> = ({
             >
               Continue with Google
             </Small>
-          </FlexBox>
+          </FlexBox> */}
 
           {/* render=
           {(renderProps) => (
