@@ -535,7 +535,12 @@ const Login: React.FC<LoginProps> = ({
             value={values.password || ""}
             errorText={touched.password && errors.password}
           />
-          <FlexBox style={{ justifyContent: "space-between" }}>
+          <FlexBox
+            style={{
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+            }}
+          >
             <CheckBox
               mb="1.75rem"
               name="remember"
@@ -557,7 +562,6 @@ const Login: React.FC<LoginProps> = ({
                 fontSize: "0.875rem",
                 borderColor: "gray.900",
                 borderBottom: "1px solid",
-                alignItems: "flex-start",
               }}
               onClick={gotoreset}
             >

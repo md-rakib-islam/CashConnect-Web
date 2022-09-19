@@ -1,3 +1,4 @@
+import FlexBox from "@component/FlexBox";
 import LoginPopup from "@component/LoginPopup";
 import { useAppContext } from "@context/app/AppContext";
 import { Get_phone_varification_code_by_customer } from "@data/constants";
@@ -9,7 +10,7 @@ import * as yup from "yup";
 import Button from "../buttons/Button";
 
 import TextField from "../text-field/TextField";
-import { H3, H5 } from "../Typography";
+import { H3, H5, H6 } from "../Typography";
 import { StyledSessionCard } from "./SessionStyle";
 
 interface SignupProps {
@@ -141,7 +142,7 @@ const Otp: React.FC<SignupProps> = () => {
           textAlign="center"
           mb="2.25rem"
         >
-          Please check your phone to send OTP
+          Check your phone to get OTP
         </H5>
 
         <form
@@ -175,7 +176,41 @@ const Otp: React.FC<SignupProps> = () => {
             value={values.otp || ""}
             errorText={otpError || ""}
           />
-
+          <FlexBox
+            style={{
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+              flexDirection: "row-reverse",
+              marginBottom: "1rem",
+            }}
+          >
+            {/* <CheckBox
+              mb="1.75rem"
+              name="remember"
+              color="secondary"
+              checked={values.remember}
+              onClick={setCookies}
+              onChange={handleChange}
+              label={
+                <FlexBox>
+                  <SemiSpan>Remember me</SemiSpan>
+                </FlexBox>
+              }
+            /> */}
+            <H6
+              fullwidth
+              ml="0px"
+              style={{
+                cursor: "pointer",
+                fontSize: "0.875rem",
+                borderColor: "gray.900",
+                borderBottom: "1px solid",
+              }}
+              // onClick={gotoreset}
+            >
+              Resend OTP
+            </H6>
+          </FlexBox>
           <Button
             mb="1.65rem"
             variant="contained"

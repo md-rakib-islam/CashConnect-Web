@@ -244,11 +244,13 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
               </>
             )}
 
-            <Link href="/signup">
-              <IconButton ml="1rem" bg="gray.200" p="8px">
-                <Icon size="25px">register</Icon>
-              </IconButton>
-            </Link>
+            {!isLogin && (
+              <Link href="/signup">
+                <IconButton ml="1rem" bg="gray.200" p="8px">
+                  <Icon size="25px">register</Icon>
+                </IconButton>
+              </Link>
+            )}
 
             <Sidenav
               handle={cartHandle}
