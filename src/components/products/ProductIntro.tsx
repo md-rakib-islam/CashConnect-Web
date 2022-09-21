@@ -38,6 +38,7 @@ export interface ProductIntroProps {
   reviewCount?: string | number;
   rating?: number;
   condition: string;
+  short_desc: string;
   orginalrice?: number;
 }
 
@@ -50,6 +51,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   reviewCount,
   rating,
   condition,
+  short_desc,
   orginalrice,
 }) => {
   const [selectedImage, setSelectedImage] = useState(0);
@@ -96,7 +98,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
     axios
       .get(`${Product_Detail_By_Id}${id}`)
       .then((res) => {
-        console.log("res.data.code", res.data.product_code);
+        console.log("res.data.code", res.data);
 
         setProductCode(res.data.product_code);
       })
@@ -427,6 +429,9 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
           <Grid item md={6} xs={12} alignItems="center">
             <H1 mb="0.8rem">{title}</H1>
 
+            <FlexBox alignItems="center" mb="1rem">
+              <H3 ml="8px">{short_desc || "_"}</H3>
+            </FlexBox>
             <FlexBox alignItems="center" mb="1rem">
               <SemiSpan>Code:</SemiSpan>
               <H6 ml="8px">{productCode || "_"}</H6>

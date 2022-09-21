@@ -33,12 +33,12 @@ function onlineSell() {
   const [_reRender, setReRender] = useState(0);
   const [previewImage, setPreviewImage] = useState<Iimage>([[]]);
   const [images, setImages] = useState<TIMG>([[]]);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const width = useWindowSize();
 
-  const { dispatch } = useAppContext()
+  const { dispatch } = useAppContext();
 
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     images.map((img, id) => {
@@ -53,7 +53,6 @@ function onlineSell() {
 
   //submit purchase data
   const handleFormSubmit = async (values) => {
-
     let purchaseData = {
       first_name: values.first_name,
       last_name: values.last_name,
@@ -79,48 +78,45 @@ function onlineSell() {
 
     const [PurchaseDataToFormData] = jsonToFormData(purchaseData);
 
-    setLoading(true)
+    setLoading(true);
 
     axios
       .post(`${Purshase_Create}`, PurchaseDataToFormData)
       .then((res) => {
         console.log("purchaserequestRes", res);
-        setLoading(false)
+        setLoading(false);
         if (res?.data?.data?.purchase_request_items?.length) {
-          router.push("/sell/youritems/success")
-        }
-        else if (res?.data?.user_exists) {
+          router.push("/sell/youritems/success");
+        } else if (res?.data?.user_exists) {
           dispatch({
             type: "CHANGE_ALERT",
             payload: {
               alertValue: `${values.email} is already exist`,
               alerType: "warning",
-            }
-          })
-        }
-        else {
+            },
+          });
+        } else {
           dispatch({
             type: "CHANGE_ALERT",
             payload: {
               alertValue: "someting went wrong",
               alerType: "error",
-            }
-          })
+            },
+          });
         }
-
-      }).catch(() => {
-        setLoading(false)
+      })
+      .catch(() => {
+        setLoading(false);
         dispatch({
           type: "CHANGE_ALERT",
           payload: {
             alertValue: "someting went wrong",
             alerType: "error",
-          }
-        })
+          },
+        });
       });
 
-    console.log("purchaseData", purchaseData)
-
+    console.log("purchaseData", purchaseData);
   };
 
   const handleContactTypeChange = ({ target: { name } }) => {
@@ -208,7 +204,6 @@ function onlineSell() {
     first_name: yup.string().required("required").nullable(requred),
     last_name: yup.string().required("required").nullable(requred),
     contact_no: yup.string().required("required").nullable(requred),
-    email: yup.string().email("invalid email").required("required").nullable(requred),
   });
 
   const {
@@ -225,40 +220,42 @@ function onlineSell() {
     onSubmit: handleFormSubmit,
   });
 
-
   const CustomOption = ({ innerProps, isDisabled, data }) => {
-
     return !isDisabled ? (
-      <div {...innerProps}
-        style={{ cursor: "pointer", width: "180px" }}
-      ><img src={`https://flagcdn.com/w20/${data.code.toLowerCase()}.png`}></img>
-        {' ' + data.label}
+      <div {...innerProps} style={{ cursor: "pointer", width: "180px" }}>
+        <img
+          src={`https://flagcdn.com/w20/${data.code.toLowerCase()}.png`}
+        ></img>
+        {" " + data.label}
       </div>
     ) : null;
-  }
-
+  };
 
   return (
     <>
       {loading && (
-        <div style={{
-          position: 'fixed',
-          height: '100%',
-          width: '100%',
-          top: '0px',
-          left: '0px',
-          display: 'flex',
-          justifyContent: "center",
-          backgroundColor: " rgb(0 0 0 / 50%)",
-          alignItems: "center",
-          zIndex: 100,
-        }}>
-          <img style={{
-            height: "100px",
-            width: "100px",
-            marginTop: "100pz"
+        <div
+          style={{
+            position: "fixed",
+            height: "100%",
+            width: "100%",
+            top: "0px",
+            left: "0px",
+            display: "flex",
+            justifyContent: "center",
+            backgroundColor: " rgb(0 0 0 / 50%)",
+            alignItems: "center",
+            zIndex: 100,
           }}
-            src="/assets/images/gif/loading.gif" />
+        >
+          <img
+            style={{
+              height: "100px",
+              width: "100px",
+              marginTop: "100pz",
+            }}
+            src="/assets/images/gif/loading.gif"
+          />
         </div>
       )}
 
@@ -280,10 +277,20 @@ function onlineSell() {
                 <Typography textAlign="center" fontSize="25px" fontWeight="700">
                   Your personal details
                 </Typography>
-                <Typography textAlign="center" fontSize="16px" fontWeight="600" mt="12px">
+                <Typography
+                  textAlign="center"
+                  fontSize="16px"
+                  fontWeight="600"
+                  mt="12px"
+                >
                   This information is 100% secure with us.
                 </Typography>
-                <Typography textAlign="center" fontSize="16px" fontWeight="600" mb="10px">
+                <Typography
+                  textAlign="center"
+                  fontSize="16px"
+                  fontWeight="600"
+                  mb="10px"
+                >
                   We will not spam you or share your details.
                 </Typography>
               </Box>
@@ -315,8 +322,6 @@ function onlineSell() {
             </Grid>
 
             <Grid item md={6} xs={12}>
-
-
               <div style={{ display: "flex", alignItems: "flex-start" }}>
                 <CountryCodeSelect
                   mt="1.03rem"
@@ -346,7 +351,6 @@ function onlineSell() {
                   errorText={touched.contact_no && errors.contact_no}
                 />
               </div>
-
             </Grid>
 
             <Grid item md={6} xs={12}>
@@ -385,20 +389,35 @@ function onlineSell() {
             >
               <Grid item md={12} xs={12}>
                 <Box alignItems="center" display="flex" flexDirection="column">
-                  <Typography textAlign="center" fontSize="25px" fontWeight="700" mt="40px">
+                  <Typography
+                    textAlign="center"
+                    fontSize="25px"
+                    fontWeight="700"
+                    mt="40px"
+                  >
                     Which area do you live or work in?
                   </Typography>
-                  <Typography textAlign="center" fontSize="16px" fontWeight="600" mt="12px">
+                  <Typography
+                    textAlign="center"
+                    fontSize="16px"
+                    fontWeight="600"
+                    mt="12px"
+                  >
                     Let us find the branches closest to you.
                   </Typography>
-                  <Typography textAlign="center" fontSize="16px" fontWeight="600" mb="15px">
+                  <Typography
+                    textAlign="center"
+                    fontSize="16px"
+                    fontWeight="600"
+                    mb="15px"
+                  >
                     Select the area that is the most convenient for you.
                   </Typography>
                 </Box>
               </Grid>
 
               <Grid item md={2} xs={1}>
-                { }
+                {}
               </Grid>
               <Grid item md={8} xs={10}>
                 <TextField
@@ -433,10 +452,20 @@ function onlineSell() {
             flexDirection="column"
             width="100%"
           >
-            <Typography textAlign="center" fontSize="25px" fontWeight="700" mt="20px">
+            <Typography
+              textAlign="center"
+              fontSize="25px"
+              fontWeight="700"
+              mt="20px"
+            >
               Tell us about your items
             </Typography>
-            <Typography textAlign="center" fontSize="16px" fontWeight="600" mt="12px">
+            <Typography
+              textAlign="center"
+              fontSize="16px"
+              fontWeight="600"
+              mt="12px"
+            >
               Provide as much detail as possible to help us give you an accurate
               quote.
             </Typography>
@@ -526,7 +555,7 @@ function onlineSell() {
                               ml="15px"
                               src={src}
                               size={100}
-                            // loader={() => previewImage}
+                              // loader={() => previewImage}
                             />
                           </Box>
                         </>
@@ -620,22 +649,43 @@ function onlineSell() {
           display="flex"
           flexDirection="column"
         >
-          <Typography textAlign="center" fontSize="25px" fontWeight="700" mt="50px">
+          <Typography
+            textAlign="center"
+            fontSize="25px"
+            fontWeight="700"
+            mt="50px"
+          >
             How would you like us to contact you?
           </Typography>
-          <Typography textAlign="center" fontSize="16px" fontWeight="600" mt="12px" mb="50px">
+          <Typography
+            textAlign="center"
+            fontSize="16px"
+            fontWeight="600"
+            mt="12px"
+            mb="50px"
+          >
             Once an agent has valued your items, we will contact you with a
             quote and the next steps.
           </Typography>
 
-          <Box display="flex" justifyContent="space-evenly" width="50%" flexWrap="wrap">
+          <Box
+            display="flex"
+            justifyContent="space-evenly"
+            width="50%"
+            flexWrap="wrap"
+          >
             <Radio
               name="email"
               mb="1.5rem"
               color="secondary"
               checked={contact_type === "email"}
               label={
-                <Typography textAlign="center" ml="6px" fontWeight="600" fontSize="18px">
+                <Typography
+                  textAlign="center"
+                  ml="6px"
+                  fontWeight="600"
+                  fontSize="18px"
+                >
                   Email
                 </Typography>
               }
@@ -647,7 +697,12 @@ function onlineSell() {
               color="secondary"
               checked={contact_type === "sms"}
               label={
-                <Typography textAlign="center" ml="6px" fontWeight="600" fontSize="18px">
+                <Typography
+                  textAlign="center"
+                  ml="6px"
+                  fontWeight="600"
+                  fontSize="18px"
+                >
                   SMS
                 </Typography>
               }
@@ -660,7 +715,12 @@ function onlineSell() {
               color="secondary"
               checked={contact_type === "cell"}
               label={
-                <Typography textAlign="center" ml="6px" fontWeight="600" fontSize="18px">
+                <Typography
+                  textAlign="center"
+                  ml="6px"
+                  fontWeight="600"
+                  fontSize="18px"
+                >
                   Cell
                 </Typography>
               }
@@ -678,19 +738,39 @@ function onlineSell() {
           display="flex"
           flexDirection="column"
         >
-          <Typography textAlign="center" fontSize="25px" fontWeight="700" mt="50px">
+          <Typography
+            textAlign="center"
+            fontSize="25px"
+            fontWeight="700"
+            mt="50px"
+          >
             Get the latest information on Cash
           </Typography>
           <Typography textAlign="center" fontSize="25px" fontWeight="700">
             Crusaders deals, competitions and news
           </Typography>
-          <Typography textAlign="center" fontSize="16px" fontWeight="600" mt="12px">
+          <Typography
+            textAlign="center"
+            fontSize="16px"
+            fontWeight="600"
+            mt="12px"
+          >
             Hear About New Products,
           </Typography>
-          <Typography textAlign="center" fontSize="16px" fontWeight="600" mt="2px">
+          <Typography
+            textAlign="center"
+            fontSize="16px"
+            fontWeight="600"
+            mt="2px"
+          >
             Be Informed First About Promotions,
           </Typography>
-          <Typography textAlign="center" fontSize="16px" fontWeight="600" mt="2px">
+          <Typography
+            textAlign="center"
+            fontSize="16px"
+            fontWeight="600"
+            mt="2px"
+          >
             Get Competition Info First
           </Typography>
         </Box>
@@ -735,7 +815,7 @@ const initialValues = {
   country_code: {
     code: "BD",
     label: "Bangladesh",
-    value: "+880"
+    value: "+880",
   },
 };
 

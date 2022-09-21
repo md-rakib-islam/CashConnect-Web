@@ -499,7 +499,7 @@ const Login: React.FC<LoginProps> = ({
           <TextField
             mb="0.75rem"
             name="username"
-            placeholder="User Name"
+            placeholder="Email or Phone Number"
             label="User Name"
             type="username"
             fullwidth

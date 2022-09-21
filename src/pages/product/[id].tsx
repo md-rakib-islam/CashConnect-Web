@@ -28,6 +28,7 @@ const ProductDetails = ({
   fullDes,
   relatedProduct,
   condition,
+  short_desc,
   orginalrice,
 }) => {
   const [_reviewsQuantity, setreviewsQuantity] = useState(
@@ -64,6 +65,7 @@ const ProductDetails = ({
         rating={rating}
         reviewCount={initialReviewsQuantity}
         condition={condition}
+        short_desc={short_desc}
         orginalrice={orginalrice}
       />
 
@@ -149,6 +151,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       initialReviewsQuantity: data?.num_reviews,
       rating: data?.rating,
       condition: data?.condition,
+      short_desc: data?.short_desc,
       relatedProduct,
     },
   };
