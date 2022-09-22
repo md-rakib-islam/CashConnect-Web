@@ -113,7 +113,7 @@ export const Multiple_Image_By_Id = `${BASE_URL}/productimage/api/v1/productimag
 
 export const Product_Color_By_Product_Id = `${BASE_URL}/productcolor/api/v1/productcolor/get_by_product_id/`;
 
-export const Product_Size_By_Product_Id = `${BASE_URL}/productsize/api/v1/productsize/get_by_product_id/`;
+export const Product_Size_By_Product_Id = `${BASE_URL}/productsize/api/v1/productsize/get_all_by_product_id/`;
 
 export const Product_High_To_Low = `${BASE_URL}/product/api/v1/product/filter_by_category_with_price_high_to_low/`;
 

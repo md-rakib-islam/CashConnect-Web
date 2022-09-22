@@ -35,6 +35,7 @@ export interface ProductCard9Props {
   className?: string;
   style?: CSSProperties;
   imgUrl?: string;
+  short_desc?: string;
   title?: string;
   price?: number;
   brand?: string | number;
@@ -55,6 +56,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
   title,
   price,
   off,
+  short_desc,
   subcategories,
   rating,
   brand,
@@ -450,6 +452,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
           <ProductIntro
             imgUrl={[imgUrl]}
             title={title}
+            short_desc={short_desc}
             price={sellablePrice}
             orginalrice={orginalPrice}
             brand={brand}

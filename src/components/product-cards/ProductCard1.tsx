@@ -3,12 +3,14 @@ import LazyImage from "@component/LazyImage";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import {
+  BASE_URL,
   Check_Stock,
   Customer_decrease_Quantity,
   Customer_Increase_Quantity,
   Customer_Order_Create,
   Customer_Order_Item_By_Product_Id,
   Customer_Order_Remove_Item,
+  Multiple_Image_By_Id,
   Product_Discount_By_Id,
 } from "@data/constants";
 import axios from "axios";
@@ -32,6 +34,7 @@ export interface ProductCard1Props extends CardProps {
   className?: string;
   style?: CSSProperties;
   imgUrl?: string;
+  short_desc?: string;
   title?: string;
   price?: number;
   off?: number;
@@ -45,6 +48,7 @@ export interface ProductCard1Props extends CardProps {
 const ProductCard1: React.FC<ProductCard1Props> = ({
   id,
   imgUrl,
+  short_desc,
   title,
   price,
   brand,
@@ -69,6 +73,9 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
   const [getItemId, setGetItemId] = useState(0);
   const [getChartquantity, setGetChartquantity] = useState(0);
   const [stock, setStock] = useState(true);
+  const [LazyyImage, setLazyyImage]: any = useState([]);
+
+  console.log("LazyyImage", LazyyImage);
 
   const cartCanged = state.cart.chartQuantity;
 
@@ -129,6 +136,20 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
       }
     }
   }, [order_Id, cartCanged]);
+
+  useEffect(() => {
+    axios
+      .get(`${Multiple_Image_By_Id}${id}`)
+      .then((res) => {
+        console.log("multipleImage", res.data?.product_images[0]);
+        setLazyyImage(res.data?.product_images[0]);
+
+        // setLazyyImage(res.data?.product_images[0]);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  }, [id]);
 
   const handleCartAmountChange = (amount, action) => {
     const dateObj: any = new Date();
@@ -263,11 +284,11 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
         <Link href={`/product/${id}`}>
           <a>
             <LazyImage
-              src={imgUrl}
+              src={`${BASE_URL}${LazyyImage?.image}`}
               width="100%"
               height="auto"
               layout="responsive"
-              loader={() => imgUrl}
+              loader={() => `${BASE_URL}${LazyyImage?.image}`}
               alt={title}
             />
           </a>
@@ -378,6 +399,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
         <Card p="1rem" position="relative">
           <ProductIntro
             imgUrl={[imgUrl]}
+            short_desc={short_desc}
             title={title}
             price={sellablePrice}
             orginalrice={orginalPrice}

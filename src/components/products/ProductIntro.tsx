@@ -12,6 +12,7 @@ import {
   Customer_Order_Remove_Item,
   Multiple_Image_By_Id,
   Product_Detail_By_Id,
+  // Product_Size_By_Product_Id,
 } from "@data/constants";
 import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
@@ -43,7 +44,6 @@ export interface ProductIntroProps {
 }
 
 const ProductIntro: React.FC<ProductIntroProps> = ({
-  imgUrl,
   title,
   price,
   id,
@@ -65,11 +65,13 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   const [itemId, setItemId] = useState(0);
   const [getItemId, setGetItemId] = useState(0);
   const [openLogin, setOpenLogin] = useState(false);
-  const [multipleUmg, setMultipleUmg] = useState(imgUrl);
+  const [multipleUmg, setMultipleUmg] = useState([]);
   const [stock, setStock] = useState(true);
   const [productCode, setProductCode] = useState("");
-  const [_reRender, setreRender] = useState(0);
+  const [color, setColor] = useState([]);
+  // const [_reRender, setreRender] = useState(0);
 
+  console.log("multipleUmg", color);
   const cartCanged = state.cart.chartQuantity;
 
   const { user_id, order_Id, isLogin, authTOKEN } = useUserInf();
@@ -107,10 +109,10 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       });
   }, []);
 
-  useEffect(() => {
-    setMultipleUmg(imgUrl);
-    setreRender(Math.random());
-  }, [imgUrl]);
+  // useEffect(() => {
+  //   setMultipleUmg(imgUrl);
+  //   setreRender(Math.random());
+  // }, [imgUrl]);
 
   useEffect(() => {
     axios
@@ -118,20 +120,56 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       .then((res) => {
         console.log("multipleImage", res.data?.product_images);
         let images = [];
+        let colors = [];
 
-        images.push(imgUrl);
+        // images.push(imgUrl);
 
         res.data?.product_images?.map((data) => {
           if (data?.image) {
             images.push(`${BASE_URL}${data?.image}`);
           }
+          if (data?.color?.name) {
+            colors.push(data?.color);
+          }
         });
+
+        setColor(colors);
+
         setMultipleUmg(images);
       })
       .catch((err) => {
         console.log("error", err);
       });
-  }, [imgUrl]);
+  }, [id]);
+
+  //for size
+  // useEffect(() => {
+  //   axios
+  //     .get(`${Product_Size_By_Product_Id}${id}`)
+  //     .then((res) => {
+  //       console.log("multipleSize", res.data.product_sizes);
+  //       let images = [];
+  //       let colors = [];
+
+  //       // images.push(imgUrl);
+
+  //       // res.data?.product_images?.map((data) => {
+  //       //   if (data?.image) {
+  //       //     images.push(`${BASE_URL}${data?.image}`);
+  //       //   }
+  //       //   if (data?.color?.name) {
+  //       //     colors.push(data?.color);
+  //       //   }
+  //       // });
+
+  //       // setColor(colors);
+
+  //       // setMultipleUmg(images);
+  //     })
+  //     .catch((err) => {
+  //       console.log("error", err);
+  //     });
+  // }, [id]);
 
   useEffect(() => {
     if (id) {
@@ -149,6 +187,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   }, [order_Id, getItemId, id, cartCanged]);
 
   const handleImageClick = (ind) => () => {
+    console.log("clickedImage", ind);
     setSelectedImage(ind);
   };
 
@@ -168,6 +207,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
         price: price,
         order_date: currentDate,
         branch: 1,
+        color: color[selectedImage]?.id,
         user: user_id,
       };
 
@@ -318,6 +358,8 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
         price: price,
         order_date: currentDate,
         branch: 1,
+        color: color[selectedImage]?.id,
+
         user: user_id,
       };
 
@@ -350,7 +392,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               type: "CHANGE_ALERT",
               payload: {
                 alerType: "error",
-                alertValue: "something went wronggggggggg",
+                alertValue: "something went wrong",
               },
             });
           });
@@ -399,30 +441,25 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                   />
                 </div>
               </FlexBox>
-              <FlexBox overflow="auto">
-                {multipleUmg.map((url, ind) => (
-                  <Box
-                    size={70}
-                    minWidth={70}
-                    bg="white"
-                    borderRadius="10px"
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    cursor="pointer"
-                    border="1px solid"
-                    key={ind}
-                    ml={ind === 0 && "auto"}
-                    mr={ind === multipleUmg.length - 1 ? "auto" : "10px"}
-                    borderColor={
-                      selectedImage === ind ? "primary.main" : "gray.400"
-                    }
-                    onClick={handleImageClick(ind)}
-                  >
-                    <Avatar src={url} borderRadius="10px" size={40} />
-                  </Box>
-                ))}
-              </FlexBox>
+              <Box
+                style={{ marginLeft: "140px" }}
+                size={70}
+                minWidth={70}
+                bg="white"
+                borderRadius="10px"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                cursor="pointer"
+                border="1px solid"
+                borderColor={selectedImage ? "primary.main" : "gray.400"}
+              >
+                <Avatar
+                  src={multipleUmg[selectedImage]}
+                  borderRadius="10px"
+                  size={40}
+                />
+              </Box>
             </Box>
           </Grid>
 
@@ -473,6 +510,45 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                 </SemiSpan>
               )}
             </Box>
+
+            <FlexBox alignItems="center" mb="1rem">
+              <SemiSpan
+                style={{ display: color.length === 0 ? "none" : "block" }}
+              >
+                Color Family:
+              </SemiSpan>
+              <H6
+                ml="8px"
+                style={{ display: color.length === 0 ? "none" : "block" }}
+              >
+                {color[selectedImage]?.name || ""}
+              </H6>
+            </FlexBox>
+
+            <FlexBox overflow="auto">
+              {multipleUmg.map((url, ind) => (
+                <Box
+                  size={50}
+                  minWidth={50}
+                  bg="white"
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  cursor="pointer"
+                  border="1px solid"
+                  key={ind}
+                  mb={20}
+                  // ml={ind === 0 && "auto"}
+                  mr={ind === multipleUmg.length - 1 ? "auto" : "10px"}
+                  borderColor={
+                    selectedImage === ind ? "primary.main" : "gray.400"
+                  }
+                  onClick={handleImageClick(ind)}
+                >
+                  <Avatar src={url} size={40} borderRadius="10px" />
+                </Box>
+              ))}
+            </FlexBox>
 
             {!cartQuantity ? (
               <FlexBox alignItems="center" mb="36px">
