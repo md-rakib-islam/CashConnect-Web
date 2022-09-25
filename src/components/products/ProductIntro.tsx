@@ -12,6 +12,7 @@ import {
   Customer_Order_Remove_Item,
   Multiple_Image_By_Id,
   Product_Detail_By_Id,
+  Product_Size_By_Product_Id,
   // Product_Size_By_Product_Id,
 } from "@data/constants";
 import useWindowSize from "@hook/useWindowSize";
@@ -45,6 +46,7 @@ export interface ProductIntroProps {
 
 const ProductIntro: React.FC<ProductIntroProps> = ({
   title,
+  imgUrl,
   price,
   id,
   brand,
@@ -54,7 +56,9 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   short_desc,
   orginalrice,
 }) => {
+  const [selectedThumbnail, setSelectedThumbnail] = useState(0);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [selectedSize, setSelectedSize] = useState(0);
 
   const { state, dispatch } = useAppContext();
   const router = useRouter();
@@ -65,13 +69,18 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   const [itemId, setItemId] = useState(0);
   const [getItemId, setGetItemId] = useState(0);
   const [openLogin, setOpenLogin] = useState(false);
+  const [colorImages, setColorImages] = useState([]);
   const [multipleUmg, setMultipleUmg] = useState([]);
+  const [_reRender, setreRender] = useState(0);
+
   const [stock, setStock] = useState(true);
   const [productCode, setProductCode] = useState("");
   const [color, setColor] = useState([]);
+  const [sizes, setSizes] = useState([]);
   // const [_reRender, setreRender] = useState(0);
+  // const [multipleUmg, setMultipleUmg] = useState([]);
 
-  console.log("multipleUmg", color);
+  console.log("multipleUmg", multipleUmg);
   const cartCanged = state.cart.chartQuantity;
 
   const { user_id, order_Id, isLogin, authTOKEN } = useUserInf();
@@ -109,10 +118,10 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       });
   }, []);
 
-  // useEffect(() => {
-  //   setMultipleUmg(imgUrl);
-  //   setreRender(Math.random());
-  // }, [imgUrl]);
+  useEffect(() => {
+    setMultipleUmg(imgUrl);
+    setreRender(Math.random());
+  }, [imgUrl]);
 
   useEffect(() => {
     axios
@@ -121,55 +130,55 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
         console.log("multipleImage", res.data?.product_images);
         let images = [];
         let colors = [];
+        let mainImg = [];
 
-        // images.push(imgUrl);
+        // mainImg.push(imgUrl);
 
         res.data?.product_images?.map((data) => {
-          if (data?.image) {
+          if (data?.color) {
             images.push(`${BASE_URL}${data?.image}`);
           }
+        });
+        res.data?.product_images?.map((data) => {
+          mainImg.push(`${BASE_URL}${data?.image}`);
+        });
+        res.data?.product_images?.map((data) => {
           if (data?.color?.name) {
             colors.push(data?.color);
           }
         });
 
         setColor(colors);
-
-        setMultipleUmg(images);
+        setMultipleUmg(mainImg);
+        setColorImages(images);
       })
       .catch((err) => {
         console.log("error", err);
       });
   }, [id]);
 
-  //for size
-  // useEffect(() => {
-  //   axios
-  //     .get(`${Product_Size_By_Product_Id}${id}`)
-  //     .then((res) => {
-  //       console.log("multipleSize", res.data.product_sizes);
-  //       let images = [];
-  //       let colors = [];
+  // for size
+  useEffect(() => {
+    axios
+      .get(`${Product_Size_By_Product_Id}${id}`)
+      .then((res) => {
+        console.log("multipleSize", res.data.product_sizes[0]);
+        let sizes = [];
 
-  //       // images.push(imgUrl);
+        // images.push(imgUrl);
 
-  //       // res.data?.product_images?.map((data) => {
-  //       //   if (data?.image) {
-  //       //     images.push(`${BASE_URL}${data?.image}`);
-  //       //   }
-  //       //   if (data?.color?.name) {
-  //       //     colors.push(data?.color);
-  //       //   }
-  //       // });
+        res.data?.product_sizes[0]?.size.map((data) => {
+          console.log("sizeData", data);
 
-  //       // setColor(colors);
+          sizes.push(data);
+        });
 
-  //       // setMultipleUmg(images);
-  //     })
-  //     .catch((err) => {
-  //       console.log("error", err);
-  //     });
-  // }, [id]);
+        setSizes(sizes);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  }, [id]);
 
   useEffect(() => {
     if (id) {
@@ -186,9 +195,17 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
     }
   }, [order_Id, getItemId, id, cartCanged]);
 
+  const handleThunmbnailClick = (ind) => () => {
+    console.log("clickedImage", ind);
+    setSelectedThumbnail(ind);
+  };
   const handleImageClick = (ind) => () => {
     console.log("clickedImage", ind);
     setSelectedImage(ind);
+  };
+  const handleSizeClick = (ind) => () => {
+    console.log("clickedSize", ind);
+    setSelectedSize(ind);
   };
 
   const handleCartAmountChange = (amount, action) => {
@@ -208,6 +225,8 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
         order_date: currentDate,
         branch: 1,
         color: color[selectedImage]?.id,
+        size: sizes[selectedSize]?.id,
+
         user: user_id,
       };
 
@@ -359,7 +378,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
         order_date: currentDate,
         branch: 1,
         color: color[selectedImage]?.id,
-
+        size: sizes[selectedSize]?.id,
         user: user_id,
       };
 
@@ -406,7 +425,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       }
     }
   };
-
   return (
     <>
       <LoginPopup open={openLogin} closeLoginDialog={closeLoginTab} />
@@ -421,10 +439,18 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                       smallImage: {
                         alt: "Wristwatch by Ted Baker London",
                         isFluidWidth: true,
-                        src: multipleUmg[selectedImage],
+                        src: selectedThumbnail
+                          ? multipleUmg[selectedThumbnail]
+                          : selectedImage
+                          ? colorImages[selectedImage]
+                          : multipleUmg[selectedThumbnail],
                       },
                       largeImage: {
-                        src: multipleUmg[selectedImage],
+                        src: selectedThumbnail
+                          ? multipleUmg[selectedThumbnail]
+                          : selectedImage
+                          ? colorImages[selectedImage]
+                          : multipleUmg[selectedThumbnail],
                         width: 1000,
                         height: 1000,
                         style: { backgroundColor: "black" },
@@ -439,27 +465,61 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                       enlargedImageClassName: "largeImageContainer",
                     }}
                   />
+
+                  {/* {colorImages[selectedImage] && (
+                    <StyledReactImageMagnify
+                      {...{
+                        smallImage: {
+                          alt: "Wristwatch by Ted Baker London",
+                          isFluidWidth: true,
+                          src: colorImages[selectedImage],
+                          // multipleUmg[selectedThumbnail],
+                        },
+                        largeImage: {
+                          src: colorImages[selectedImage],
+                          // multipleUmg[selectedThumbnail],
+                          width: 1000,
+                          height: 1000,
+                          style: { backgroundColor: "black" },
+                        },
+                        enlargedImageContainerDimensions: {
+                          width: "250%",
+                          height: "150%",
+                        },
+                        enlargedImageContainerStyle: {
+                          zIndex: "100",
+                        },
+                        enlargedImageClassName: "largeImageContainer",
+                      }}
+                    />
+                  )} */}
                 </div>
               </FlexBox>
-              <Box
-                style={{ marginLeft: "140px" }}
-                size={70}
-                minWidth={70}
-                bg="white"
-                borderRadius="10px"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                cursor="pointer"
-                border="1px solid"
-                borderColor={selectedImage ? "primary.main" : "gray.400"}
-              >
-                <Avatar
-                  src={multipleUmg[selectedImage]}
-                  borderRadius="10px"
-                  size={40}
-                />
-              </Box>
+
+              <FlexBox overflow="auto">
+                {multipleUmg.map((url, ind) => (
+                  <Box
+                    size={70}
+                    minWidth={70}
+                    bg="white"
+                    borderRadius="10px"
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    cursor="pointer"
+                    border="1px solid"
+                    key={url}
+                    ml={ind === 0 && "auto"}
+                    mr={ind === multipleUmg.length - 1 ? "auto" : "10px"}
+                    borderColor={
+                      selectedThumbnail === ind ? "primary.main" : "gray.400"
+                    }
+                    onClick={handleThunmbnailClick(ind)}
+                  >
+                    <Avatar src={url} borderRadius="10px" size={40} />
+                  </Box>
+                ))}
+              </FlexBox>
             </Box>
           </Grid>
 
@@ -526,7 +586,41 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
             </FlexBox>
 
             <FlexBox overflow="auto">
-              {multipleUmg.map((url, ind) => (
+              {colorImages.map((url, ind) => (
+                <Box
+                  style={{ display: color.length === 0 ? "none" : "block" }}
+                  size={50}
+                  minWidth={50}
+                  bg="white"
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  cursor="pointer"
+                  border="1px solid"
+                  key={url}
+                  mb={20}
+                  // ml={ind === 0 && "auto"}
+                  mr={ind === colorImages.length - 1 ? "auto" : "10px"}
+                  borderColor={
+                    selectedImage === ind ? "primary.main" : "gray.400"
+                  }
+                  onClick={handleImageClick(ind)}
+                >
+                  <Avatar src={url} size={40} borderRadius="10px" />
+                </Box>
+              ))}
+            </FlexBox>
+            <FlexBox overflow="auto">
+              <SemiSpan
+                style={{
+                  display: sizes.length === 0 ? "none" : "block",
+                  marginRight: "10px",
+                  marginTop: "15px",
+                }}
+              >
+                Size:
+              </SemiSpan>
+              {sizes.map((size, ind) => (
                 <Box
                   size={50}
                   minWidth={50}
@@ -539,13 +633,15 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                   key={ind}
                   mb={20}
                   // ml={ind === 0 && "auto"}
-                  mr={ind === multipleUmg.length - 1 ? "auto" : "10px"}
+                  mr={ind === sizes.length - 1 ? "auto" : "10px"}
                   borderColor={
-                    selectedImage === ind ? "primary.main" : "gray.400"
+                    selectedSize === ind ? "primary.main" : "gray.400"
                   }
-                  onClick={handleImageClick(ind)}
+                  onClick={handleSizeClick(ind)}
                 >
-                  <Avatar src={url} size={40} borderRadius="10px" />
+                  <H6 style={{ display: size.length === 0 ? "none" : "block" }}>
+                    {size.name || ""}
+                  </H6>
                 </Box>
               ))}
             </FlexBox>

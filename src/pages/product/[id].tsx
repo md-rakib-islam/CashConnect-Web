@@ -96,7 +96,7 @@ const ProductDetails = ({
           borderBottom={selectedOption === "review" && "2px solid"}
           borderColor="primary.main"
         >
-          Review {initialReviewsQuantity}
+          Review {initialReviewsQuantity ? initialReviewsQuantity : ""}
         </H5>
       </FlexBox>
 

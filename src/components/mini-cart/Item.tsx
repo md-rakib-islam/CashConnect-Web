@@ -5,7 +5,7 @@ import Divider from "@component/Divider";
 import FlexBox from "@component/FlexBox";
 import Icon from "@component/icon/Icon";
 import Typography, { H5, SemiSpan, Tiny } from "@component/Typography";
-import { BASE_URL, Check_Stock, Multiple_Image_By_Id } from "@data/constants";
+import { BASE_URL, Check_Stock } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
 import React, { Fragment, useEffect, useState } from "react";
@@ -17,7 +17,6 @@ interface ItemProps {
 
 const Item: React.FC<ItemProps> = ({ item, handleCartAmountChange }) => {
   const [stock, setStock] = useState(true);
-  const [LazyyImage, setLazyyImage]: any = useState([]);
 
   useEffect(() => {
     axios
@@ -31,22 +30,6 @@ const Item: React.FC<ItemProps> = ({ item, handleCartAmountChange }) => {
         console.log("error", err);
       });
   }, []);
-
-  useEffect(() => {
-    axios
-      .get(`${Multiple_Image_By_Id}${item?.product?.id}`)
-      .then((res) => {
-        console.log("multipleImage", res.data?.product_images[0]);
-        setLazyyImage(res.data?.product_images[0]);
-
-        // setLazyyImage(res.data?.product_images[0]);
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
-  }, [item?.product?.id]);
-
-  console.log("item", item);
 
   return (
     <Fragment key={item.id}>
@@ -84,7 +67,7 @@ const Item: React.FC<ItemProps> = ({ item, handleCartAmountChange }) => {
         <Link href={`/product/${item?.product?.id}`}>
           <a>
             <Avatar
-              src={`${BASE_URL}${LazyyImage?.image}`}
+              src={`${BASE_URL}${item?.product?.thumbnail}`}
               mx="1rem"
               alt={item.product?.name}
               size={76}
