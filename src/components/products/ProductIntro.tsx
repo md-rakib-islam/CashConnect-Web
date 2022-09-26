@@ -1,3 +1,4 @@
+// import Carousel from "@component/carousel/Carousel";
 import Currency from "@component/Currency";
 import LoginPopup from "@component/LoginPopup";
 import { useAppContext } from "@context/app/AppContext";
@@ -59,6 +60,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   const [selectedThumbnail, setSelectedThumbnail] = useState(0);
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState(0);
+  // const [visibleSlides, setVisibleSlides] = useState(6);
 
   const { state, dispatch } = useAppContext();
   const router = useRouter();
@@ -91,6 +93,12 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   const closeLoginTab = () => {
     setOpenLogin(false);
   };
+  // useEffect(() => {
+  //   if (width < 370) setVisibleSlides(1);
+  //   else if (width < 650) setVisibleSlides(2);
+  //   else if (width < 950) setVisibleSlides(4);
+  //   else setVisibleSlides(6);
+  // }, [width]);
 
   useEffect(() => {
     axios
@@ -202,6 +210,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   const handleImageClick = (ind) => () => {
     console.log("clickedImage", ind);
     setSelectedImage(ind);
+    setSelectedThumbnail(0);
   };
   const handleSizeClick = (ind) => () => {
     console.log("clickedSize", ind);
@@ -497,6 +506,12 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               </FlexBox>
 
               <FlexBox overflow="auto">
+                {/* <Carousel
+                  totalSlides={multipleUmg.length}
+                  visibleSlides={visibleSlides}
+                  step={visibleSlides}
+                  // getMoreItem={getMoreItem}
+                > */}
                 {multipleUmg.map((url, ind) => (
                   <Box
                     size={70}
@@ -519,6 +534,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                     <Avatar src={url} borderRadius="10px" size={40} />
                   </Box>
                 ))}
+                {/* </Carousel> */}
               </FlexBox>
             </Box>
           </Grid>
