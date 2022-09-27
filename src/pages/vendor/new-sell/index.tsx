@@ -1,5 +1,3 @@
-
-
 import Avatar from "@component/avatar/Avatar";
 import Box from "@component/Box";
 import Button from "@component/buttons/Button";
@@ -15,7 +13,7 @@ import TextField from "@component/text-field/TextField";
 import Typography from "@component/Typography";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
-import { Purshase_Create, User_By_Id } from "@data/constants";
+import { Customer_By_Id, Purshase_Create } from "@data/constants";
 import { requred } from "@data/data";
 import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
@@ -37,14 +35,15 @@ function newPurchase() {
   const [_reRender, setReRender] = useState(0);
   const [previewImage, setPreviewImage] = useState<Iimage>([[]]);
   const [images, setImages] = useState<TIMG>([[]]);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const width = useWindowSize();
 
-  const { dispatch } = useAppContext()
+  const { dispatch } = useAppContext();
 
-  const router = useRouter()
+  const router = useRouter();
 
-  const { user_id } = useUserInf()
+  const { user_id, authTOKEN } = useUserInf();
+  console.log("useUserInf", user_id);
 
   useEffect(() => {
     images.map((img, id) => {
@@ -59,19 +58,23 @@ function newPurchase() {
 
   useEffect(() => {
     if (user_id) {
-      axios.get(`${User_By_Id}${user_id}`).then(res => {
-        console.log("vendorRes", res)
-        setFieldValue("first_name", res?.data?.first_name)
-        setFieldValue("last_name", res?.data?.last_name)
-        setFieldValue("email", res?.data?.email)
-        setFieldValue("contact_no", res?.data?.primary_phone)
-      }).catch((err) => { console.log("error", err) })
+      axios
+        .get(`${Customer_By_Id}${user_id}`, authTOKEN)
+        .then((res) => {
+          console.log("vendorRes", res);
+          setFieldValue("first_name", res?.data?.first_name);
+          setFieldValue("last_name", res?.data?.last_name);
+          setFieldValue("email", res?.data?.email);
+          setFieldValue("contact_no", res?.data?.primary_phone);
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
     }
-  }, [user_id])
+  }, [user_id]);
 
   //submit purchase data
   const handleFormSubmit = async (values) => {
-
     let purchaseData = {
       first_name: values.first_name,
       last_name: values.last_name,
@@ -97,49 +100,52 @@ function newPurchase() {
 
     const [PurchaseDataToFormData] = jsonToFormData(purchaseData);
 
-
-    setLoading(true)
+    setLoading(true);
 
     axios
       .post(`${Purshase_Create}`, PurchaseDataToFormData)
       .then((res) => {
         console.log("purchaserequestRes", res);
-        setLoading(false)
+        setLoading(false);
         if (res?.data?.data?.purchase_request_items?.length) {
-          const user_type = localStorage.getItem("userType")
-          router.push(`${user_type === "vendor" ? "/vendor/new-sell/success" : "/new-sell/success"}`)
-        }
-        else if (res?.data?.user_exists) {
+          const user_type = localStorage.getItem("userType");
+          router.push(
+            `${
+              user_type === "vendor"
+                ? "/vendor/new-sell/success"
+                : "/new-sell/success"
+            }`
+          );
+        } else if (res?.data?.user_exists) {
           dispatch({
             type: "CHANGE_ALERT",
             payload: {
               alertValue: `${values.email} is already exist`,
               alerType: "warning",
-            }
-          })
-        }
-        else {
+            },
+          });
+        } else {
           dispatch({
             type: "CHANGE_ALERT",
             payload: {
               alertValue: "someting went wrong",
               alerType: "error",
-            }
-          })
+            },
+          });
         }
-      }).catch(() => {
-        setLoading(false)
+      })
+      .catch(() => {
+        setLoading(false);
         dispatch({
           type: "CHANGE_ALERT",
           payload: {
             alertValue: "someting went wrong",
             alerType: "error",
-          }
-        })
+          },
+        });
       });
 
-    console.log("purchaseData", purchaseData)
-
+    console.log("purchaseData", purchaseData);
   };
 
   const handleContactTypeChange = ({ target: { name } }) => {
@@ -227,7 +233,11 @@ function newPurchase() {
     first_name: yup.string().required("required").nullable(requred),
     last_name: yup.string().required("required").nullable(requred),
     contact_no: yup.string().required("required").nullable(requred),
-    email: yup.string().email("invalid email").required("required").nullable(requred),
+    email: yup
+      .string()
+      .email("invalid email")
+      .required("required")
+      .nullable(requred),
   });
 
   const {
@@ -247,24 +257,28 @@ function newPurchase() {
   return (
     <>
       {loading && (
-        <div style={{
-          position: 'fixed',
-          height: '100%',
-          width: '100%',
-          top: '0px',
-          left: '0px',
-          display: 'flex',
-          justifyContent: "center",
-          backgroundColor: " rgb(0 0 0 / 50%)",
-          alignItems: "center",
-          zIndex: 100,
-        }}>
-          <img style={{
-            height: "100px",
-            width: "100px",
-            marginTop: "100pz"
+        <div
+          style={{
+            position: "fixed",
+            height: "100%",
+            width: "100%",
+            top: "0px",
+            left: "0px",
+            display: "flex",
+            justifyContent: "center",
+            backgroundColor: " rgb(0 0 0 / 50%)",
+            alignItems: "center",
+            zIndex: 100,
           }}
-            src="/assets/images/gif/loading.gif" />
+        >
+          <img
+            style={{
+              height: "100px",
+              width: "100px",
+              marginTop: "100pz",
+            }}
+            src="/assets/images/gif/loading.gif"
+          />
         </div>
       )}
 
@@ -272,7 +286,7 @@ function newPurchase() {
         title="Add Product"
         iconName="delivery-box"
         button={
-          <Link href="/vendor/products">
+          <Link href="/">
             <Button color="primary" bg="primary.light" px="2rem">
               Back to Product List
             </Button>
@@ -280,7 +294,6 @@ function newPurchase() {
         }
       />
       <Card p="30px">
-
         <form onSubmit={handleSubmit}>
           <Box
             mt="60px"
@@ -296,13 +309,27 @@ function newPurchase() {
             <Grid container horizontal_spacing={6} vertical_spacing={4}>
               <Grid item md={12} xs={12}>
                 <Box alignItems="center" display="flex" flexDirection="column">
-                  <Typography textAlign="center" fontSize="25px" fontWeight="700">
+                  <Typography
+                    textAlign="center"
+                    fontSize="25px"
+                    fontWeight="700"
+                  >
                     Your personal details
                   </Typography>
-                  <Typography textAlign="center" fontSize="16px" fontWeight="600" mt="12px">
+                  <Typography
+                    textAlign="center"
+                    fontSize="16px"
+                    fontWeight="600"
+                    mt="12px"
+                  >
                     This information is 100% secure with us.
                   </Typography>
-                  <Typography textAlign="center" fontSize="16px" fontWeight="600" mb="10px">
+                  <Typography
+                    textAlign="center"
+                    fontSize="16px"
+                    fontWeight="600"
+                    mb="10px"
+                  >
                     We will not spam you or share your details.
                   </Typography>
                 </Box>
@@ -338,7 +365,6 @@ function newPurchase() {
               </Grid>
 
               <Grid item md={6} xs={12}>
-
                 {/* <div style={{ display: "flex" }}>
                   <Select
                     mb="1rem"
@@ -372,7 +398,6 @@ function newPurchase() {
                   style={{ cursor: "no-drop" }}
                 />
                 {/* </div> */}
-
               </Grid>
 
               <Grid item md={6} xs={12}>
@@ -412,21 +437,40 @@ function newPurchase() {
                 pt="60px"
               >
                 <Grid item md={12} xs={12}>
-                  <Box alignItems="center" display="flex" flexDirection="column">
-                    <Typography textAlign="center" fontSize="25px" fontWeight="700" mt="40px">
+                  <Box
+                    alignItems="center"
+                    display="flex"
+                    flexDirection="column"
+                  >
+                    <Typography
+                      textAlign="center"
+                      fontSize="25px"
+                      fontWeight="700"
+                      mt="40px"
+                    >
                       Which area do you live or work in?
                     </Typography>
-                    <Typography textAlign="center" fontSize="16px" fontWeight="600" mt="12px">
+                    <Typography
+                      textAlign="center"
+                      fontSize="16px"
+                      fontWeight="600"
+                      mt="12px"
+                    >
                       Let us find the branches closest to you.
                     </Typography>
-                    <Typography textAlign="center" fontSize="16px" fontWeight="600" mb="15px">
+                    <Typography
+                      textAlign="center"
+                      fontSize="16px"
+                      fontWeight="600"
+                      mb="15px"
+                    >
                       Select the area that is the most convenient for you.
                     </Typography>
                   </Box>
                 </Grid>
 
                 <Grid item md={2} xs={1}>
-                  { }
+                  {}
                 </Grid>
                 <Grid item md={8} xs={10}>
                   <TextField
@@ -461,12 +505,22 @@ function newPurchase() {
               flexDirection="column"
               width="100%"
             >
-              <Typography textAlign="center" fontSize="25px" fontWeight="700" mt="20px">
+              <Typography
+                textAlign="center"
+                fontSize="25px"
+                fontWeight="700"
+                mt="20px"
+              >
                 Tell us about your items
               </Typography>
-              <Typography textAlign="center" fontSize="16px" fontWeight="600" mt="12px">
-                Provide as much detail as possible to help us give you an accurate
-                quote.
+              <Typography
+                textAlign="center"
+                fontSize="16px"
+                fontWeight="600"
+                mt="12px"
+              >
+                Provide as much detail as possible to help us give you an
+                accurate quote.
               </Typography>
             </Box>
             {items.map((_item, idx) => {
@@ -554,7 +608,7 @@ function newPurchase() {
                                 ml="15px"
                                 src={src}
                                 size={100}
-                              // loader={() => previewImage}
+                                // loader={() => previewImage}
                               />
                             </Box>
                           </>
@@ -648,22 +702,43 @@ function newPurchase() {
             display="flex"
             flexDirection="column"
           >
-            <Typography textAlign="center" fontSize="25px" fontWeight="700" mt="50px">
+            <Typography
+              textAlign="center"
+              fontSize="25px"
+              fontWeight="700"
+              mt="50px"
+            >
               How would you like us to contact you?
             </Typography>
-            <Typography textAlign="center" fontSize="16px" fontWeight="600" mt="12px" mb="50px">
+            <Typography
+              textAlign="center"
+              fontSize="16px"
+              fontWeight="600"
+              mt="12px"
+              mb="50px"
+            >
               Once an agent has valued your items, we will contact you with a
               quote and the next steps.
             </Typography>
 
-            <Box display="flex" justifyContent="space-evenly" width="50%" flexWrap="wrap">
+            <Box
+              display="flex"
+              justifyContent="space-evenly"
+              width="50%"
+              flexWrap="wrap"
+            >
               <Radio
                 name="email"
                 mb="1.5rem"
                 color="secondary"
                 checked={contact_type === "email"}
                 label={
-                  <Typography textAlign="center" ml="6px" fontWeight="600" fontSize="18px">
+                  <Typography
+                    textAlign="center"
+                    ml="6px"
+                    fontWeight="600"
+                    fontSize="18px"
+                  >
                     Email
                   </Typography>
                 }
@@ -675,7 +750,12 @@ function newPurchase() {
                 color="secondary"
                 checked={contact_type === "sms"}
                 label={
-                  <Typography textAlign="center" ml="6px" fontWeight="600" fontSize="18px">
+                  <Typography
+                    textAlign="center"
+                    ml="6px"
+                    fontWeight="600"
+                    fontSize="18px"
+                  >
                     SMS
                   </Typography>
                 }
@@ -688,7 +768,12 @@ function newPurchase() {
                 color="secondary"
                 checked={contact_type === "cell"}
                 label={
-                  <Typography textAlign="center" ml="6px" fontWeight="600" fontSize="18px">
+                  <Typography
+                    textAlign="center"
+                    ml="6px"
+                    fontWeight="600"
+                    fontSize="18px"
+                  >
                     Cell
                   </Typography>
                 }
@@ -706,19 +791,39 @@ function newPurchase() {
             display="flex"
             flexDirection="column"
           >
-            <Typography textAlign="center" fontSize="25px" fontWeight="700" mt="50px">
+            <Typography
+              textAlign="center"
+              fontSize="25px"
+              fontWeight="700"
+              mt="50px"
+            >
               Get the latest information on Cash
             </Typography>
             <Typography textAlign="center" fontSize="25px" fontWeight="700">
               Crusaders deals, competitions and news
             </Typography>
-            <Typography textAlign="center" fontSize="16px" fontWeight="600" mt="12px">
+            <Typography
+              textAlign="center"
+              fontSize="16px"
+              fontWeight="600"
+              mt="12px"
+            >
               Hear About New Products,
             </Typography>
-            <Typography textAlign="center" fontSize="16px" fontWeight="600" mt="2px">
+            <Typography
+              textAlign="center"
+              fontSize="16px"
+              fontWeight="600"
+              mt="2px"
+            >
               Be Informed First About Promotions,
             </Typography>
-            <Typography textAlign="center" fontSize="16px" fontWeight="600" mt="2px">
+            <Typography
+              textAlign="center"
+              fontSize="16px"
+              fontWeight="600"
+              mt="2px"
+            >
               Get Competition Info First
             </Typography>
           </Box>
@@ -751,7 +856,6 @@ function newPurchase() {
             </Button>
           </Box>
         </form>
-
       </Card>
     </>
   );
