@@ -13,9 +13,12 @@ import TextField from "@component/text-field/TextField";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import {
-  BASE_URL, City_All,
+  BASE_URL,
+  City_All,
   Country_All,
-  Customer_By_Id, Customer_Update, Thana_All
+  Customer_By_Id,
+  Customer_Update,
+  Thana_All,
 } from "@data/constants";
 import { country_codes } from "@data/country_code";
 import { genders, requred } from "@data/data";
@@ -31,8 +34,7 @@ import * as yup from "yup";
 type Iimage = any;
 type TIMG = any;
 
-const ProfileEditor = ({
-}) => {
+const ProfileEditor = ({}) => {
   const [previewImage, setPreviewImage] = useState<Iimage>();
   const [image, setImage] = useState<TIMG>("");
 
@@ -40,19 +42,25 @@ const ProfileEditor = ({
   const [cities, setCities] = useState([]);
   const [countries, setCountries] = useState([]);
 
-  const { user_id, authTOKEN } = useUserInf()
+  const { user_id, authTOKEN } = useUserInf();
 
-  const { dispatch } = useAppContext()
+  const { dispatch } = useAppContext();
 
   const handleFormSubmit = async (values) => {
-
-    const { isValid, emailExist, primaryPhoneExist, SecondaryPhoneExist } = await checkValidation({ email: values.email, primaryPhone: values.primary_phone, secondaryPhone: values.secondary_phone, userId: user_id })
+    const { isValid, emailExist, primaryPhoneExist, SecondaryPhoneExist } =
+      await checkValidation({
+        email: values.email,
+        primaryPhone: values.primary_phone,
+        secondaryPhone: values.secondary_phone,
+        userId: user_id,
+      });
 
     if (isValid) {
       const data = {
         ...values,
         primary_phone: `${values.primary_phone}`,
-        secondary_phone: values.secondary_phone === "+880" ? "" : values.secondary_phone || "",
+        secondary_phone:
+          values.secondary_phone === "+880" ? "" : values.secondary_phone || "",
         image: image,
         gender:
           typeof values.gender != "object"
@@ -67,7 +75,9 @@ const ProfileEditor = ({
             ? values?.country
             : values?.country?.id,
         branch:
-          typeof values.branch != "object" ? values?.branch : values?.branch?.id,
+          typeof values.branch != "object"
+            ? values?.branch
+            : values?.branch?.id,
         cusotmer_type:
           typeof values.cusotmer_type != "object"
             ? values?.cusotmer_type
@@ -75,7 +85,7 @@ const ProfileEditor = ({
       };
 
       const [customerEditData] = jsonToFormData(data);
-      console.log(data)
+      console.log(data);
       axios
         .put(`${Customer_Update}${user_id}`, customerEditData, authTOKEN)
         .then((res) => {
@@ -88,70 +98,74 @@ const ProfileEditor = ({
               payload: {
                 alerType: "success",
                 alertValue: "update sussess...",
-              }
-            })
-          }
-          else {
+              },
+            });
+          } else {
             dispatch({
               type: "CHANGE_ALERT",
               payload: {
                 alerType: "error",
                 alertValue: "someting went wrong",
-              }
-            })
+              },
+            });
           }
-        }).catch(() => {
+        })
+        .catch(() => {
           dispatch({
             type: "CHANGE_ALERT",
             payload: {
               alerType: "error",
               alertValue: "someting went wrong",
-            }
-          })
-        })
-    }
-    else {
+            },
+          });
+        });
+    } else {
       setErrors({
         ...errors,
         // username: userNameExist ? "user name already exist" : "",
         email: emailExist ? "email already exist" : "",
         primary_phone: primaryPhoneExist ? "primary phone already exist" : "",
-        secondary_phone: SecondaryPhoneExist ? "secondary phone already exist" : "",
-      })
+        secondary_phone: SecondaryPhoneExist
+          ? "secondary phone already exist"
+          : "",
+      });
     }
   };
 
-
   useEffect(() => {
     if (user_id && authTOKEN) {
-      axios.get(`${Customer_By_Id}${user_id}`, authTOKEN).then((datas) => {
-        console.log("EditDetails", datas.data);
-        const { data } = datas;
+      axios
+        .get(`${Customer_By_Id}${user_id}`, authTOKEN)
+        .then((datas) => {
+          console.log("EditDetails", datas.data);
+          const { data } = datas;
 
-        console.log("secondary_phone", data?.secondary_phone)
+          console.log("secondary_phone", data?.secondary_phone);
 
-        resetForm({
-          values: {
-            ...values,
-            ...data,
-            primary_phone: data?.primary_phone || "+880",
-            secondary_phone: data?.secondary_phone || "+880"
+          resetForm({
+            values: {
+              ...values,
+              ...data,
+              primary_phone: data?.primary_phone || "+880",
+              secondary_phone: data?.secondary_phone || "+880",
+            },
+          });
+
+          setPreviewImage(`${BASE_URL}${data.image}`);
+
+          for (let key in data) {
+            // setFieldValue(`${key}`, _.isNull(data[key]) ? "" : data[key]);
+            setFieldValue(`${key}`, data[key]);
           }
+          setFieldValue("gender", {
+            id: data.gender,
+            name: genders.find((gender: any) => gender?.id == data.gender)
+              ?.name,
+          });
         })
-
-        setPreviewImage(`${BASE_URL}${data.image}`);
-
-        for (let key in data) {
-
-          // setFieldValue(`${key}`, _.isNull(data[key]) ? "" : data[key]);
-          setFieldValue(`${key}`, data[key]);
-        }
-        setFieldValue("gender", {
-          id: data.gender,
-          name: genders.find((gender: any) => gender?.id == data.gender)
-            ?.name,
+        .catch((err) => {
+          console.log("error", err);
         });
-      }).catch((err) => { console.log("error", err) });
     }
   }, [user_id, authTOKEN]);
 
@@ -160,19 +174,28 @@ const ProfileEditor = ({
       .then((res) => res.json())
       .then((data) => {
         setCities(data.cities);
-      }).catch((err) => { console.log("error", err) });
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
 
     fetch(`${Thana_All}`)
       .then((res) => res.json())
       .then((data) => {
         setThanas(data.thanas);
-      }).catch((err) => { console.log("error", err) });
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
 
     fetch(`${Country_All}`)
       .then((res) => res.json())
       .then((data) => {
         setCountries(data.countries);
-      }).catch((err) => { console.log("error", err) });
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
   }, []);
 
   const {
@@ -192,16 +215,15 @@ const ProfileEditor = ({
   });
 
   const CustomOption = ({ innerProps, isDisabled, data }) => {
-
     return !isDisabled ? (
-      <div {...innerProps}
-        style={{ cursor: "pointer", width: "180px" }}
-      ><img src={`https://flagcdn.com/w20/${data.code.toLowerCase()}.png`}></img>
-        {' ' + data.label}
+      <div {...innerProps} style={{ cursor: "pointer", width: "180px" }}>
+        <img
+          src={`https://flagcdn.com/w20/${data.code.toLowerCase()}.png`}
+        ></img>
+        {" " + data.label}
       </div>
     ) : null;
-  }
-
+  };
 
   return (
     <div>
@@ -222,7 +244,7 @@ const ProfileEditor = ({
           <Avatar
             src={previewImage}
             size={64}
-          // loader={() => previewImage}
+            // loader={() => previewImage}
           />
 
           <Box ml="-20px" zIndex={1}>
@@ -290,19 +312,19 @@ const ProfileEditor = ({
                 />
               </Grid>
 
-              {/* <Grid item md={6} xs={12}>
+              <Grid item md={6} xs={12}>
                 <TextField
                   name="username"
                   label="User Name"
                   fullwidth
                   onBlur={handleBlur}
-                  onChange={(e: any,) => {
+                  onChange={(e: any) => {
                     setFieldValue("username", e.target.value.trim());
                   }}
                   value={values.username || ""}
                   errorText={touched.username && errors.username}
                 />
-              </Grid> */}
+              </Grid>
 
               <Grid item md={6} xs={12}>
                 <TextField
@@ -345,7 +367,6 @@ const ProfileEditor = ({
               </Grid>
 
               <Grid item md={6} xs={12}>
-
                 <div style={{ display: "flex", alignItems: "flex-start" }}>
                   <CountryCodeSelect
                     mb="1rem"
@@ -379,7 +400,6 @@ const ProfileEditor = ({
               </Grid>
 
               <Grid item md={6} xs={12}>
-
                 <div style={{ display: "flex", alignItems: "flex-start" }}>
                   <CountryCodeSelect
                     mb="1rem"
@@ -407,7 +427,9 @@ const ProfileEditor = ({
                     onBlur={handleBlur}
                     onChange={handleChange}
                     value={values?.secondary_phone}
-                    errorText={touched.secondary_phone && errors.secondary_phone}
+                    errorText={
+                      touched.secondary_phone && errors.secondary_phone
+                    }
                   />
                 </div>
               </Grid>
@@ -440,8 +462,6 @@ const ProfileEditor = ({
                 />
               </Grid>
 
-
-
               <Grid item md={6} xs={12}>
                 <Select
                   mb="1rem"
@@ -453,6 +473,17 @@ const ProfileEditor = ({
                     setFieldValue("thana", thana);
                   }}
                   errorText={touched.thana && errors.thana}
+                />
+              </Grid>
+              <Grid item md={6} xs={12}>
+                <TextField
+                  name="postal_code"
+                  label="Postal Code"
+                  fullwidth
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.postal_code || ""}
+                  errorText={touched.postal_code && errors.postal_code}
                 />
               </Grid>
 
@@ -473,7 +504,7 @@ const ProfileEditor = ({
               <Grid item md={6} xs={12}>
                 <Select
                   mb="1rem"
-                  label="country"
+                  label="Country"
                   placeholder="Select country"
                   options={countries}
                   value={values.country || ""}
@@ -481,18 +512,6 @@ const ProfileEditor = ({
                     setFieldValue("country", country);
                   }}
                   errorText={touched.country && errors.country}
-                />
-              </Grid>
-
-              <Grid item md={6} xs={12}>
-                <TextField
-                  name="postal_code"
-                  label="Postal Code"
-                  fullwidth
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.postal_code || ""}
-                  errorText={touched.postal_code && errors.postal_code}
                 />
               </Grid>
 
@@ -565,7 +584,6 @@ const ProfileEditor = ({
   );
 };
 
-
 const initialValues = {
   first_name: "",
   last_name: "",
@@ -576,21 +594,28 @@ const initialValues = {
   country_code: {
     code: "BD",
     label: "Bangladesh",
-    value: "+880"
+    value: "+880",
   },
   country_code_2: {
     code: "BD",
     label: "Bangladesh",
-    value: "+880"
+    value: "+880",
   },
 };
 
 const checkoutSchema = yup.object().shape({
   first_name: yup.string().required("required").nullable(requred),
   last_name: yup.string().required("required").nullable(requred),
-  email: yup.string().email("invalid email").required("required").nullable(requred),
+  email: yup
+    .string()
+    .email("invalid email")
+    .required("required")
+    .nullable(requred),
   date_of_birth: yup.date().required("invalid date").nullable(requred),
-  primary_phone: yup.string().required("primary_phone required").nullable(requred),
+  primary_phone: yup
+    .string()
+    .required("primary_phone required")
+    .nullable(requred),
   // secondary_phone: yup.string().required("secondary_phone required").nullable(requred),
 });
 

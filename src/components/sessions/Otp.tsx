@@ -168,8 +168,6 @@ const Otp: React.FC<SignupProps> = () => {
             mb="0.75rem"
             name="phone_otp"
             label="OTP"
-            type="number"
-            placeholder="12345"
             fullwidth
             onBlur={handleBlur}
             onChange={(e) => setFieldValue("otp", e.target.value)}
