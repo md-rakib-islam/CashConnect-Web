@@ -221,6 +221,7 @@ export const Get_all_parent_category_without_pagination = `${BASE_URL}/category/
 // OTP
 export const Get_phone_varification_code_by_customer = `${BASE_URL}/customer/api/v1/customer/verify_primary_phone/`;
 export const Get_phone_varification_code_by_vendor = `${BASE_URL}/vendor/api/v1/vendor/verify_primary_phone/`;
+export const Get_phone_varification_code_for_resend_otp = `${BASE_URL}/user/api/v1/user/get_phone_otp/`;
 
 // resetPasswordOtp
 export const Get_phone_varification_code_for_reset_password = `${BASE_URL}/user/api/v1/user/get_phone_otp/`;

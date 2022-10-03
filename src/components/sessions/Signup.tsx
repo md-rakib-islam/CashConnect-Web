@@ -1,9 +1,10 @@
 import Alert from "@component/alert/alert";
+import Grid from "@component/grid/Grid";
 import LoginPopup from "@component/LoginPopup";
-import { CountryCodeSelect } from "@component/Select";
+// import { CountryCodeSelect } from "@component/Select";
 import { useAppContext } from "@context/app/AppContext";
 import { Customer_Create, Vendor_Create } from "@data/constants";
-import { country_codes } from "@data/country_code";
+// import { country_codes } from "@data/country_code";
 import axios from "axios";
 import { useFormik } from "formik";
 import checkValidation from "helper/checkValidation";
@@ -103,7 +104,7 @@ const Signup: React.FC<SignupProps> = ({
             console.log("createdCustomerRes", data);
             if (type == "SignupPage") {
               router.push({
-                pathname: `/opt/${values.primary_phone}`,
+                pathname: `/otp/${values.primary_phone}`,
               });
 
               dispatch({
@@ -122,11 +123,15 @@ const Signup: React.FC<SignupProps> = ({
               });
             }
           })
-          .catch(() => {
+          .catch((err) => {
+            setLoading(false);
+
+            console.log("signup Erro", err.response.data.primary_phone[0]);
+
             dispatch({
               type: "CHANGE_ALERT",
               payload: {
-                alertValue: "someting went wrong",
+                alertValue: err.response.data.primary_phone[0],
                 alerType: "error",
               },
             });
@@ -138,7 +143,7 @@ const Signup: React.FC<SignupProps> = ({
             console.log("createdVendorRes", data);
             if (type == "SignupPage") {
               router.push({
-                pathname: `/opt/${values.primary_phone}`,
+                pathname: `/otp/${values.primary_phone}`,
               });
               setLoading(true);
 
@@ -158,11 +163,15 @@ const Signup: React.FC<SignupProps> = ({
               });
             }
           })
-          .catch(() => {
+          .catch((err) => {
+            setLoading(false);
+
+            console.log("signup Erro", err.response.data.primary_phone[0]);
+
             dispatch({
               type: "CHANGE_ALERT",
               payload: {
-                alertValue: "someting went wrong",
+                alertValue: err.response.data.primary_phone[0],
                 alerType: "error",
               },
             });
@@ -187,24 +196,24 @@ const Signup: React.FC<SignupProps> = ({
     handleBlur,
     handleChange,
     handleSubmit,
-    setFieldValue,
+    // setFieldValue,
   } = useFormik({
     onSubmit: handleFormSubmit,
     initialValues,
     validationSchema: formSchema,
   });
 
-  const CustomOption = ({ innerProps, isDisabled, data }) => {
-    console.log(`https://flagcdn.com/w20/${data.code.toLowerCase()}.png`);
-    return !isDisabled ? (
-      <div {...innerProps} style={{ cursor: "pointer", width: "180px" }}>
-        <img
-          src={`https://flagcdn.com/w20/${data.code.toLowerCase()}.png`}
-        ></img>
-        {" " + data.label}
-      </div>
-    ) : null;
-  };
+  // const CustomOption = ({ innerProps, isDisabled, data }) => {
+  //   console.log(`https://flagcdn.com/w20/${data.code.toLowerCase()}.png`);
+  //   return !isDisabled ? (
+  //     <div {...innerProps} style={{ cursor: "pointer", width: "180px" }}>
+  //       <img
+  //         src={`https://flagcdn.com/w20/${data.code.toLowerCase()}.png`}
+  //       ></img>
+  //       {" " + data.label}
+  //     </div>
+  //   ) : null;
+  // };
 
   return (
     <>
@@ -337,7 +346,7 @@ const Signup: React.FC<SignupProps> = ({
           /> */}
 
           <div style={{ display: "flex", alignItems: "flex-start" }}>
-            <CountryCodeSelect
+            {/* <CountryCodeSelect
               mb="0.75rem"
               mt="1rem"
               label="Country"
@@ -353,19 +362,48 @@ const Signup: React.FC<SignupProps> = ({
                 setFieldValue("primary_phone", `${value.value}`);
               }}
               errorText={touched.country_code && errors.country_code}
-            />
-            <TextField
-              mb="0.75rem"
-              mt="1rem"
-              name="primary_phone"
-              // placeholder="Obtional"
-              label="Phone Number"
-              fullwidth
-              onBlur={handleBlur}
-              onChange={handleChange}
-              value={`${values.primary_phone || ""}`}
-              errorText={touched.primary_phone && errors.primary_phone}
-            />
+            /> */}
+            <Grid item md={4}>
+              <TextField
+                style={{ textAlign: "center" }}
+                mb="0.75rem"
+                mt="1rem"
+                name="country_code"
+                // placeholder="Obtional"
+                label="Country"
+                fullwidth
+                endAdornment={
+                  <div
+                    style={{
+                      cursor: "pointer",
+                      width: "105px",
+                      marginTop: "2px",
+                    }}
+                  >
+                    <img src={`https://flagcdn.com/w20/bd.png`}></img>
+                  </div>
+                }
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={`${values.country_code || ""}`}
+                errorText={touched.country_code && errors.country_code}
+              />
+            </Grid>
+
+            <Grid item md={8}>
+              <TextField
+                mb="0.75rem"
+                mt="1rem"
+                name="primary_phone"
+                // placeholder="Obtional"
+                label="Phone Number"
+                fullwidth
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={`${values.primary_phone || ""}`}
+                errorText={touched.primary_phone && errors.primary_phone}
+              />
+            </Grid>
           </div>
 
           <TextField
@@ -528,15 +566,16 @@ const initialValues = {
   first_name: "",
   last_name: "",
   username: "",
-  primary_phone: "+880",
+  primary_phone: "",
   email: "",
   password: "",
   re_password: "",
-  country_code: {
-    code: "BD",
-    label: "Bangladesh",
-    value: "+880",
-  },
+  country_code: "+880",
+  // {
+  //   code: "BD",
+  //   label: "Bangladesh",
+  //   value: "+880",
+  // }
   agreement: false,
 };
 
@@ -546,7 +585,7 @@ const formSchema = yup.object().shape({
   // username: yup.string().required("user name is required"),
   primary_phone: yup.string().required("Phone number is required"),
   password: yup.string().required("Password is required"),
-  country_code: yup.object().required("requred"),
+  // country_code: yup.object().required("requred"),
   re_password: yup
     .string()
     .oneOf([yup.ref("password"), null], "Passwords must match")

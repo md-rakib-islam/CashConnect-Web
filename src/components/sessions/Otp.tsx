@@ -1,7 +1,10 @@
 import FlexBox from "@component/FlexBox";
 import LoginPopup from "@component/LoginPopup";
 import { useAppContext } from "@context/app/AppContext";
-import { Get_phone_varification_code_by_customer } from "@data/constants";
+import {
+  Get_phone_varification_code_by_customer,
+  Get_phone_varification_code_for_resend_otp,
+} from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
@@ -19,10 +22,11 @@ interface SignupProps {
 }
 
 const Otp: React.FC<SignupProps> = () => {
+  const router = useRouter();
+
   const [openLogin, setOpenLogin] = useState(false);
   const [otpError, setOtpError] = useState("");
-
-  const router = useRouter();
+  const phoneNumber = router.query?.phoneNumber;
 
   const { dispatch } = useAppContext();
 
@@ -81,6 +85,38 @@ const Otp: React.FC<SignupProps> = () => {
       });
   };
 
+  //Resend Otp
+  const resendOtp = () => {
+    axios
+      .get(
+        `${Get_phone_varification_code_for_resend_otp}?primary_phone=${phoneNumber}`
+      )
+      .then((res) => {
+        console.log("otpResponse", res);
+
+        if (res.status === 200) {
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: res.data.detail,
+            },
+          });
+        } else {
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: res.data.detail,
+            },
+          });
+        }
+      })
+      .catch((error) => {
+        setLoading(false);
+
+        console.log(error);
+      });
+  };
+
   const {
     values,
     errors,
@@ -94,7 +130,6 @@ const Otp: React.FC<SignupProps> = () => {
     initialValues,
     validationSchema: formSchema,
   });
-  const phoneNumber = router.query?.phoneNumber;
 
   useEffect(() => {
     if (phoneNumber) {
@@ -204,7 +239,7 @@ const Otp: React.FC<SignupProps> = () => {
                 borderColor: "gray.900",
                 borderBottom: "1px solid",
               }}
-              // onClick={gotoreset}
+              onClick={resendOtp}
             >
               Resend OTP
             </H6>

@@ -50,8 +50,8 @@ const ProductDetails = ({
     }
   }, [review]);
 
-  const handleOptionClick = (opt) => () => {
-    setSelectedOption(opt);
+  const handleOptionClick = (otp) => () => {
+    setSelectedOption(otp);
   };
 
   return (
