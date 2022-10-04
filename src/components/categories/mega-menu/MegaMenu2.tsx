@@ -6,6 +6,7 @@ import { StyledMegaMenu1 } from "./MegaMenuStyle";
 
 export interface MegaMenu2Props {
   data: {
+    [categories: string]: any;
     icon: string;
     href: string;
     title: string;
@@ -13,19 +14,23 @@ export interface MegaMenu2Props {
   }[];
   index: number;
 }
-
+export interface MegaMenu {
+  data: {
+    [categories: string]: any;
+    icon: string;
+    href: string;
+    title: string;
+    menuData?: any;
+  }[];
+  index: number;
+}
 const MegaMenu2: React.FC<MegaMenu2Props> = ({ data, index }) => {
   console.log("categoriesData", data);
   return (
     <StyledMegaMenu1 className="mega-menu" index={index}>
       <Card ml="1rem" py="0.5rem" boxShadow="regular">
-        {data?.categories?.map((item) => {
-          console.log(
-            "item.title",
-            item.title,
-            item.subCategories,
-            !!item.subCategories?.length
-          );
+        {data?.map((item) => {
+          console.log("item.title", item);
           return (
             <CategoryMenuItem
               title={item.title}
@@ -34,7 +39,9 @@ const MegaMenu2: React.FC<MegaMenu2Props> = ({ data, index }) => {
               caret={!!item.subCategories?.length}
               key={item.title}
             >
-              {item.subCategories && <MegaMenu3 minWidth="560px" data={item} />}
+              {item.subCategories && (
+                <MegaMenu3 minWidth="560px" data={item} index={0} />
+              )}
             </CategoryMenuItem>
           );
         })}

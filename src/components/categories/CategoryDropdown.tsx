@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import useFormattedCategoryData from "../../customHook/useFormattedCategoryData";
 import CategoryMenuItem from "./category-menu-item/CategoryMenuItem";
 import { StyledCategoryDropdown } from "./CategoryDropdownStyle";
-import MegaMenu1 from "./mega-menu/MegaMenu1";
 import MegaMenu2 from "./mega-menu/MegaMenu2";
 
 export interface CategoryDropdownProps {
@@ -57,6 +56,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
             // onMouseOut={() => setIncreaseWidth(false)}
           >
             {formattedCategoryData?.map((item, index) => {
+              console.log("catagoryyyyyy", item);
               let MegaMenu = megaMenu[item.menuComponent];
 
               return (
@@ -71,7 +71,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
                   setIncreaseWidthMethod={setIncreaseWidthMethod}
                 >
                   {!_.isEmpty(item.menuData?.categories) ? (
-                    <MegaMenu data={item.menuData} index={index} />
+                    <MegaMenu data={item.menuData?.categories} index={index} />
                   ) : null}
                 </CategoryMenuItem>
               );

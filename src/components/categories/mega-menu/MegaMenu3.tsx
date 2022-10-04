@@ -2,38 +2,14 @@ import Box from "@component/Box";
 import Card from "@component/Card";
 import FlexBox from "@component/FlexBox";
 import Grid from "@component/grid/Grid";
-import Image from "@component/Image";
 import NavLink from "@component/nav-link/NavLink";
-import Typography, { H3, SemiSpan, Small } from "@component/Typography";
-import NextImage from "next/image";
-import Link from "next/link";
+import { SemiSpan } from "@component/Typography";
 import React from "react";
 import { StyledMegaMenu1 } from "./MegaMenuStyle";
 
-interface Image {
-  imgUrl: string;
-  href: string;
-}
-
-interface SubCategory {
-  title: string;
-  href: string;
-}
-
-interface Category {
-  title: string;
-  href?: string;
-  subCategories: SubCategory[];
-}
-
-interface MegaMenu {
-  categories: Category[];
-  rightImage?: Image;
-}
-
 interface MegaMenuProps {
-  data: MegaMenu;
-  minWidth?: string;
+  data: any | [];
+  minWidth?: string | "";
   index: number;
 }
 
@@ -132,9 +108,7 @@ const MegaMenu3: React.FC<MegaMenuProps> = ({ data, index }) => {
         </Link> */}
       </Card>
     </StyledMegaMenu1>
-  ) : (
-    ""
-  );
+  ) : null;
 };
 
 MegaMenu3.defaultProps = {
