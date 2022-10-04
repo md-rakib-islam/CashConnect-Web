@@ -28,7 +28,12 @@ const MegaMenu2: React.FC<MegaMenu2Props> = ({ data, index }) => {
   console.log("categoriesData", data);
   return (
     <StyledMegaMenu1 className="mega-menu" index={index}>
-      <Card ml="1rem" py="0.5rem" boxShadow="regular">
+      <Card
+        style={{ height: "400px" }}
+        ml="1rem"
+        py="0.5rem"
+        boxShadow="regular"
+      >
         {data?.map((item) => {
           console.log("item.title", item);
           return (

@@ -17,7 +17,11 @@ const MegaMenu3: React.FC<MegaMenuProps> = ({ data, index }) => {
   console.log("subCategories", data);
   return data?.subCategories.length ? (
     <StyledMegaMenu1 className="mega-menu" index={index}>
-      <Card ml="1rem" boxShadow="regular">
+      <Card
+        style={{ height: "400px", width: "280px", marginRight: "20px" }}
+        ml="1rem"
+        boxShadow="regular"
+      >
         <FlexBox px="1.25rem" py="0.875rem">
           <Box flex="1 1 0">
             {data?.subCategories?.map((item, ind) => (

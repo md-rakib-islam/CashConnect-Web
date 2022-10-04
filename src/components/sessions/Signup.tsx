@@ -583,7 +583,11 @@ const formSchema = yup.object().shape({
   first_name: yup.string().required("First name is required"),
   last_name: yup.string().required("Last name is required"),
   // username: yup.string().required("user name is required"),
-  primary_phone: yup.string().required("Phone number is required"),
+  primary_phone: yup
+    .string()
+    .min(11, "Please enter your number with 0")
+    .max(12, "Invalid phone number")
+    .required("Phone number is required"),
   password: yup.string().required("Password is required"),
   // country_code: yup.object().required("requred"),
   re_password: yup

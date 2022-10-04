@@ -11,7 +11,9 @@ export const StyledMegaMenu1 = styled.div<StyledMegaMenu1Props>`
   left: 265px;
   right: auto;
   z-index: 99;
-  top: ${({ index }) => (index ? `${index * 40 + 5}px` : "0px")};
+
+  // top: ${({ index }) => (index ? `${index * 40 + 5}px` : "0px")};
+  top: 0;
 
   .title-link,
   .child-link {
@@ -28,7 +30,6 @@ export const StyledMegaMenu1 = styled.div<StyledMegaMenu1Props>`
   .mega-menu-content {
     padding: 0.5rem 0px;
     margin-left: 1rem;
-    border-radius: 4px;
     background-color: ${getTheme("colors.body.paper")};
     box-shadow: ${getTheme("shadows.6")};
     transition: all 250ms ease-in-out;
