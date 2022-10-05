@@ -2,6 +2,7 @@ import Box from "@component/Box";
 import FlexBox from "@component/FlexBox";
 import NavbarLayout from "@component/layout/NavbarLayout";
 import ProductDescription from "@component/products/ProductDescription";
+import ProductFeatures from "@component/products/ProductFeatures";
 import ProductIntro from "@component/products/ProductIntro";
 import ProductReview from "@component/products/ProductReview";
 import RelatedProducts from "@component/products/RelatedProducts";
@@ -26,6 +27,7 @@ const ProductDetails = ({
   rating,
   initialReviewsQuantity,
   fullDes,
+  fullFeatures,
   relatedProduct,
   condition,
   short_desc,
@@ -43,12 +45,19 @@ const ProductDetails = ({
 
   const router = useRouter();
   const review = router.query?.review;
+  const features = router.query?.features;
 
   useEffect(() => {
     if (review) {
       setSelectedOption("review");
     }
   }, [review]);
+
+  useEffect(() => {
+    if (features) {
+      setSelectedOption("features");
+    }
+  }, [features]);
 
   const handleOptionClick = (otp) => () => {
     setSelectedOption(otp);
@@ -90,6 +99,17 @@ const ProductDetails = ({
         </H5>
         <H5
           className="cursor-pointer"
+          mr="25px"
+          p="4px 10px"
+          color={selectedOption === "features" ? "primary.main" : "text.muted"}
+          borderBottom={selectedOption === "features" && "2px solid"}
+          borderColor="primary.main"
+          onClick={handleOptionClick("features")}
+        >
+          Features
+        </H5>
+        <H5
+          className="cursor-pointer"
           p="4px 10px"
           color={selectedOption === "review" ? "primary.main" : "text.muted"}
           onClick={handleOptionClick("review")}
@@ -103,6 +123,9 @@ const ProductDetails = ({
       <Box mb="50px">
         {selectedOption === "description" && (
           <ProductDescription fullDes={fullDes} parse={""} />
+        )}
+        {selectedOption === "features" && (
+          <ProductFeatures fullFeatures={fullFeatures} parse={""} />
         )}
         {selectedOption === "review" && (
           <ProductReview product_id={id} setReviews={setNumOfReviews} />
@@ -148,6 +171,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       imgUrl: `${BASE_URL}${data?.thumbnail}`,
       brand: _.isObject(data?.brand) ? data?.brand?.name : data?.brand || "",
       fullDes: data?.full_desc,
+      fullFeatures: data?.features,
       initialReviewsQuantity: data?.num_reviews,
       rating: data?.rating,
       condition: data?.condition,
