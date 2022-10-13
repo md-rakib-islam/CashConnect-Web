@@ -3,6 +3,7 @@
 
 //base url
 export const BASE_URL = "http://192.168.0.151:8001";
+export const WS_URL = "192.168.0.151:8001";
 // export const BASE_URL = "https://api2.cashconnectbd.com";
 // export const BASE_URL = "http://134.119.184.218:8000";
 

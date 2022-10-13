@@ -570,7 +570,7 @@ const initialValues = {
   email: "",
   password: "",
   re_password: "",
-  country_code: "+880",
+  country_code: "+88",
   // {
   //   code: "BD",
   //   label: "Bangladesh",

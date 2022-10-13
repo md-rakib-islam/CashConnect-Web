@@ -56,6 +56,7 @@ class JwtService {
       localStorage.setItem("jwt_access_token", access_token);
     } else {
       localStorage.removeItem("jwt_access_token");
+      sessionStorage.removeItem("fbssls_5515163185212209");
       localStorage.removeItem("UserId");
       delete axios.defaults.headers.common.Authorization;
     }

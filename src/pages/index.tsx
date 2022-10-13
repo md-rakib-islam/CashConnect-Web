@@ -1,3 +1,4 @@
+import Chat from "@component/chat/Chat";
 import Section13 from "@component/home-1/Section13";
 import {
   Brand_Featured,
@@ -14,7 +15,6 @@ import {
 import getFormattedProductData from "@helper/getFormattedProductData";
 import axios from "axios";
 import { GetServerSideProps } from "next";
-import MessengerCustomerChat from "react-messenger-customer-chat";
 
 import Section1 from "../components/home-1/Section1";
 import Section10 from "../components/home-1/Section10";
@@ -54,35 +54,8 @@ const IndexPage = ({
       <Section10 categoriesList={categoriesList} />
       <Section11 moreForYouList={moreForYouList} />
       <Section12 />
-      {/* <MessengerChat
-        pageId="105787914880937"
-        language="sv_SE"
-        themeColor={"#e94560"}
-        bottomSpacing={30}
-        loggedInGreeting="loggedInGreeting"
-        loggedOutGreeting="loggedOutGreeting"
-        greetingDialogDisplay={"show"}
-        debugMode={true}
-        onMessengerShow={() => {
-          console.log("onMessengerShow");
-        }}
-        onMessengerHide={() => {
-          console.log("onMessengerHide");
-        }}
-        onMessengerDialogShow={() => {
-          console.log("onMessengerDialogShow");
-        }}
-        onMessengerDialogHide={() => {
-          console.log("onMessengerDialogHide");
-        }}
-        onMessengerMounted={() => {
-          console.log("onMessengerMounted");
-        }}
-        onMessengerLoad={() => {
-          console.log("onMessengerLoad");
-        }}
-      /> */}
-      <MessengerCustomerChat pageId={105787914880937} appId={317421420602599} />
+      {/* <Section14 /> */}
+      <Chat />
     </main>
   );
 };

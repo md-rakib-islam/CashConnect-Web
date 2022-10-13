@@ -19,6 +19,7 @@ const VendorDashboardNavigation = () => {
   const handleLogout = () => {
     localStorage.removeItem("UserId");
     localStorage.removeItem("jwt_access_token");
+    sessionStorage.removeItem("fbssls_5515163185212209");
     localStorage.removeItem("OrderId");
     localStorage.removeItem("userType");
 
