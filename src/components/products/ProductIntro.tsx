@@ -68,6 +68,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   var routerId = router.query?.id as string;
 
   const [cartQuantity, setCartQuantity] = useState(0);
+  const [defaultCartQuantity, setDefaultCartQuantity] = useState(1);
   const [itemId, setItemId] = useState(0);
   const [getItemId, setGetItemId] = useState(0);
   const [openLogin, setOpenLogin] = useState(false);
@@ -105,7 +106,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       .get(`${Check_Stock}${id}`)
       .then((res) => {
         console.log("res.data.is_in_stock", res.data.is_in_stock);
-        if (!res.data.is_in_stock) {
+        if (res.data.is_in_stock === false) {
           setStock(false);
         }
       })
@@ -229,7 +230,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
       const orderData = {
         product: id || routerId,
-        quantity: 1,
+        quantity: defaultCartQuantity,
         price: price,
         order_date: currentDate,
         branch: 1,
@@ -382,7 +383,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
       const orderData = {
         product: id || routerId,
-        quantity: 1,
+        quantity: defaultCartQuantity,
         price: price,
         order_date: currentDate,
         branch: 1,
@@ -661,6 +662,45 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                 </Box>
               ))}
             </FlexBox>
+            {!cartQuantity && (
+              <FlexBox alignItems="center" mb="36px">
+                <SemiSpan
+                  style={{
+                    marginRight: "10px",
+                    // marginTop: "15px",
+                  }}
+                >
+                  Quantity:{" "}
+                </SemiSpan>
+                <Button
+                  p="9px"
+                  variant="outlined"
+                  size="small"
+                  color="primary"
+                  disabled={!stock || defaultCartQuantity == 1}
+                  onClick={() =>
+                    setDefaultCartQuantity(defaultCartQuantity - 1)
+                  }
+                >
+                  <Icon variant="small">minus</Icon>
+                </Button>
+                <H3 fontWeight="600" mx="20px">
+                  {defaultCartQuantity.toString().padStart(2, "0")}
+                </H3>
+                <Button
+                  p="9px"
+                  variant="outlined"
+                  size="small"
+                  color="primary"
+                  disabled={!stock}
+                  onClick={() =>
+                    setDefaultCartQuantity(defaultCartQuantity + 1)
+                  }
+                >
+                  <Icon variant="small">plus</Icon>
+                </Button>
+              </FlexBox>
+            )}
 
             {!cartQuantity ? (
               <FlexBox alignItems="center" mb="36px">
@@ -688,12 +728,20 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               </FlexBox>
             ) : (
               <FlexBox alignItems="center" mb="36px">
+                <SemiSpan
+                  style={{
+                    marginRight: "10px",
+                    // marginTop: "15px",
+                  }}
+                >
+                  Quantity:{" "}
+                </SemiSpan>
                 <Button
                   p="9px"
                   variant="outlined"
                   size="small"
                   color="primary"
-                  // disabled={!stock}
+                  disabled={!stock || cartQuantity == 1}
                   onClick={() =>
                     handleCartAmountChange(cartQuantity - 1, "decrease")
                   }

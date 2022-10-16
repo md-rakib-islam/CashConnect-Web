@@ -36,6 +36,7 @@ const Profile = () => {
         .get(`${Customer_By_Id}${user_id}`, authTOKEN)
         .then((user) => {
           const { data } = user;
+          console.log("userData", data);
           setpreViewImg(`${BASE_URL}${data.image}`);
           setfirst_name(data.first_name);
           setlast_name(data.last_name);

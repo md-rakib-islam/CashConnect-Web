@@ -3,6 +3,7 @@ import useUserInf from "@customHook/useUserInf";
 import {
   City_All,
   Country_All,
+  Customer_By_Id,
   Customer_Order_Shipping_Address,
   Shipping_Adress_By_Order_Id,
   Thana_All,
@@ -31,6 +32,7 @@ const CheckoutForm = () => {
   const [cities, setCities] = useState([]);
   const [countries, setCountries] = useState([]);
   const [openLogin, setOpenLogin] = useState(false);
+  const [address, setAddress] = useState("");
 
   const { user_id, authTOKEN, order_Id, isLogin } = useUserInf();
 
@@ -112,6 +114,23 @@ const CheckoutForm = () => {
       setFieldValue("same_as_profile_address", checked);
     };
 
+  useEffect(() => {
+    if (user_id) {
+      axios
+        .get(`${Customer_By_Id}${user_id}`, authTOKEN)
+        .then((user) => {
+          const { data } = user;
+          console.log("userData", data);
+          setAddress(data.street_address_one);
+          setFieldValue("name", `${data.first_name} ${data.last_name}`);
+          setFieldValue("email", `${data.email}`);
+          setFieldValue("phone", `${data.primary_phone}`);
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
+    }
+  }, [user_id]);
   useEffect(() => {
     if (order_Id) {
       axios
@@ -206,16 +225,19 @@ const CheckoutForm = () => {
       <LoginPopup open={openLogin} closeLoginDialog={closeLoginTab} />
       <form onSubmit={handleSubmit}>
         <Card1 mb="2rem">
-          <Typography fontWeight="600" mb="1rem">
-            Shipping Address
-          </Typography>
+          <div style={{ display: address ? "block" : "none" }}>
+            <Typography fontWeight="600" mb="1rem">
+              Shipping Address
+            </Typography>
 
-          <CheckBox
-            label="Same as profile address"
-            color="secondary"
-            mb={sameAsProfile ? "" : "1rem"}
-            onChange={handleCheckboxChange(setFieldValue)}
-          />
+            <CheckBox
+              style={{ display: address ? "block" : "none" }}
+              label="Same as profile address"
+              color="secondary"
+              mb={sameAsProfile ? "" : "1rem"}
+              onChange={handleCheckboxChange(setFieldValue)}
+            />
+          </div>
 
           {!sameAsProfile && (
             <Grid container spacing={7}>
