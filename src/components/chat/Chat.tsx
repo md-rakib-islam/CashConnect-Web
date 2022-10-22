@@ -184,6 +184,7 @@ const Chat: React.FC = () => {
         //     // }
         //   }
         // }
+        //Cashconnect
       };
       ws.onerror = function (event) {
         console.log("WebSocket Error occurred....", event);
