@@ -36,10 +36,10 @@ export const Category_With_Product_Brand = `${BASE_URL}/category/api/v1/homepage
 export const Category_Wth_Name_Img = `${BASE_URL}/category/api/v1/homepage_categories_with_id_name_image/all/`;
 
 //city api
-export const City_All = `${BASE_URL}/city/api/v1/city/all/`;
+export const City_All = `${BASE_URL}/city/api/v1/city/without_pagination/all/`;
 
 //country api
-export const Country_All = `${BASE_URL}/country/api/v1/country/all/`;
+export const Country_All = `${BASE_URL}/country/api/v1/country/without_pagination/all/`;
 
 //customer api
 export const Customer_type_All = `${BASE_URL}/customer_type/api/v1/customer_type/all/`;
@@ -206,7 +206,7 @@ export const Check_User_Name = `${BASE_URL}/user/api/v1/user/check_username_when
 export const Check_User_Name_When_Update = `${BASE_URL}/user/api/v1/user/check_username_when_update/`;
 
 //thana api
-export const Thana_All = `${BASE_URL}/thana/api/v1/thana/all/`;
+export const Thana_All = `${BASE_URL}/thana/api/v1/thana/without_pagination/all/`;
 
 //vendor api
 export const Vendor_Create = `${BASE_URL}/vendor/api/v1/vendor/create/`;

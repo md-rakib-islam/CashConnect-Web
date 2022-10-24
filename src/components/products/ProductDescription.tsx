@@ -12,7 +12,7 @@ export interface ProductDescriptionProps {
 const ProductDescription: React.FC<ProductDescriptionProps> = ({ fullDes }) => {
   return (
     <Box>
-      <H3 mb="1rem">Specification:</H3>
+      <H3 mb="1rem">Description</H3>
       <Typography>{fullDes ? parse(fullDes) : "_"}</Typography>
     </Box>
   );

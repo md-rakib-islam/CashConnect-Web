@@ -1,7 +1,6 @@
 import Alert from "@component/alert/alert";
 import SignupPopup from "@component/SignupPopup";
 import { useAppContext } from "@context/app/AppContext";
-import useUserInf from "@customHook/useUserInf";
 import { Get_Pending_Order_After_Login } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
@@ -39,7 +38,13 @@ const Login: React.FC<LoginProps> = ({
 
   const [openSignup, setOpenSignup] = useState(false);
 
-  const { authTOKEN } = useUserInf();
+  // const { authTOKEN } = useUserInf();
+  const [authTOKEN, setAuthTOKEN] = useState({
+    headers: {
+      "Content-type": "application/json",
+      Authorization: "",
+    },
+  });
 
   const [loading, setLoading] = useState(false);
   const [nameCookie, setNameCookie] = useState();
@@ -49,6 +54,14 @@ const Login: React.FC<LoginProps> = ({
     setLoading(false);
   };
 
+  useEffect(() => {
+    setAuthTOKEN({
+      headers: {
+        "Content-type": "application/json",
+        Authorization: localStorage.getItem("jwt_access_token"),
+      },
+    });
+  }, []);
   useEffect(() => {
     router.events.on("routeChangeComplete", handleLoadingComplete);
   }, [router.events]);
@@ -80,12 +93,20 @@ const Login: React.FC<LoginProps> = ({
 
     return jwtService.signInWithEmailAndPassword(username, password).then(
       (user) => {
-        console.log("user", user);
+        const token = {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: localStorage.getItem("jwt_access_token"),
+          },
+        };
+        console.log("authTOKENauthTOKEN", token, user);
 
         axios
-          .get(`${Get_Pending_Order_After_Login}`, authTOKEN)
+          .get(`${Get_Pending_Order_After_Login}`, token)
+
           .then((res) => {
-            console.log("order_Id_res", res, authTOKEN);
+            debugger;
+            console.log("order_Id_res_pending", res, authTOKEN);
             if (res.data.id) {
               localStorage.setItem("OrderId", res.data.id);
             } else {
@@ -192,7 +213,7 @@ const Login: React.FC<LoginProps> = ({
         console.log("userFacebook", user);
 
         axios
-          .get(`${Get_Pending_Order_After_Login}`, authTOKEN)
+          .get(`${Get_Pending_Order_After_Login}`, auth_token)
           .then((res) => {
             console.log("order_Id_res", res);
             if (res.data.id) {

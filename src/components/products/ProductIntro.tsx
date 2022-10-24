@@ -271,7 +271,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               type: "CHANGE_ALERT",
               payload: {
                 alerType: "error",
-                alertValue: "something went wrong",
+                alertValue: "something went wronggggg",
               },
             });
           });

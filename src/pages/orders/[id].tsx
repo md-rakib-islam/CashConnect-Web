@@ -21,12 +21,10 @@ import { useRouter } from "next/router";
 import React, { Fragment, useEffect, useState } from "react";
 import Item from "./Item";
 
-
 // type OrderStatus = "packaging" | "shipping" | "delivering" | "complete";
 
 const OrderDetails = () => {
-
-  const [orderStatus, setorderStatus] = useState<any>("packaging")
+  const [orderStatus, setorderStatus] = useState<any>("packaging");
 
   const orderStatusList = ["packaging", "shipping", "delivering", "complete"];
   const stepIconList = ["package-box", "truck-1", "delivery"];
@@ -35,33 +33,31 @@ const OrderDetails = () => {
   const width = useWindowSize();
   const breakpoint = 350;
 
-  const [productList, setProductList] = useState([])
-  const [subTotal, setSubTotal] = useState(0)
-  const [shippingFee, setShippingFee] = useState(0)
-  const [discount, setDiscount] = useState(0)
-  const [total, setTotal] = useState(0)
-  const [paid_by, setPaid_by] = useState("Credit/Debit Card")
-  const [orderId, setOrderId] = useState(0)
-  const [DeliveredOn, setDeliveredOn] = useState("")
-  const [placedOn, setPlacedOn] = useState("")
-  const [shippingAddress, setshippingAddress] = useState("")
+  const [productList, setProductList] = useState([]);
+  const [subTotal, setSubTotal] = useState(0);
+  const [shippingFee, setShippingFee] = useState(0);
+  const [discount, setDiscount] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [paid_by, setPaid_by] = useState("Credit/Debit Card");
+  const [orderId, setOrderId] = useState(0);
+  const [DeliveredOn, setDeliveredOn] = useState("");
+  const [placedOn, setPlacedOn] = useState("");
+  const [shippingAddress, setshippingAddress] = useState("");
 
-
-  const router = useRouter()
-  const order_id = router.query?.id
-
+  const router = useRouter();
+  const order_id = router.query?.id;
 
   const getStatus = (status) => {
     switch (status) {
-      case ("pending" || "Pending"):
+      case "pending" || "Pending":
         return "packaging";
-      case ("processing" || "Processing"):
+      case "processing" || "Processing":
         return "shipping";
-      case ("cancelled" || "Cancelled"):
+      case "cancelled" || "Cancelled":
         return "packaging";
-      case ("delivered" || "Delivered"):
+      case "delivered" || "Delivered":
         return "complete";
-      case ("on_the_way" || "on the way" || "Nn the way" || "On The Way"):
+      case "on_the_way" || "on the way" || "Nn the way" || "On The Way":
         return "delivering";
       default:
         return "";
@@ -70,20 +66,27 @@ const OrderDetails = () => {
 
   useEffect(() => {
     if (order_id) {
-      axios.get(`${Customer_order_Details_For_Status}${order_id}`).then((res) => {
-        console.log("CorderDetailsRes", res.data);
-        setProductList(res.data.order?.order_items || []);
-        setSubTotal(res.data.order?.net_amount || 0);
-        setTotal(res.data.order?.net_amount);
-        setShippingFee(res.data.order?.shipping_price || 0)
-        setDiscount(res.data.order?.discount_amount || 0)
-        setPaid_by(res.data.order?.payment_method?.name || "_")
-        setOrderId(res.data.order?.id || 0)
-        setDeliveredOn(res.data.order?.delivered_at || "")
-        setPlacedOn(res.data.order?.created_at || "")
-        setshippingAddress(res.data.order?.shipping_address?.street_address || "")
-        setorderStatus(getStatus(res.data.order?.order_status?.name || ""))
-      }).catch((err) => { console.log("error", err) });
+      axios
+        .get(`${Customer_order_Details_For_Status}${order_id}`)
+        .then((res) => {
+          console.log("CorderDetailsRes", res.data);
+          setProductList(res.data.order?.order_items || []);
+          setSubTotal(res.data.order?.net_amount || 0);
+          setTotal(res.data.order?.net_amount);
+          setShippingFee(res.data.order?.shipping_price || 0);
+          setDiscount(res.data.order?.discount_amount || 0);
+          setPaid_by(res.data.order?.payment_method?.name || "_");
+          setOrderId(res.data.order?.id || 0);
+          setDeliveredOn(res.data.order?.delivered_at || "");
+          setPlacedOn(res.data.order?.created_at || "");
+          setshippingAddress(
+            res.data.order?.shipping_address?.street_address || ""
+          );
+          setorderStatus(getStatus(res.data.order?.order_status?.name || ""));
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
     }
   }, [order_id]);
 
@@ -150,8 +153,10 @@ const OrderDetails = () => {
             color="primary.main"
             textAlign="center"
           >
-            Estimated Delivery Date <b>
-              {placedOn && addDays(new Date(placedOn), 3,)?.toString()?.slice(0, 15)}
+            Estimated Delivery Date{" "}
+            <b>
+              {placedOn &&
+                addDays(new Date(placedOn), 3)?.toString()?.slice(0, 15)}
             </b>
           </Typography>
         </FlexBox>
@@ -184,7 +189,9 @@ const OrderDetails = () => {
         </TableRow>
 
         <Box py="0.5rem">
-          {productList.map((item) => <Item item={item} key={item?.id}></Item>)}
+          {productList.map((item) => (
+            <Item item={item} key={item?.id}></Item>
+          ))}
         </Box>
       </Card>
 
@@ -212,7 +219,9 @@ const OrderDetails = () => {
               <Typography fontSize="14px" color="text.hint">
                 Subtotal:
               </Typography>
-              <H6 my="0px">{subTotal ? (<Currency>{subTotal}</Currency>) : "-"}</H6>
+              <H6 my="0px">
+                {subTotal ? <Currency>{subTotal}</Currency> : "-"}
+              </H6>
             </FlexBox>
             <FlexBox
               justifyContent="space-between"
@@ -222,7 +231,9 @@ const OrderDetails = () => {
               <Typography fontSize="14px" color="text.hint">
                 Shipping fee:
               </Typography>
-              <H6 my="0px">{shippingFee ? (<Currency>{shippingFee}</Currency>) : "-"}</H6>
+              <H6 my="0px">
+                {shippingFee ? <Currency>{shippingFee}</Currency> : "-"}
+              </H6>
             </FlexBox>
             <FlexBox
               justifyContent="space-between"
@@ -232,7 +243,9 @@ const OrderDetails = () => {
               <Typography fontSize="14px" color="text.hint">
                 Discount:
               </Typography>
-              <H6 my="0px">{discount ? (<Currency>{discount}</Currency>) : "-"}</H6>
+              <H6 my="0px">
+                {discount ? <Currency>{discount}</Currency> : "-"}
+              </H6>
             </FlexBox>
 
             <Divider mb="0.5rem" />
@@ -243,9 +256,11 @@ const OrderDetails = () => {
               mb="1rem"
             >
               <H6 my="0px">Total</H6>
-              <H6 my="0px">{total ? (<Currency>{total}</Currency>) : "-"}</H6>
+              <H6 my="0px">{total ? <Currency>{total}</Currency> : "-"}</H6>
             </FlexBox>
-            <Typography fontSize="14px">Paid by {paid_by}</Typography>
+            <Typography fontSize="14px" style={{ fontWeight: 600 }}>
+              Payment by {paid_by.toUpperCase()}
+            </Typography>
           </Card>
         </Grid>
       </Grid>
@@ -254,11 +269,12 @@ const OrderDetails = () => {
 };
 
 try {
-  var user_type: string = localStorage.getItem("userType")
+  var user_type: string = localStorage.getItem("userType");
 } catch (err) {
   var user_type = "";
 }
 
-OrderDetails.layout = user_type === "vendor" ? VendorDashboardLayout : CustomerDashboardLayout;
+OrderDetails.layout =
+  user_type === "vendor" ? VendorDashboardLayout : CustomerDashboardLayout;
 
 export default OrderDetails;

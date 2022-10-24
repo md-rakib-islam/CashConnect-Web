@@ -12,7 +12,7 @@ export interface ProductFeaturesProps {
 const ProductFeatures: React.FC<ProductFeaturesProps> = ({ fullFeatures }) => {
   return (
     <Box>
-      <H3 mb="1rem">Features:</H3>
+      <H3 mb="1rem">Specification</H3>
       <Typography>{fullFeatures ? parse(fullFeatures) : "_"}</Typography>
     </Box>
   );

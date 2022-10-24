@@ -7,7 +7,7 @@ import Grid from "@component/grid/Grid";
 import DashboardLayout from "@component/layout/CustomerDashboardLayout";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import TableRow from "@component/TableRow";
-import Typography, { H3, H5, Small } from "@component/Typography";
+import { H3, H5, Small } from "@component/Typography";
 import useUserInf from "@customHook/useUserInf";
 import { BASE_URL, Customer_By_Id, User_Details } from "@data/constants";
 import axios from "axios";
@@ -22,7 +22,7 @@ const Profile = () => {
   const [email, setemail] = useState("");
   const [phone, setphone] = useState("");
   const [birth_day, setbirth_day] = useState("");
-  const [balance, setBalance] = useState([]);
+  // const [balance, setBalance] = useState([]);
   const [total_orders, setTotal_orders] = useState([]);
   const [pending_orders, setPending_orders] = useState([]);
   const [unpaid_orders, setUnpaid_orders] = useState([]);
@@ -55,7 +55,7 @@ const Profile = () => {
         .get(`${User_Details}${user_id}`, authTOKEN)
         .then((user) => {
           console.log("userDetails", user_id);
-          setBalance(user.data.balance);
+          // setBalance(user.data.balance);
           setTotal_orders(user.data.total_orders);
           setPending_orders(user.data.pending_orders);
           setUnpaid_orders(user.data.unpaid_orders);
@@ -85,7 +85,9 @@ const Profile = () => {
           <Grid item lg={6} md={6} sm={12} xs={12}>
             <FlexBox as={Card} p="14px 32px" height="100%" alignItems="center">
               <Avatar src={preViewImg} size={64} />
-              <Box ml="12px" flex="1 1 0">
+              <H5 ml={"1rem"} my="0px">{`${first_name} ${last_name}`}</H5>
+
+              {/* <Box ml="12px" flex="1 1 0">
                 <FlexBox
                   flexWrap="wrap"
                   justifyContent="space-between"
@@ -111,7 +113,7 @@ const Profile = () => {
                     SILVER USER
                   </Typography>
                 </FlexBox>
-              </Box>
+              </Box> */}
             </FlexBox>
           </Grid>
 

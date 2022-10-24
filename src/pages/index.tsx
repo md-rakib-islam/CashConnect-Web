@@ -51,8 +51,9 @@ const IndexPage = ({
       <Section5 newArrivalList={newArrivalList} />
       <Section13 bigDiscountList={bigDiscountList} />
       <Section7 categoryWithProductBrandList={categoryWithProductBrandList} />
-      <Section10 categoriesList={categoriesList} />
       <Section11 moreForYouList={moreForYouList} />
+      <Section10 categoriesList={categoriesList} />
+
       <Section12 />
       {/* <Section14 /> */}
       <Chat />

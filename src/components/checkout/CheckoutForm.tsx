@@ -188,7 +188,7 @@ const CheckoutForm = () => {
     var checkoutSchema: any = yup.object().shape({});
   } else {
     var checkoutSchema: any = yup.object().shape({
-      company: yup.string().required("company is required").nullable(requred),
+      // company: yup.string().required("company is required").nullable(requred),
       name: yup.string().required("   is required").nullable(requred),
       email: yup.string().required("email is required").nullable(requred),
       phone: yup.string().required("phone is required").nullable(requred),
@@ -229,14 +229,25 @@ const CheckoutForm = () => {
             <Typography fontWeight="600" mb="1rem">
               Shipping Address
             </Typography>
-
-            <CheckBox
-              style={{ display: address ? "block" : "none" }}
-              label="Same as profile address"
-              color="secondary"
-              mb={sameAsProfile ? "" : "1rem"}
-              onChange={handleCheckboxChange(setFieldValue)}
-            />
+            <div
+              style={{
+                borderStyle: "solid",
+                border: "2px solid #e84262",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <CheckBox
+                style={{
+                  display: address ? "block" : "none",
+                }}
+                label="Same as profile address"
+                color="secondary"
+                m={sameAsProfile ? "0.5rem" : "0.5rem"}
+                onChange={handleCheckboxChange(setFieldValue)}
+              />
+            </div>
           </div>
 
           {!sameAsProfile && (
@@ -264,14 +275,14 @@ const CheckoutForm = () => {
                 />
                 <Select
                   mb="1rem"
-                  label="Country"
-                  placeholder="Select Country"
-                  options={countries}
-                  value={values.country_id || ""}
-                  onChange={(country_id: any) => {
-                    setFieldValue("country_id", country_id?.id);
+                  label="City"
+                  placeholder="Select City"
+                  options={cities}
+                  value={values.city_id || ""}
+                  onChange={(city_id: any) => {
+                    setFieldValue("city_id", city_id?.id);
                   }}
-                  errorText={touched.country_id && errors.country_id}
+                  errorText={touched.city_id && errors.city_id}
                 />
                 <TextField
                   name="zip_code"
@@ -283,15 +294,6 @@ const CheckoutForm = () => {
                   onChange={handleChange}
                   value={values.zip_code || ""}
                   errorText={touched.zip_code && errors.zip_code}
-                />
-                <TextField
-                  name="street_address"
-                  label="Address"
-                  fullwidth
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.street_address || ""}
-                  errorText={touched.street_address && errors.street_address}
                 />
               </Grid>
               <Grid item sm={6} xs={12}>
@@ -306,7 +308,7 @@ const CheckoutForm = () => {
                   value={values.email || ""}
                   errorText={touched.email && errors.email}
                 />
-                <TextField
+                {/* <TextField
                   name="company"
                   label="Company"
                   fullwidth
@@ -315,18 +317,19 @@ const CheckoutForm = () => {
                   onChange={handleChange}
                   value={values.company || ""}
                   errorText={touched.company && errors.company}
-                />
+                /> */}
                 <Select
                   mb="1rem"
-                  label="City"
-                  placeholder="Select City"
-                  options={cities}
-                  value={values.city_id || ""}
-                  onChange={(city_id: any) => {
-                    setFieldValue("city_id", city_id?.id);
+                  label="Country"
+                  placeholder="Select Country"
+                  options={countries}
+                  value={values.country_id || ""}
+                  onChange={(country_id: any) => {
+                    setFieldValue("country_id", country_id?.id);
                   }}
-                  errorText={touched.city_id && errors.city_id}
+                  errorText={touched.country_id && errors.country_id}
                 />
+
                 <Select
                   mb="1rem"
                   label="Thana"
@@ -337,6 +340,15 @@ const CheckoutForm = () => {
                     setFieldValue("thana_id", thana_id?.id);
                   }}
                   errorText={touched.thana_id && errors.thana_id}
+                />
+                <TextField
+                  name="street_address"
+                  label="Address"
+                  fullwidth
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.street_address || ""}
+                  errorText={touched.street_address && errors.street_address}
                 />
               </Grid>
             </Grid>
@@ -371,7 +383,7 @@ const initialValues = {
   name: "",
   email: "",
   phone: "",
-  company: "",
+  // company: "",
   zip_code: "",
   country_id: "",
   city_id: "",

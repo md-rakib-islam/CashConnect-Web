@@ -76,6 +76,7 @@ const ProductDetails = ({
         condition={condition}
         short_desc={short_desc}
         orginalrice={orginalrice}
+        parse={""}
       />
 
       <FlexBox
@@ -106,7 +107,7 @@ const ProductDetails = ({
           borderColor="primary.main"
           onClick={handleOptionClick("features")}
         >
-          Features
+          Specification
         </H5>
         <H5
           className="cursor-pointer"
