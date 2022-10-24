@@ -30,7 +30,9 @@ import FlexBox from "../FlexBox";
 import Grid from "../grid/Grid";
 import Icon from "../icon/Icon";
 import Rating from "../rating/Rating";
-import { H1, H2, H3, H6, SemiSpan } from "../Typography";
+import Typography, { H1, H2, H3, H6, SemiSpan } from "../Typography";
+
+const parse = require("html-react-parser");
 
 export interface ProductIntroProps {
   imgUrl?: string[];
@@ -43,6 +45,7 @@ export interface ProductIntroProps {
   condition: string;
   short_desc: string;
   orginalrice?: number;
+  parse: string;
 }
 
 const ProductIntro: React.FC<ProductIntroProps> = ({
@@ -544,7 +547,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
             <H1 mb="0.8rem">{title}</H1>
 
             <FlexBox alignItems="center" mb="1rem">
-              <H3 ml="8px">{short_desc || "_"}</H3>
+              <Typography>{short_desc ? parse(short_desc) : "_"}</Typography>
             </FlexBox>
             <FlexBox alignItems="center" mb="1rem">
               <SemiSpan>Code:</SemiSpan>
