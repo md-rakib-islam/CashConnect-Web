@@ -82,6 +82,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
     );
     var flashDealsLists: any[] = await flashDealsRes.data.products;
     var flashDealsList = await getFormattedProductData(flashDealsLists);
+    console.log("flashDealsList", flashDealsList);
   } catch (err) {
     var flashDealsList = [];
   }

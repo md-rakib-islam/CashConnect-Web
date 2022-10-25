@@ -80,13 +80,14 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   const [_reRender, setreRender] = useState(0);
 
   const [stock, setStock] = useState(true);
+  const [stockQuantity, setStockQuantity] = useState();
   const [productCode, setProductCode] = useState("");
   const [color, setColor] = useState([]);
   const [sizes, setSizes] = useState([]);
   // const [_reRender, setreRender] = useState(0);
   // const [multipleUmg, setMultipleUmg] = useState([]);
 
-  console.log("multipleUmg", multipleUmg);
+  // console.log("stockQuantity", stockQuantity);
   const cartCanged = state.cart.chartQuantity;
 
   const { user_id, order_Id, isLogin, authTOKEN } = useUserInf();
@@ -108,7 +109,8 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
     axios
       .get(`${Check_Stock}${id}`)
       .then((res) => {
-        console.log("res.data.is_in_stock", res.data.is_in_stock);
+        console.log("res.data.is_in_stock", res.data.in_stock);
+        setStockQuantity(res.data.in_stock);
         if (res.data.is_in_stock === false) {
           setStock(false);
         }
@@ -695,7 +697,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                   variant="outlined"
                   size="small"
                   color="primary"
-                  disabled={!stock}
+                  disabled={!stock || defaultCartQuantity == stockQuantity}
                   onClick={() =>
                     setDefaultCartQuantity(defaultCartQuantity + 1)
                   }

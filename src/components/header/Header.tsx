@@ -104,7 +104,9 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
   const cartHandle = (
     <FlexBox ml="20px" alignItems="flex-start">
       <IconButton bg="gray.200" p="12px">
-        <Icon size="20px">bag</Icon>
+        <Icon style={{ color: "#e84262" }} size="20px">
+          bag
+        </Icon>
       </IconButton>
 
       {
@@ -190,7 +192,9 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
           <FlexBox className="header-right" alignItems="center">
             {!isLogin ? (
               <IconButton onClick={login} ml="1rem" bg="gray.200" p="8px">
-                <Icon size="28px">user</Icon>
+                <Icon style={{ color: "#e84262" }} size="28px">
+                  user
+                </Icon>
               </IconButton>
             ) : (
               <>
@@ -198,7 +202,9 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
                   direction="left"
                   handler={
                     <IconButton ml="1rem" bg="gray.200" p="8px">
-                      <Icon size="25px">settingsAccount</Icon>
+                      <Icon style={{ color: "#e84262" }} size="25px">
+                        settingsAccount
+                      </Icon>
                     </IconButton>
                   }
                 >
@@ -213,7 +219,7 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
                       }}
                       onClick={() => goToFrofile()}
                     >
-                      <Icon size="30px" ml="5px">
+                      <Icon style={{ color: "#e84262" }} size="30px" ml="5px">
                         user
                       </Icon>
                       <Typography fontWeight="600" fontSize="16px" ml="5px">
@@ -233,7 +239,7 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
                       }}
                       onClick={() => handleLogout()}
                     >
-                      <Icon size="23px" ml="8px">
+                      <Icon style={{ color: "#e84262" }} size="23px" ml="8px">
                         logout
                       </Icon>
                       <Typography fontWeight="600" fontSize="16px" ml="10px">
@@ -248,7 +254,9 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
             {!isLogin && (
               <Link href="/signup">
                 <IconButton ml="1rem" bg="gray.200" p="8px">
-                  <Icon size="25px">register</Icon>
+                  <Icon style={{ color: "#e84262" }} size="25px">
+                    register
+                  </Icon>
                 </IconButton>
               </Link>
             )}
