@@ -105,7 +105,6 @@ const Login: React.FC<LoginProps> = ({
           .get(`${Get_Pending_Order_After_Login}`, token)
 
           .then((res) => {
-            debugger;
             console.log("order_Id_res_pending", res, authTOKEN);
             if (res.data.id) {
               localStorage.setItem("OrderId", res.data.id);
