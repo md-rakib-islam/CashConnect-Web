@@ -14,11 +14,11 @@ import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import {
   BASE_URL,
-  City_All,
+  City_All_BY_COUNTRY_ID,
   Country_All,
   Customer_By_Id,
   Customer_Update,
-  Thana_All,
+  Thana_All_BY_CITY_ID,
 } from "@data/constants";
 import { country_codes } from "@data/country_code";
 import { genders, requred } from "@data/data";
@@ -169,25 +169,28 @@ const ProfileEditor = ({}) => {
     }
   }, [user_id, authTOKEN]);
 
+  const handleCity = (country) => {
+    fetch(`${City_All_BY_COUNTRY_ID}${country.id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("cityData", data);
+        setCities(data);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  };
+  const handleThana = (city) => {
+    fetch(`${Thana_All_BY_CITY_ID}${city.id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setThanas(data);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  };
   useEffect(() => {
-    fetch(`${City_All}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setCities(data.cities);
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
-
-    fetch(`${Thana_All}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setThanas(data.thanas);
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
-
     fetch(`${Country_All}`)
       .then((res) => res.json())
       .then((data) => {
@@ -461,7 +464,37 @@ const ProfileEditor = ({}) => {
                   }
                 />
               </Grid>
-
+              <Grid item md={6} xs={12}>
+                <Select
+                  mb="1rem"
+                  label="Country"
+                  placeholder="Select country"
+                  options={countries}
+                  value={values.country || ""}
+                  onChange={(country) => {
+                    setFieldValue("country", country);
+                    setFieldValue("city", "");
+                    setFieldValue("thana", "");
+                    handleCity(country);
+                  }}
+                  errorText={touched.country && errors.country}
+                />
+              </Grid>
+              <Grid item md={6} xs={12}>
+                <Select
+                  mb="1rem"
+                  label="City"
+                  placeholder="Select city"
+                  options={cities}
+                  value={values.city || ""}
+                  onChange={(city) => {
+                    setFieldValue("city", city);
+                    setFieldValue("thana", "");
+                    handleThana(city);
+                  }}
+                  errorText={touched.city && errors.city}
+                />
+              </Grid>
               <Grid item md={6} xs={12}>
                 <Select
                   mb="1rem"
@@ -484,34 +517,6 @@ const ProfileEditor = ({}) => {
                   onChange={handleChange}
                   value={values.postal_code || ""}
                   errorText={touched.postal_code && errors.postal_code}
-                />
-              </Grid>
-
-              <Grid item md={6} xs={12}>
-                <Select
-                  mb="1rem"
-                  label="City"
-                  placeholder="Select city"
-                  options={cities}
-                  value={values.city || ""}
-                  onChange={(city) => {
-                    setFieldValue("city", city);
-                  }}
-                  errorText={touched.city && errors.city}
-                />
-              </Grid>
-
-              <Grid item md={6} xs={12}>
-                <Select
-                  mb="1rem"
-                  label="Country"
-                  placeholder="Select country"
-                  options={countries}
-                  value={values.country || ""}
-                  onChange={(country) => {
-                    setFieldValue("country", country);
-                  }}
-                  errorText={touched.country && errors.country}
                 />
               </Grid>
 

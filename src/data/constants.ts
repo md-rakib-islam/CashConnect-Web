@@ -2,9 +2,9 @@
 //http://api.cashconnectbd.com
 
 //base url
-export const BASE_URL = "http://192.168.0.151:8001";
+// export const BASE_URL = "http://192.168.0.151:8001";
 export const WS_URL = "192.168.0.151:8001";
-// export const BASE_URL = "https://api2.cashconnectbd.com";
+export const BASE_URL = "https://api2.cashconnectbd.com";
 // export const BASE_URL = "http://134.119.184.218:8000";
 
 //branch api
@@ -37,6 +37,7 @@ export const Category_Wth_Name_Img = `${BASE_URL}/category/api/v1/homepage_categ
 
 //city api
 export const City_All = `${BASE_URL}/city/api/v1/city/without_pagination/all/`;
+export const City_All_BY_COUNTRY_ID = `${BASE_URL}/city/api/v1/city/get_city_by_country_id/`;
 
 //country api
 export const Country_All = `${BASE_URL}/country/api/v1/country/without_pagination/all/`;
@@ -209,6 +210,7 @@ export const Check_User_Name_When_Update = `${BASE_URL}/user/api/v1/user/check_u
 
 //thana api
 export const Thana_All = `${BASE_URL}/thana/api/v1/thana/without_pagination/all/`;
+export const Thana_All_BY_CITY_ID = `${BASE_URL}/thana/api/v1/thana/get_thana_by_city_id/`;
 
 //vendor api
 export const Vendor_Create = `${BASE_URL}/vendor/api/v1/vendor/create/`;

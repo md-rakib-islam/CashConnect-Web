@@ -1,13 +1,13 @@
 import LoginPopup from "@component/LoginPopup";
 import useUserInf from "@customHook/useUserInf";
 import {
-  City_All,
+  City_All_BY_COUNTRY_ID,
   Country_All,
   Customer_By_Id,
   Customer_Order_Blling_Address,
   Customer_Order_Shipping_Address,
   Shipping_Adress_By_Order_Id,
-  Thana_All,
+  Thana_All_BY_CITY_ID,
 } from "@data/constants";
 import { requred } from "@data/data";
 import axios from "axios";
@@ -33,7 +33,6 @@ const CheckoutForm = () => {
   const [cities, setCities] = useState([]);
   const [countries, setCountries] = useState([]);
   const [openLogin, setOpenLogin] = useState(false);
-
   const { user_id, authTOKEN, order_Id, isLogin } = useUserInf();
 
   const closeLoginTab = () => {
@@ -166,12 +165,40 @@ const CheckoutForm = () => {
           setFieldValue("name", `${data.first_name} ${data.last_name}`);
           setFieldValue("email", `${data.email}`);
           setFieldValue("phone", `${data.primary_phone}`);
+          setFieldValue(
+            "name_shipping",
+            `${data.first_name} ${data.last_name}`
+          );
+          setFieldValue("email_shipping", `${data.email}`);
+          setFieldValue("phone_shipping", `${data.primary_phone}`);
         })
         .catch((err) => {
           console.log("error", err);
         });
     }
   }, [user_id]);
+
+  const handleCity = (country) => {
+    fetch(`${City_All_BY_COUNTRY_ID}${country.id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("cityData", data);
+        setCities(data);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  };
+  const handleThana = (city) => {
+    fetch(`${Thana_All_BY_CITY_ID}${city.id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setThanas(data);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  };
   useEffect(() => {
     if (order_Id) {
       axios
@@ -196,24 +223,6 @@ const CheckoutForm = () => {
           console.log("error", err);
         });
     }
-
-    fetch(`${City_All}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setCities(data.cities);
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
-
-    fetch(`${Thana_All}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setThanas(data.thanas);
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
 
     fetch(`${Country_All}`)
       .then((res) => res.json())
@@ -311,6 +320,8 @@ const CheckoutForm = () => {
                 value={values.city || ""}
                 onChange={(city: any) => {
                   setFieldValue("city", city?.id);
+                  setFieldValue("thana", "");
+                  handleThana(city);
                 }}
                 errorText={touched.city && errors.city}
               />
@@ -356,6 +367,9 @@ const CheckoutForm = () => {
                 value={values.country || ""}
                 onChange={(country: any) => {
                   setFieldValue("country", country?.id);
+                  setFieldValue("city", "");
+                  setFieldValue("thana", "");
+                  handleCity(country);
                 }}
                 errorText={touched.country && errors.country}
               />
@@ -429,6 +443,8 @@ const CheckoutForm = () => {
                   value={values.city_shipping || ""}
                   onChange={(city: any) => {
                     setFieldValue("city_shipping", city?.id);
+                    setFieldValue("thana_shipping", "");
+                    handleThana(city);
                   }}
                   errorText={touched.city_shipping && errors.city_shipping}
                 />
@@ -476,6 +492,9 @@ const CheckoutForm = () => {
                   value={values.country_shipping || ""}
                   onChange={(country: any) => {
                     setFieldValue("country_shipping", country?.id);
+                    setFieldValue("city_shipping", "");
+                    setFieldValue("thana_shipping", "");
+                    handleCity(country);
                   }}
                   errorText={
                     touched.country_shipping && errors.country_shipping

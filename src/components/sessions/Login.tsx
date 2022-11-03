@@ -203,16 +203,21 @@ const Login: React.FC<LoginProps> = ({
   const responseFacebook = (response) => {
     console.log("responseFacebook", response);
     console.log("name", response.name);
-    const fb_auth_token = sessionStorage.getItem("fbssls_5515163185212209");
 
-    const auth_token = response.accessToken || fb_auth_token;
-
+    const auth_token = response.accessToken;
+    const token = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: localStorage.getItem("jwt_access_token"),
+      },
+    };
+    console.log("authTOKENauthTOKEN", token);
     return authService.signInWithFacebook(auth_token).then(
       (user) => {
         console.log("userFacebook", user);
 
         axios
-          .get(`${Get_Pending_Order_After_Login}`, auth_token)
+          .get(`${Get_Pending_Order_After_Login}`, token)
           .then((res) => {
             console.log("order_Id_res", res);
             if (res.data.id) {

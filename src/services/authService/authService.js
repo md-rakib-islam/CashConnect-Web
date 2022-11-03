@@ -12,7 +12,7 @@ class AuthService {
       console.log(FACEBOOK_LOGIN_URL);
       axios
         .post(`${FACEBOOK_LOGIN_URL}`, {
-          auth_token: auth_token,
+          auth_token: auth_token.authResponse.accessToken,
         })
         .then((response) => {
           console.log("loginRes", response);
