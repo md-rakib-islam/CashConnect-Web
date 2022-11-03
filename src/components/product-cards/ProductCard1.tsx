@@ -302,18 +302,35 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
               </SemiSpan>
             )}
 
-            <FlexBox alignItems="center" mt={stock ? "10px" : "0px"}>
-              <SemiSpan pr="0.5rem" fontWeight="600" color="primary.main">
-                <Currency>{sellablePrice.toFixed(2)}</Currency>
+            {!!orginalPrice && (
+              <SemiSpan color="text.muted" fontWeight="600">
+                <del>
+                  <Currency>{orginalPrice?.toFixed(2)}</Currency>
+                </del>
               </SemiSpan>
-              {!!orginalPrice && (
-                <SemiSpan color="text.muted" fontWeight="600">
-                  <del>
-                    <Currency>{orginalPrice?.toFixed(2)}</Currency>
-                  </del>
-                </SemiSpan>
-              )}
-            </FlexBox>
+            )}
+            <SemiSpan pr="0.5rem" fontWeight="600" color="primary.main">
+              <Currency>{sellablePrice.toFixed(2)}</Currency>
+            </SemiSpan>
+
+            {/* <FlexBox alignItems="center" mt={stock ? "10px" : "0px"}>
+           
+            </FlexBox> */}
+            <H4
+              display="flex"
+              className="title"
+              fontSize="13px"
+              fontWeight="600"
+              color={
+                condition === "new" ||
+                condition === "New" ||
+                condition === "NEW"
+                  ? "primary.main"
+                  : "secondary.main"
+              }
+            >
+              {condition || ""}
+            </H4>
           </Box>
 
           <FlexBox
@@ -360,20 +377,6 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
             )}
           </FlexBox>
         </FlexBox>
-
-        <H4
-          display="flex"
-          className="title"
-          fontSize="13px"
-          fontWeight="600"
-          color={
-            condition === "new" || condition === "New" || condition === "NEW"
-              ? "primary.main"
-              : "secondary.main"
-          }
-        >
-          {condition || ""}
-        </H4>
       </div>
 
       <Modal open={open} onClose={toggleDialog}>

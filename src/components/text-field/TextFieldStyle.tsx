@@ -52,7 +52,7 @@ export const TextFieldWrapper = styled.div<TextFieldProps & SpaceProps>(
       small: {
         display: "block",
         color: props.errorColor ? props.errorColor : "error.main",
-        fontSize: "0.875rem",
+        // fontSize: "0.875rem",
         marginTop: "0.25rem",
         marginLeft: "0.25rem",
       },

@@ -67,7 +67,9 @@ export const Customer_Order_Item_By_Product_Id = `${BASE_URL}/customerorder/api/
 
 export const Customer_Order_Comment = `${BASE_URL}/customerorder/api/v1/customerorder/add_comment/`;
 
-export const Customer_Order_Shipping_Address = `${BASE_URL}/customerorder/api/v1/customerorder/add_shipping_address/`;
+export const Customer_Order_Shipping_Address = `${BASE_URL}/shippingaddress/api/v1/shippingaddress/create/`;
+
+export const Customer_Order_Blling_Address = `${BASE_URL}/billingaddress/api/v1/billingaddress/create/`;
 
 export const Customer_Order_Payment = `${BASE_URL}/customerorder/api/v1/customerorder/add_payment_method_and_payment_method_detail/`;
 

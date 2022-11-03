@@ -24,10 +24,24 @@ import Item from "./Item";
 // type OrderStatus = "packaging" | "shipping" | "delivering" | "complete";
 
 const OrderDetails = () => {
-  const [orderStatus, setorderStatus] = useState<any>("packaging");
+  const [orderStatus, setorderStatus] = useState<any>("processing");
 
-  const orderStatusList = ["packaging", "shipping", "delivering", "complete"];
-  const stepIconList = ["package-box", "truck-1", "delivery"];
+  const orderStatusList = [
+    // "pending",
+    "processing",
+    "packaging",
+    "shipping",
+    "delivering",
+    "complete",
+  ];
+  const stepIconList = [
+    "package-box",
+    "processing",
+    // "truck-1",
+    "truck",
+    "delivery-truck",
+    "delivery",
+  ];
 
   const statusIndex = orderStatusList.indexOf(orderStatus);
   const width = useWindowSize();
