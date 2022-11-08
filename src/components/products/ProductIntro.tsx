@@ -133,7 +133,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   }, []);
 
   useEffect(() => {
-    setMultipleUmg(imgUrl);
+    // setMultipleUmg(imgUrl);
     setreRender(Math.random());
   }, [imgUrl]);
 
@@ -440,6 +440,8 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       }
     }
   };
+
+  console.log("MultipleUmg", multipleUmg);
   return (
     <>
       <LoginPopup open={openLogin} closeLoginDialog={closeLoginTab} />
