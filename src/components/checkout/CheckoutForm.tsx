@@ -5,8 +5,8 @@ import {
   Country_All,
   Customer_By_Id,
   Customer_Order_Blling_Address,
+  Customer_Order_Invoice,
   Customer_Order_Shipping_Address,
-  Shipping_Adress_By_Order_Id,
   Thana_All_BY_CITY_ID,
 } from "@data/constants";
 import { requred } from "@data/data";
@@ -202,22 +202,31 @@ const CheckoutForm = () => {
   useEffect(() => {
     if (order_Id) {
       axios
-        .get(`${Shipping_Adress_By_Order_Id}${order_Id}`)
+        .get(`${Customer_Order_Invoice}${order_Id}`, authTOKEN)
         .then((res) => {
           console.log("shippingDetailsRes", res);
-          const { data } = res;
-          // setShippingId(data.id);
-          for (let key in data) {
-            if (key == "country") {
-              setFieldValue(`country`, data[key]);
-            } else if (key == "city") {
-              setFieldValue(`city`, data[key]);
-            } else if (key == "thana") {
-              setFieldValue(`thana`, data[key]);
-            } else {
-              setFieldValue(`${key}`, data[key]);
-            }
-          }
+
+          setFieldValue(`street_address`, res?.data?.billing?.street_address);
+          setFieldValue(`zip_code`, res?.data?.billing?.zip_code);
+
+          setFieldValue(
+            `street_address_shipping`,
+            res?.data?.shipping?.street_address
+          );
+          setFieldValue(`zip_code_shipping`, res?.data?.shipping?.zip_code);
+
+          // // setShippingId(data.id);
+          // for (let key in data) {
+          //   if (key == "country") {
+          //     setFieldValue(`country`, data[key]);
+          //   } else if (key == "city") {
+          //     setFieldValue(`city`, data[key]);
+          //   } else if (key == "thana") {
+          //     setFieldValue(`thana`, data[key]);
+          //   } else {
+          //     setFieldValue(`${key}`, data[key]);
+          //   }
+          // }
         })
         .catch((err) => {
           console.log("error", err);
@@ -232,7 +241,7 @@ const CheckoutForm = () => {
       .catch((err) => {
         console.log("error", err);
       });
-  }, []);
+  }, [order_Id]);
 
   if (sameAsBillingAddress) {
     var checkoutSchema: any = yup.object().shape({
