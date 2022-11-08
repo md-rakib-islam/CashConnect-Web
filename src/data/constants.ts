@@ -2,9 +2,9 @@
 //http://api.cashconnectbd.com
 
 //base url
-// export const BASE_URL = "http://192.168.0.151:8001";
+export const BASE_URL = "http://192.168.0.151:8001";
 export const WS_URL = "192.168.0.151:8001";
-export const BASE_URL = "https://api2.cashconnectbd.com";
+// export const BASE_URL = "https://api2.cashconnectbd.com";
 // export const BASE_URL = "http://134.119.184.218:8000";
 
 //branch api
@@ -75,6 +75,8 @@ export const Customer_Order_Blling_Address = `${BASE_URL}/billingaddress/api/v1/
 export const Customer_Order_Payment = `${BASE_URL}/customerorder/api/v1/customerorder/add_payment_method_and_payment_method_detail/`;
 
 export const Customer_Order_Confirm = `${BASE_URL}/customerorder/api/v1/customerorder/confirm_from_frontend/`;
+
+export const Customer_Order_Invoice = `${BASE_URL}/customerorder/api/v1/customerorder/get_invoice_by_order_id/`;
 
 export const Customer_Order_Pending_Details = `${BASE_URL}/customerorder/api/v1/customerorder/get_a_customer_order_pending_detail/`;
 

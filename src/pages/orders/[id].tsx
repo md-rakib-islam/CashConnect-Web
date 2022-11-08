@@ -2,6 +2,7 @@ import Avatar from "@component/avatar/Avatar";
 import Box from "@component/Box";
 import Button from "@component/buttons/Button";
 import Card from "@component/Card";
+import { Chip } from "@component/Chip";
 import Currency from "@component/Currency";
 import Divider from "@component/Divider";
 import FlexBox from "@component/FlexBox";
@@ -11,14 +12,17 @@ import CustomerDashboardLayout from "@component/layout/CustomerDashboardLayout";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import VendorDashboardLayout from "@component/layout/VendorDashboardLayout";
 import TableRow from "@component/TableRow";
-import Typography, { H5, H6, Paragraph } from "@component/Typography";
-import { Customer_order_Details_For_Status } from "@data/constants";
+import Typography, { H5, H6, Paragraph, Small } from "@component/Typography";
+import {
+  Customer_order_Details_For_Status,
+  Customer_Order_Invoice,
+} from "@data/constants";
 import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
 import { format } from "date-fns";
 import addDays from "date-fns/addDays";
 import { useRouter } from "next/router";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useMemo, useState } from "react";
 import Item from "./Item";
 
 // type OrderStatus = "packaging" | "shipping" | "delivering" | "complete";
@@ -42,7 +46,27 @@ const OrderDetails = () => {
     "delivery-truck",
     "delivery",
   ];
+  const getColor = (status) => {
+    switch (status) {
+      case "pending" || "Pending":
+        return "secondary";
+      case "processing" || "Processing":
+        return "secondary";
+      case "cancelled" || "Cancelled":
+        return "error";
+      case "delivered" ||
+        "Delivered" ||
+        "on_the_way" ||
+        "on the way" ||
+        "Nn the way" ||
+        "On The Way":
+        return "success";
+      default:
+        return "";
+    }
+  };
 
+  const memoizedGetColor = (status) => useMemo(() => getColor(status), []);
   const statusIndex = orderStatusList.indexOf(orderStatus);
   const width = useWindowSize();
   const breakpoint = 350;
@@ -56,7 +80,8 @@ const OrderDetails = () => {
   const [orderId, setOrderId] = useState(0);
   const [DeliveredOn, setDeliveredOn] = useState("");
   const [placedOn, setPlacedOn] = useState("");
-  const [shippingAddress, setshippingAddress] = useState("");
+  const [PhoneNumber, setPhoneNumber] = useState("");
+  const [invoice, setInvoice] = useState<any>({});
 
   const router = useRouter();
   const order_id = router.query?.id;
@@ -79,6 +104,23 @@ const OrderDetails = () => {
   };
 
   useEffect(() => {
+    axios
+      .get(`${Customer_Order_Invoice}${order_id}`, {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: localStorage.getItem("jwt_access_token"),
+        },
+      })
+      .then((res) => {
+        console.log("Customer_Order_Invoice", res.data);
+        setInvoice(res?.data);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  }, []);
+
+  useEffect(() => {
     if (order_id) {
       axios
         .get(`${Customer_order_Details_For_Status}${order_id}`)
@@ -93,9 +135,7 @@ const OrderDetails = () => {
           setOrderId(res.data.order?.id || 0);
           setDeliveredOn(res.data.order?.delivered_at || "");
           setPlacedOn(res.data.order?.created_at || "");
-          setshippingAddress(
-            res.data.order?.shipping_address?.street_address || ""
-          );
+          setPhoneNumber(res.data.order?.user_phone_number || "");
           setorderStatus(getStatus(res.data.order?.order_status?.name || ""));
         })
         .catch((err) => {
@@ -104,7 +144,7 @@ const OrderDetails = () => {
     }
   }, [order_id]);
 
-  // console.log("productList", productList)
+  console.log("invoice", invoice);
   return (
     <div>
       <DashboardPageHeader
@@ -179,102 +219,189 @@ const OrderDetails = () => {
       <Card p="0px" mb="30px" overflow="hidden">
         <TableRow bg="gray.200" p="12px" boxShadow="none" borderRadius={0}>
           <FlexBox className="pre" m="6px" alignItems="center">
-            <Typography fontSize="14px" color="text.muted" mr="4px">
+            <Typography fontSize="11px" color="text.muted" mr="4px">
               Order ID:
             </Typography>
-            <Typography fontSize="14px">{orderId}</Typography>
+            <Typography fontSize="11px">{orderId}</Typography>
           </FlexBox>
           <FlexBox className="pre" m="6px" alignItems="center">
-            <Typography fontSize="14px" color="text.muted" mr="4px">
+            <Typography fontSize="11px" color="text.muted" mr="4px">
               Placed on:
             </Typography>
-            <Typography fontSize="14px">
+            <Typography fontSize="11px">
               {placedOn && format(new Date(placedOn), "MMM dd, yyyy")}
             </Typography>
           </FlexBox>
           <FlexBox className="pre" m="6px" alignItems="center">
-            <Typography fontSize="14px" color="text.muted" mr="4px">
+            <Typography fontSize="11px" color="text.muted" mr="4px">
               Delivered on:
             </Typography>
-            <Typography fontSize="14px">
+            <Typography fontSize="11px">
               {DeliveredOn && format(new Date(DeliveredOn), "MMM dd, yyyy")}
             </Typography>
           </FlexBox>
         </TableRow>
-
-        <Box py="0.5rem">
-          {productList.map((item) => (
-            <Item item={item} key={item?.id}></Item>
-          ))}
-        </Box>
       </Card>
 
-      <Grid container spacing={6}>
-        <Grid item lg={6} md={6} xs={12}>
-          <Card p="20px 30px">
-            <H5 mt="0px" mb="14px">
+      <Card>
+        <FlexBox>
+          <Grid style={{ padding: "20px 30px" }} item lg={3} md={3} xs={3}>
+            <H5 mt="0px" mb="14px" fontSize="14px">
+              Customer Information
+            </H5>
+            <Paragraph fontSize="11px" my="0px">
+              Name: {invoice?.billing?.user?.first_name}{" "}
+              {invoice?.billing?.user?.last_name}
+            </Paragraph>
+            <Paragraph fontSize="11px" my="0px">
+              Phone: {PhoneNumber}
+            </Paragraph>
+          </Grid>
+          <Grid style={{ padding: "20px 30px" }} item lg={3} md={3} xs={3}>
+            <H5 mt="0px" mb="14px" fontSize="14px">
+              Billing Address
+            </H5>
+            <Paragraph fontSize="11px" my="0px">
+              Name: {invoice?.billing?.user?.first_name}{" "}
+              {invoice?.billing?.user?.last_name}
+            </Paragraph>
+            <Paragraph fontSize="11px" my="0px">
+              Address: {invoice?.billing?.street_address}{" "}
+              {invoice?.billing?.thana?.name} {invoice?.billing?.city?.name} -
+              {invoice?.billing?.zip_code}
+            </Paragraph>
+            <Paragraph fontSize="11px" my="0px">
+              Phone: {invoice?.billing?.phone}{" "}
+            </Paragraph>
+            <Paragraph fontSize="11px" my="0px">
+              Email: {invoice?.billing?.email}{" "}
+            </Paragraph>
+          </Grid>
+          <Grid style={{ padding: "20px 30px" }} item lg={3} md={3} xs={3}>
+            <H5 mt="0px" mb="14px" fontSize="14px">
               Shipping Address
             </H5>
-            <Paragraph fontSize="14px" my="0px">
-              {shippingAddress}
+            <Paragraph fontSize="11px" my="0px">
+              Name: {invoice?.shipping?.user?.first_name}{" "}
+              {invoice?.shipping?.user?.last_name}
             </Paragraph>
-          </Card>
-        </Grid>
-        <Grid item lg={6} md={6} xs={12}>
-          <Card p="20px 30px">
-            <H5 mt="0px" mb="14px">
-              Total Summary
+            <Paragraph fontSize="11px" my="0px">
+              Address: {invoice?.shipping?.street_address}{" "}
+              {invoice?.shipping?.thana?.name} {invoice?.shipping?.city?.name} -
+              {invoice?.shipping?.zip_code}
+            </Paragraph>
+            <Paragraph fontSize="11px" my="0px">
+              Phone: {invoice?.shipping?.phone}{" "}
+            </Paragraph>
+            <Paragraph fontSize="11px" my="0px">
+              Email: {invoice?.shipping?.email}{" "}
+            </Paragraph>
+          </Grid>
+          <Grid style={{ padding: "20px 30px" }} item lg={3} md={3} xs={3}>
+            <H5 mt="0px" mb="14px" fontSize="14px">
+              Order Information
             </H5>
-            <FlexBox
-              justifyContent="space-between"
-              alignItems="center"
-              mb="0.5rem"
-            >
-              <Typography fontSize="14px" color="text.hint">
-                Subtotal:
-              </Typography>
-              <H6 my="0px">
-                {subTotal ? <Currency>{subTotal}</Currency> : "-"}
-              </H6>
-            </FlexBox>
-            <FlexBox
-              justifyContent="space-between"
-              alignItems="center"
-              mb="0.5rem"
-            >
-              <Typography fontSize="14px" color="text.hint">
-                Shipping fee:
-              </Typography>
-              <H6 my="0px">
-                {shippingFee ? <Currency>{shippingFee}</Currency> : "-"}
-              </H6>
-            </FlexBox>
-            <FlexBox
-              justifyContent="space-between"
-              alignItems="center"
-              mb="0.5rem"
-            >
-              <Typography fontSize="14px" color="text.hint">
-                Discount:
-              </Typography>
-              <H6 my="0px">
-                {discount ? <Currency>{discount}</Currency> : "-"}
-              </H6>
-            </FlexBox>
+            <Paragraph fontSize="11px" my="0px">
+              Order # {invoice?.order?.order_no}
+            </Paragraph>
+            <Paragraph fontSize="11px" my="0px">
+              Order Date:{" "}
+              {invoice?.order?.order_date &&
+                format(new Date(invoice?.order?.order_date), "MMM dd, yyyy")}
+            </Paragraph>
 
+            <Box m="6px">
+              <Chip
+                p="0.25rem 1rem"
+                bg={`${memoizedGetColor(
+                  invoice?.order?.order_status?.name
+                )}.light`}
+              >
+                <Small
+                  color={`${memoizedGetColor(
+                    invoice?.order?.order_status?.name
+                  )}.main`}
+                >
+                  {invoice?.order?.order_status?.name}
+                </Small>
+              </Chip>
+            </Box>
+          </Grid>
+        </FlexBox>
+      </Card>
+
+      <Grid style={{ marginTop: "20px" }} container spacing={12}>
+        <Grid item lg={12} md={12} xs={12}>
+          <Card p="20px 30px">
+            <Box py="0.5rem">
+              {productList.map((item) => (
+                <Item item={item} key={item?.id}></Item>
+              ))}
+            </Box>
             <Divider mb="0.5rem" />
-
-            <FlexBox
-              justifyContent="space-between"
-              alignItems="center"
-              mb="1rem"
+            <Grid
+              style={{ marginRight: "0px", marginLeft: "auto" }}
+              item
+              lg={3}
+              md={3}
+              xs={3}
             >
-              <H6 my="0px">Total</H6>
-              <H6 my="0px">{total ? <Currency>{total}</Currency> : "-"}</H6>
-            </FlexBox>
-            <Typography fontSize="14px" style={{ fontWeight: 600 }}>
-              Payment by {paid_by.toUpperCase()}
-            </Typography>
+              <Box>
+                <H5 mt="0px" mb="14px" fontSize="14px">
+                  Total Summary
+                </H5>
+                <FlexBox
+                  justifyContent="space-between"
+                  alignItems="center"
+                  mb="0.5rem"
+                >
+                  <Typography fontSize="11px" color="text.hint">
+                    Subtotal:
+                  </Typography>
+                  <H6 my="0px">
+                    {subTotal ? <Currency>{subTotal}</Currency> : "-"}
+                  </H6>
+                </FlexBox>
+                <FlexBox
+                  justifyContent="space-between"
+                  alignItems="center"
+                  mb="0.5rem"
+                >
+                  <Typography fontSize="11px" color="text.hint">
+                    Shipping fee:
+                  </Typography>
+                  <H6 my="0px">
+                    {shippingFee ? <Currency>{shippingFee}</Currency> : "-"}
+                  </H6>
+                </FlexBox>
+                <FlexBox
+                  justifyContent="space-between"
+                  alignItems="center"
+                  mb="0.5rem"
+                >
+                  <Typography fontSize="11px" color="text.hint">
+                    Discount:
+                  </Typography>
+                  <H6 my="0px">
+                    {discount ? <Currency>{discount}</Currency> : "-"}
+                  </H6>
+                </FlexBox>
+
+                <Divider mb="0.5rem" />
+
+                <FlexBox
+                  justifyContent="space-between"
+                  alignItems="center"
+                  mb="1rem"
+                >
+                  <H6 my="0px">Total</H6>
+                  <H6 my="0px">{total ? <Currency>{total}</Currency> : "-"}</H6>
+                </FlexBox>
+                <Typography fontSize="11px" style={{ fontWeight: 600 }}>
+                  Payment by {paid_by.toUpperCase()}
+                </Typography>
+              </Box>
+            </Grid>
           </Card>
         </Grid>
       </Grid>
