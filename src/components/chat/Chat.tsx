@@ -42,7 +42,7 @@ const Chat: React.FC = () => {
   // useEffect(() => {
   //   const authTOKEN = localStorage.getItem("jwt_access_token");
   //   const token = authTOKEN;
-  //   var ws = new WebSocket(`ws://${WS_URL}/ws/chat/?token=${token}`);
+  //   var ws = new WebSocket(`wss://${WS_URL}/ws/chat/?token=${token}`);
 
   //   ws.onopen = function () {
   //     console.log("WebSocket connection is open useEffect....");
@@ -79,7 +79,7 @@ const Chat: React.FC = () => {
   // const connectSocket = () => {
   //   const authTOKEN = localStorage.getItem("jwt_access_token");
   //   const token = authTOKEN.slice(7);
-  //   var ws = new WebSocket(`ws://${WS_URL}/ws/chat/?token=${token}`);
+  //   var ws = new WebSocket(`wss://${WS_URL}/ws/chat/?token=${token}`);
 
   //   return ws;
   // };
@@ -87,7 +87,7 @@ const Chat: React.FC = () => {
     if (!connected) {
       const authTOKEN = localStorage.getItem("jwt_access_token");
       const token = authTOKEN?.slice(7);
-      var ws = new WebSocket(`ws://${WS_URL}/ws/chat/?token=${token}`);
+      var ws = new WebSocket(`wss://${WS_URL}/ws/chat/?token=${token}`);
       ws.onopen = function () {
         console.log("WebSocket connection is open....");
         setConnected(true);
@@ -112,7 +112,7 @@ const Chat: React.FC = () => {
       if (!connected) {
         const authTOKEN = localStorage.getItem("jwt_access_token");
         const token = authTOKEN?.slice(7);
-        var ws = await new WebSocket(`ws://${WS_URL}/ws/chat/?token=${token}`);
+        var ws = await new WebSocket(`wss://${WS_URL}/ws/chat/?token=${token}`);
       } else {
         ws = socket;
       }

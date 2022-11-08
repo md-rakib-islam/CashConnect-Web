@@ -460,6 +460,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
             rating={rating}
             reviewCount={reviewCount}
             condition={condition}
+            parse={""}
           />
           <Box
             position="absolute"
