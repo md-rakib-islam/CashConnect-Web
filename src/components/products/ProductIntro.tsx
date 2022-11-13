@@ -370,9 +370,11 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
     } else {
       if (isMobile) {
         localStorage.setItem("backAfterLogin", `/product/${id}`);
-        router.push("/login").then(() => window.location.reload());
+        router.push("/login");
       } else {
-        setOpenLogin(true);
+        // setOpenLogin(true);
+        router.push("/login");
+        localStorage.setItem("backAfterLogin", `/product/${id}`);
       }
     }
   };
@@ -434,9 +436,11 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
     } else {
       if (isMobile) {
         localStorage.setItem("backAfterLogin", `/product/${id}`);
-        router.push("/login").then(() => window.location.reload());
+        router.push("/login");
       } else {
-        setOpenLogin(true);
+        // setOpenLogin(true);
+        router.push("/login");
+        localStorage.setItem("backAfterLogin", `/checkout`);
       }
     }
   };

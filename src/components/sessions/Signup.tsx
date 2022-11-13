@@ -59,7 +59,7 @@ const Signup: React.FC<SignupProps> = ({
 
   const gotologin = () => {
     if (type == "SignupPage") {
-      router.push("/login").then(() => window.location.reload());
+      router.push("/login");
     } else {
       setOpenLogin(true);
     }

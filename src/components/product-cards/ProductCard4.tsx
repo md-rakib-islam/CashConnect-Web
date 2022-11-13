@@ -3,8 +3,8 @@ import { Chip } from "@component/Chip";
 import Currency from "@component/Currency";
 import HoverBox from "@component/HoverBox";
 import LazyImage from "@component/LazyImage";
-import { H3, Small } from "@component/Typography";
-import { Product_Discount_By_Id } from "@data/constants";
+import { H3, SemiSpan, Small } from "@component/Typography";
+import { Check_Stock, Product_Discount_By_Id } from "@data/constants";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { CSSProperties } from "styled-components";
@@ -32,15 +32,34 @@ const ProductCard4: React.FC<ProductCard4Props> = ({
   reviewCount,
   condition,
 }) => {
+  const [sellablePrice, setsellablePrice] = useState(Number(price));
+  const [orginalPrice, setorginalPrice] = useState(0);
   const [discountedPercent, setdiscountedPercent] = useState(0);
+  const [stock, setStock] = useState(true);
 
   useEffect(() => {
     axios.get(`${Product_Discount_By_Id}${id}`).then((res) => {
       console.log("descountRes", res);
       if (res.data.discounts?.discounted_price) {
+        setsellablePrice(res.data.discounts?.discounted_price);
+        setorginalPrice(Number(res.data.discounts?.product.unit_price));
+
         setdiscountedPercent(res.data.discounts?.discount_percent);
       }
     });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(`${Check_Stock}${id}`)
+      .then((res) => {
+        if (!res.data.is_in_stock) {
+          setStock(false);
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
   }, []);
   return (
     <Box>
@@ -88,13 +107,25 @@ const ProductCard4: React.FC<ProductCard4Props> = ({
       >
         {title}
       </H3>
+      {stock || (
+        <SemiSpan fontWeight="bold" color="primary.main" mt="2px">
+          Out Of Stock
+        </SemiSpan>
+      )}
+      {!!orginalPrice && (
+        <SemiSpan color="text.muted" fontWeight="600">
+          <del>
+            <Currency>{orginalPrice?.toFixed(2)}</Currency>
+          </del>
+        </SemiSpan>
+      )}
       <H3
         fontWeight="600"
         fontSize="14px"
         textAlign="center"
         color="primary.main"
       >
-        <Currency>{Number(price).toFixed(2)}</Currency>
+        <Currency>{sellablePrice.toFixed(2)}</Currency>
       </H3>
       <H3
         display="flex"

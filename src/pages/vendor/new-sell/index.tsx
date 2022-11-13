@@ -108,23 +108,19 @@ function newPurchase() {
         console.log("purchaserequestRes", res);
         setLoading(false);
         if (res?.data?.data?.purchase_request_items?.length) {
-          const user_type = localStorage.getItem("userType");
-          router.push(
-            `${
-              user_type === "vendor"
-                ? "/vendor/new-sell/success"
-                : "/new-sell/success"
-            }`
-          );
-        } else if (res?.data?.user_exists) {
-          dispatch({
-            type: "CHANGE_ALERT",
-            payload: {
-              alertValue: `${values.email} is already exist`,
-              alerType: "warning",
-            },
-          });
-        } else {
+          // const user_type = localStorage.getItem("userType");
+          router.push("/new-sell/success");
+        }
+        // else if (res?.data?.user_exists) {
+        //   dispatch({
+        //     type: "CHANGE_ALERT",
+        //     payload: {
+        //       alertValue: `${values.email} is already exist`,
+        //       alerType: "warning",
+        //     },
+        //   });
+        // }
+        else {
           dispatch({
             type: "CHANGE_ALERT",
             payload: {

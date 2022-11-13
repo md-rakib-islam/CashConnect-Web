@@ -7,12 +7,11 @@ import Hidden from "@component/hidden/Hidden";
 import Icon from "@component/icon/Icon";
 import NavbarLayout from "@component/layout/NavbarLayout";
 import Radio from "@component/radio/Radio";
-import { CountryCodeSelect } from "@component/Select";
 import TextField from "@component/text-field/TextField";
 import Typography from "@component/Typography";
 import { useAppContext } from "@context/app/AppContext";
-import { Purshase_Create } from "@data/constants";
-import { country_codes } from "@data/country_code";
+import useUserInf from "@customHook/useUserInf";
+import { Customer_By_Id, Purshase_Create } from "@data/constants";
 import { requred } from "@data/data";
 import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
@@ -35,8 +34,8 @@ function onlineSell() {
   const [images, setImages] = useState<TIMG>([[]]);
   const [loading, setLoading] = useState(false);
   const width = useWindowSize();
-
   const { dispatch } = useAppContext();
+  const { user_id, authTOKEN } = useUserInf();
 
   const router = useRouter();
 
@@ -51,6 +50,22 @@ function onlineSell() {
     console.log("images", images);
   }, [images]);
 
+  useEffect(() => {
+    if (user_id) {
+      axios
+        .get(`${Customer_By_Id}${user_id}`, authTOKEN)
+        .then((res) => {
+          console.log("vendorRes", res);
+          setFieldValue("first_name", res?.data?.first_name);
+          setFieldValue("last_name", res?.data?.last_name);
+          setFieldValue("email", res?.data?.email);
+          setFieldValue("contact_no", res?.data?.primary_phone);
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
+    }
+  }, [user_id]);
   //submit purchase data
   const handleFormSubmit = async (values) => {
     let purchaseData = {
@@ -220,17 +235,6 @@ function onlineSell() {
     onSubmit: handleFormSubmit,
   });
 
-  const CustomOption = ({ innerProps, isDisabled, data }) => {
-    return !isDisabled ? (
-      <div {...innerProps} style={{ cursor: "pointer", width: "180px" }}>
-        <img
-          src={`https://flagcdn.com/w20/${data.code.toLowerCase()}.png`}
-        ></img>
-        {" " + data.label}
-      </div>
-    ) : null;
-  };
-
   return (
     <>
       {loading && (
@@ -305,6 +309,8 @@ function onlineSell() {
                 onChange={handleChange}
                 value={values.first_name || ""}
                 errorText={touched.first_name && errors.first_name}
+                style={{ cursor: "no-drop" }}
+                readOnly
               />
             </Grid>
 
@@ -318,39 +324,25 @@ function onlineSell() {
                 onChange={handleChange}
                 value={values.last_name || ""}
                 errorText={touched.last_name && errors.last_name}
+                style={{ cursor: "no-drop" }}
+                readOnly
               />
             </Grid>
 
             <Grid item md={6} xs={12}>
-              <div style={{ display: "flex", alignItems: "flex-start" }}>
-                <CountryCodeSelect
-                  mt="1.03rem"
-                  label="Country"
-                  width="40%"
-                  placeholder="Select Country"
-                  getOptionLabelBy="label"
-                  getOptionValueBy="value"
-                  options={country_codes}
-                  components={{ Option: CustomOption }}
-                  value={values.country_code || null}
-                  onChange={(value: any) => {
-                    setFieldValue("country_code", value);
-                    setFieldValue("contact_no", `${value.value}`);
-                  }}
-                  errorText={touched.country_code && errors.country_code}
-                />
-                <TextField
-                  mt="1rem"
-                  name="contact_no"
-                  label="Contact Number"
-                  fullwidth
-                  boxShadow
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.contact_no || ""}
-                  errorText={touched.contact_no && errors.contact_no}
-                />
-              </div>
+              <TextField
+                mt="1rem"
+                name="contact_no"
+                label="Contact Number"
+                fullwidth
+                boxShadow
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.contact_no || ""}
+                errorText={touched.contact_no && errors.contact_no}
+                style={{ cursor: "no-drop" }}
+                readOnly
+              />
             </Grid>
 
             <Grid item md={6} xs={12}>
@@ -365,6 +357,8 @@ function onlineSell() {
                 onChange={handleChange}
                 value={values.email || ""}
                 errorText={touched.email && errors.email}
+                style={{ cursor: "no-drop" }}
+                readOnly
               />
             </Grid>
           </Grid>
@@ -812,11 +806,6 @@ const initialValues = {
   last_name: "",
   contact_no: "+880",
   email: "",
-  country_code: {
-    code: "BD",
-    label: "Bangladesh",
-    value: "+880",
-  },
 };
 
 onlineSell.layout = NavbarLayout;

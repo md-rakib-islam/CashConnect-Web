@@ -130,6 +130,14 @@ const Login: React.FC<LoginProps> = ({
           } else {
             router.push("/profile");
           }
+        } else if (type == "popup") {
+          const backUrl = localStorage.getItem("backAfterLogin");
+          if (backUrl) {
+            localStorage.removeItem("backAfterLogin");
+            router.push(`${backUrl}`);
+            closeLoginDialog();
+            localStorage.removeItem("backAfterLogin");
+          }
         } else {
           closeLoginDialog();
           localStorage.removeItem("backAfterLogin");

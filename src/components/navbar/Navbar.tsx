@@ -1,6 +1,7 @@
 import Box from "@component/Box";
 import Card from "@component/Card";
 import MenuItem from "@component/MenuItem";
+import useUserInf from "@customHook/useUserInf";
 import { Get_all_parent_category_without_pagination } from "@data/constants";
 import navbarNavigations from "@data/navbarNavigations";
 import axios from "axios";
@@ -27,9 +28,9 @@ interface Nav {
   extLink?: boolean;
 }
 
-
 const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
   const [loading, setLoading] = useState(false);
+  const { isLogin } = useUserInf();
 
   const router = useRouter();
 
@@ -51,6 +52,7 @@ const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
   }, [router.events]);
 
   const renderNestedNav = (list: any[], isRoot = false) => {
+    console.log("navbar", list);
     return list?.map((nav: Nav) => {
       if (isRoot) {
         if (nav.url && nav.extLink)
@@ -112,7 +114,20 @@ const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
       } else {
         if (nav.url)
           return (
-            <NavLink href={nav.url} key={nav.title}>
+            <NavLink
+              href={
+                !isLogin && nav.url === "/sell/youritems" ? "/login" : nav.url
+              }
+              onClick={() => {
+                {
+                  !isLogin && nav.url === "/sell/youritems"
+                    ? localStorage.setItem("backAfterLogin", "/sell/youritems")
+                    : "";
+                }
+                console.log("nav.url", nav.url);
+              }}
+              key={nav.title}
+            >
               <MenuItem>
                 <Span fontSize="14px">{nav.title}</Span>
               </MenuItem>
@@ -149,24 +164,28 @@ const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
   return (
     <>
       {loading && (
-         <div style={{
-          position: 'fixed',
-          height: '100%',
-          width: '100%',
-          top: '0px',
-          left: '0px',
-          display: 'flex',
-          justifyContent: "center",
-          backgroundColor: " rgb(0 0 0 / 50%)",
-          alignItems: "center",
-          zIndex: 100,
-        }}>
-          <img style={{
-            height: "100px",
-            width: "100px",
-            marginTop: "100pz"
+        <div
+          style={{
+            position: "fixed",
+            height: "100%",
+            width: "100%",
+            top: "0px",
+            left: "0px",
+            display: "flex",
+            justifyContent: "center",
+            backgroundColor: " rgb(0 0 0 / 50%)",
+            alignItems: "center",
+            zIndex: 100,
           }}
-            src="/assets/images/gif/loading.gif" />
+        >
+          <img
+            style={{
+              height: "100px",
+              width: "100px",
+              marginTop: "100pz",
+            }}
+            src="/assets/images/gif/loading.gif"
+          />
         </div>
       )}
       <StyledNavbar>
@@ -200,22 +219,23 @@ const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
           </Categories>
 
           <FlexBox>
-      
-            <div className={DropDownStyle.link}> 
-            <NavLink
-              className={DropDownStyle.home}
-              href="/"
-              onClick={() =>  setLoading(true)}
-            >
-              Home
-            </NavLink>
+            <div className={DropDownStyle.link}>
+              <NavLink
+                className={DropDownStyle.home}
+                href="/"
+                onClick={() => setLoading(true)}
+              >
+                Home
+              </NavLink>
             </div>
-          
+
             <div className={DropDownStyle.dropdown}>
               <a className={DropDownStyle.dropbtn}>Shop Now</a>
               <div className={DropDownStyle.dropdown_content}>
                 <div className={DropDownStyle.dropdown2}>
-                  <button className={DropDownStyle.dropbtn2}>Show Branch</button>
+                  <button className={DropDownStyle.dropbtn2}>
+                    Show Branch
+                  </button>
                   <div className={DropDownStyle.dropdown_content2}>
                     {/* {topCategory.map((n) => (
                       <Link

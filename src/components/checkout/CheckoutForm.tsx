@@ -144,7 +144,7 @@ const CheckoutForm = () => {
           });
       }
     } else {
-      router.push("/login").then(() => window.location.reload());
+      router.push("/login");
     }
   };
 
@@ -179,7 +179,7 @@ const CheckoutForm = () => {
   }, [user_id]);
 
   const handleCity = (country) => {
-    fetch(`${City_All_BY_COUNTRY_ID}${country.id}`)
+    fetch(`${City_All_BY_COUNTRY_ID}${country.id ? country.id : country}`)
       .then((res) => res.json())
       .then((data) => {
         console.log("cityData", data);
@@ -237,7 +237,17 @@ const CheckoutForm = () => {
       .then((res) => res.json())
       .then((data) => {
         setCountries(data.countries);
+
+        const getPspIssPlace = data.countries.find(
+          (data) => data.name === "Bangladesh" || data.name === "bangladesh"
+        )?.id;
+
+        setFieldValue("country", getPspIssPlace);
+        data.countries.find((data) =>
+          data.name === "Bangladesh" ? handleCity(data.id) : ""
+        );
       })
+
       .catch((err) => {
         console.log("error", err);
       });
@@ -408,7 +418,7 @@ const CheckoutForm = () => {
 
           <div>
             <CheckBox
-              label="Same as Billing Address"
+              label="Shipping address same as billing address"
               color="primary"
               m={sameAsBillingAddress ? "0.5rem" : "0.5rem"}
               onChange={handleCheckboxChange(setFieldValue)}

@@ -57,7 +57,7 @@ const Otp: React.FC<SignupProps> = () => {
         console.log("otpResponse", res);
 
         if (res.status === 200) {
-          router.push("/login").then(() => window.location.reload());
+          router.push("/login");
           dispatch({
             type: "CHANGE_ALERT",
             payload: {

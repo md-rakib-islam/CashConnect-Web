@@ -47,6 +47,7 @@ const ProfileEditor = ({}) => {
   const { dispatch } = useAppContext();
 
   const handleFormSubmit = async (values) => {
+    console.log("valuesss", values);
     const { isValid, emailExist, primaryPhoneExist, SecondaryPhoneExist } =
       await checkValidation({
         email: values.email,
@@ -169,17 +170,6 @@ const ProfileEditor = ({}) => {
     }
   }, [user_id, authTOKEN]);
 
-  const handleCity = (country) => {
-    fetch(`${City_All_BY_COUNTRY_ID}${country.id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("cityData", data);
-        setCities(data);
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
-  };
   const handleThana = (city) => {
     fetch(`${Thana_All_BY_CITY_ID}${city.id}`)
       .then((res) => res.json())
@@ -195,11 +185,31 @@ const ProfileEditor = ({}) => {
       .then((res) => res.json())
       .then((data) => {
         setCountries(data.countries);
+
+        const getPspIssPlace = data.countries.find(
+          (data) => data.name === "Bangladesh" || data.name === "bangladesh"
+        )?.id;
+        setFieldValue("country", getPspIssPlace);
+        data.countries.find((data) =>
+          data.name === "Bangladesh" ? handleCity(data.id) : ""
+        );
       })
       .catch((err) => {
         console.log("error", err);
       });
   }, []);
+
+  const handleCity = (country) => {
+    fetch(`${City_All_BY_COUNTRY_ID}${country.id ? country.id : country}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("cityData", data);
+        setCities(data);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  };
 
   const {
     values,
@@ -472,6 +482,7 @@ const ProfileEditor = ({}) => {
                   options={countries}
                   value={values.country || ""}
                   onChange={(country) => {
+                    console.log("country", country);
                     setFieldValue("country", country);
                     setFieldValue("city", "");
                     setFieldValue("thana", "");

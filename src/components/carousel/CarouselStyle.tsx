@@ -91,8 +91,8 @@ export const StyledCarousel = styled(
 
   .dot {
     position: relative;
-    height: 16px;
-    width: 16px;
+    height: 10px;
+    width: 10px;
     border-radius: 300px;
     margin: 0.25rem;
     cursor: pointer;

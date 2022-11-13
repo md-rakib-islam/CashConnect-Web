@@ -54,12 +54,12 @@ const Profile = () => {
       axios
         .get(`${User_Details}${user_id}`, authTOKEN)
         .then((user) => {
-          console.log("userDetails", user_id);
+          console.log("userDetails", user);
           // setBalance(user.data.balance);
           setTotal_orders(user.data.total_orders);
           setPending_orders(user.data.pending_orders);
           setUnpaid_orders(user.data.unpaid_orders);
-          setDeliverable_orders(user.data.deliverable_orders);
+          setDeliverable_orders(user.data.delivered_orders);
         })
         .catch((err) => {
           console.log("error", err);

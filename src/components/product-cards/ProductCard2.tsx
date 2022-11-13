@@ -2,8 +2,8 @@ import { Chip } from "@component/Chip";
 import Currency from "@component/Currency";
 import HoverBox from "@component/HoverBox";
 import LazyImage from "@component/LazyImage";
-import { H3, H4 } from "@component/Typography";
-import { Product_Discount_By_Id } from "@data/constants";
+import { H3, H4, SemiSpan } from "@component/Typography";
+import { Check_Stock, Product_Discount_By_Id } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -25,17 +25,34 @@ const ProductCard2: React.FC<ProductCard2Props> = ({
   condition,
   id,
 }) => {
+  const [sellablePrice, setsellablePrice] = useState(Number(price));
   const [orginalPrice, setorginalPrice] = useState(0);
   const [discountedPercent, setdiscountedPercent] = useState(0);
+  const [stock, setStock] = useState(true);
 
   useEffect(() => {
     axios.get(`${Product_Discount_By_Id}${id}`).then((res) => {
       console.log("descountRes", res);
       if (res.data.discounts?.discounted_price) {
+        setsellablePrice(res.data.discounts?.discounted_price);
+
         setorginalPrice(Number(res.data.discounts?.product.unit_price));
         setdiscountedPercent(res.data.discounts?.discount_percent);
       }
     });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(`${Check_Stock}${id}`)
+      .then((res) => {
+        if (!res.data.is_in_stock) {
+          setStock(false);
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
   }, []);
   return (
     <>
@@ -77,7 +94,11 @@ const ProductCard2: React.FC<ProductCard2Props> = ({
           >
             {title.length >= 20 ? `${title.slice(0, 20)}...` : title}
           </H3>
-
+          {stock || (
+            <SemiSpan fontWeight="bold" color="primary.main" mt="2px">
+              Out Of Stock
+            </SemiSpan>
+          )}
           <div style={{ display: "flex" }}>
             {!!orginalPrice && (
               <H4
@@ -87,12 +108,12 @@ const ProductCard2: React.FC<ProductCard2Props> = ({
                 style={{ marginRight: "5px" }}
               >
                 <del>
-                  <Currency>{orginalPrice}</Currency>
+                  <Currency>{orginalPrice?.toFixed(2)}</Currency>
                 </del>
               </H4>
             )}
             <H4 fontWeight="600" fontSize="14px" color="primary.main">
-              <Currency>{Number(price).toFixed(2)}</Currency>
+              <Currency>{sellablePrice.toFixed(2)}</Currency>
             </H4>
           </div>
           {/* <Currency>{Math.ceil(price).toLocaleString()}</Currency> */}

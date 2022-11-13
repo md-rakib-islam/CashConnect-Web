@@ -2,13 +2,13 @@ const navbarNavigations = [
   // {
   //   title: "Home",
   //   url: "/",
-    
+
   // },
   // {
   //   title: "About Us",
   //   url: "",
   // },
- 
+
   {
     title: "Sell",
     child: [
@@ -30,7 +30,6 @@ const navbarNavigations = [
     title: "Customer Care",
     url: "/help",
   },
-  
 ];
 
 export default navbarNavigations;

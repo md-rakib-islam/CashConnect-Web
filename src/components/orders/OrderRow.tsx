@@ -23,13 +23,17 @@ export interface OrderRowProps {
 const OrderRow: React.FC<OrderRowProps> = ({ item }) => {
   const getColor = (status) => {
     switch (status) {
-      case ("pending" || "Pending"):
+      case "pending" || "Pending":
         return "secondary";
-      case ("processing" || "Processing"):
+      case "processing" || "Processing":
         return "secondary";
-      case ("cancelled" || "Cancelled"):
+      case "packaging" || "Packaging":
+        return "secondary";
+      case "on_the_way" || "On_the_way":
+        return "secondary";
+      case "cancelled" || "Cancelled":
         return "error";
-      case ("delivered" || "Delivered" || "on_the_way" || "on the way" || "Nn the way" || "On The Way"):
+      case "delivered" || "Delivered":
         return "success";
       default:
         return "";
@@ -37,7 +41,6 @@ const OrderRow: React.FC<OrderRowProps> = ({ item }) => {
   };
 
   const memoizedGetColor = (status) => useMemo(() => getColor(status), []);
-
 
   return (
     <Link href={item.href}>
@@ -48,23 +51,16 @@ const OrderRow: React.FC<OrderRowProps> = ({ item }) => {
         <Box m="6px">
           <Chip
             p="0.25rem 1rem"
-            bg={`${memoizedGetColor(
-              item.order_status?.name
-            )}.light`}
+            bg={`${memoizedGetColor(item.order_status?.name)}.light`}
           >
-            <Small
-              color={`${memoizedGetColor(
-                item.order_status?.name
-              )}.main`}
-            >
-              {
-                item.order_status?.name
-              }
+            <Small color={`${memoizedGetColor(item.order_status?.name)}.main`}>
+              {item.order_status?.name}
             </Small>
           </Chip>
         </Box>
         <Typography className="flex-grow pre" m="6px" textAlign="left">
-          {item?.created_at && format(new Date(item?.created_at), "MMM dd, yyyy")}
+          {item?.created_at &&
+            format(new Date(item?.created_at), "MMM dd, yyyy")}
         </Typography>
         <Typography m="6px" textAlign="left">
           <Currency>{Number(item.net_amount).toFixed(2)}</Currency>

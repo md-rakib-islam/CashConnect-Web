@@ -22,55 +22,41 @@ import axios from "axios";
 import { format } from "date-fns";
 import addDays from "date-fns/addDays";
 import { useRouter } from "next/router";
-import React, { Fragment, useEffect, useMemo, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import Item from "./Item";
 
 // type OrderStatus = "packaging" | "shipping" | "delivering" | "complete";
 
 const OrderDetails = () => {
-  const [orderStatus, setorderStatus] = useState<any>("processing");
+  const [orderStatus, setorderStatus] = useState<any>("pending");
 
   const orderStatusList = [
-    // "pending",
+    "pending",
     "processing",
     "packaging",
-    "shipping",
-    "delivering",
-    "complete",
+    "on_the_way",
+    // "delivering",
+    "delivered",
   ];
   const stepIconList = [
-    "package-box",
-    "processing",
-    // "truck-1",
-    "truck",
-    "delivery-truck",
-    "delivery",
-  ];
-  const getColor = (status) => {
-    switch (status) {
-      case "pending" || "Pending":
-        return "secondary";
-      case "processing" || "Processing":
-        return "secondary";
-      case "cancelled" || "Cancelled":
-        return "error";
-      case "delivered" ||
-        "Delivered" ||
-        "on_the_way" ||
-        "on the way" ||
-        "Nn the way" ||
-        "On The Way":
-        return "success";
-      default:
-        return "";
-    }
-  };
+    { icon: "package-box", name: "Accepted" },
+    { icon: "processing", name: "Processing" },
+    { icon: "truck-1", name: "In Transit" },
+    { icon: "delivery-truck", name: "On the way" },
+    { icon: "delivery", name: "Delivered" },
 
-  const memoizedGetColor = (status) => useMemo(() => getColor(status), []);
+    // "truck",
+  ];
+  // const statusText = [
+  //   "Accepted",
+
+  //   // "truck",
+
+  // ];
+
   const statusIndex = orderStatusList.indexOf(orderStatus);
   const width = useWindowSize();
-  const breakpoint = 350;
-
+  const breakpoint = 340;
   const [productList, setProductList] = useState([]);
   const [subTotal, setSubTotal] = useState(0);
   const [shippingFee, setShippingFee] = useState(0);
@@ -82,26 +68,8 @@ const OrderDetails = () => {
   const [placedOn, setPlacedOn] = useState("");
   const [PhoneNumber, setPhoneNumber] = useState("");
   const [invoice, setInvoice] = useState<any>({});
-
   const router = useRouter();
   const order_id = router.query?.id;
-
-  const getStatus = (status) => {
-    switch (status) {
-      case "pending" || "Pending":
-        return "packaging";
-      case "processing" || "Processing":
-        return "shipping";
-      case "cancelled" || "Cancelled":
-        return "packaging";
-      case "delivered" || "Delivered":
-        return "complete";
-      case "on_the_way" || "on the way" || "Nn the way" || "On The Way":
-        return "delivering";
-      default:
-        return "";
-    }
-  };
 
   useEffect(() => {
     axios
@@ -136,7 +104,7 @@ const OrderDetails = () => {
           setDeliveredOn(res.data.order?.delivered_at || "");
           setPlacedOn(res.data.order?.created_at || "");
           setPhoneNumber(res.data.order?.user_phone_number || "");
-          setorderStatus(getStatus(res.data.order?.order_status?.name || ""));
+          setorderStatus(res.data.order?.order_status?.name || "");
         })
         .catch((err) => {
           console.log("error", err);
@@ -166,7 +134,7 @@ const OrderDetails = () => {
           my="2rem"
         >
           {stepIconList.map((item, ind) => (
-            <Fragment key={item}>
+            <Fragment key={item.icon}>
               <Box position="relative">
                 <Avatar
                   size={64}
@@ -174,10 +142,11 @@ const OrderDetails = () => {
                   color={ind <= statusIndex ? "gray.white" : "primary.main"}
                 >
                   <Icon size="32px" defaultcolor="currentColor">
-                    {item}
+                    {item.icon}
                   </Icon>
                 </Avatar>
-                {ind < statusIndex && (
+
+                {ind <= statusIndex && (
                   <Box position="absolute" right="0" top="0">
                     <Avatar size={22} bg="gray.200" color="success.main">
                       <Icon size="12px" defaultcolor="currentColor">
@@ -186,13 +155,27 @@ const OrderDetails = () => {
                     </Avatar>
                   </Box>
                 )}
+                {orderStatus == "cancelled" && (
+                  <Box position="absolute" right="0" top="0">
+                    <Avatar size={22} bg="primary.main" color="gray.200">
+                      <Icon size="12px" defaultcolor="currentColor">
+                        close
+                      </Icon>
+                    </Avatar>
+                  </Box>
+                )}
+                <H6 color={ind <= statusIndex ? "primary.main" : "gray.500"}>
+                  {" "}
+                  {item.name}
+                </H6>
               </Box>
+
               {ind < stepIconList.length - 1 && (
                 <Box
                   flex={width < breakpoint ? "unset" : "1 1 0"}
                   height={width < breakpoint ? 50 : 4}
                   minWidth={width < breakpoint ? 4 : 50}
-                  bg={ind < statusIndex ? "primary.main" : "gray.300"}
+                  bg={ind <= statusIndex ? "primary.main" : "gray.300"}
                 />
               )}
             </Fragment>
@@ -309,18 +292,22 @@ const OrderDetails = () => {
               {invoice?.order?.order_date &&
                 format(new Date(invoice?.order?.order_date), "MMM dd, yyyy")}
             </Paragraph>
-
             <Box m="6px">
               <Chip
                 p="0.25rem 1rem"
-                bg={`${memoizedGetColor(
-                  invoice?.order?.order_status?.name
-                )}.light`}
+                style={{ backgroundColor: "#f5efef" }}
+                // bg={`${memoizedGetColor(
+                //   invoice?.order?.order_status?.name
+                // )}.light`}
               >
                 <Small
-                  color={`${memoizedGetColor(
-                    invoice?.order?.order_status?.name
-                  )}.main`}
+                  style={{
+                    color:
+                      invoice?.order?.order_status?.name == "cancelled"
+                        ? "red"
+                        : "green",
+                    fontWeight: 700,
+                  }}
                 >
                   {invoice?.order?.order_status?.name}
                 </Small>

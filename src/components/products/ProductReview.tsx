@@ -57,7 +57,7 @@ const ProductReview: React.FC<ProductReviewProps> = ({
         });
       }
     } else {
-      push("/login").then(() => window.location.reload());
+      push("/login");
       localStorage.setItem(
         "backAfterLogin",
         `/product/${query?.id}?review=write`
