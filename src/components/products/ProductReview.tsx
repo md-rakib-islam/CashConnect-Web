@@ -87,6 +87,9 @@ const ProductReview: React.FC<ProductReviewProps> = ({
           const canReview =
             res.data.can_user_review_and_rating === "no" ? false : true;
           setReviewPermission(canReview);
+        })
+        .catch((err) => {
+          console.log("error", err);
         });
     }
   }, [authTOKEN, reCheackReviewPermission]);

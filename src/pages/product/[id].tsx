@@ -41,7 +41,7 @@ const ProductDetails = ({
     setreviewsQuantity(quantity);
   };
 
-  const [selectedOption, setSelectedOption] = useState("description");
+  const [selectedOption, setSelectedOption] = useState("features");
 
   const router = useRouter();
   const review = router.query?.review;
@@ -89,6 +89,17 @@ const ProductDetails = ({
           className="cursor-pointer"
           mr="25px"
           p="4px 10px"
+          color={selectedOption === "features" ? "primary.main" : "text.muted"}
+          borderBottom={selectedOption === "features" && "2px solid"}
+          borderColor="primary.main"
+          onClick={handleOptionClick("features")}
+        >
+          Specification
+        </H5>
+        <H5
+          className="cursor-pointer"
+          mr="25px"
+          p="4px 10px"
           color={
             selectedOption === "description" ? "primary.main" : "text.muted"
           }
@@ -97,17 +108,6 @@ const ProductDetails = ({
           onClick={handleOptionClick("description")}
         >
           Description
-        </H5>
-        <H5
-          className="cursor-pointer"
-          mr="25px"
-          p="4px 10px"
-          color={selectedOption === "features" ? "primary.main" : "text.muted"}
-          borderBottom={selectedOption === "features" && "2px solid"}
-          borderColor="primary.main"
-          onClick={handleOptionClick("features")}
-        >
-          Specification
         </H5>
         <H5
           className="cursor-pointer"

@@ -112,7 +112,7 @@ const OrderDetails = () => {
     }
   }, [order_id]);
 
-  console.log("invoice", invoice);
+  console.log("productList", productList);
   return (
     <div>
       <DashboardPageHeader
