@@ -28,20 +28,20 @@ import Item from "./Item";
 // type OrderStatus = "packaging" | "shipping" | "delivering" | "complete";
 
 const OrderDetails = () => {
-  const [orderStatus, setorderStatus] = useState<any>("pending");
+  const [orderStatus, setorderStatus] = useState<any>("processing");
 
   const orderStatusList = [
-    "pending",
     "processing",
+    "confirmed",
     "packaging",
     "on_the_way",
     // "delivering",
     "delivered",
   ];
   const stepIconList = [
-    { icon: "package-box", name: "Accepted" },
     { icon: "processing", name: "Processing" },
-    { icon: "truck-1", name: "In Transit" },
+    { icon: "confirmed", name: "Confirmed" },
+    { icon: "packaging", name: "Packaging" },
     { icon: "delivery-truck", name: "On the way" },
     { icon: "delivery", name: "Delivered" },
 

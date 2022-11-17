@@ -24,7 +24,6 @@ import {
   Product_For_You,
   Product_High_To_Low,
   Product_Low_To_High,
-  Product_Search,
   Product_Top_Rated,
   Used_product_using,
 } from "@data/constants";
@@ -110,7 +109,7 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
           }
         }
       } else if (type === "search_by_product_name") {
-        const search_key: any = router.query.search_key;
+        const search_key: any = router.query.name;
         setSearchingFor(search_key);
       } else if (type === "shop_now") {
         if (router.query.condition === "new") {
@@ -291,7 +290,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   } else if (params.type === "search_by_product_name") {
     try {
       const res = await axios.get(
-        `${Product_Search}?page=${query.page || 1}&size=${query.size || 12}`,
+        `${Product_Filter}?page=${query.page || 1}&size=${query.size || 12}`,
         { params: { name: query.search_key, category } }
       );
       var data: any[] = await res.data.products;
