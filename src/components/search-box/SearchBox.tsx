@@ -24,7 +24,7 @@ export interface SearchBoxProps {}
 
 const SearchBox: React.FC<SearchBoxProps> = () => {
   const [category] = useState("All Categories");
-  const [categoryId] = useState(0);
+  // const [categoryId] = useState(0);
   const [resultList, setResultList] = useState([]);
   const [categories, setCategories] = useState([]);
 
@@ -34,13 +34,13 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
   const isTablet = width < 1025;
 
   useEffect(() => {
-    setFieldValue("search", router.query?.search_key || "");
-  }, [router.query?.search_key]);
+    setFieldValue("search", router.query?.name || "");
+  }, [router.query?.name]);
 
   const handleFormSubmit = (values) => {
     router.push({
       pathname: "/product/search/search_by_product_name",
-      query: { categoryId: categoryId, name: values.search },
+      query: { categoryId: "", name: values.search },
     });
   };
 
@@ -57,7 +57,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
     const value = e.target?.value;
     axios
       .get(`${Product_Filter}?page=${1}&size=${10}`, {
-        params: { name: value || "", category: categoryId },
+        params: { name: value || "", category: "" },
       })
       .then((res) => {
         console.log("res", res.data.products);
@@ -170,7 +170,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
               <Link
                 href={{
                   pathname: "/product/search/search_by_product_name",
-                  query: { categoryId: categoryId, name: item?.name },
+                  query: { categoryId: "", name: item?.name },
                 }}
               >
                 <MenuItem

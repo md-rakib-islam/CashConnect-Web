@@ -26,6 +26,7 @@ const Profile = () => {
   const [total_orders, setTotal_orders] = useState([]);
   const [pending_orders, setPending_orders] = useState([]);
   const [unpaid_orders, setUnpaid_orders] = useState([]);
+  const [cancled_orders, setCancled_orders] = useState([]);
   const [deliverable_orders, setDeliverable_orders] = useState([]);
 
   const { user_id, authTOKEN } = useUserInf();
@@ -59,6 +60,7 @@ const Profile = () => {
           setTotal_orders(user.data.total_orders);
           setPending_orders(user.data.pending_orders);
           setUnpaid_orders(user.data.unpaid_orders);
+          setCancled_orders(user.data.cancelled_orders);
           setDeliverable_orders(user.data.delivered_orders);
         })
         .catch((err) => {
@@ -118,8 +120,8 @@ const Profile = () => {
           </Grid>
 
           <Grid item lg={6} md={6} sm={12} xs={12}>
-            <Grid container spacing={4}>
-              <Grid item lg={3} sm={6} xs={6}>
+            <Grid container spacing={2}>
+              <Grid item lg={2.4} sm={6} xs={6}>
                 <FlexBox
                   as={Card}
                   flexDirection="column"
@@ -135,7 +137,7 @@ const Profile = () => {
                   </Small>
                 </FlexBox>
               </Grid>
-              <Grid item lg={3} sm={6} xs={6}>
+              <Grid item lg={2.4} sm={6} xs={6}>
                 <FlexBox
                   as={Card}
                   flexDirection="column"
@@ -144,14 +146,15 @@ const Profile = () => {
                   p="1rem 1.25rem"
                 >
                   <H3 color="primary.main" my="0px" fontWeight="600">
-                    {pending_orders || 0}
+                    {deliverable_orders || 0}
                   </H3>
                   <Small color="text.muted" textAlign="center">
-                    Pending Orders
+                    Delivered Orders
                   </Small>
                 </FlexBox>
               </Grid>
-              <Grid item lg={3} sm={6} xs={6}>
+
+              <Grid item lg={2.4} sm={6} xs={6}>
                 <FlexBox
                   as={Card}
                   flexDirection="column"
@@ -167,7 +170,7 @@ const Profile = () => {
                   </Small>
                 </FlexBox>
               </Grid>
-              <Grid item lg={3} sm={6} xs={6}>
+              <Grid item lg={2.4} sm={6} xs={6}>
                 <FlexBox
                   as={Card}
                   flexDirection="column"
@@ -176,10 +179,26 @@ const Profile = () => {
                   p="1rem 1.25rem"
                 >
                   <H3 color="primary.main" my="0px" fontWeight="600">
-                    {deliverable_orders || 0}
+                    {pending_orders || 0}
                   </H3>
                   <Small color="text.muted" textAlign="center">
-                    Delivered Orders
+                    Pending Orders
+                  </Small>
+                </FlexBox>
+              </Grid>
+              <Grid item lg={2.4} sm={6} xs={6}>
+                <FlexBox
+                  as={Card}
+                  flexDirection="column"
+                  alignItems="center"
+                  height="100%"
+                  p="1rem 1.25rem"
+                >
+                  <H3 color="primary.main" my="0px" fontWeight="600">
+                    {cancled_orders || 0}
+                  </H3>
+                  <Small color="text.muted" textAlign="center">
+                    Cancled Orders
                   </Small>
                 </FlexBox>
               </Grid>

@@ -62,6 +62,9 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
   useEffect(() => {
     const type = router.query.type;
     const { categoryId } = router.query;
+
+    console.log("type", type);
+
     if (type) {
       if (type === "product_by_category") {
         if (categoryId) {
@@ -109,8 +112,8 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
           }
         }
       } else if (type === "search_by_product_name") {
-        const search_key: any = router.query.name;
-        setSearchingFor(search_key);
+        const name: any = router.query.name;
+        setSearchingFor(name);
       } else if (type === "shop_now") {
         if (router.query.condition === "new") {
           setSearchingFor("New Product");
@@ -127,11 +130,9 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
         setSearchingFor("Big Discounts");
       } else if (type === "more_for_you_all") {
         setSearchingFor("Just For You");
-      } else if (type === "search_by_product_name") {
-        setSearchingFor("Top Ratings");
       }
     }
-  }, [id]);
+  }, [id, router.query.name]);
 
   useEffect(() => {
     setProductList(productLists);
@@ -219,7 +220,7 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
                 </IconButton>
               }
             >
-              <ProductFilterCard />
+              <ProductFilterCard productList={productList} />
             </Sidenav>
           )}
         </FlexBox>
@@ -227,7 +228,7 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
 
       <Grid container spacing={6}>
         <Hidden as={Grid} item lg={3} xs={12} down={1024}>
-          <ProductFilterCard />
+          <ProductFilterCard productList={productList} />
         </Hidden>
 
         <Grid item lg={9} xs={12}>
@@ -269,6 +270,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   query,
 }) => {
   const category: any = query.categoryId;
+  const name: any = query.name;
   console.log("type", params.type);
 
   if (params.type === "product_by_category" || params.type === "search_for") {
@@ -291,7 +293,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     try {
       const res = await axios.get(
         `${Product_Filter}?page=${query.page || 1}&size=${query.size || 12}`,
-        { params: { name: query.search_key, category } }
+        { params: { name: name, category } }
       );
       var data: any[] = await res.data.products;
       var totalProduct: number = await res.data.total_elements;

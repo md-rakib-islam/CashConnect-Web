@@ -126,12 +126,14 @@ const Signup: React.FC<SignupProps> = ({
           .catch((err) => {
             setLoading(false);
 
-            console.log("signup Erro", err.response.data.primary_phone[0]);
+            console.log("signup Erro", err.response.data);
 
             dispatch({
               type: "CHANGE_ALERT",
               payload: {
-                alertValue: err.response.data.primary_phone[0],
+                alertValue: err.response?.data
+                  ? err.response?.data?.primary_phone[0]
+                  : err.response.data,
                 alerType: "error",
               },
             });
