@@ -33,7 +33,7 @@ const Section2: React.FC<Section2Props> = ({ flashDealsList }) => {
 
   useEffect(() => {
     setFlashDealsListLists(flashDealsList);
-  }, []);
+  }, [flashDealsList]);
 
   const getMoreItem = () => {
     if (!pageEnd) {

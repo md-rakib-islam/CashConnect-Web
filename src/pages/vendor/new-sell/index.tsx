@@ -71,7 +71,7 @@ function newPurchase() {
           console.log("error", err);
         });
     }
-  }, [user_id]);
+  }, [user_id, authTOKEN]);
 
   //submit purchase data
   const handleFormSubmit = async (values) => {

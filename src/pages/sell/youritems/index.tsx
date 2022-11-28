@@ -65,7 +65,7 @@ function onlineSell() {
           console.log("error", err);
         });
     }
-  }, [user_id]);
+  }, [user_id, authTOKEN]);
   //submit purchase data
   const handleFormSubmit = async (values) => {
     let purchaseData = {

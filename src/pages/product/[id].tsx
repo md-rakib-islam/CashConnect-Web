@@ -31,7 +31,7 @@ const ProductDetails = ({
   relatedProduct,
   condition,
   short_desc,
-  orginalrice,
+  orginalprice,
 }) => {
   const [_reviewsQuantity, setreviewsQuantity] = useState(
     initialReviewsQuantity
@@ -75,7 +75,7 @@ const ProductDetails = ({
         reviewCount={initialReviewsQuantity}
         condition={condition}
         short_desc={short_desc}
-        orginalrice={orginalrice}
+        orginalprice={orginalprice}
         parse={""}
       />
 
@@ -166,9 +166,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       id: params.id,
       title: data.name,
       price: data?.product_discount?.discounted_price || data?.unit_price,
-      orginalrice: data?.product_discount?.discounted_price
-        ? data?.unit_price
-        : null,
+      orginalprice: data?.unit_price || null,
       imgUrl: `${BASE_URL}${data?.thumbnail}`,
       brand: _.isObject(data?.brand) ? data?.brand?.name : data?.brand || "",
       fullDes: data?.full_desc,

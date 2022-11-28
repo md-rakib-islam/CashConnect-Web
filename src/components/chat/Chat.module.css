@@ -192,37 +192,45 @@
   margin-right: 5px;
   margin-left: 5px;
 }
+.messageElemReceiver p {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
 .messageElemSender img {
   margin-right: 5px;
   margin-left: 5px;
 }
-.message {
+.messageElemSender p {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.messages {
   height: "300px";
   overflow-y: scroll;
   scroll-behavior: smooth;
 }
-.message html {
+.messages html {
   scroll-behavior: smooth;
 }
-.message img {
+.messages img {
   width: 32px;
   height: 32px;
   border-radius: 50%;
   object-fit: cover;
 }
-.message::-webkit-scrollbar {
+.messages::-webkit-scrollbar {
   scroll-behavior: smooth;
   width: 10px;
 }
 /* Track */
-.message::-webkit-scrollbar-track {
+.messages::-webkit-scrollbar-track {
   scroll-behavior: smooth;
 
   background: #f1f1f1;
   border-radius: 10px;
 }
 /* Handle */
-.message::-webkit-scrollbar-thumb {
+.messages::-webkit-scrollbar-thumb {
   scroll-behavior: smooth;
 
   background: #e84262;

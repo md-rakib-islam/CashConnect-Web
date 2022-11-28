@@ -76,7 +76,7 @@ const ProductReview: React.FC<ProductReviewProps> = ({
       .catch((err) => {
         console.log("error", err);
       });
-  }, [reloadreviews, query]);
+  }, [reloadreviews, query, product_id]);
 
   useEffect(() => {
     if (authTOKEN) {
@@ -92,7 +92,7 @@ const ProductReview: React.FC<ProductReviewProps> = ({
           console.log("error", err);
         });
     }
-  }, [authTOKEN, reCheackReviewPermission]);
+  }, [authTOKEN, reCheackReviewPermission, product_id]);
 
   const {
     values,

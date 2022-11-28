@@ -176,7 +176,7 @@ const CheckoutForm = () => {
           console.log("error", err);
         });
     }
-  }, [user_id]);
+  }, [user_id, authTOKEN]);
 
   const handleCity = (country) => {
     fetch(`${City_All_BY_COUNTRY_ID}${country.id ? country.id : country}`)

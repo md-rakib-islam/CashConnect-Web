@@ -60,7 +60,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
         params: { name: value || "", category: "" },
       })
       .then((res) => {
-        console.log("res", res.data.products);
+        console.log("resSearchProduct", res.data.products);
         setResultList(res?.data?.products);
       })
       .catch(() => {

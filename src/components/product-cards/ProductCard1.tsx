@@ -91,7 +91,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
       .catch((err) => {
         console.log("error", err);
       });
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     axios.get(`${Product_Discount_By_Id}${id}`).then((res) => {
@@ -102,7 +102,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
         setdiscountedPercent(res.data.discounts?.discount_percent);
       }
     });
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     if (order_Id) {
@@ -130,7 +130,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
           });
       }
     }
-  }, [order_Id, cartCanged]);
+  }, [order_Id, cartCanged, id]);
 
   const handleCartAmountChange = (amount, action) => {
     const dateObj: any = new Date();
@@ -171,11 +171,10 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
           });
       } else {
         localStorage.setItem("backAfterLogin", `/product/${id}`);
-        router
-          .push({
-            pathname: "/login",
-          })
-          .then(() => router.reload());
+        router.push({
+          pathname: "/login",
+        });
+        // .then(() => router.reload());
       }
     }
 
@@ -386,7 +385,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
             short_desc={short_desc}
             title={title}
             price={sellablePrice}
-            orginalrice={orginalPrice}
+            orginalprice={orginalPrice}
             id={id}
             brand={brand}
             rating={rating}

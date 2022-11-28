@@ -9,7 +9,7 @@ import {
   Check_Stock,
   Customer_decrease_Quantity,
   Customer_Increase_Quantity,
-  Customer_Order_Remove_Item
+  Customer_Order_Remove_Item,
 } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
@@ -42,27 +42,31 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
 }) => {
   const { dispatch } = useAppContext();
 
-  const [openLogin, setOpenLogin] = useState(false)
-  const [stock, setStock] = useState(true)
+  const [openLogin, setOpenLogin] = useState(false);
+  const [stock, setStock] = useState(true);
 
-  const { user_id, order_Id, isLogin, authTOKEN } = useUserInf()
+  const { user_id, order_Id, isLogin, authTOKEN } = useUserInf();
 
   useEffect(() => {
-    axios.get(`${Check_Stock}${product?.id}`).then(res => {
-      if (!res.data.is_in_stock) {
-        setStock(false)
-      }
-    }).catch((err) => { console.log("error", err) })
-  }, [])
+    axios
+      .get(`${Check_Stock}${product?.id}`)
+      .then((res) => {
+        if (!res.data.is_in_stock) {
+          setStock(false);
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  }, [product?.id]);
 
   const closeLoginTab = () => {
-    setOpenLogin(false)
-  }
+    setOpenLogin(false);
+  };
 
   const handleCartAmountChange = useCallback(
     (action) => () => {
       if (isLogin) {
-
         const item_id = id;
         const orderData = {
           product_id: product?.id,
@@ -76,7 +80,10 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
 
         if (action == "remove") {
           axios
-            .delete(`${Customer_Order_Remove_Item}${order_Id}/${item_id}`, authTOKEN)
+            .delete(
+              `${Customer_Order_Remove_Item}${order_Id}/${item_id}`,
+              authTOKEN
+            )
             .then((res) => {
               console.log("CproductDeleteRes", res);
               runReloadCart();
@@ -84,30 +91,43 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
                 type: "CHANGE_CART_QUANTITY",
                 payload: { chartQuantity: Math.random() },
               });
-            }).catch((err) => { console.log("error", err) });
-
+            })
+            .catch((err) => {
+              console.log("error", err);
+            });
         } else if (action == "increase") {
           console.log("increaseData", orderData);
           axios
-            .put(`${Customer_Increase_Quantity}${order_Id}/${item_id}`, orderData, authTOKEN)
+            .put(
+              `${Customer_Increase_Quantity}${order_Id}/${item_id}`,
+              orderData,
+              authTOKEN
+            )
             .then((res) => {
               console.log("itemIncreaseRes", res);
               runReloadCart();
-            }).catch((err) => { console.log("error", err) });
-
+            })
+            .catch((err) => {
+              console.log("error", err);
+            });
         } else if (action == "decrease") {
           axios
-            .put(`${Customer_decrease_Quantity}${order_Id}/${item_id}`, orderData, authTOKEN)
+            .put(
+              `${Customer_decrease_Quantity}${order_Id}/${item_id}`,
+              orderData,
+              authTOKEN
+            )
             .then((res) => {
               console.log("itemDecreaseRes", res);
               runReloadCart();
-            }).catch((err) => { console.log("error", err) });
+            })
+            .catch((err) => {
+              console.log("error", err);
+            });
         }
+      } else {
+        setOpenLogin(true);
       }
-      else {
-        setOpenLogin(true)
-      }
-
     },
 
     [user_id, order_Id, isLogin, authTOKEN]
@@ -158,18 +178,26 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
             className="title"
             fontSize="13px"
             fontWeight="600"
-            color={(condition === "new" || condition === "New" || condition === "NEW") ? "primary.main" : "secondary.main"}
-          >{condition || ""}
+            color={
+              condition === "new" || condition === "New" || condition === "NEW"
+                ? "primary.main"
+                : "secondary.main"
+            }
+          >
+            {condition || ""}
           </H4>
 
-          {stock || (<SemiSpan fontWeight="bold" color="primary.main" ml="1px">Out Of Stock</SemiSpan>)}
+          {stock || (
+            <SemiSpan fontWeight="bold" color="primary.main" ml="1px">
+              Out Of Stock
+            </SemiSpan>
+          )}
 
           <FlexBox
             // width="100%"
             justifyContent="space-between"
             alignItems="flex-end"
           >
-
             <FlexBox flexWrap="wrap" alignItems="center">
               <Typography color="gray.600" mr="0.5rem" display="flex">
                 <Currency>{Number(price).toFixed(2)}</Currency> x {quantity}

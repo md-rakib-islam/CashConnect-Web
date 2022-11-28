@@ -86,12 +86,17 @@ const OrderDetails = () => {
       .catch((err) => {
         console.log("error", err);
       });
-  }, []);
+  }, [order_id]);
 
   useEffect(() => {
     if (order_id) {
       axios
-        .get(`${Customer_order_Details_For_Status}${order_id}`)
+        .get(`${Customer_order_Details_For_Status}${order_id}`, {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: localStorage.getItem("jwt_access_token"),
+          },
+        })
         .then((res) => {
           console.log("CorderDetailsRes", res.data);
           setProductList(res.data.order?.order_items || []);

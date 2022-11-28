@@ -30,8 +30,12 @@ const ProductFilterCard = ({ productList }) => {
     productList.map((n) => n.brand)
   );
   const newItem = productList.map((n) => n.brand);
-  const uniqueBrands = [];
+  const uniqueBrands: any = [];
   console.log("uniqueItems", uniqueBrands);
+
+  useEffect(() => {
+    localStorage.setItem("uniqueBrands", JSON.stringify(uniqueBrands));
+  }, [uniqueBrands]);
 
   function removeDuplicates(arr) {
     var unique = [];
@@ -148,7 +152,9 @@ const ProductFilterCard = ({ productList }) => {
           console.log("error", err);
         });
     } else {
-      setBrandlist(uniqueBrands);
+      const updatedBrand: any = localStorage.getItem("uniqueBrands");
+      console.log("updatedBrand");
+      setBrandlist(JSON.parse(updatedBrand));
     }
   }, [router.query, productList]);
 
@@ -304,7 +310,7 @@ const ProductFilterCard = ({ productList }) => {
       <Divider my="24px" />
 
       <H6 mb="16px">Brands</H6>
-      {brandlist.map((brand) => (
+      {brandlist?.map((brand) => (
         <CheckBox
           key={brand.id}
           name={`brand${brand.id}`}

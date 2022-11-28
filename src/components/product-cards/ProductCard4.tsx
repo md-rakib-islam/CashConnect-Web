@@ -47,7 +47,7 @@ const ProductCard4: React.FC<ProductCard4Props> = ({
         setdiscountedPercent(res.data.discounts?.discount_percent);
       }
     });
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     axios
@@ -60,7 +60,7 @@ const ProductCard4: React.FC<ProductCard4Props> = ({
       .catch((err) => {
         console.log("error", err);
       });
-  }, []);
+  }, [id]);
   return (
     <Box>
       <HoverBox mb="1rem" mx="auto" borderRadius={8}>

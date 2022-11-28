@@ -40,7 +40,7 @@ const ProductCard2: React.FC<ProductCard2Props> = ({
         setdiscountedPercent(res.data.discounts?.discount_percent);
       }
     });
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     axios
@@ -53,7 +53,7 @@ const ProductCard2: React.FC<ProductCard2Props> = ({
       .catch((err) => {
         console.log("error", err);
       });
-  }, []);
+  }, [id]);
   return (
     <>
       <Link href={productUrl}>

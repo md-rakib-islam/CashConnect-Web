@@ -13,6 +13,7 @@ import {
   Customer_Order_Remove_Item,
   Multiple_Image_By_Id,
   Product_Detail_By_Id,
+  Product_Discount_By_Id,
   Product_Size_By_Product_Id,
   // Product_Size_By_Product_Id,
 } from "@data/constants";
@@ -44,7 +45,7 @@ export interface ProductIntroProps {
   rating?: number;
   condition: string;
   short_desc: string;
-  orginalrice?: number;
+  orginalprice?: number;
   parse: string;
 }
 
@@ -58,7 +59,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   rating,
   condition,
   short_desc,
-  orginalrice,
+  orginalprice,
 }) => {
   const [selectedThumbnail, setSelectedThumbnail] = useState(0);
   const [selectedImage, setSelectedImage] = useState(0);
@@ -70,6 +71,8 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
   var routerId = router.query?.id as string;
 
+  console.log("itemmId", id, routerId);
+
   const [cartQuantity, setCartQuantity] = useState(0);
   const [defaultCartQuantity, setDefaultCartQuantity] = useState(1);
   const [itemId, setItemId] = useState(0);
@@ -78,6 +81,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   const [colorImages, setColorImages] = useState([]);
   const [multipleUmg, setMultipleUmg] = useState([]);
   const [_reRender, setreRender] = useState(0);
+  const [discount, setDiscount] = useState();
 
   const [stock, setStock] = useState(true);
   const [stockQuantity, setStockQuantity] = useState();
@@ -118,7 +122,19 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       .catch(() => {
         console.log("errr");
       });
-  }, []);
+  }, [id]);
+
+  useEffect(() => {
+    axios.get(`${Product_Discount_By_Id}${id}`).then((res) => {
+      console.log("ProductDiscount", res);
+      setDiscount(res.data?.discounts?.discounted_price);
+      //  if (res.data.discounts?.discounted_price) {
+      //    setsellablePrice(res.data.discounts?.discounted_price);
+      //    setorginalPrice(Number(res.data.discounts?.product.unit_price));
+      //    setdiscountedPercent(res.data.discounts?.discount_percent);
+      //  }
+    });
+  }, [id]);
   useEffect(() => {
     axios
       .get(`${Product_Detail_By_Id}${id}`)
@@ -130,7 +146,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       .catch(() => {
         console.log("errr");
       });
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     // setMultipleUmg(imgUrl);
@@ -445,7 +461,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
     }
   };
 
-  console.log("MultipleUmg", multipleUmg);
+  console.log("orginalprice", orginalprice);
   return (
     <>
       <LoginPopup open={openLogin} closeLoginDialog={closeLoginTab} />
@@ -580,16 +596,23 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
             </FlexBox>
 
             <Box mb="24px">
-              {!!orginalrice && (
-                <H2 color="text.muted" mb="4px" lineHeight="1">
-                  <del>
-                    <Currency>{orginalrice}</Currency>
-                  </del>
+              {discount ? (
+                <>
+                  <H2 color="text.muted" mb="4px" lineHeight="1">
+                    <del>
+                      <Currency>{orginalprice}</Currency>
+                    </del>
+                  </H2>
+                  <H2 color="primary.main" mb="4px" lineHeight="1">
+                    <Currency>{Number(price).toFixed(2)}</Currency>
+                  </H2>
+                </>
+              ) : (
+                <H2 color="primary.main" mb="4px" lineHeight="1">
+                  <Currency>{orginalprice}</Currency>
                 </H2>
               )}
-              <H2 color="primary.main" mb="4px" lineHeight="1">
-                <Currency>{Number(price).toFixed(2)}</Currency>
-              </H2>
+
               {stock ? (
                 <SemiSpan color="inherit">Stock Available</SemiSpan>
               ) : (

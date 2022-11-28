@@ -12,10 +12,12 @@ import TextField from "@component/text-field/TextField";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import {
-  BASE_URL, City_All,
-  Country_All, Thana_All,
+  BASE_URL,
+  City_All,
+  Country_All,
+  Thana_All,
   Vendor_By_Id,
-  Vendor_Update
+  Vendor_Update,
 } from "@data/constants";
 import { country_codes } from "@data/country_code";
 import { genders, requred } from "@data/data";
@@ -36,31 +38,39 @@ const AccountSettings = () => {
   const [cities, setCities] = useState([]);
   const [countries, setCountries] = useState([]);
 
-  const [updated, setUpdated] = useState(0)
+  const [updated, setUpdated] = useState(0);
 
-  const { dispatch } = useAppContext()
+  const { dispatch } = useAppContext();
 
-  const { user_id, authTOKEN } = useUserInf()
+  const { user_id, authTOKEN } = useUserInf();
 
   useEffect(() => {
-
     fetch(`${City_All}`)
       .then((res) => res.json())
       .then((data) => {
         setCities(data.cities);
-      }).catch((err) => { console.log("error", err) });
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
 
     fetch(`${Thana_All}`)
       .then((res) => res.json())
       .then((data) => {
         setThanas(data.thanas);
-      }).catch((err) => { console.log("error", err) });
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
 
     fetch(`${Country_All}`)
       .then((res) => res.json())
       .then((data) => {
         setCountries(data.countries);
-      }).catch((err) => { console.log("error", err) });
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
 
     // fetch(`${Branch_All}`)
     //   .then((res) => res.json())
@@ -69,38 +79,46 @@ const AccountSettings = () => {
     //   }).catch((err) => { console.log("error", err) });
   }, []);
 
-
   useEffect(() => {
     if (user_id) {
-      axios.get(`${Vendor_By_Id}${user_id}`, authTOKEN).then((datas) => {
-        console.log("VendorEditDetails", datas.data);
-        const { data } = datas;
+      axios
+        .get(`${Vendor_By_Id}${user_id}`, authTOKEN)
+        .then((datas) => {
+          console.log("VendorEditDetails", datas.data);
+          const { data } = datas;
 
-        setPreviewImage(`${BASE_URL}${data.image}`);
+          setPreviewImage(`${BASE_URL}${data.image}`);
 
-        resetForm({
-          values: {
-            ...values,
-            ...data,
-            primary_phone: data?.primary_phone || "+880",
-            secondary_phone: data?.secondary_phone || "+880"
-          }
+          resetForm({
+            values: {
+              ...values,
+              ...data,
+              primary_phone: data?.primary_phone || "+880",
+              secondary_phone: data?.secondary_phone || "+880",
+            },
+          });
         })
-
-      }).catch((err) => { console.log("error", err) });
+        .catch((err) => {
+          console.log("error", err);
+        });
     }
-  }, [user_id, updated]);
+  }, [user_id, updated, authTOKEN]);
 
   const handleFormSubmit = async (values) => {
-
-    const { isValid, emailExist, primaryPhoneExist, SecondaryPhoneExist } = await checkValidation({  email: values.email, primaryPhone: values.primary_phone, secondaryPhone: values.secondary_phone, userId: user_id })
+    const { isValid, emailExist, primaryPhoneExist, SecondaryPhoneExist } =
+      await checkValidation({
+        email: values.email,
+        primaryPhone: values.primary_phone,
+        secondaryPhone: values.secondary_phone,
+        userId: user_id,
+      });
 
     if (isValid) {
-
       const data = {
         ...values,
         primary_phone: `${values.primary_phone}`,
-        secondary_phone: values.secondary_phone === "+880" ? "" : values.secondary_phone || "",
+        secondary_phone:
+          values.secondary_phone === "+880" ? "" : values.secondary_phone || "",
         image: image,
         gender:
           typeof values.gender != "object"
@@ -115,12 +133,14 @@ const AccountSettings = () => {
             ? values?.country
             : values?.country?.id,
         branch:
-          typeof values.branch != "object" ? values?.branch : values?.branch?.id,
+          typeof values.branch != "object"
+            ? values?.branch
+            : values?.branch?.id,
       };
 
       const [vendorEditData] = jsonToFormData(data);
 
-      console.log("data", data)
+      console.log("data", data);
 
       axios
         .put(`${Vendor_Update}${user_id}`, vendorEditData, authTOKEN)
@@ -132,38 +152,38 @@ const AccountSettings = () => {
               type: "CHANGE_ALERT",
               payload: {
                 alertValue: "update sussess...",
-              }
-            })
-            setUpdated(Math.random())
-          }
-          else {
+              },
+            });
+            setUpdated(Math.random());
+          } else {
             dispatch({
               type: "CHANGE_ALERT",
               payload: {
                 alerType: "error",
                 alertValue: "someting went wrong",
-              }
-            })
+              },
+            });
           }
-        }).catch(() => {
+        })
+        .catch(() => {
           dispatch({
             type: "CHANGE_ALERT",
             payload: {
               alerType: "error",
               alertValue: "someting went wrong",
-            }
-          })
+            },
+          });
         });
-    }
-
-    else {
+    } else {
       setErrors({
         ...errors,
         // username: userNameExist ? "user name already exist" : "",
         email: emailExist ? "email already exist" : "",
         primary_phone: primaryPhoneExist ? "primary phone already exist" : "",
-        secondary_phone: SecondaryPhoneExist ? "secondary phone already exist" : "",
-      })
+        secondary_phone: SecondaryPhoneExist
+          ? "secondary phone already exist"
+          : "",
+      });
     }
   };
 
@@ -184,18 +204,17 @@ const AccountSettings = () => {
   });
 
   const CustomOption = ({ innerProps, isDisabled, data }) => {
-
     return !isDisabled ? (
-      <div {...innerProps}
-        style={{ cursor: "pointer", width: "180px" }}
-      ><img src={`https://flagcdn.com/w20/${data.code.toLowerCase()}.png`}></img>
-        {' ' + data.label}
+      <div {...innerProps} style={{ cursor: "pointer", width: "180px" }}>
+        <img
+          src={`https://flagcdn.com/w20/${data.code.toLowerCase()}.png`}
+        ></img>
+        {" " + data.label}
       </div>
     ) : null;
-  }
+  };
 
-  console.log("values", values)
-
+  console.log("values", values);
 
   return (
     <div>
@@ -377,7 +396,6 @@ const AccountSettings = () => {
               </Grid>
 
               <Grid item md={6} xs={12}>
-
                 <div style={{ display: "flex", alignItems: "flex-start" }}>
                   <CountryCodeSelect
                     mb="1rem"
@@ -411,7 +429,6 @@ const AccountSettings = () => {
               </Grid>
 
               <Grid item md={6} xs={12}>
-
                 <div style={{ display: "flex", alignItems: "flex-start" }}>
                   <CountryCodeSelect
                     mb="1rem"
@@ -439,11 +456,12 @@ const AccountSettings = () => {
                     onBlur={handleBlur}
                     onChange={handleChange}
                     value={values.secondary_phone}
-                    errorText={touched.secondary_phone && errors.secondary_phone}
+                    errorText={
+                      touched.secondary_phone && errors.secondary_phone
+                    }
                   />
                 </div>
               </Grid>
-
 
               <Grid item md={6} xs={12}>
                 <TextField
@@ -600,7 +618,7 @@ const AccountSettings = () => {
           </Button>
         </form>
       </Card1>
-    </div >
+    </div>
   );
 };
 
@@ -614,21 +632,28 @@ const initialValues = {
   country_code: {
     code: "BD",
     label: "Bangladesh",
-    value: "+880"
+    value: "+880",
   },
   country_code_2: {
     code: "BD",
     label: "Bangladesh",
-    value: "+880"
+    value: "+880",
   },
 };
 
 const accountSchema = yup.object().shape({
   first_name: yup.string().required("required").nullable(requred),
   last_name: yup.string().required("required").nullable(requred),
-  email: yup.string().email("invalid email").required("required").nullable(requred),
+  email: yup
+    .string()
+    .email("invalid email")
+    .required("required")
+    .nullable(requred),
   date_of_birth: yup.date().required("invalid date").nullable(requred),
-  primary_phone: yup.string().required("primary_phone required").nullable(requred),
+  primary_phone: yup
+    .string()
+    .required("primary_phone required")
+    .nullable(requred),
   // secondary_phone: yup.string().required("secondary_phone required").nullable(requred),
 });
 

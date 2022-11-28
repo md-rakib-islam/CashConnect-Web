@@ -3,9 +3,9 @@ import FlexBox from "@component/FlexBox";
 import DashboardLayout from "@component/layout/FooterLayout";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import TableRow from "@component/TableRow";
-import  { Small } from "@component/Typography";
+import { Small } from "@component/Typography";
 // import useUserInf from "@customHook/useUserInf";
-// import { BASE_URL, Customer_By_Id, User_Details } from "@data/constants";
+// import { BASE_URL, Customer_By_Id, User_Order_Details } from "@data/constants";
 // import axios from "axios";
 // import { format } from "date-fns";
 import Link from "next/link";
@@ -41,7 +41,7 @@ const Career = () => {
   // }, [user_id]);
   // useEffect(() => {
   //   if (user_id) {
-  //     axios.get(`${User_Details}${user_id}`, authTOKEN).then((user) => {
+  //     axios.get(`${User_Order_Details}${user_id}`, authTOKEN).then((user) => {
   //       console.log('userDetails', user.data)
   //       setBalance(user.data.balance);
   //       setTotal_orders(user.data.total_orders);
@@ -54,7 +54,6 @@ const Career = () => {
   return (
     <div>
       <DashboardPageHeader
-        
         iconName="work"
         title="Careers with cashconnectBD LTD"
         button={
@@ -166,15 +165,20 @@ const Career = () => {
         </FlexBox>
         <FlexBox flexDirection="column" p="0.5rem">
           <Small color="text.muted" mb="4px" textAlign="left">
-           Position Title
+            Position Title
           </Small>
           <span>Frontend Developer,UK</span>
         </FlexBox>
-  
+
         <FlexBox flexDirection="column" p="1.5rem">
-          <Button color="primary" bg="primary.light" borderRadius={"20px"} width={'40%'} >
-              Apply Now
-            </Button>
+          <Button
+            color="primary"
+            bg="primary.light"
+            borderRadius={"20px"}
+            width={"40%"}
+          >
+            Apply Now
+          </Button>
         </FlexBox>
       </TableRow>
       <TableRow p="0.75rem 1.5rem" mb={"10px"}>
@@ -186,15 +190,20 @@ const Career = () => {
         </FlexBox>
         <FlexBox flexDirection="column" p="0.5rem">
           <Small color="text.muted" mb="4px" textAlign="left">
-           Position Title
+            Position Title
           </Small>
           <span>Frontend Developer,UK</span>
         </FlexBox>
-  
+
         <FlexBox flexDirection="column" p="1.5rem">
-          <Button color="primary" bg="primary.light" borderRadius={"20px"} width={'40%'} >
-              Apply Now
-            </Button>
+          <Button
+            color="primary"
+            bg="primary.light"
+            borderRadius={"20px"}
+            width={"40%"}
+          >
+            Apply Now
+          </Button>
         </FlexBox>
       </TableRow>
       <TableRow p="0.75rem 1.5rem" mb={"10px"}>
@@ -206,15 +215,20 @@ const Career = () => {
         </FlexBox>
         <FlexBox flexDirection="column" p="0.5rem">
           <Small color="text.muted" mb="4px" textAlign="left">
-           Position Title
+            Position Title
           </Small>
           <span>Frontend Developer,UK</span>
         </FlexBox>
-  
+
         <FlexBox flexDirection="column" p="1.5rem">
-          <Button color="primary" bg="primary.light" borderRadius={"20px"} width={'40%'} >
-              Apply Now
-            </Button>
+          <Button
+            color="primary"
+            bg="primary.light"
+            borderRadius={"20px"}
+            width={"40%"}
+          >
+            Apply Now
+          </Button>
         </FlexBox>
       </TableRow>
       <TableRow p="0.75rem 1.5rem" mb={"10px"}>
@@ -226,22 +240,25 @@ const Career = () => {
         </FlexBox>
         <FlexBox flexDirection="column" p="0.5rem">
           <Small color="text.muted" mb="4px" textAlign="left">
-           Position Title
+            Position Title
           </Small>
           <span>Frontend Developer,UK</span>
         </FlexBox>
-  
+
         <FlexBox flexDirection="column" p="1.5rem">
-          <Button color="primary" bg="primary.light" borderRadius={"20px"} width={'40%'} >
-              Apply Now
-            </Button>
+          <Button
+            color="primary"
+            bg="primary.light"
+            borderRadius={"20px"}
+            width={"40%"}
+          >
+            Apply Now
+          </Button>
         </FlexBox>
       </TableRow>
     </div>
   );
 };
-
-
 
 Career.layout = DashboardLayout;
 

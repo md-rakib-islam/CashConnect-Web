@@ -9,7 +9,9 @@ export const WS_URL = "192.168.0.151:8001";
 
 //branch api
 export const Branch_All = `${BASE_URL}/branch/api/v1/branch/all/`;
-export const User_Details = `${BASE_URL}/user/api/v1/get_balance_orderstatus_count_by_userid/`;
+// customer info
+export const User_Order_Details = `${BASE_URL}/user/api/v1/get_balance_orderstatus_count_by_userid/`;
+export const User_Sell_Details = `${BASE_URL}/purchase_request/api/v1/purchase_request/get_all_purchase_request_counts_of_a_vendor/`;
 
 //brand api
 export const Brand_By_Id = `${BASE_URL}/brand/api/v1/brand/`;
@@ -83,6 +85,8 @@ export const Customer_Order_Pending_Details = `${BASE_URL}/customerorder/api/v1/
 export const Customer_order_Details_For_Status = `${BASE_URL}/customerorder/api/v1/customerorder/get_a_customer_order_detail_with_order_orderitem_shipping/`;
 
 export const Get_Pending_Order_After_Login = `${BASE_URL}/customerorder/api/v1/customerorder/get_a_pending_order_of_an_authenticated_customer/`;
+
+export const Get_Tracking_Order = `${BASE_URL}/customerorder/api/v1/customerorder/get_a_customer_order_by_order_no/`;
 
 //login api
 export const LOGIN_URL = `${BASE_URL}/user/api/v1/user/login/`;

@@ -9,7 +9,13 @@ import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import TableRow from "@component/TableRow";
 import { H3, H5, Small } from "@component/Typography";
 import useUserInf from "@customHook/useUserInf";
-import { BASE_URL, Customer_By_Id, User_Details } from "@data/constants";
+import {
+  BASE_URL,
+  Customer_By_Id,
+  User_Order_Details,
+  User_Sell_Details,
+} from "@data/constants";
+// import Divider from "@mui/material/Divider";
 import axios from "axios";
 import { format } from "date-fns";
 import Link from "next/link";
@@ -28,6 +34,7 @@ const Profile = () => {
   const [unpaid_orders, setUnpaid_orders] = useState([]);
   const [cancled_orders, setCancled_orders] = useState([]);
   const [deliverable_orders, setDeliverable_orders] = useState([]);
+  const [sellDetails, setSellDetails] = useState<any>({});
 
   const { user_id, authTOKEN } = useUserInf();
 
@@ -49,11 +56,11 @@ const Profile = () => {
           console.log("error", err);
         });
     }
-  }, [user_id]);
+  }, [user_id, authTOKEN]);
   useEffect(() => {
     if (user_id) {
       axios
-        .get(`${User_Details}${user_id}`, authTOKEN)
+        .get(`${User_Order_Details}${user_id}`, authTOKEN)
         .then((user) => {
           console.log("userDetails", user);
           // setBalance(user.data.balance);
@@ -67,7 +74,21 @@ const Profile = () => {
           console.log("error", err);
         });
     }
-  }, [user_id]);
+  }, [user_id, authTOKEN]);
+
+  useEffect(() => {
+    axios
+      .get(`${User_Sell_Details}`, authTOKEN)
+      .then((user) => {
+        console.log("userSEllDetails", user);
+        // setBalance(user.data.balance);
+        setSellDetails(user?.data);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  }, [authTOKEN]);
+  console.log("SellDetails", sellDetails);
   return (
     <div>
       <DashboardPageHeader
@@ -118,7 +139,34 @@ const Profile = () => {
               </Box> */}
             </FlexBox>
           </Grid>
-
+        </Grid>
+        <Grid style={{ paddingTop: "1rem" }} container spacing={6}>
+          <Grid item lg={6} md={6} sm={12} xs={12}>
+            <FlexBox
+              flexDirection="column"
+              alignItems="center"
+              height="100%"
+              p="0 1.25rem"
+            >
+              <Small color="text.muted" textAlign="center">
+                Orders Info
+              </Small>
+            </FlexBox>
+          </Grid>
+          <Grid item lg={6} md={6} sm={12} xs={12}>
+            <FlexBox
+              flexDirection="column"
+              alignItems="center"
+              height="100%"
+              p="0 1.25rem"
+            >
+              <Small color="text.muted" textAlign="center">
+                Sells Info
+              </Small>
+            </FlexBox>
+          </Grid>
+        </Grid>
+        <Grid as={Card} container spacing={6}>
           <Grid item lg={6} md={6} sm={12} xs={12}>
             <Grid container spacing={2}>
               <Grid item lg={2.4} sm={6} xs={6}>
@@ -132,6 +180,7 @@ const Profile = () => {
                   <H3 color="primary.main" my="0px" fontWeight="600">
                     {total_orders || 0}
                   </H3>
+
                   <Small color="text.muted" textAlign="center">
                     Total Orders
                   </Small>
@@ -199,6 +248,77 @@ const Profile = () => {
                   </H3>
                   <Small color="text.muted" textAlign="center">
                     Cancled Orders
+                  </Small>
+                </FlexBox>
+              </Grid>
+            </Grid>
+          </Grid>
+          {/* <Divider orientation="vertical" flexItem /> */}
+
+          <Grid item lg={6} md={6} sm={12} xs={12}>
+            <Grid container spacing={2}>
+              <Grid item lg={3} sm={6} xs={6}>
+                <FlexBox
+                  as={Card}
+                  flexDirection="column"
+                  alignItems="center"
+                  height="100%"
+                  p="1rem 1.25rem"
+                >
+                  <H3 color="primary.main" my="0px" fontWeight="600">
+                    {sellDetails?.total_counts || 0}
+                  </H3>
+                  <Small color="text.muted" textAlign="center">
+                    Total Sell Items
+                  </Small>
+                </FlexBox>
+              </Grid>
+              <Grid item lg={3} sm={6} xs={6}>
+                <FlexBox
+                  as={Card}
+                  flexDirection="column"
+                  alignItems="center"
+                  height="100%"
+                  p="1rem 1.25rem"
+                >
+                  <H3 color="primary.main" my="0px" fontWeight="600">
+                    {sellDetails?.submitted_counts || 0}
+                  </H3>
+                  <Small color="text.muted" textAlign="center">
+                    Submitted Sell Items
+                  </Small>
+                </FlexBox>
+              </Grid>
+
+              <Grid item lg={3} sm={6} xs={6}>
+                <FlexBox
+                  as={Card}
+                  flexDirection="column"
+                  alignItems="center"
+                  height="100%"
+                  p="1rem 1.25rem"
+                >
+                  <H3 color="primary.main" my="0px" fontWeight="600">
+                    {sellDetails?.pending_counts || 0}
+                  </H3>
+                  <Small color="text.muted" textAlign="center">
+                    Pending Sell Items
+                  </Small>
+                </FlexBox>
+              </Grid>
+              <Grid item lg={3} sm={6} xs={6}>
+                <FlexBox
+                  as={Card}
+                  flexDirection="column"
+                  alignItems="center"
+                  height="100%"
+                  p="1rem 1.25rem"
+                >
+                  <H3 color="primary.main" my="0px" fontWeight="600">
+                    {sellDetails?.cancelled_counts || 0}
+                  </H3>
+                  <Small color="text.muted" textAlign="center">
+                    Cancled Sell Items
                   </Small>
                 </FlexBox>
               </Grid>

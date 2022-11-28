@@ -85,11 +85,9 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
     }
   };
   const login = () => {
-    router
-      .replace({
-        pathname: "/login",
-      })
-      .then(() => router.reload());
+    router.replace({
+      pathname: "/login",
+    });
   };
 
   try {

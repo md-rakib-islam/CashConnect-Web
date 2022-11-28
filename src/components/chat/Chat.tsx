@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ChatStyle from "./Chat.module.css";
 import { BASE_URL, WS_URL } from "@data/constants";
 import useUserInf from "@customHook/useUserInf";
@@ -11,7 +11,6 @@ const Chat: React.FC = () => {
   const [receiverImage, setReceiverImage] = useState("");
   const { isLogin } = useUserInf();
   const router = useRouter();
-  const scrollRef = useRef(null);
 
   const scrollTo = (ref) => {
     if (ref && ref.current /* + other conditions */) {
@@ -85,6 +84,7 @@ const Chat: React.FC = () => {
   // };
   useEffect(() => {
     if (!connected) {
+      const userId = localStorage.getItem("UserId");
       const authTOKEN = localStorage.getItem("jwt_access_token");
       const token = authTOKEN?.slice(7);
       var ws = new WebSocket(`wss://${WS_URL}/ws/chat/?token=${token}`);
@@ -93,16 +93,55 @@ const Chat: React.FC = () => {
         setConnected(true);
         setSocket(ws);
       };
+      ws.onmessage = function (event) {
+        const data = JSON.parse(event.data);
+        console.log("ChatMessageOld", data);
+        const messages = data.messages;
+        if (data.msg_type == "old") {
+          for (let message of messages) {
+            console.log("message:", message);
+            if (message.user.id == userId) {
+              document.getElementById("messages").innerHTML += `<div  class=${
+                ChatStyle.messageElemSender
+              }><p class=${ChatStyle.sender}>${message.text}</p>  <img src=${`${
+                message.user.image ? BASE_URL : `/no_image.png`
+              }`}${
+                message.user.image ? message.user.image : ""
+              } alt='imgae'/></div>`;
+            } else if (message.user.id !== userId) {
+              setReceiverImage(message?.user?.image);
+              document.getElementById("messages").innerHTML += `<div  class=${
+                ChatStyle.messageElemReceiver
+              }>
+                  <img src=${`${
+                    message.user.image ? BASE_URL : `/no_image.png`
+                  }`}${message.user.image ? message.user.image : ""}
+                  }alt=""/>
+                  <p class=${ChatStyle.receiver}>${message.text}</p>
+                  </div>`;
+            }
+          }
+
+          // document.getElementById("messages");
+        }
+      };
     }
-  }, []);
+  }, [connected]);
+
   const onkeydown = (e) => {
     if (e.key == "Enter") {
       handleMessageSubmit(e);
     }
   };
-  //  useEffect(() => {
-  //    scrollRef.current.
-  //  }, []);
+  useEffect(() => {
+    window.setInterval(function () {
+      const elem = document.getElementById("messages");
+      if (elem != null) {
+        elem.scrollTop = elem?.scrollHeight;
+      }
+    }, 1000);
+  }, []);
+
   const handleMessageSubmit = async (values) => {
     if (isLogin) {
       const userId = localStorage.getItem("UserId");
@@ -158,10 +197,9 @@ const Chat: React.FC = () => {
           <p class=${ChatStyle.receiver}>${message.message}</p>
           </div>`;
           }
-          document
-            .getElementById("messages")
-            .scrollIntoView({ behavior: "smooth" });
+          document.getElementById("messages");
         }
+
         // else if (message.msg_type == "new" && message.user.id !== userId) {
         //   let messageElem = document.createElement("div");
         //   messageElem.textContent = message.message;
@@ -253,9 +291,8 @@ const Chat: React.FC = () => {
           </div>
           <div id="fromValue" className={ChatStyle.formFeild}>
             <div
-              ref={scrollRef}
               id="messages"
-              className={ChatStyle.message}
+              className={ChatStyle.messages}
               style={{ height: "300px" }}
             ></div>
           </div>
