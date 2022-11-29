@@ -103,7 +103,7 @@ export const product_by_categoryId = `${BASE_URL}/product/api/v1/product_using_c
 
 export const Product_by_id = `${BASE_URL}/product/api/v1/product_with_discount/`;
 
-export const Product_Flash_Deals = `${BASE_URL}/product/api/v1/product_with_top_selling/all/`;
+export const Product_Flash_Deals = `${BASE_URL}/product/api/v1/product_with_flashdeal_status_true/all/`;
 
 export const Product_Arrival = `${BASE_URL}/product/api/v1/product_with_arrival_status_true/all/`;
 
