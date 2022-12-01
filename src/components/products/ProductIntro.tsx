@@ -214,7 +214,10 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
     if (id) {
       if (order_Id) {
         axios
-          .get(`${Customer_Order_Item_By_Product_Id}${order_Id}/${id}`)
+          .get(
+            `${Customer_Order_Item_By_Product_Id}${order_Id}/${id}`,
+            authTOKEN
+          )
           .then((item) => {
             console.log("item", item.data.order_item);
             setItemId(item.data.order_item.id);

@@ -116,7 +116,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
   useEffect(() => {
     if (order_Id) {
       axios
-        .get(`${Customer_Order_Item_By_Product_Id}${order_Id}/${id}`)
+        .get(`${Customer_Order_Item_By_Product_Id}${order_Id}/${id}`, authTOKEN)
         .then((item) => {
           setItemId(item?.data?.order_item?.id);
           setCartQuantity(item?.data?.order_item?.quantity);
@@ -129,7 +129,10 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
     if (id && order_Id) {
       if (state.cart.prductId == id) {
         axios
-          .get(`${Customer_Order_Item_By_Product_Id}${order_Id}/${id}`)
+          .get(
+            `${Customer_Order_Item_By_Product_Id}${order_Id}/${id}`,
+            authTOKEN
+          )
           .then((item) => {
             setItemId(item?.data?.order_item?.id);
             setCartQuantity(item?.data?.order_item?.quantity);

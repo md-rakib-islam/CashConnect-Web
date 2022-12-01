@@ -136,7 +136,12 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
   useEffect(() => {
     if (order_Id) {
       axios
-        .get(`${Customer_Order_Pending_Details}${order_Id}`)
+        .get(`${Customer_Order_Pending_Details}${order_Id}`, {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: localStorage.getItem("jwt_access_token"),
+          },
+        })
         .then((res) => {
           setCartProductList(res.data.order.order_items);
           console.log("miniCartLisdt", res.data.order.order_items);

@@ -16,16 +16,16 @@ import {
   space,
   SpaceProps,
   typography,
-  TypographyProps
+  TypographyProps,
 } from "styled-system";
 
 interface CustomProps
   extends TypographyProps,
-  SpaceProps,
-  ColorProps,
-  FlexProps,
-  LayoutProps,
-  BorderProps {
+    SpaceProps,
+    ColorProps,
+    FlexProps,
+    LayoutProps,
+    BorderProps {
   ref?: any;
   as?: any;
   title?: string;
@@ -116,14 +116,23 @@ export const Tiny2: React.FC<CustomProps> = (props) => {
   const { state } = useAppContext();
   const cartCanged = state.cart.chartQuantity;
 
-  const { order_Id } = useUserInf()
+  const { order_Id } = useUserInf();
 
   useEffect(() => {
     if (order_Id) {
-      axios.get(`${Customer_Order_Pending_Details}${order_Id}`)
+      axios
+        .get(`${Customer_Order_Pending_Details}${order_Id}`, {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: localStorage.getItem("jwt_access_token"),
+          },
+        })
         .then((res) => {
           setProductQuantity(res?.data?.order?.order_items?.length);
-        }).catch((err) => { console.log("error", err) });
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
     }
   }, [cartCanged, order_Id]);
 

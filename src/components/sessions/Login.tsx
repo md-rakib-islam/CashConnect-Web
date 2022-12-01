@@ -102,7 +102,12 @@ const Login: React.FC<LoginProps> = ({
         console.log("authTOKENauthTOKEN", token, user);
 
         axios
-          .get(`${Get_Pending_Order_After_Login}`, token)
+          .get(`${Get_Pending_Order_After_Login}`, {
+            headers: {
+              "Content-type": "application/json",
+              Authorization: localStorage.getItem("jwt_access_token"),
+            },
+          })
 
           .then((res) => {
             console.log("order_Id_res_pending", res, authTOKEN);
@@ -225,7 +230,12 @@ const Login: React.FC<LoginProps> = ({
         console.log("userFacebook", user);
 
         axios
-          .get(`${Get_Pending_Order_After_Login}`, token)
+          .get(`${Get_Pending_Order_After_Login}`, {
+            headers: {
+              "Content-type": "application/json",
+              Authorization: localStorage.getItem("jwt_access_token"),
+            },
+          })
           .then((res) => {
             console.log("order_Id_res", res);
             if (res.data.id) {

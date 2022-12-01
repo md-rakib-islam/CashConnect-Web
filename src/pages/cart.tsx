@@ -4,7 +4,7 @@ import TextArea from "@component/textarea/TextArea";
 import useUserInf from "@customHook/useUserInf";
 import {
   Customer_Order_Comment,
-  Customer_Order_Pending_Details
+  Customer_Order_Pending_Details,
 } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
@@ -31,15 +31,15 @@ type CartItem = {
 const Cart = () => {
   const [cartProductList, setCartProductList] = useState<CartItem[]>([]);
   const [reloadCart, setReloadCart] = useState(0);
-  const [openLogin, setOpenLogin] = useState(false)
+  const [openLogin, setOpenLogin] = useState(false);
 
-  const router = useRouter()
+  const router = useRouter();
 
-  const { order_Id, authTOKEN, isLogin } = useUserInf()
+  const { order_Id, authTOKEN, isLogin } = useUserInf();
 
   const closeLoginTab = () => {
-    setOpenLogin(false)
-  }
+    setOpenLogin(false);
+  };
 
   const getTotalPrice = () => {
     return (
@@ -49,7 +49,6 @@ const Cart = () => {
       ) || 0
     );
   };
-
 
   const addComment = () => {
     console.log("comment", values.comment);
@@ -64,22 +63,34 @@ const Cart = () => {
           .post(`${Customer_Order_Comment}${order_Id}`, comment, authTOKEN)
           .then((res) => {
             console.log("comentRes", res);
-            router.push("/checkout")
-          }).catch((err) => { console.log("error", err) });
+            router.push("/checkout");
+          })
+          .catch((err) => {
+            console.log("error", err);
+          });
       }
-    }
-    else {
-      setOpenLogin(true)
+    } else {
+      setOpenLogin(true);
     }
   };
 
   useEffect(() => {
     if (order_Id) {
-      axios.get(`${Customer_Order_Pending_Details}${order_Id}`).then((res) => {
-        console.log("CorderDetailsRes", res);
-        setCartProductList(res.data.order?.order_items);
-        setFieldValue("comment", res.data.order?.comment);
-      }).catch((err) => { console.log("error", err) });
+      axios
+        .get(`${Customer_Order_Pending_Details}${order_Id}`, {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: localStorage.getItem("jwt_access_token"),
+          },
+        })
+        .then((res) => {
+          console.log("CorderDetailsRes", res);
+          setCartProductList(res.data.order?.order_items);
+          setFieldValue("comment", res.data.order?.comment);
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
     }
   }, [order_Id, reloadCart]);
 
@@ -91,7 +102,7 @@ const Cart = () => {
     comment: "",
   };
   const checkoutSchema = null;
-  const handleFormSubmit = () => { };
+  const handleFormSubmit = () => {};
 
   const {
     values,
@@ -165,7 +176,6 @@ const Cart = () => {
 
             <Divider mb="1rem" />
 
-
             <Button
               variant="contained"
               color="primary"
@@ -174,7 +184,6 @@ const Cart = () => {
             >
               Checkout Now
             </Button>
-
           </Card1>
         </Grid>
       </Grid>
