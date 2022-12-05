@@ -1,5 +1,7 @@
 import Box from "@component/Box";
+// import useFormattedProductData from "@customHook/useFormattedProductData";
 import { Product_Flash_Deals } from "@data/constants";
+import getFormattedProductData2 from "@helper/getFormattedProductData";
 import axios from "axios";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
@@ -42,11 +44,10 @@ const Section2: React.FC<Section2Props> = ({ flashDealsList }) => {
         .get(`${Product_Flash_Deals}?page=${page + 1}&size=${6}`)
         .then((res) => {
           console.log("res.data.products", res.data.products);
+          const newItem = getFormattedProductData2(res.data.products);
           if (res.data.total_pages > 1) {
-            const flashDealsListState = flashDealsListLists;
-            setFlashDealsListLists(
-              flashDealsListState.concat(res.data.products)
-            );
+            const flashDealsListState = flashDealsList;
+            setFlashDealsListLists(flashDealsListState.concat(newItem));
 
             setPage(page + 1);
           }

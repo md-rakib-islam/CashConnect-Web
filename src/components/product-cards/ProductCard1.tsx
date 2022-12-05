@@ -267,7 +267,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
         <Link href={`/product/${id}`}>
           <a>
             <LazyImage
-              src={imgUrl}
+              src={imgUrl ? imgUrl : "/assets/images/logos/shopping-bag.svg"}
               width="100%"
               height="auto"
               layout="responsive"

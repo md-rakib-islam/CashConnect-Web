@@ -80,7 +80,7 @@ const ProductCard4: React.FC<ProductCard4Props> = ({
           </Chip>
         )}
         <LazyImage
-          src={imgUrl}
+          src={imgUrl ? imgUrl : "/assets/images/logos/shopping-bag.svg"}
           loader={() => imgUrl}
           width="100%"
           height="auto"

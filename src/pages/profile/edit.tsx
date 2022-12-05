@@ -8,7 +8,7 @@ import Hidden from "@component/hidden/Hidden";
 import Icon from "@component/icon/Icon";
 import DashboardLayout from "@component/layout/CustomerDashboardLayout";
 import DashboardPageHeader from "@component/layout/DashboardPageHeader";
-import Select, { CountryCodeSelect } from "@component/Select";
+import Select from "@component/Select";
 import TextField from "@component/text-field/TextField";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
@@ -20,7 +20,6 @@ import {
   Customer_Update,
   Thana_All_BY_CITY_ID,
 } from "@data/constants";
-import { country_codes } from "@data/country_code";
 import { genders, requred } from "@data/data";
 import axios from "axios";
 import { useFormik } from "formik";
@@ -147,8 +146,8 @@ const ProfileEditor = ({}) => {
             values: {
               ...values,
               ...data,
-              primary_phone: data?.primary_phone || "+880",
-              secondary_phone: data?.secondary_phone || "+880",
+              primary_phone: data?.primary_phone,
+              secondary_phone: data?.secondary_phone,
             },
           });
 
@@ -227,16 +226,16 @@ const ProfileEditor = ({}) => {
     onSubmit: handleFormSubmit,
   });
 
-  const CustomOption = ({ innerProps, isDisabled, data }) => {
-    return !isDisabled ? (
-      <div {...innerProps} style={{ cursor: "pointer", width: "180px" }}>
-        <img
-          src={`https://flagcdn.com/w20/${data.code.toLowerCase()}.png`}
-        ></img>
-        {" " + data.label}
-      </div>
-    ) : null;
-  };
+  // const CustomOption = ({ innerProps, isDisabled, data }) => {
+  //   return !isDisabled ? (
+  //     <div {...innerProps} style={{ cursor: "pointer", width: "180px" }}>
+  //       <img
+  //         src={`https://flagcdn.com/w20/${data.code.toLowerCase()}.png`}
+  //       ></img>
+  //       {" " + data.label}
+  //     </div>
+  //   ) : null;
+  // };
 
   return (
     <div>
@@ -330,6 +329,7 @@ const ProfileEditor = ({}) => {
                   name="username"
                   label="User Name"
                   fullwidth
+                  readOnly
                   onBlur={handleBlur}
                   onChange={(e: any) => {
                     setFieldValue("username", e.target.value.trim());
@@ -381,28 +381,44 @@ const ProfileEditor = ({}) => {
 
               <Grid item md={6} xs={12}>
                 <div style={{ display: "flex", alignItems: "flex-start" }}>
-                  <CountryCodeSelect
-                    mb="1rem"
-                    mt="1rem"
-                    label="Country"
-                    width="40%"
-                    placeholder="Select Country"
-                    getOptionLabelBy="label"
-                    getOptionValueBy="value"
-                    options={country_codes}
-                    components={{ Option: CustomOption }}
-                    value={values.country_code || null}
-                    onChange={(value: any) => {
-                      setFieldValue("country_code", value);
-                      setFieldValue("primary_phone", `${value.value}`);
-                    }}
-                    errorText={touched.country_code && errors.country_code}
-                  />
+                  <Grid item md={4}>
+                    <TextField
+                      style={{ textAlign: "center" }}
+                      mb="0.75rem"
+                      mt="1rem"
+                      name="country_code"
+                      // placeholder="Obtional"
+                      label="Country"
+                      fullwidth
+                      endAdornment={
+                        <div
+                          style={{
+                            cursor: "pointer",
+                            width: "105px",
+                            marginTop: "2px",
+                            marginLeft: "20px",
+                          }}
+                        >
+                          <img
+                            style={{
+                              marginLeft: "20px",
+                            }}
+                            src={`https://flagcdn.com/w20/bd.png`}
+                          ></img>
+                        </div>
+                      }
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={`${values.country_code || ""}`}
+                      errorText={touched.country_code && errors.country_code}
+                    />
+                  </Grid>
                   <TextField
                     mt="1rem"
                     mb="1rem"
                     name="primary_phone"
                     label="Primary Phone"
+                    readOnly
                     fullwidth
                     onBlur={handleBlur}
                     onChange={handleChange}
@@ -414,23 +430,40 @@ const ProfileEditor = ({}) => {
 
               <Grid item md={6} xs={12}>
                 <div style={{ display: "flex", alignItems: "flex-start" }}>
-                  <CountryCodeSelect
-                    mb="1rem"
-                    mt="1rem"
-                    label="Country"
-                    width="40%"
-                    placeholder="Select Country"
-                    getOptionLabelBy="label"
-                    getOptionValueBy="value"
-                    options={country_codes}
-                    components={{ Option: CustomOption }}
-                    value={values.country_code_2 || null}
-                    onChange={(value: any) => {
-                      setFieldValue("country_code_2", value);
-                      setFieldValue("secondary_phone", `${value.value}`);
-                    }}
-                    errorText={touched.country_code_2 && errors.country_code_2}
-                  />
+                  <Grid item md={4}>
+                    <TextField
+                      style={{ textAlign: "center" }}
+                      mb="0.75rem"
+                      mt="1rem"
+                      name="country_code_2"
+                      // placeholder="Obtional"
+                      label="Country"
+                      fullwidth
+                      endAdornment={
+                        <div
+                          style={{
+                            cursor: "pointer",
+                            width: "105px",
+                            marginTop: "2px",
+                            marginLeft: "20px",
+                          }}
+                        >
+                          <img
+                            style={{
+                              marginLeft: "20px",
+                            }}
+                            src={`https://flagcdn.com/w20/bd.png`}
+                          ></img>
+                        </div>
+                      }
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={`${values.country_code_2 || ""}`}
+                      errorText={
+                        touched.country_code_2 && errors.country_code_2
+                      }
+                    />
+                  </Grid>
                   <TextField
                     mt="1rem"
                     mb="1rem"
@@ -461,19 +494,6 @@ const ProfileEditor = ({}) => {
                 />
               </Grid>
 
-              <Grid item md={6} xs={12}>
-                <TextField
-                  name="street_address_two"
-                  label="Street Address Two"
-                  fullwidth
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.street_address_two || ""}
-                  errorText={
-                    touched.street_address_two && errors.street_address_two
-                  }
-                />
-              </Grid>
               <Grid item md={6} xs={12}>
                 <Select
                   mb="1rem"
@@ -605,18 +625,10 @@ const initialValues = {
   last_name: "",
   email: "",
   date_of_birth: "",
-  primary_phone: "+880",
-  secondary_phone: "+880",
-  country_code: {
-    code: "BD",
-    label: "Bangladesh",
-    value: "+880",
-  },
-  country_code_2: {
-    code: "BD",
-    label: "Bangladesh",
-    value: "+880",
-  },
+  primary_phone: "",
+  secondary_phone: "",
+  country_code: "+88",
+  country_code_2: "+88",
 };
 
 const checkoutSchema = yup.object().shape({

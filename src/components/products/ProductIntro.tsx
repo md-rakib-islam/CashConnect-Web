@@ -793,7 +793,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                   variant="outlined"
                   size="small"
                   color="primary"
-                  disabled={!stock}
+                  disabled={!stock || cartQuantity == stockQuantity}
                   onClick={() =>
                     handleCartAmountChange(cartQuantity + 1, "increase")
                   }

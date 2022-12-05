@@ -140,7 +140,7 @@ const Profile = () => {
             </FlexBox>
           </Grid>
         </Grid>
-        <Grid style={{ paddingTop: "1rem" }} container spacing={6}>
+        {/* <Grid style={{ paddingTop: "1rem" }} container spacing={6}>
           <Grid item lg={6} md={6} sm={12} xs={12}>
             <FlexBox
               flexDirection="column"
@@ -165,9 +165,20 @@ const Profile = () => {
               </Small>
             </FlexBox>
           </Grid>
-        </Grid>
-        <Grid as={Card} container spacing={6}>
-          <Grid item lg={6} md={6} sm={12} xs={12}>
+        </Grid> */}
+        <Grid style={{ marginTop: "1rem" }} container spacing={6}>
+          <Grid
+            style={{ backgroundColor: "#d5d5d5" }}
+            as={Card}
+            item
+            lg={6}
+            md={6}
+            sm={12}
+            xs={12}
+          >
+            <FlexBox flexDirection="column" alignItems="center" p="0 1.25rem">
+              <H5 textAlign="center">Orders Info</H5>
+            </FlexBox>
             <Grid container spacing={2}>
               <Grid item lg={2.4} sm={6} xs={6}>
                 <FlexBox
@@ -255,7 +266,18 @@ const Profile = () => {
           </Grid>
           {/* <Divider orientation="vertical" flexItem /> */}
 
-          <Grid item lg={6} md={6} sm={12} xs={12}>
+          <Grid
+            style={{ backgroundColor: "#ceb8be" }}
+            as={Card}
+            item
+            lg={6}
+            md={6}
+            sm={12}
+            xs={12}
+          >
+            <FlexBox flexDirection="column" alignItems="center" p="0 1.25rem">
+              <H5 textAlign="center">Sells Info</H5>
+            </FlexBox>
             <Grid container spacing={2}>
               <Grid item lg={3} sm={6} xs={6}>
                 <FlexBox

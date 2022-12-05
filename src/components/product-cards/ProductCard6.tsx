@@ -1,8 +1,8 @@
-import Card from '@component/Card';
-import { Chip } from '@component/Chip';
-import HoverBox from '@component/HoverBox';
-import LazyImage from '@component/LazyImage';
-import React from 'react';
+import Card from "@component/Card";
+import { Chip } from "@component/Chip";
+import HoverBox from "@component/HoverBox";
+import LazyImage from "@component/LazyImage";
+import React from "react";
 
 export interface ProductCard6Props {
   imgUrl: string;
@@ -10,11 +10,7 @@ export interface ProductCard6Props {
   subtitle: string;
 }
 
-
-const ProductCard6: React.FC<ProductCard6Props> = ({
-  title,
-  imgUrl,
-}) => {
+const ProductCard6: React.FC<ProductCard6Props> = ({ title, imgUrl }) => {
   return (
     <Card position="relative">
       <Chip
@@ -32,7 +28,12 @@ const ProductCard6: React.FC<ProductCard6Props> = ({
       </Chip>
 
       <HoverBox height="120px" borderRadius={8}>
-        <LazyImage src={imgUrl} layout="fill" objectFit="cover" loader={() => imgUrl} />
+        <LazyImage
+          src={imgUrl ? imgUrl : "/assets/images/logos/shopping-bag.svg"}
+          layout="fill"
+          objectFit="cover"
+          loader={() => imgUrl}
+        />
       </HoverBox>
     </Card>
   );

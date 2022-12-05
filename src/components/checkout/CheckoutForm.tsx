@@ -30,7 +30,9 @@ const CheckoutForm = () => {
 
   // const [_shippingId, setShippingId] = useState(0);
   const [thanas, setThanas] = useState([]);
+  const [thanasShipping, setThanasShipping] = useState([]);
   const [cities, setCities] = useState([]);
+  const [citiesShipping, setCitiesShipping] = useState([]);
   const [countries, setCountries] = useState([]);
   const [openLogin, setOpenLogin] = useState(false);
   const { user_id, authTOKEN, order_Id, isLogin } = useUserInf();
@@ -189,11 +191,32 @@ const CheckoutForm = () => {
         console.log("error", err);
       });
   };
+  const handleCityShipping = (country) => {
+    fetch(`${City_All_BY_COUNTRY_ID}${country.id ? country.id : country}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("cityData", data);
+        setCitiesShipping(data);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  };
   const handleThana = (city) => {
     fetch(`${Thana_All_BY_CITY_ID}${city.id}`)
       .then((res) => res.json())
       .then((data) => {
         setThanas(data);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  };
+  const handleThanaShipping = (city) => {
+    fetch(`${Thana_All_BY_CITY_ID}${city.id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setThanasShipping(data);
       })
       .catch((err) => {
         console.log("error", err);
@@ -243,8 +266,12 @@ const CheckoutForm = () => {
         )?.id;
 
         setFieldValue("country", getPspIssPlace);
+        setFieldValue("country_shipping", getPspIssPlace);
         data.countries.find((data) =>
           data.name === "Bangladesh" ? handleCity(data.id) : ""
+        );
+        data.countries.find((data) =>
+          data.name === "Bangladesh" ? handleCityShipping(data.id) : ""
         );
       })
 
@@ -458,12 +485,12 @@ const CheckoutForm = () => {
                   mb="1rem"
                   label="City"
                   placeholder="Select City"
-                  options={cities}
+                  options={citiesShipping}
                   value={values.city_shipping || ""}
                   onChange={(city: any) => {
                     setFieldValue("city_shipping", city?.id);
                     setFieldValue("thana_shipping", "");
-                    handleThana(city);
+                    handleThanaShipping(city);
                   }}
                   errorText={touched.city_shipping && errors.city_shipping}
                 />
@@ -513,7 +540,7 @@ const CheckoutForm = () => {
                     setFieldValue("country_shipping", country?.id);
                     setFieldValue("city_shipping", "");
                     setFieldValue("thana_shipping", "");
-                    handleCity(country);
+                    handleCityShipping(country);
                   }}
                   errorText={
                     touched.country_shipping && errors.country_shipping
@@ -524,7 +551,7 @@ const CheckoutForm = () => {
                   mb="1rem"
                   label="Thana"
                   placeholder="Select Thana"
-                  options={thanas}
+                  options={thanasShipping}
                   value={values.thana_shipping || ""}
                   onChange={(thana: any) => {
                     setFieldValue("thana_shipping", thana?.id);

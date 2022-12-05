@@ -94,7 +94,11 @@ const Section13 = ({ bigDiscountList }) => {
                     )}
                     <HoverBox borderRadius={8} mb="0.5rem">
                       <LazyImage
-                        src={item.imgUrl}
+                        src={
+                          item.imgUrl
+                            ? item.imgUrl
+                            : "/assets/images/logos/shopping-bag.svg"
+                        }
                         loader={() => item.imgUrl}
                         width="100%"
                         height="auto"
