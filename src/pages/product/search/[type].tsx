@@ -16,8 +16,6 @@ import {
   Category_All_Without_Pg,
   New_product_using,
   Product_Arrival,
-  Product_By_BrandId,
-  product_by_categoryId,
   Product_Discount,
   Product_Filter,
   Product_Flash_Deals,
@@ -270,13 +268,12 @@ export const getServerSideProps: GetServerSideProps = async ({
   query,
 }) => {
   const category: any = query.categoryId;
-  const name: any = query.name;
   console.log("type", params.type);
 
   if (params.type === "product_by_category" || params.type === "search_for") {
     try {
       const res = await fetch(
-        `${product_by_categoryId}${category}?page=${query.page || 1}&size=${
+        `${Product_Filter}?category=${category}&page=${query.page || 1}&size=${
           query.size || 12
         }`
       );
@@ -291,9 +288,24 @@ export const getServerSideProps: GetServerSideProps = async ({
     }
   } else if (params.type === "search_by_product_name") {
     try {
+      // let params = new URLSearchParams();
+      const name: any = query.name;
+
+      // const brands: any = query.brand;
+      // const brandIds = JSON.parse(brands);
+
+      // params.append("name", name);
+      // console.log("request", request);
       const res = await axios.get(
         `${Product_Filter}?page=${query.page || 1}&size=${query.size || 12}`,
-        { params: { name: name, category } }
+        {
+          params: {
+            name: name,
+            // brand: brandIds.map((brand) => {
+            //   brand;
+            // }),
+          },
+        }
       );
       var data: any[] = await res.data.products;
       var totalProduct: number = await res.data.total_elements;
@@ -307,6 +319,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     try {
       const brands: any = query.brand;
       const ratings: any = query.rating;
+      const name: any = query.name;
 
       const brandIds = JSON.parse(brands);
       const ratingIds = JSON.parse(ratings);
@@ -317,6 +330,7 @@ export const getServerSideProps: GetServerSideProps = async ({
       const maxPrice: any = query.max_price;
 
       params.append("category", category);
+      params.append("name", name);
       params.append("min_price", minPrice);
       params.append("max_price", maxPrice);
       brandIds.map((brand) => {
@@ -412,9 +426,9 @@ export const getServerSideProps: GetServerSideProps = async ({
   } else if (params.type === "product_by_brand") {
     try {
       const res = await axios.get(
-        `${Product_By_BrandId}${query.brandId}?page=${query.page || 1}&size=${
-          query.size || 12
-        }`
+        `${Product_Filter}?brand=${query.brandId}&page=${
+          query.page || 1
+        }&size=${query.size || 12}`
       );
       var data: any[] = await res.data.products;
       var totalProduct: number = await res.data.total_elements;

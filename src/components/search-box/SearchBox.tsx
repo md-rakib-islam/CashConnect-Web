@@ -40,7 +40,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
   const handleFormSubmit = (values) => {
     router.push({
       pathname: "/product/search/search_by_product_name",
-      query: { categoryId: "", name: values.search },
+      query: { name: values.search },
     });
   };
 
@@ -57,7 +57,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
     const value = e.target?.value;
     axios
       .get(`${Product_Filter}?page=${1}&size=${10}`, {
-        params: { name: value || "", category: "" },
+        params: { name: value || "" },
       })
       .then((res) => {
         console.log("resSearchProduct", res.data.products);
@@ -94,6 +94,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
       window.removeEventListener("click", handleDocumentClick);
     };
   }, []);
+  console.log("resultList", resultList);
 
   const { values, errors, touched, handleChange, handleSubmit, setFieldValue } =
     useFormik({
@@ -128,6 +129,13 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
               handleChange(e);
               hanldeSearch(e);
               handleAutoComplete(e);
+            }}
+            onKeyDown={(e: any) => {
+              if (e.key === "Enter") {
+                handleAutoComplete(e);
+                handleChange(e);
+                hanldeSearch(e);
+              }
             }}
             value={values.search || ""}
             errorText={touched.search && errors.search}
@@ -170,7 +178,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
               <Link
                 href={{
                   pathname: "/product/search/search_by_product_name",
-                  query: { categoryId: "", name: item?.name },
+                  query: { name: item?.name, brand: item?.brand.id },
                 }}
               >
                 <MenuItem

@@ -55,7 +55,9 @@ const ProductFilterCard = ({ productList }) => {
 
   const handleFormSubmit = () => {};
 
+  console.log("router", router.query.type);
   const filterProduct = (type, e, id?: string | number) => {
+    // if (router.query.type !== "search_by_product_name") {
     const value = e.target.value;
 
     const min_price =
@@ -114,18 +116,93 @@ const ProductFilterCard = ({ productList }) => {
     if (type === "category") {
       setCategoryId(id);
     }
-
+    console.log("brandProductSearch", router.query);
     router.push({
       pathname: "/product/search/filter",
       query: {
         categoryId: type === "category" ? id : categoryId,
+        name: router.query.name,
         min_price,
         max_price,
         brand: JSON.stringify(brand),
         rating: JSON.stringify(rating),
       },
     });
+    // } else {
+    //   const value = e.target.value;
+
+    //   const min_price =
+    //     type === "min_price" ? (value ? value : "") : values.min_price;
+    //   const max_price =
+    //     type === "max_price" ? (value ? value : "") : values.max_price;
+
+    //   if (type === "brand") {
+    //     setBrandIds({
+    //       ...brandIds,
+    //       [`brand${id}`]: brandIds[`brand${id}`] ? 0 : id,
+    //     });
+    //     var brandIDs = {
+    //       ...brandIds,
+    //       [`brand${id}`]: brandIds[`brand${id}`] ? 0 : id,
+    //     };
+    //     var brand = [];
+    //     for (let x in brandIDs) {
+    //       if (brandIDs[x]) {
+    //         brand.push(brandIDs[x]);
+    //       }
+    //     }
+    //   } else {
+    //     var brand = [];
+    //     for (let x in brandIds) {
+    //       if (brandIds[x]) {
+    //         brand.push(brandIds[x]);
+    //       }
+    //     }
+    //   }
+
+    //   if (type === "rating") {
+    //     setRatingIds({
+    //       ...ratingIds,
+    //       [`rating${id}`]: ratingIds[`rating${id}`] ? 0 : id,
+    //     });
+    //     var ratingIDs = {
+    //       ...ratingIds,
+    //       [`rating${id}`]: ratingIds[`rating${id}`] ? 0 : id,
+    //     };
+    //     var rating = [];
+    //     for (let x in ratingIDs) {
+    //       if (ratingIDs[x]) {
+    //         rating.push(ratingIDs[x]);
+    //       }
+    //     }
+    //   } else {
+    //     var rating = [];
+    //     for (let x in ratingIds) {
+    //       if (ratingIds[x]) {
+    //         rating.push(ratingIds[x]);
+    //       }
+    //     }
+    //   }
+
+    //   if (type === "category") {
+    //     setCategoryId(id);
+    //   }
+    //   console.log("brandProductSearch", router.query);
+    //   router.push({
+    //     pathname: "/product/search/search_by_product_name",
+    //     query: {
+    //       // categoryId: type === "category" ? id : categoryId,
+    //       name: router.query.name,
+    //       min_price,
+    //       max_price,
+    //       brand: JSON.stringify(brand),
+    //       // rating: JSON.stringify(rating),
+    //     },
+    //   });
+    // }
   };
+
+  console.log("brandProductSearch", router.query);
 
   useEffect(() => {
     axios
