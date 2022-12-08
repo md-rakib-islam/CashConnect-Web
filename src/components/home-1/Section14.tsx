@@ -11,7 +11,7 @@ const Section14: React.FC = () => {
   useEffect(() => {
     const token = authTOKEN.headers.Authorization.slice(7);
 
-    var ws = new WebSocket(`ws://192.168.0.151:8001/ws/chat/?token=${token}`);
+    var ws = new WebSocket(`wss://192.168.0.151:8001/ws/chat/?token=${token}`);
 
     ws.onopen = function () {
       console.log("WebSocket connection is open....");
