@@ -9,7 +9,7 @@ import NavbarLayout from "@component/layout/NavbarLayout";
 import ProductCard1List from "@component/products/ProductCard1List";
 import ProductCard9List from "@component/products/ProductCard9List";
 import ProductFilterCard from "@component/products/ProductFilterCard";
-import Select from "@component/Select";
+// import Select from "@component/Select";
 import Sidenav from "@component/sidenav/Sidenav";
 import { H5, Paragraph } from "@component/Typography";
 import {
@@ -20,18 +20,16 @@ import {
   Product_Filter,
   Product_Flash_Deals,
   Product_For_You,
-  Product_High_To_Low,
-  Product_Low_To_High,
   Product_Top_Rated,
   Used_product_using,
 } from "@data/constants";
 import axios from "axios";
-import { useFormik } from "formik";
+// import { useFormik } from "formik";
 import _ from "lodash";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
-import * as yup from "yup";
+// import * as yup from "yup";
 import useWindowSize from "../../../hooks/useWindowSize";
 
 const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
@@ -55,7 +53,9 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
     []
   );
 
-  const handleFormSubmit = () => {};
+  // const handleFormSubmit = (e) => {
+  //   console.log("shotrbay", e);
+  // };
 
   useEffect(() => {
     const type = router.query.type;
@@ -111,6 +111,7 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
         }
       } else if (type === "search_by_product_name") {
         const name: any = router.query.name;
+
         setSearchingFor(name);
       } else if (type === "shop_now") {
         if (router.query.condition === "new") {
@@ -137,11 +138,11 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
     setTotalProducts(totalProduct);
   }, [productLists, totalProduct]);
 
-  const { values, setFieldValue } = useFormik({
-    initialValues: initialValues,
-    validationSchema: checkoutSchema,
-    onSubmit: handleFormSubmit,
-  });
+  // const { values, setFieldValue } = useFormik({
+  //   initialValues: initialValues,
+  //   validationSchema: checkoutSchema,
+  //   onSubmit: handleFormSubmit,
+  // });
   return (
     <Box pt="20px">
       <FlexBox
@@ -160,7 +161,7 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
           </Paragraph>
         </div>
         <FlexBox alignItems="center" flexWrap="wrap">
-          <Paragraph color="text.muted" mr="1rem">
+          {/* <Paragraph color="text.muted" mr="1rem">
             Short by:
           </Paragraph>
           <Box flex="1 1 0" mr="1.75rem" minWidth="150px">
@@ -171,20 +172,128 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
               getOptionLabelBy="label"
               getOptionValueBy="value"
               value={values?.shortBy || ""}
+              onSubmit={values?.shortBy}
               onChange={(shortBy: any) => {
                 setFieldValue("shortBy", shortBy);
-                router.push({
-                  pathname: `/product/search/${
-                    shortBy?.value === "High"
-                      ? "product_high_to_low"
-                      : "product_low_to_high"
-                  }`,
-                  query: { categoryId: id },
-                });
+                if (router.query.type == "new_arrivals_all_filter") {
+                  router.push({
+                    pathname: "/product/search/new_arrivals_all_filter",
+                    query: {
+                      // categoryId: router.query.categoryId,
+                      name: router?.query?.name,
+                      ascending: `${shortBy?.value === "High" ? `no` : `yes`}`,
+                      maxPrice: router?.query?.max_price || "",
+                      minPrice: router?.query?.min_price || "",
+                      brand: router?.query?.brand,
+                      rating: router?.query?.rating,
+                    },
+                  });
+                }
+                if (router.query.type == "new_arrivals_all") {
+                  router.push({
+                    pathname: "/product/search/new_arrivals_all_filter",
+                    query: {
+                      // categoryId: type === "category" ? id : categoryId,
+                      // name: router.query.name,
+                      ascending: `${shortBy?.value === "High" ? `no` : `yes`}`,
+                      maxPrice: router?.query?.max_price || "",
+                      minPrice: router?.query?.min_price || "",
+                      brand: router?.query?.brand,
+                      rating: router?.query?.rating,
+                    },
+                  });
+                }
+                if (router.query.type == "flash_deals_all") {
+                  router.push({
+                    pathname: "/product/search/flash_deals_all_filter",
+                    query: {
+                      // categoryId: type === "category" ? id : categoryId,
+                      // name: router.query.name,
+                      ascending: `${shortBy?.value === "High" ? `no` : `yes`}`,
+                      maxPrice: router?.query?.max_price || "",
+                      minPrice: router?.query?.min_price || "",
+                      brand: router?.query?.brand,
+                      rating: router?.query?.rating,
+                    },
+                  });
+                }
+
+                if (router.query.type == "new_arrivals_all_filter") {
+                  router.push({
+                    pathname: "/product/search/new_arrivals_all_filter",
+                    query: {
+                      // categoryId: type === "category" ? id : categoryId,
+                      // name: router.query.name,
+                      ascending: `${shortBy?.value === "High" ? `no` : `yes`}`,
+                      maxPrice: router?.query?.max_price || "",
+                      minPrice: router?.query?.min_price || "",
+                      brand: router?.query?.brand,
+                      rating: router?.query?.rating,
+                    },
+                  });
+                }
+                if (router.query.type == "flash_deals_all_filter") {
+                  router.push({
+                    pathname: "/product/search/flash_deals_all_filter",
+                    query: {
+                      // categoryId: type === "category" ? id : categoryId,
+                      // name: router.query.name,
+                      ascending: `${shortBy?.value === "High" ? `no` : `yes`}`,
+                      maxPrice: router?.query?.max_price || "",
+                      minPrice: router?.query?.min_price || "",
+                      brand: router?.query?.brand,
+                      rating: router?.query?.rating,
+                    },
+                  });
+                }
+
+                if (router.query.type == "product_by_category") {
+                  router.push({
+                    pathname: "/product/search/filter",
+                    query: {
+                      categoryId: router.query.categoryId,
+                      name: router.query.name,
+                      ascending: `${shortBy?.value === "High" ? `no` : `yes`}`,
+                      maxPrice: router?.query?.max_price || "",
+                      minPrice: router?.query?.min_price || "",
+                      brand: router?.query?.brand,
+                      rating: router?.query?.rating,
+                    },
+                  });
+                }
+                if (router.query.type == "filter") {
+                  router.push({
+                    pathname: "/product/search/filter",
+                    query: {
+                      categoryId: router.query.categoryId,
+                      name: router.query.name,
+                      ascending: `${shortBy?.value === "High" ? `no` : `yes`}`,
+                      maxPrice: router?.query?.max_price || "",
+                      minPrice: router?.query?.min_price || "",
+                      brand: router?.query?.brand,
+                      rating: router?.query?.rating,
+                    },
+                  });
+                }
+
+                if (router.query.type == "search_by_product_name") {
+                  router.push({
+                    pathname: "/product/search/filter",
+                    query: {
+                      name: router.query.name,
+                      ascending: `${shortBy?.value === "High" ? `no` : `yes`}`,
+                      maxPrice: router?.query?.max_price || "",
+                      minPrice: router?.query?.min_price || "",
+                      brand: router?.query?.brand,
+                      rating: router?.query?.rating,
+                    },
+                  });
+                }
+
                 console.log("shortBy", shortBy);
               }}
             />
-          </Box>
+          </Box> */}
 
           <Paragraph color="text.muted" mr="0.5rem">
             View:
@@ -249,15 +358,15 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
   );
 };
 
-const sortOptions = [
-  { label: "Price Low to High", value: "Low" },
-  { label: "Price High to Low", value: "High" },
-];
-const initialValues = {
-  shortBy: "",
-};
+// const sortOptions = [
+//   { label: "Price Low to High", value: "Low" },
+//   { label: "Price High to Low", value: "High" },
+// ];
+// const initialValues = {
+//   shortBy: "",
+// };
 
-var checkoutSchema = yup.object().shape({});
+// var checkoutSchema = yup.object().shape({});
 
 ProductSearchResult.layout = NavbarLayout;
 
@@ -267,7 +376,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   params,
   query,
 }) => {
-  const category: any = query.categoryId;
+  const category: any = query.categoryId ? query.categoryId : "";
   console.log("type", params.type);
 
   if (params.type === "product_by_category" || params.type === "search_for") {
@@ -288,22 +397,12 @@ export const getServerSideProps: GetServerSideProps = async ({
     }
   } else if (params.type === "search_by_product_name") {
     try {
-      // let params = new URLSearchParams();
       const name: any = query.name;
-
-      // const brands: any = query.brand;
-      // const brandIds = JSON.parse(brands);
-
-      // params.append("name", name);
-      // console.log("request", request);
       const res = await axios.get(
         `${Product_Filter}?page=${query.page || 1}&size=${query.size || 12}`,
         {
           params: {
             name: name,
-            // brand: brandIds.map((brand) => {
-            //   brand;
-            // }),
           },
         }
       );
@@ -319,7 +418,8 @@ export const getServerSideProps: GetServerSideProps = async ({
     try {
       const brands: any = query.brand;
       const ratings: any = query.rating;
-      const name: any = query.name;
+      const name: any = query.name ? query.name : "";
+      const ascending: any = query.ascending ? query.ascending : "";
 
       const brandIds = JSON.parse(brands);
       const ratingIds = JSON.parse(ratings);
@@ -331,6 +431,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 
       params.append("category", category);
       params.append("name", name);
+      params.append("ascending", ascending);
       params.append("min_price", minPrice);
       params.append("max_price", maxPrice);
       brandIds.map((brand) => {
@@ -371,10 +472,90 @@ export const getServerSideProps: GetServerSideProps = async ({
       var totalProduct = 0;
       var totalPage = 0;
     }
+  } else if (params.type === "flash_deals_all_filter") {
+    try {
+      const brands: any = query.brand;
+      const ratings: any = query.rating;
+      const ascending: any = query.ascending ? query.ascending : "";
+
+      const brandIds = JSON.parse(brands);
+      const ratingIds = JSON.parse(ratings);
+
+      let params = new URLSearchParams();
+
+      const minPrice: any = query.min_price;
+      const maxPrice: any = query.max_price;
+
+      params.append("ascending", ascending);
+      params.append("min_price", minPrice);
+      params.append("max_price", maxPrice);
+      brandIds.map((brand) => {
+        params.append("brand", brand);
+      });
+      ratingIds.map((rating) => {
+        params.append("rating", rating);
+      });
+
+      var request = {
+        params: params,
+      };
+
+      const res = await axios.get(
+        `${Product_Arrival}?page=${query.page || 1}&size=${query.size || 12}`,
+        request
+      );
+      var data: any[] = await res.data.products;
+      var totalProduct: number = await res.data.total_elements;
+      var totalPage: number = await res.data.total_pages;
+    } catch (error) {
+      var data = [];
+      var totalProduct = 0;
+      var totalPage = 0;
+    }
   } else if (params.type === "top_ratings_all") {
     try {
       const res = await axios.get(
         `${Product_Top_Rated}?page=${query.page || 1}&size=${query.size || 12}`
+      );
+      var data: any[] = await res.data.products;
+      var totalProduct: number = await res.data.total_elements;
+      var totalPage: number = await res.data.total_pages;
+    } catch (error) {
+      var data = [];
+      var totalProduct = 0;
+      var totalPage = 0;
+    }
+  } else if (params.type === "top_ratings_all_filter") {
+    try {
+      const brands: any = query.brand;
+      const ratings: any = query.rating;
+      const ascending: any = query.ascending ? query.ascending : "";
+
+      const brandIds = JSON.parse(brands);
+      const ratingIds = JSON.parse(ratings);
+
+      let params = new URLSearchParams();
+
+      const minPrice: any = query.min_price;
+      const maxPrice: any = query.max_price;
+
+      params.append("ascending", ascending);
+      params.append("min_price", minPrice);
+      params.append("max_price", maxPrice);
+      brandIds.map((brand) => {
+        params.append("brand", brand);
+      });
+      ratingIds.map((rating) => {
+        params.append("rating", rating);
+      });
+
+      var request = {
+        params: params,
+      };
+
+      const res = await axios.get(
+        `${Product_Top_Rated}?page=${query.page || 1}&size=${query.size || 12}`,
+        request
       );
       var data: any[] = await res.data.products;
       var totalProduct: number = await res.data.total_elements;
@@ -397,10 +578,90 @@ export const getServerSideProps: GetServerSideProps = async ({
       var totalProduct = 0;
       var totalPage = 0;
     }
+  } else if (params.type === "new_arrivals_all_filter") {
+    try {
+      const brands: any = query.brand;
+      const ratings: any = query.rating;
+      const ascending: any = query.ascending ? query.ascending : "";
+
+      const brandIds = JSON.parse(brands);
+      const ratingIds = JSON.parse(ratings);
+
+      let params = new URLSearchParams();
+
+      const minPrice: any = query.min_price;
+      const maxPrice: any = query.max_price;
+
+      params.append("ascending", ascending);
+      params.append("min_price", minPrice);
+      params.append("max_price", maxPrice);
+      brandIds.map((brand) => {
+        params.append("brand", brand);
+      });
+      ratingIds.map((rating) => {
+        params.append("rating", rating);
+      });
+
+      var request = {
+        params: params,
+      };
+
+      const res = await axios.get(
+        `${Product_Arrival}?page=${query.page || 1}&size=${query.size || 12}`,
+        request
+      );
+      var data: any[] = await res.data.products;
+      var totalProduct: number = await res.data.total_elements;
+      var totalPage: number = await res.data.total_pages;
+    } catch (error) {
+      var data = [];
+      var totalProduct = 0;
+      var totalPage = 0;
+    }
   } else if (params.type === "big_discounts_all") {
     try {
       const res = await axios.get(
         `${Product_Discount}?page=${query.page || 1}&size=${query.size || 12}`
+      );
+      var data: any[] = await res.data.products;
+      var totalProduct: number = await res.data.total_elements;
+      var totalPage: number = await res.data.total_pages;
+    } catch (error) {
+      var data = [];
+      var totalProduct = 0;
+      var totalPage = 0;
+    }
+  } else if (params.type === "big_discounts_all_filter") {
+    try {
+      const brands: any = query.brand;
+      const ratings: any = query.rating;
+      const ascending: any = query.ascending ? query.ascending : "";
+
+      const brandIds = JSON.parse(brands);
+      const ratingIds = JSON.parse(ratings);
+
+      let params = new URLSearchParams();
+
+      const minPrice: any = query.min_price;
+      const maxPrice: any = query.max_price;
+
+      params.append("ascending", ascending);
+      params.append("min_price", minPrice);
+      params.append("max_price", maxPrice);
+      brandIds.map((brand) => {
+        params.append("brand", brand);
+      });
+      ratingIds.map((rating) => {
+        params.append("rating", rating);
+      });
+
+      var request = {
+        params: params,
+      };
+
+      const res = await axios.get(
+        `${Product_Discount}?page=${query.page || 1}&size=${query.size || 12}`,
+        request
       );
       var data: any[] = await res.data.products;
       var totalProduct: number = await res.data.total_elements;
@@ -423,44 +684,52 @@ export const getServerSideProps: GetServerSideProps = async ({
       var totalProduct = 0;
       var totalPage = 0;
     }
+  } else if (params.type === "more_for_you_all_filter") {
+    try {
+      const brands: any = query.brand;
+      const ratings: any = query.rating;
+      const ascending: any = query.ascending ? query.ascending : "";
+
+      const brandIds = JSON.parse(brands);
+      const ratingIds = JSON.parse(ratings);
+
+      let params = new URLSearchParams();
+
+      const minPrice: any = query.min_price;
+      const maxPrice: any = query.max_price;
+
+      params.append("ascending", ascending);
+      params.append("min_price", minPrice);
+      params.append("max_price", maxPrice);
+      brandIds.map((brand) => {
+        params.append("brand", brand);
+      });
+      ratingIds.map((rating) => {
+        params.append("rating", rating);
+      });
+
+      var request = {
+        params: params,
+      };
+
+      const res = await axios.get(
+        `${Product_For_You}?page=${query.page || 1}&size=${query.size || 12}`,
+        request
+      );
+      var data: any[] = await res.data.products;
+      var totalProduct: number = await res.data.total_elements;
+      var totalPage: number = await res.data.total_pages;
+    } catch (error) {
+      var data = [];
+      var totalProduct = 0;
+      var totalPage = 0;
+    }
   } else if (params.type === "product_by_brand") {
     try {
       const res = await axios.get(
         `${Product_Filter}?brand=${query.brandId}&page=${
           query.page || 1
         }&size=${query.size || 12}`
-      );
-      var data: any[] = await res.data.products;
-      var totalProduct: number = await res.data.total_elements;
-      var totalPage: number = await res.data.total_pages;
-    } catch (error) {
-      var data = [];
-      var totalProduct = 0;
-      var totalPage = 0;
-    }
-  } else if (params.type === "product_high_to_low") {
-    try {
-      const res = await axios.post(
-        `${Product_High_To_Low}?page=${query.page || 1}&size=${
-          query.size || 12
-        }`,
-        { category }
-      );
-      var data: any[] = await res.data.products;
-      var totalProduct: number = await res.data.total_elements;
-      var totalPage: number = await res.data.total_pages;
-    } catch (error) {
-      var data = [];
-      var totalProduct = 0;
-      var totalPage = 0;
-    }
-  } else if (params.type === "product_low_to_high") {
-    try {
-      const res = await axios.post(
-        `${Product_Low_To_High}?page=${query.page || 1}&size=${
-          query.size || 12
-        }`,
-        { category }
       );
       var data: any[] = await res.data.products;
       var totalProduct: number = await res.data.total_elements;

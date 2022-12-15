@@ -1,3 +1,5 @@
+import Box from "@component/Box";
+import Select from "@component/Select";
 import useFormattedCategoryData from "@customHook/useFormattedCategoryData";
 import { Brands_By_Category, Category_All_With_Child } from "@data/constants";
 import axios from "axios";
@@ -27,9 +29,11 @@ const ProductFilterCard = ({ productList }) => {
 
   console.log(
     "productList Filter",
-    productList.map((n) => n.brand)
+    productList.map((n) => (n.brand ? n.brand : { id: 0, name: "No Brand" }))
   );
-  const newItem = productList.map((n) => n.brand);
+  const newItem = productList.map((n) =>
+    n.brand ? n.brand : { id: 0, name: "No Brand" }
+  );
   const uniqueBrands: any = [];
   console.log("uniqueItems", uniqueBrands);
 
@@ -41,8 +45,8 @@ const ProductFilterCard = ({ productList }) => {
     var unique = [];
 
     arr.forEach((element) => {
-      if (!unique.includes(element.id)) {
-        unique.push(element.id);
+      if (!unique.includes(element?.id)) {
+        unique.push(element?.id);
         uniqueBrands.push(element);
       }
     });
@@ -58,8 +62,10 @@ const ProductFilterCard = ({ productList }) => {
   console.log("router", router.query.type);
   const filterProduct = (type, e, id?: string | number) => {
     // if (router.query.type !== "search_by_product_name") {
-    const value = e.target.value;
+    const value = e.target?.value;
+    console.log("filterValue", value, e, type);
 
+    const ascending = type === "shortBy" && e == "Low" ? "yes" : "no";
     const min_price =
       type === "min_price" ? (value ? value : "") : values.min_price;
     const max_price =
@@ -117,17 +123,221 @@ const ProductFilterCard = ({ productList }) => {
       setCategoryId(id);
     }
     console.log("brandProductSearch", router.query);
-    router.push({
-      pathname: "/product/search/filter",
-      query: {
-        categoryId: type === "category" ? id : categoryId,
-        name: router.query.name,
-        min_price,
-        max_price,
-        brand: JSON.stringify(brand),
-        rating: JSON.stringify(rating),
-      },
-    });
+
+    if (router.query.type == "top_ratings_all") {
+      router.push({
+        pathname: "/product/search/top_ratings_all_filter",
+        query: {
+          // categoryId: type === "category" ? id : categoryId,
+          // name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
+    if (router.query.type == "new_arrivals_all") {
+      router.push({
+        pathname: "/product/search/new_arrivals_all_filter",
+        query: {
+          // categoryId: type === "category" ? id : categoryId,
+          // name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
+    if (router.query.type == "big_discounts_all") {
+      router.push({
+        pathname: "/product/search/big_discounts_all_filter",
+        query: {
+          // categoryId: type === "category" ? id : categoryId,
+          // name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
+    if (router.query.type == "more_for_you_all") {
+      router.push({
+        pathname: "/product/search/more_for_you_all_filter",
+        query: {
+          // categoryId: type === "category" ? id : categoryId,
+          // name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
+    if (router.query.type == "flash_deals_all") {
+      router.push({
+        pathname: "/product/search/flash_deals_all_filter",
+        query: {
+          // categoryId: type === "category" ? id : categoryId,
+          // name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
+
+    if (router.query.type == "flash_deals_all_filter") {
+      router.push({
+        pathname: "/product/search/flash_deals_all_filter",
+        query: {
+          // categoryId: type === "category" ? id : categoryId,
+          // name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
+    if (router.query.type == "new_arrivals_all_filter") {
+      router.push({
+        pathname: "/product/search/new_arrivals_all_filter",
+        query: {
+          // categoryId: type === "category" ? id : categoryId,
+          // name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
+    if (router.query.type == "big_discounts_all_filter") {
+      router.push({
+        pathname: "/product/search/big_discounts_all_filter",
+        query: {
+          // categoryId: type === "category" ? id : categoryId,
+          // name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
+    if (router.query.type == "more_for_you_all_filter") {
+      router.push({
+        pathname: "/product/search/more_for_you_all_filter",
+        query: {
+          // categoryId: type === "category" ? id : categoryId,
+          // name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
+    if (router.query.type == "top_ratings_all_filter") {
+      router.push({
+        pathname: "/product/search/top_ratings_all_filter",
+        query: {
+          // categoryId: type === "category" ? id : categoryId,
+          // name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
+
+    if (router.query.type == "product_by_category") {
+      router.push({
+        pathname: "/product/search/filter",
+        query: {
+          categoryId: type === "category" ? id : categoryId,
+          name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
+    if (router.query.type == "search_for") {
+      router.push({
+        pathname: "/product/search/filter",
+        query: {
+          categoryId: type === "category" ? id : categoryId,
+          name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
+    if (router.query.type == "filter") {
+      router.push({
+        pathname: "/product/search/filter",
+        query: {
+          categoryId: type === "category" ? id : categoryId,
+          name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
+
+    if (router.query.type == "search_by_product_name") {
+      router.push({
+        pathname: "/product/search/filter",
+        query: {
+          categoryId: type === "category" ? id : categoryId,
+          name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
+    // else {
+    //   router.push({
+    //     pathname: "/product/search/filter",
+    //     query: {
+    //       categoryId: type === "category" ? id : categoryId,
+    //       name: router.query.name,
+    //       ascending: router.query.ascending,
+    //       min_price,
+    //       max_price,
+    //       brand: JSON.stringify(brand),
+    //       rating: JSON.stringify(rating),
+    //     },
+    //   });
+    // }
+
     // } else {
     //   const value = e.target.value;
 
@@ -236,7 +446,7 @@ const ProductFilterCard = ({ productList }) => {
   }, [router.query, productList]);
 
   console.log("categoryId", categoryId);
-  const { values, errors, touched, handleChange } = useFormik({
+  const { values, errors, touched, handleChange, setFieldValue } = useFormik({
     initialValues: initialValues,
     validationSchema: checkoutSchema,
     onSubmit: handleFormSubmit,
@@ -341,6 +551,26 @@ const ProductFilterCard = ({ productList }) => {
           })
         : ""}
 
+      <Divider mt="18px" mb="24px" />
+
+      <H6 mb="16px"> Short by</H6>
+
+      <Box flex="1 1 0" mr="1.75rem" minWidth="150px">
+        <Select
+          placeholder="Short by"
+          // defaultValue={sortOptions[0]}
+          options={sortOptions}
+          getOptionLabelBy="label"
+          getOptionValueBy="value"
+          value={values?.shortBy || ""}
+          onChange={(shortBy: any) => {
+            setFieldValue("shortBy", shortBy);
+
+            filterProduct("shortBy", shortBy.value);
+            console.log("shortBy", shortBy);
+          }}
+        />
+      </Box>
       <Divider mt="18px" mb="24px" />
 
       <H6 mb="16px">Price Range</H6>
@@ -455,10 +685,14 @@ const ProductFilterCard = ({ productList }) => {
 //   "#70F6FF",
 //   "#6B7AFF",
 // ];
-
+const sortOptions = [
+  { label: "Price Low to High", value: "Low" },
+  { label: "Price High to Low", value: "High" },
+];
 const initialValues = {
   min_price: "",
   max_price: "",
+  shortBy: "",
 };
 
 const checkoutSchema: any = yup.object().shape({});

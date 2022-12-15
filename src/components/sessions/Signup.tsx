@@ -45,6 +45,7 @@ const Signup: React.FC<SignupProps> = ({
   };
 
   useEffect(() => {
+    setFieldValue("email", "");
     setUser_type(3);
   }, []);
   useEffect(() => {
@@ -195,10 +196,11 @@ const Signup: React.FC<SignupProps> = ({
     values,
     errors,
     touched,
+
     handleBlur,
     handleChange,
     handleSubmit,
-    // setFieldValue,
+    setFieldValue,
   } = useFormik({
     onSubmit: handleFormSubmit,
     initialValues,
@@ -315,6 +317,7 @@ const Signup: React.FC<SignupProps> = ({
             name="first_name"
             label="First Name"
             placeholder="First Name"
+            autoComplete="off"
             fullwidth
             onBlur={handleBlur}
             onChange={handleChange}
@@ -327,6 +330,7 @@ const Signup: React.FC<SignupProps> = ({
             name="last_name"
             label="Last Name"
             placeholder="Last Name"
+            autoComplete="off"
             fullwidth
             onBlur={handleBlur}
             onChange={handleChange}
@@ -398,6 +402,7 @@ const Signup: React.FC<SignupProps> = ({
                 mt="1rem"
                 name="primary_phone"
                 // placeholder="Obtional"
+                autoComplete="off"
                 label="Phone Number"
                 fullwidth
                 onBlur={handleBlur}
@@ -415,6 +420,7 @@ const Signup: React.FC<SignupProps> = ({
             type={passwordVisibility ? "text" : "password"}
             label="Password"
             fullwidth
+            autoComplete="off"
             endAdornment={
               <IconButton
                 size="small"
@@ -441,6 +447,7 @@ const Signup: React.FC<SignupProps> = ({
             type={passwordVisibility ? "text" : "password"}
             label="Confirm Password"
             fullwidth
+            autoComplete="off"
             endAdornment={
               <IconButton
                 size="small"
@@ -467,6 +474,7 @@ const Signup: React.FC<SignupProps> = ({
             label="Email"
             type="email"
             fullwidth
+            autoComplete="off"
             onBlur={handleBlur}
             onChange={handleChange}
             value={values.email || ""}

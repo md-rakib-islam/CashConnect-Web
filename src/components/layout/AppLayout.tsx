@@ -2,7 +2,7 @@ import Footer from "@component/footer/Footer";
 import Header from "@component/header/Header";
 import MobileNavigationBar from "@component/mobile-navigation/MobileNavigationBar";
 import Sticky from "@component/sticky/Sticky";
-import Topbar from "@component/topbar/Topbar";
+// import Topbar from "@component/topbar/Topbar";
 import { Site_Setting_All } from "@data/constants";
 import Head from "next/head";
 import React, { useEffect, useState } from "react";
@@ -48,7 +48,7 @@ const AppLayout: React.FC<Props> = ({ children, navbar }) => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <Topbar />
+      {/* <Topbar /> */}
 
       <Sticky fixedOn={0}>
         <Header />

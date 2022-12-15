@@ -125,6 +125,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
             className="search-field"
             placeholder="Search and hit enter..."
             fullwidth
+            autoComplete="off"
             onChange={(e) => {
               handleChange(e);
               hanldeSearch(e);
@@ -178,7 +179,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
               <Link
                 href={{
                   pathname: "/product/search/search_by_product_name",
-                  query: { name: item?.name, brand: item?.brand.id },
+                  query: { name: item?.name },
                 }}
               >
                 <MenuItem
