@@ -501,7 +501,9 @@ export const getServerSideProps: GetServerSideProps = async ({
       };
 
       const res = await axios.get(
-        `${Product_Arrival}?page=${query.page || 1}&size=${query.size || 12}`,
+        `${Product_Flash_Deals}?page=${query.page || 1}&size=${
+          query.size || 12
+        }`,
         request
       );
       var data: any[] = await res.data.products;

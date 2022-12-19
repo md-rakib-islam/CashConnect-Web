@@ -41,7 +41,7 @@ const ProductDetails = ({
     setreviewsQuantity(quantity);
   };
 
-  const [selectedOption, setSelectedOption] = useState("features");
+  const [selectedOption, setSelectedOption] = useState("");
 
   const router = useRouter();
   const review = router.query?.review;
@@ -51,16 +51,13 @@ const ProductDetails = ({
     if (review) {
       setSelectedOption("review");
     }
-  }, [review]);
-
-  useEffect(() => {
     if (features) {
       setSelectedOption("features");
     }
-  }, [features]);
+  }, [review, features]);
 
-  const handleOptionClick = (otp) => () => {
-    setSelectedOption(otp);
+  const handleOptionClick = (e) => () => {
+    setSelectedOption(e);
   };
 
   return (
@@ -82,7 +79,7 @@ const ProductDetails = ({
       <FlexBox
         borderBottom="1px solid"
         borderColor="gray.400"
-        mt="80px"
+        mt="30px"
         mb="26px"
       >
         <H5

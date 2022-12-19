@@ -571,7 +571,7 @@ const ProductFilterCard = ({ productList }) => {
           }}
         />
       </Box>
-      <Divider mt="18px" mb="24px" />
+      <Divider my="24px" />
 
       <H6 mb="16px">Price Range</H6>
       <FlexBox justifyContent="space-between" alignItems="center">

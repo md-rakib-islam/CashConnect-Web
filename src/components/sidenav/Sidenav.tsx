@@ -56,7 +56,7 @@ const Sidenav: React.FC<SidenavProps> = ({
             onClick={toggleSidenav || handleToggleSidenav}
           >
             <div className="sidenav-content" onClick={handleModalContentClick}>
-              {children}
+              {children ? children : ""}
             </div>
           </StyledSidenav>,
           sidenav

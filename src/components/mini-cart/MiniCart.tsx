@@ -151,6 +151,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
         });
     }
   }, [reloadCart, order_Id]);
+  console.log("cartProductList.length", cartProductList.length);
 
   return (
     <>

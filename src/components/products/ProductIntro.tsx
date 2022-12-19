@@ -19,7 +19,7 @@ import {
 } from "@data/constants";
 import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
-import Link from "next/link";
+// import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import ReactImageMagnify from "react-image-magnify";
@@ -470,7 +470,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       <LoginPopup open={openLogin} closeLoginDialog={closeLoginTab} />
       <Box overflow="visible">
         <Grid container justifyContent="center" spacing={16}>
-          <Grid item md={6} xs={12} alignItems="center">
+          <Grid item md={5} xs={12} alignItems="center">
             <Box>
               <FlexBox justifyContent="center" mb="50px">
                 <div style={{ width: "300px", height: "auto" }}>
@@ -545,10 +545,10 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                 > */}
                 {multipleUmg.map((url, ind) => (
                   <Box
-                    size={70}
-                    minWidth={70}
+                    size={50}
+                    minWidth={50}
                     bg="white"
-                    borderRadius="10px"
+                    borderRadius="5px"
                     display="flex"
                     justifyContent="center"
                     alignItems="center"
@@ -562,7 +562,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                     }
                     onClick={handleThunmbnailClick(ind)}
                   >
-                    <Avatar src={url} borderRadius="10px" size={40} />
+                    <Avatar src={url} borderRadius="5px" size={40} />
                   </Box>
                 ))}
                 {/* </Carousel> */}
@@ -570,27 +570,29 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
             </Box>
           </Grid>
 
-          <Grid item md={6} xs={12} alignItems="center">
-            <H1 mb="0.8rem">{title}</H1>
+          <Grid item md={7} xs={12} alignItems="center">
+            <H1 style={{ fontSize: "20px" }} mb="0.8rem">
+              {title}
+            </H1>
 
-            <FlexBox alignItems="center" mb="1rem">
+            <FlexBox alignItems="center" mb="0.8rem">
               <Typography>{short_desc ? parse(short_desc) : "_"}</Typography>
             </FlexBox>
-            <FlexBox alignItems="center" mb="1rem">
+            <FlexBox alignItems="center" mb="0.8rem">
               <SemiSpan>Code:</SemiSpan>
               <H6 ml="8px">{productCode || "_"}</H6>
             </FlexBox>
-            <FlexBox alignItems="center" mb="1rem">
+            <FlexBox alignItems="center" mb="0.8rem">
               <SemiSpan>Condition:</SemiSpan>
-              <H6 ml="8px">{condition || "_"}</H6>
+              <H6 ml="8px">{condition.toLocaleUpperCase() || "_"}</H6>
             </FlexBox>
 
-            <FlexBox alignItems="center" mb="1rem">
+            <FlexBox alignItems="center" mb="0.8rem">
               <SemiSpan>Brand:</SemiSpan>
               <H6 ml="8px">{brand || ""}</H6>
             </FlexBox>
 
-            <FlexBox alignItems="center" mb="1rem">
+            <FlexBox alignItems="center" mb="0.8rem">
               <SemiSpan>Rated:</SemiSpan>
               <Box ml="8px" mr="8px">
                 <Rating color="warn" value={rating} outof={5} />
@@ -598,26 +600,43 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               <H6>({reviewCount})</H6>
             </FlexBox>
 
-            <Box mb="24px">
+            <Box mb="15px">
               {discount ? (
                 <>
-                  <H2 color="text.muted" mb="4px" lineHeight="1">
+                  <H2
+                    style={{ fontSize: "20px" }}
+                    color="primary.main"
+                    mb="2px"
+                    lineHeight="1"
+                  >
+                    <Currency>{Number(price).toFixed(2)}</Currency>
+                  </H2>
+                  <H2
+                    style={{ fontSize: "20px" }}
+                    color="text.muted"
+                    mb="2px"
+                    lineHeight="1"
+                  >
                     <del>
                       <Currency>{orginalprice}</Currency>
                     </del>
                   </H2>
-                  <H2 color="primary.main" mb="4px" lineHeight="1">
-                    <Currency>{Number(price).toFixed(2)}</Currency>
-                  </H2>
                 </>
               ) : (
-                <H2 color="primary.main" mb="4px" lineHeight="1">
+                <H2
+                  style={{ fontSize: "20px" }}
+                  color="primary.main"
+                  mb="2px"
+                  lineHeight="1"
+                >
                   <Currency>{orginalprice}</Currency>
                 </H2>
               )}
 
               {stock ? (
-                <SemiSpan color="inherit">Stock Available</SemiSpan>
+                <SemiSpan fontWeight="bold" ml="5px" color="inherit">
+                  Stock Available
+                </SemiSpan>
               ) : (
                 <SemiSpan fontWeight="bold" ml="5px" color="primary.main">
                   Out Of Stock
@@ -625,7 +644,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               )}
             </Box>
 
-            <FlexBox alignItems="center" mb="1rem">
+            <FlexBox alignItems="center" mb="0.8rem">
               <SemiSpan
                 style={{ display: color.length === 0 ? "none" : "block" }}
               >
@@ -700,7 +719,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               ))}
             </FlexBox>
             {!cartQuantity && (
-              <FlexBox alignItems="center" mb="36px">
+              <FlexBox alignItems="center" mb="20px">
                 <SemiSpan
                   style={{
                     marginRight: "10px",
@@ -740,13 +759,13 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
             )}
 
             {!cartQuantity ? (
-              <FlexBox alignItems="center" mb="36px">
+              <FlexBox alignItems="center" mb="20px">
                 <Button
                   disabled={!stock}
                   variant="contained"
                   size="small"
                   color="primary"
-                  mb="36px"
+                  mb="20px"
                   onClick={() => handleCartAmountChange(1, "addToCart")}
                 >
                   Add to Cart
@@ -757,14 +776,14 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                   size="small"
                   color="primary"
                   marginLeft="15px"
-                  mb="36px"
+                  mb="20px"
                   onClick={() => handleBuyNow("addToCart")}
                 >
                   Buy Now
                 </Button>
               </FlexBox>
             ) : (
-              <FlexBox alignItems="center" mb="36px">
+              <FlexBox alignItems="center" mb="20px">
                 <SemiSpan
                   style={{
                     marginRight: "10px",
@@ -803,7 +822,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               </FlexBox>
             )}
 
-            <FlexBox alignItems="center" mb="1rem">
+            {/* <FlexBox alignItems="center" mb="0.8rem">
               <SemiSpan>Sold By:</SemiSpan>
               <Link href="/shop/fdfdsa">
                 <a>
@@ -812,7 +831,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                   </H6>
                 </a>
               </Link>
-            </FlexBox>
+            </FlexBox> */}
           </Grid>
         </Grid>
       </Box>

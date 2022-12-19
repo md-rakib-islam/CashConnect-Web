@@ -137,8 +137,13 @@ export const Tiny2: React.FC<CustomProps> = (props) => {
   }, [cartCanged, order_Id]);
 
   return (
-    <Typography as="span" fontSize="10px" {...props}>
-      {productQuantity || 0}
+    <Typography
+      // style={{ display: !productQuantity ? "none" : "block" }}
+      as="span"
+      fontSize="10px"
+      {...props}
+    >
+      {productQuantity}
     </Typography>
   );
 };

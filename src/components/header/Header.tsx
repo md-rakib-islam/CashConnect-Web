@@ -4,7 +4,11 @@ import Menu from "@component/Menu";
 import MenuItem from "@component/MenuItem";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
-import { Site_Setting_All } from "@data/constants";
+import {
+  Customer_Order_Pending_Details,
+  Site_Setting_All,
+} from "@data/constants";
+import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -34,12 +38,33 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
+  const [productQuantity, setProductQuantity] = useState(0);
+  const { state } = useAppContext();
+  const cartCanged = state.cart.chartQuantity;
 
-  const { isLogin } = useUserInf();
+  const { isLogin, order_Id } = useUserInf();
 
   const handleLoadingComplete = () => {
     setLoading(false);
   };
+
+  useEffect(() => {
+    if (order_Id) {
+      axios
+        .get(`${Customer_Order_Pending_Details}${order_Id}`, {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: localStorage.getItem("jwt_access_token"),
+          },
+        })
+        .then((res) => {
+          setProductQuantity(res?.data?.order?.order_items?.length);
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
+    }
+  }, [cartCanged, order_Id]);
 
   useEffect(() => {
     router.events.on("routeChangeComplete", handleLoadingComplete);
@@ -99,6 +124,7 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
     setReRender(Math.random());
   }, [userID]);
 
+  console.log("productQuantity", productQuantity);
   const cartHandle = (
     <FlexBox ml="20px" alignItems="flex-start">
       <IconButton bg="gray.200" p="12px">
@@ -109,6 +135,7 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
 
       {
         <FlexBox
+          style={{ display: productQuantity == 0 ? "none" : "flex" }}
           borderRadius="300px"
           bg="error.main"
           px="5px"

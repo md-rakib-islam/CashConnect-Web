@@ -118,13 +118,21 @@ const OrderDetails = () => {
   }, [order_id]);
 
   console.log("productList", productList);
+  const clicked = () => {
+    router.push("/");
+  };
   return (
     <div>
       <DashboardPageHeader
         title="Order Details"
         iconName="bag_filled"
         button={
-          <Button color="primary" bg="primary.light" px="2rem">
+          <Button
+            onClick={clicked}
+            color="primary"
+            bg="primary.light"
+            px="2rem"
+          >
             Order Again
           </Button>
         }
