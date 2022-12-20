@@ -18,6 +18,7 @@ import {
   typography,
   TypographyProps,
 } from "styled-system";
+import FlexBox from "./FlexBox";
 
 interface CustomProps
   extends TypographyProps,
@@ -137,14 +138,25 @@ export const Tiny2: React.FC<CustomProps> = (props) => {
   }, [cartCanged, order_Id]);
 
   return (
-    <Typography
-      // style={{ display: !productQuantity ? "none" : "block" }}
-      as="span"
-      fontSize="10px"
-      {...props}
-    >
-      {productQuantity}
-    </Typography>
+    <>
+      {
+        <FlexBox
+          style={{ display: productQuantity == 0 ? "none" : "flex" }}
+          borderRadius="300px"
+          bg="error.main"
+          px="5px"
+          py="2px"
+          alignItems="center"
+          justifyContent="center"
+          ml="-1rem"
+          mt="-9px"
+        >
+          <Typography as="span" fontSize="10px" {...props}>
+            {productQuantity}
+          </Typography>
+        </FlexBox>
+      }
+    </>
   );
 };
 

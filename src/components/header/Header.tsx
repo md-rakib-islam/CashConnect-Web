@@ -40,6 +40,7 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
   const router = useRouter();
   const [productQuantity, setProductQuantity] = useState(0);
   const { state } = useAppContext();
+
   const cartCanged = state.cart.chartQuantity;
 
   const { isLogin, order_Id } = useUserInf();
@@ -132,23 +133,9 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
           bag
         </Icon>
       </IconButton>
+      {/* this Tiny2 component is a customized version of Tiny */}
 
-      {
-        <FlexBox
-          style={{ display: productQuantity == 0 ? "none" : "flex" }}
-          borderRadius="300px"
-          bg="error.main"
-          px="5px"
-          py="2px"
-          alignItems="center"
-          justifyContent="center"
-          ml="-1rem"
-          mt="-9px"
-        >
-          {/* this Tiny2 component is a customized version of Tiny */}
-          <Tiny2 color="white" fontWeight="600"></Tiny2>
-        </FlexBox>
-      }
+      <Tiny2 color="white" fontWeight="600"></Tiny2>
     </FlexBox>
   );
 

@@ -64,6 +64,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
               )
               .then(() => {
                 setReloadCart(Math.random());
+                setCartProductList([]);
                 dispatch({
                   type: "CHANGE_CART_QUANTITY",
                   payload: {
