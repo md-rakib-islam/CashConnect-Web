@@ -1,19 +1,20 @@
 import Box from "@component/Box";
-import Card from "@component/Card";
+// import Card from "@component/Card";
 import Carousel from "@component/carousel/Carousel";
-import Currency from "@component/Currency";
-import FlexBox from "@component/FlexBox";
-import HoverBox from "@component/HoverBox";
-import LazyImage from "@component/LazyImage";
-import { H4 } from "@component/Typography";
+// import Currency from "@component/Currency";
+// import HoverBox from "@component/HoverBox";
+// import LazyImage from "@component/LazyImage";
+import ProductCard1 from "@component/product-cards/ProductCard1";
+// import Rating from "@component/rating/Rating";
+// import { H4 } from "@component/Typography";
 import { Product_Discount } from "@data/constants";
 import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
 import _ from "lodash";
-import Link from "next/link";
+// import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import CategorySectionCreator from "../CategorySectionCreator";
-import { Chip } from "../Chip";
+// import { Chip } from "../Chip";
 
 const Section13 = ({ bigDiscountList }) => {
   // const [bigDiscountLists, setbigDiscountLists] = useFormattedProductData(bigDiscountList, "bigdiscount")
@@ -70,85 +71,17 @@ const Section13 = ({ bigDiscountList }) => {
           getMoreItem={getMoreItem}
         >
           {bigDiscountLists?.map((item) => (
-            <Box py="0.25rem" key={item.id} style={{ height: "100%" }}>
-              <Card p="1rem" style={{ height: "100%" }}>
-                <Link href={`/product/${item.id}`}>
-                  <a style={{ position: "relative" }}>
-                    {!!item?.off && (
-                      <Chip
-                        position="absolute"
-                        bg="primary.main"
-                        color="primary.text"
-                        fontSize="10px"
-                        fontWeight="600"
-                        p="5px 10px"
-                        top="10px"
-                        left="10px"
-                        zIndex={1}
-                      >
-                        {/* {item?.off}% off */}
-                        <pre
-                          style={{ margin: "0px" }}
-                        >{`${item?.off}% off`}</pre>
-                      </Chip>
-                    )}
-                    <HoverBox borderRadius={8} mb="0.5rem">
-                      <LazyImage
-                        src={
-                          item.imgUrl
-                            ? item.imgUrl
-                            : "/assets/images/logos/shopping-bag.svg"
-                        }
-                        loader={() => item.imgUrl}
-                        width="100%"
-                        height="auto"
-                        layout="responsive"
-                        alt={item.title}
-                      />
-                    </HoverBox>
-                    <H4 fontWeight="600" fontSize="14px" mb="0.25rem">
-                      {item.title.slice(0, 40)}
-                    </H4>
-
-                    <FlexBox>
-                      <H4
-                        fontWeight="600"
-                        fontSize="14px"
-                        color="primary.main"
-                        mr="0.5rem"
-                      >
-                        <Currency>
-                          {Math.ceil(item.price).toLocaleString()}
-                        </Currency>
-                      </H4>
-
-                      <H4 fontWeight="600" fontSize="14px" color="text.muted">
-                        <del>
-                          <Currency>
-                            {Math.ceil(item.orginalPrice).toLocaleString()}
-                          </Currency>
-                        </del>
-                      </H4>
-                    </FlexBox>
-
-                    <H4
-                      display="flex"
-                      className="title"
-                      fontSize="14px"
-                      fontWeight="600"
-                      color={
-                        item?.condition === "new" ||
-                        item?.condition === "New" ||
-                        item?.condition === "NEW"
-                          ? "primary.main"
-                          : "secondary.main"
-                      }
-                    >
-                      {item?.condition || ""}
-                    </H4>
-                  </a>
-                </Link>
-              </Card>
+            <Box py="0.25rem" key={item.id}>
+              <ProductCard1
+                id={item.id}
+                imgUrl={item.imgUrl}
+                title={item.title}
+                rating={item.rating}
+                price={item.price}
+                off={0}
+                key={item.id}
+                reviewCount={item.reviewCount}
+              />
             </Box>
           ))}
         </Carousel>

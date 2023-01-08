@@ -489,7 +489,7 @@ const Signup: React.FC<SignupProps> = ({
             onChange={handleChange}
             label={
               <FlexBox>
-                <SemiSpan>By signing up, you agree to</SemiSpan>
+                <SemiSpan>By signing up, I agree to the</SemiSpan>
                 <a href="/" target="_blank" rel="noreferrer noopener">
                   <H6
                     ml="0.5rem"

@@ -543,7 +543,7 @@ const Login: React.FC<LoginProps> = ({
             mb="0.75rem"
             name="username"
             placeholder="Email or Phone Number"
-            label="User Name"
+            label="User ID"
             type="username"
             fullwidth
             onBlur={handleBlur}

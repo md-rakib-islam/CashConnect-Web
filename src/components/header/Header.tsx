@@ -13,7 +13,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Categories from "../categories/Categories";
 import Container from "../Container";
 import FlexBox from "../FlexBox";
 import Icon from "../icon/Icon";
@@ -24,11 +23,11 @@ import Typography, { Tiny2 } from "../Typography";
 import StyledHeader from "./HeaderStyle";
 
 type HeaderProps = {
-  isFixed?: boolean;
+  // isFixed?: boolean;
   className?: string;
 };
 
-const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
+const Header: React.FC<HeaderProps> = ({ className }) => {
   const [open, setOpen] = useState(false);
   const toggleSidenav = () => setOpen(!open);
   const [_reRender, setReRender] = useState(0);
@@ -185,7 +184,7 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
               </a>
             </Link>
 
-            {isFixed && (
+            {/* {isFixed && (
               <div className="category-holder">
                 <Categories>
                   <FlexBox color="text.hint" alignItems="center" ml="1rem">
@@ -194,7 +193,7 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
                   </FlexBox>
                 </Categories>
               </div>
-            )}
+            )} */}
           </FlexBox>
 
           <FlexBox justifyContent="center" flex="1 1 0">

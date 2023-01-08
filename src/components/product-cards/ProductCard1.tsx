@@ -298,9 +298,21 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 
             <Rating value={rating || 0} outof={5} color="warn" readonly />
 
-            {stock || (
+            {!stock ? (
               <SemiSpan fontWeight="bold" color="primary.main" mt="2px">
                 Out Of Stock
+              </SemiSpan>
+            ) : (
+              <SemiSpan
+                fontWeight="bold"
+                style={{
+                  color: "white",
+                  visibility: "hidden",
+                  display: orginalPrice ? "none" : "block",
+                }}
+                mt="2px"
+              >
+                Available
               </SemiSpan>
             )}
 
@@ -331,7 +343,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
                   : "secondary.main"
               }
             >
-              {condition || ""}
+              {condition ? condition.toUpperCase() : ""}
             </H4>
           </Box>
 

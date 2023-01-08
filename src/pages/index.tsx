@@ -42,8 +42,8 @@ const IndexPage = ({
   return (
     <main>
       <Section1 sliderList={sliderList} />
-      <Section2 flashDealsList={flashDealsList} />
       <Section3 topCategoryList={topCategoryList} />
+      <Section2 flashDealsList={flashDealsList} />
       <Section4
         topRatedList={topRatedList}
         featuredBrandList={featuredBrandList}
