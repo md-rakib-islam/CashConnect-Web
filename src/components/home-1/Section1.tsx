@@ -8,7 +8,7 @@ import React, { Fragment } from "react";
 const Section1 = ({ sliderList }) => {
   return (
     <Fragment>
-      <Navbar navListOpen={false} />
+      {/* <Navbar navListOpen={false} /> */}
       <Box bg="gray.white" mb="3.75rem">
         <Container slider>
           <Carousel

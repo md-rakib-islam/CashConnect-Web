@@ -2,6 +2,7 @@ import IconButton from "@component/buttons/IconButton";
 import Image from "@component/Image";
 import Menu from "@component/Menu";
 import MenuItem from "@component/MenuItem";
+import Navbar from "@component/navbar/Navbar";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import {
@@ -284,6 +285,7 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
           </FlexBox>
         </Container>
       </StyledHeader>
+      <Navbar navListOpen={false} />
     </>
   );
 };

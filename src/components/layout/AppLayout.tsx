@@ -53,12 +53,8 @@ const AppLayout: React.FC<Props> = ({ children, navbar }) => {
       <Sticky fixedOn={0}>
         <Header />
       </Sticky>
+      {navbar && <div className="section-after-sticky">{navbar}</div>}
 
-      {navbar && (
-        <div style={{ position: "fixed" }} className="section-after-sticky">
-          {navbar}
-        </div>
-      )}
       {!navbar ? (
         <div className="section-after-sticky">{children}</div>
       ) : (
