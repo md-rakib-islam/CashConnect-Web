@@ -72,16 +72,7 @@ const Section13 = ({ bigDiscountList }) => {
         >
           {bigDiscountLists?.map((item) => (
             <Box py="0.25rem" key={item.id}>
-              <ProductCard1
-                id={item.id}
-                imgUrl={item.imgUrl}
-                title={item.title}
-                rating={item.rating}
-                price={item.price}
-                off={0}
-                key={item.id}
-                reviewCount={item.reviewCount}
-              />
+              <ProductCard1 {...item} />
             </Box>
           ))}
         </Carousel>
