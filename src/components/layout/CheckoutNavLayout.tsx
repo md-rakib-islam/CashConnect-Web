@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import Box from "../Box";
 import Container from "../Container";
 import Grid from "../grid/Grid";
-import Navbar from "../navbar/Navbar";
 import Stepper from "../stepper/Stepper";
 import AppLayout from "./AppLayout";
 
@@ -49,7 +48,7 @@ const CheckoutNavLayout: React.FC = ({ children }) => {
   }, [pathname]);
 
   return (
-    <AppLayout navbar={<Navbar />}>
+    <AppLayout>
       <Container my="2rem">
         <Box mb="14px">
           <Grid container spacing={6}>
