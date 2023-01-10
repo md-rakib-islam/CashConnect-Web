@@ -33,7 +33,10 @@ function getFormattedProductData(productData = [], type?: string) {
             : data?.product?.brand || null,
           rating: data?.product?.rating || null,
           reviewCount: data?.product?.num_reviews || null,
-          condition: data?.product?.condition || null,
+          condition:
+            data?.product?.condition == "used"
+              ? "pre owned"
+              : data?.product?.condition,
           off: data?.discount_percent || null,
         };
       } else {
@@ -56,7 +59,7 @@ function getFormattedProductData(productData = [], type?: string) {
             : data?.brand || null,
           rating: data?.rating || null,
           reviewCount: data?.num_reviews || null,
-          condition: data?.condition || null,
+          condition: data?.condition == "used" ? "pre owned" : data?.condition,
         };
       }
     });

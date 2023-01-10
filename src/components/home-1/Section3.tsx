@@ -1,4 +1,4 @@
-import Card from "@component/Card";
+import Box from "@component/Box";
 import Carousel from "@component/carousel/Carousel";
 import { BASE_URL, Category_Top_All } from "@data/constants";
 import useWindowSize from "@hook/useWindowSize";
@@ -72,13 +72,13 @@ const Section3 = ({ topCategoryList }) => {
             key={item?.id}
           >
             <a>
-              <Card p="1rem">
+              <Box p="1rem" style={{ height: "200px" }}>
                 <ProductCard6
                   title={item?.name}
                   subtitle={"3k orders in this week"}
                   imgUrl={`${BASE_URL}${item?.image}`}
                 />
-              </Card>
+              </Box>
             </a>
           </Link>
         ))}

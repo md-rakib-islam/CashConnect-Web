@@ -14,20 +14,19 @@ const ProductCard6: React.FC<ProductCard6Props> = ({ title, imgUrl }) => {
   return (
     <Card position="relative">
       <Chip
-        bg="secondary.main"
+        // bg="white"
         position="absolute"
-        color="white"
-        fontWeight="600"
-        fontSize="10px"
-        p="4px 10px"
-        top="0.875rem"
+        color="secondary.main"
+        fontWeight="800"
+        fontSize="12px"
+        top="9.4rem"
         left="0.875rem"
         zIndex={2}
       >
-        {title}
+        {title.length >= 20 ? `${title.slice(0, 20)}` : title}
       </Chip>
 
-      <HoverBox height="120px" borderRadius={8}>
+      <HoverBox height="140px" borderRadius={8}>
         <LazyImage
           src={imgUrl ? imgUrl : "/assets/images/logos/shopping-bag.svg"}
           layout="fill"
