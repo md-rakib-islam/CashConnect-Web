@@ -2,9 +2,9 @@
 //http://api.cashconnectbd.com
 
 //base url
-// export const BASE_URL = "http://192.168.0.151:8001";
+export const BASE_URL = "http://192.168.0.151:8001";
 export const WS_URL = "192.168.0.151:8001";
-export const BASE_URL = "https://api2.cashconnectbd.com";
+// export const BASE_URL = "https://api2.cashconnectbd.com";
 // export const BASE_URL = "http://134.119.184.218:8000";
 
 //branch api
@@ -200,7 +200,7 @@ export const Ticket_Details_Create = `${BASE_URL}/ticket_detail/api/v1/ticket_de
 export const Ticket_Details_All = `${BASE_URL}/ticket_detail/api/v1/ticket_detail/get_all_by_ticket_id/`;
 
 //user api
-export const User_By_Id = `${BASE_URL}/user/api/v1/user/`;
+export const User_By_Id = `${BASE_URL}/user/api/v1/user/me`;
 
 export const Check_Email = `${BASE_URL}/user/api/v1/user/check_email_when_create/`;
 export const Check_Email_When_Update = `${BASE_URL}/user/api/v1/user/check_email_when_update/`;

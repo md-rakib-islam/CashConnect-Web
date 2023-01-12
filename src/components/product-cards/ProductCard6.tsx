@@ -18,12 +18,12 @@ const ProductCard6: React.FC<ProductCard6Props> = ({ title, imgUrl }) => {
         position="absolute"
         color="secondary.main"
         fontWeight="800"
-        fontSize="12px"
-        top="9.4rem"
+        fontSize="14px"
+        top="8.6rem"
         left="0.875rem"
         zIndex={2}
       >
-        {title.length >= 20 ? `${title.slice(0, 20)}` : title}
+        {title}
       </Chip>
 
       <HoverBox height="140px" borderRadius={8}>

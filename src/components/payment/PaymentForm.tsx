@@ -80,7 +80,12 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
   useEffect(() => {
     if (user_id) {
       axios
-        .get(`${User_By_Id}${user_id}`)
+        .get(`${User_By_Id}`, {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: localStorage.getItem("jwt_access_token"),
+          },
+        })
         .then((res) => {
           console.log("resUseer", res);
           setuserName(res?.data?.username);

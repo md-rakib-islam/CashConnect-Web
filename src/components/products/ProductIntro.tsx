@@ -231,11 +231,12 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   const handleThunmbnailClick = (ind) => () => {
     console.log("clickedImage", ind);
     setSelectedThumbnail(ind);
+    setSelectedImage(0);
   };
   const handleImageClick = (ind) => () => {
     console.log("clickedImage", ind);
     setSelectedImage(ind);
-    setSelectedThumbnail(0);
+    setSelectedThumbnail(ind);
   };
   const handleSizeClick = (ind) => () => {
     console.log("clickedSize", ind);
