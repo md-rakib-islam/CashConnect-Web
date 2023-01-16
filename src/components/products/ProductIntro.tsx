@@ -1,4 +1,6 @@
 // import Carousel from "@component/carousel/Carousel";
+import Carousel2 from "@component/carouselImg/Carousel2";
+import Carousel3 from "@component/carouselImg2/Carousel3";
 import Currency from "@component/Currency";
 import LoginPopup from "@component/LoginPopup";
 import { useAppContext } from "@context/app/AppContext";
@@ -88,6 +90,8 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   const [productCode, setProductCode] = useState("");
   const [color, setColor] = useState([]);
   const [sizes, setSizes] = useState([]);
+  const [visibleSlides, setVisibleSlides] = useState(5);
+
   // const [_reRender, setreRender] = useState(0);
   // const [multipleUmg, setMultipleUmg] = useState([]);
 
@@ -102,12 +106,12 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   const closeLoginTab = () => {
     setOpenLogin(false);
   };
-  // useEffect(() => {
-  //   if (width < 370) setVisibleSlides(1);
-  //   else if (width < 650) setVisibleSlides(2);
-  //   else if (width < 950) setVisibleSlides(4);
-  //   else setVisibleSlides(6);
-  // }, [width]);
+  useEffect(() => {
+    if (width < 370) setVisibleSlides(4);
+    else if (width < 650) setVisibleSlides(4);
+    else if (width < 950) setVisibleSlides(5);
+    else setVisibleSlides(5);
+  }, [width]);
 
   useEffect(() => {
     axios
@@ -537,63 +541,67 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                 </div>
               </FlexBox>
 
-              <FlexBox overflow="auto">
+              <FlexBox margin="auto" maxWidth={260}>
                 {/* <Carousel
                   totalSlides={multipleUmg.length}
                   visibleSlides={visibleSlides}
                   step={visibleSlides}
                   // getMoreItem={getMoreItem}
                 > */}
-                {multipleUmg.map((url, ind) => (
-                  <Box
-                    size={50}
-                    minWidth={50}
-                    bg="white"
-                    borderRadius="5px"
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    cursor="pointer"
-                    border="1px solid"
-                    key={url}
-                    ml={ind === 0 && "auto"}
-                    mr={ind === multipleUmg.length - 1 ? "auto" : "10px"}
-                    borderColor={
-                      selectedThumbnail === ind ? "primary.main" : "gray.400"
-                    }
-                    onClick={handleThunmbnailClick(ind)}
-                  >
-                    <Avatar src={url} borderRadius="5px" size={40} />
-                  </Box>
-                ))}
+                <Carousel2
+                  totalSlides={multipleUmg?.length}
+                  visibleSlides={visibleSlides}
+                  step={visibleSlides}
+                >
+                  {multipleUmg.map((url, ind) => (
+                    <Box
+                      size={50}
+                      minWidth={50}
+                      bg="white"
+                      borderRadius="5px"
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                      cursor="pointer"
+                      border="1px solid"
+                      key={url}
+                      ml={ind === 0 && "auto"}
+                      mr={ind === multipleUmg.length - 1 ? "auto" : "10px"}
+                      borderColor={
+                        selectedThumbnail === ind ? "primary.main" : "gray.400"
+                      }
+                      onClick={handleThunmbnailClick(ind)}
+                    >
+                      <Avatar src={url} borderRadius="5px" size={40} />
+                    </Box>
+                  ))}
+                </Carousel2>
                 {/* </Carousel> */}
               </FlexBox>
             </Box>
           </Grid>
 
           <Grid item md={7} xs={12} alignItems="center">
-            <H1 style={{ fontSize: "20px" }} mb="0.8rem">
-              {title}
-            </H1>
+            <H1 style={{ fontSize: "20px" }}>{title}</H1>
 
-            <FlexBox alignItems="center" mb="0.8rem">
+            <FlexBox alignItems="center">
               <Typography>{short_desc ? parse(short_desc) : "_"}</Typography>
             </FlexBox>
-            <FlexBox alignItems="center" mb="0.8rem">
+            <FlexBox alignItems="center">
               <SemiSpan>Code:</SemiSpan>
               <H6 ml="8px">{productCode || "_"}</H6>
             </FlexBox>
-            <FlexBox alignItems="center" mb="0.8rem">
+            <FlexBox alignItems="center">
               <SemiSpan>Condition:</SemiSpan>
               <H6 ml="8px">{condition.toLocaleUpperCase() || "_"}</H6>
             </FlexBox>
 
-            <FlexBox alignItems="center" mb="0.8rem">
+            <FlexBox alignItems="center">
               <SemiSpan>Brand:</SemiSpan>
               <H6 ml="8px">{brand || ""}</H6>
             </FlexBox>
 
-            <FlexBox alignItems="center" mb="0.8rem">
+            <FlexBox alignItems="center">
               <SemiSpan>Rated:</SemiSpan>
               <Box ml="8px" mr="8px">
                 <Rating color="warn" value={rating} outof={5} />
@@ -601,13 +609,12 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               <H6>({reviewCount})</H6>
             </FlexBox>
 
-            <Box mb="15px">
+            <Box>
               {discount ? (
                 <>
                   <H2
                     style={{ fontSize: "20px" }}
                     color="primary.main"
-                    mb="2px"
                     lineHeight="1"
                   >
                     <Currency>{Number(price).toFixed(2)}</Currency>
@@ -615,7 +622,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                   <H2
                     style={{ fontSize: "20px" }}
                     color="text.muted"
-                    mb="2px"
                     lineHeight="1"
                   >
                     <del>
@@ -627,7 +633,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                 <H2
                   style={{ fontSize: "20px" }}
                   color="primary.main"
-                  mb="2px"
                   lineHeight="1"
                 >
                   <Currency>{orginalprice}</Currency>
@@ -645,7 +650,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               )}
             </Box>
 
-            <FlexBox alignItems="center" mb="0.8rem">
+            <FlexBox alignItems="center">
               <SemiSpan
                 style={{ display: color.length === 0 ? "none" : "block" }}
               >
@@ -659,31 +664,40 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               </H6>
             </FlexBox>
 
-            <FlexBox overflow="auto">
-              {colorImages.map((url, ind) => (
-                <Box
-                  style={{ display: color.length === 0 ? "none" : "block" }}
-                  size={50}
-                  minWidth={50}
-                  bg="white"
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  cursor="pointer"
-                  border="1px solid"
-                  key={url}
-                  mb={20}
-                  // ml={ind === 0 && "auto"}
-                  mr={ind === colorImages.length - 1 ? "auto" : "10px"}
-                  borderColor={
-                    selectedImage === ind ? "primary.main" : "gray.400"
-                  }
-                  onClick={handleImageClick(ind)}
-                >
-                  <Avatar src={url} size={40} borderRadius="10px" />
-                </Box>
-              ))}
-            </FlexBox>
+            <Box
+              style={{ display: color.length === 0 ? "none" : "block" }}
+              margin="auto"
+              maxWidth={280}
+            >
+              <Carousel3
+                totalSlides={multipleUmg?.length}
+                visibleSlides={visibleSlides}
+                step={visibleSlides}
+              >
+                {colorImages.map((url, ind) => (
+                  <Box
+                    style={{ display: color.length === 0 ? "none" : "block" }}
+                    size={40}
+                    minWidth={40}
+                    bg="white"
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    cursor="pointer"
+                    border="1px solid"
+                    key={url}
+                    ml={ind === 0 && "auto"}
+                    mr={ind === colorImages.length - 1 ? "auto" : "10px"}
+                    borderColor={
+                      selectedImage === ind ? "primary.main" : "gray.400"
+                    }
+                    onClick={handleImageClick(ind)}
+                  >
+                    <Avatar src={url} size={35} borderRadius="5px" />
+                  </Box>
+                ))}
+              </Carousel3>
+            </Box>
             <FlexBox overflow="auto">
               <SemiSpan
                 style={{
@@ -705,7 +719,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                   cursor="pointer"
                   border="1px solid"
                   key={ind}
-                  mb={20}
                   // ml={ind === 0 && "auto"}
                   mr={ind === sizes.length - 1 ? "auto" : "10px"}
                   borderColor={
@@ -720,7 +733,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               ))}
             </FlexBox>
             {!cartQuantity && (
-              <FlexBox alignItems="center" mb="20px">
+              <FlexBox mt="1rem" alignItems="center">
                 <SemiSpan
                   style={{
                     marginRight: "10px",
@@ -760,13 +773,12 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
             )}
 
             {!cartQuantity ? (
-              <FlexBox alignItems="center" mb="20px">
+              <FlexBox mt="1rem" alignItems="center">
                 <Button
                   disabled={!stock}
                   variant="contained"
                   size="small"
                   color="primary"
-                  mb="20px"
                   onClick={() => handleCartAmountChange(1, "addToCart")}
                 >
                   Add to Cart
@@ -777,14 +789,13 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                   size="small"
                   color="primary"
                   marginLeft="15px"
-                  mb="20px"
                   onClick={() => handleBuyNow("addToCart")}
                 >
                   Buy Now
                 </Button>
               </FlexBox>
             ) : (
-              <FlexBox alignItems="center" mb="20px">
+              <FlexBox mt="1rem" alignItems="center">
                 <SemiSpan
                   style={{
                     marginRight: "10px",
@@ -823,7 +834,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               </FlexBox>
             )}
 
-            {/* <FlexBox alignItems="center" mb="0.8rem">
+            {/* <FlexBox alignItems="center" >
               <SemiSpan>Sold By:</SemiSpan>
               <Link href="/shop/fdfdsa">
                 <a>

@@ -5,7 +5,7 @@ const StyledHeader = styled.header`
   position: relative;
   z-index: 1;
   height: ${layoutConstant.headerHeight};
-  background: rgb(219 219 219);
+  background: #ffffff;
 
   .logo {
     img {
@@ -34,7 +34,7 @@ const StyledHeader = styled.header`
   }
 
   @media only screen and (max-width: 900px) {
-    background:rgb(232 66 98);    
+    background: rgb(232 66 98);
     height: ${layoutConstant.mobileHeaderHeight};
 
     .logo,

@@ -7,7 +7,7 @@ import ProductCard1 from "../product-cards/ProductCard1";
 
 const Section11 = ({ moreForYouList }) => {
   const moreForYouLists = (
-    <Container mb="70px">
+    <Container mb="2rem">
       <CategorySectionHeader
         title="Just For You"
         seeMoreLink="product/search/more_for_you_all"

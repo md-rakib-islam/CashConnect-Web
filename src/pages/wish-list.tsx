@@ -24,7 +24,7 @@ const WishList = () => {
       <Grid container spacing={6}>
         {productDatabase.slice(1, 10).map((item) => (
           <Grid item lg={4} sm={6} xs={12} key={item.id}>
-            <ProductCard1 {...item} />
+            <ProductCard1 hoverEffect {...item} />
           </Grid>
         ))}
       </Grid>

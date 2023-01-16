@@ -12,6 +12,7 @@ export const StyledProductCard1 = styled(Card)`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  box-shadow: ${getTheme("shadows.6")};
 
   .image-holder {
     padding: 0px 15px;

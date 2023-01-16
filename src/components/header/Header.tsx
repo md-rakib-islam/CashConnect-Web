@@ -1,3 +1,4 @@
+import Avatar from "@component/avatar/Avatar";
 import IconButton from "@component/buttons/IconButton";
 import Image from "@component/Image";
 import Menu from "@component/Menu";
@@ -6,8 +7,10 @@ import Navbar from "@component/navbar/Navbar";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import {
+  BASE_URL,
   Customer_Order_Pending_Details,
   Site_Setting_All,
+  User_By_Id,
 } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
@@ -20,7 +23,7 @@ import Icon from "../icon/Icon";
 import MiniCart from "../mini-cart/MiniCart";
 import SearchBox from "../search-box/SearchBox";
 import Sidenav from "../sidenav/Sidenav";
-import Typography, { Tiny2 } from "../Typography";
+import Typography, { H5, Tiny2 } from "../Typography";
 import StyledHeader from "./HeaderStyle";
 
 type HeaderProps = {
@@ -44,7 +47,9 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
   const cartCanged = state.cart.chartQuantity;
 
   const { isLogin, order_Id } = useUserInf();
-
+  const [preViewImg, setpreViewImg] = useState("");
+  const [first_name, setfirst_name] = useState("");
+  const [last_name, setlast_name] = useState("");
   const handleLoadingComplete = () => {
     setLoading(false);
   };
@@ -76,6 +81,29 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
       .then((res) => res.json())
       .then((res) => {
         console.log("SiteSettingRes", res.general_settings[0]);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  }, []);
+  useEffect(() => {
+    axios
+      .get(`${User_By_Id}`, {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: localStorage.getItem("jwt_access_token"),
+        },
+      })
+      .then((res) => {
+        console.log("resUseerForHeader", preViewImg);
+        setfirst_name(res?.data?.first_name);
+        setlast_name(res?.data?.last_name);
+        setpreViewImg(
+          `${res?.data?.image ? BASE_URL : "/no_image.png"}${
+            res?.data?.image ? res?.data?.image : ""
+          }`
+        );
+        console.log("resUseerForHeader", preViewImg);
       })
       .catch((err) => {
         console.log("error", err);
@@ -220,6 +248,24 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
                     </IconButton>
                   }
                 >
+                  <MenuItem p="2px">
+                    <div
+                      style={{
+                        fontSize: "20px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flexStart",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => goToFrofile()}
+                    >
+                      <Avatar src={preViewImg} size={40} />
+                      <H5
+                        ml={"1rem"}
+                        my="0px"
+                      >{`${first_name} ${last_name}`}</H5>
+                    </div>
+                  </MenuItem>
                   <MenuItem p="2px">
                     <div
                       style={{

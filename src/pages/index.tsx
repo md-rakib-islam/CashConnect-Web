@@ -153,7 +153,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
   try {
     var moreForYouRes = await axios.get(
-      `${Product_For_You}?page=${1}&size=${12}`
+      `${Product_For_You}?page=${1}&size=${24}`
     );
     var moreForYouLists: any[] = await moreForYouRes.data.products;
     var moreForYouList = getFormattedProductData(moreForYouLists);

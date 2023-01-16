@@ -380,7 +380,7 @@ const initialValues = {
 
 const checkoutSchema = yup.object().shape({
   name: yup.string().required("required"),
-  email: yup.string().required("required"),
+  // email: yup.string().required("required"),
   subject: yup.string().required("required"),
   ticket_department: yup.object().required("required"),
   ticket_priority: yup.object().required("required"),

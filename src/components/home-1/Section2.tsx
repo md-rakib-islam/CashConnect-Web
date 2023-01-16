@@ -28,7 +28,7 @@ const Section2: React.FC<Section2Props> = ({ flashDealsList }) => {
 
   useEffect(() => {
     if (width < 370) setVisibleSlides(1);
-    else if (width < 650) setVisibleSlides(4);
+    else if (width < 650) setVisibleSlides(2);
     else if (width < 950) setVisibleSlides(6);
     else setVisibleSlides(6);
   }, [width]);
@@ -81,16 +81,7 @@ const Section2: React.FC<Section2Props> = ({ flashDealsList }) => {
         >
           {flashDealsListLists?.map((item) => (
             <Box py="0.25rem" key={item.id}>
-              <ProductCard1
-                id={item.id}
-                imgUrl={item.imgUrl}
-                title={item.title}
-                rating={item.rating}
-                price={item.price}
-                off={0}
-                key={item.id}
-                reviewCount={item.reviewCount}
-              />
+              <ProductCard1 hoverEffect {...item} flash="flash" />
             </Box>
           ))}
         </Carousel>

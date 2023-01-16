@@ -15,7 +15,7 @@ const Section5 = ({ newArrivalList }) => {
       <Grid container spacing={6}>
         {newArrivalList?.slice(0, 6)?.map((item) => (
           <Grid item lg={2} md={3} sm={4} xs={6} key={item.id}>
-            <ProductCard1 {...item} />
+            <ProductCard1 hoverEffect {...item} />
           </Grid>
         ))}
       </Grid>

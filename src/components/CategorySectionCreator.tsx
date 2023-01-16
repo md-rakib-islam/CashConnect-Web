@@ -16,8 +16,8 @@ const CategorySectionCreator: React.FC<CategorySectionCreatorProps> = ({
   children,
 }) => {
   return (
-    <Box mb="3.75rem">
-      <Container pb="1rem">
+    <Box mb="2rem">
+      <Container>
         {title && (
           <CategorySectionHeader
             title={title}

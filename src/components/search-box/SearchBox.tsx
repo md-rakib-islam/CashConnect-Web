@@ -123,7 +123,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
           <TextField
             name="search"
             className="search-field"
-            placeholder="Search and hit enter..."
+            placeholder="I'm looking for..."
             fullwidth
             autoComplete="off"
             onChange={(e) => {

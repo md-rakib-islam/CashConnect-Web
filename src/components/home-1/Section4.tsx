@@ -9,7 +9,7 @@ import Grid from "../grid/Grid";
 
 const Section4 = ({ topRatedList, featuredBrandList }) => {
   return (
-    <Box mb="3.75rem">
+    <Box mb="3rem">
       <Container>
         <Box>
           <Grid container spacing={6}>
@@ -33,7 +33,7 @@ const Section4 = ({ topRatedList, featuredBrandList }) => {
                     >
                       <Link href={item.productUrl}>
                         <a>
-                          <ProductCard1 {...item} />
+                          <ProductCard1 hoverEffect {...item} />
                         </a>
                       </Link>
                     </Grid>
@@ -66,7 +66,7 @@ const Section4 = ({ topRatedList, featuredBrandList }) => {
                         key={item?.id}
                       >
                         <a>
-                          <ProductCard1 {...item} />
+                          <ProductCard1 hoverEffect {...item} />
                         </a>
                       </Link>
                     </Grid>

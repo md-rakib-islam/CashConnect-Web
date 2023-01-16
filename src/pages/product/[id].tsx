@@ -80,7 +80,7 @@ const ProductDetails = ({
         borderBottom="1px solid"
         borderColor="gray.400"
         mt="30px"
-        mb="26px"
+        mb="2rem"
       >
         <H5
           className="cursor-pointer"
@@ -118,7 +118,7 @@ const ProductDetails = ({
         </H5>
       </FlexBox>
 
-      <Box mb="50px">
+      <Box mb="2rem">
         {selectedOption === "description" && (
           <ProductDescription fullDes={fullDes} parse={""} />
         )}

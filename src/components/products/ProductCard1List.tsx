@@ -8,16 +8,19 @@ import Pagination from "../pagination/Pagination";
 import ProductCard1 from "../product-cards/ProductCard1";
 import { SemiSpan } from "../Typography";
 
-
 export interface ProductCard1ListProps {
   productList?: any;
   totalPage?: number;
   totalProduct?: number;
 }
 
-const ProductCard1List: React.FC<ProductCard1ListProps> = ({ productList, totalPage, totalProduct }) => {
-
-  const [formattedProductData, setFormattedProductData] = useFormattedProductData([]);
+const ProductCard1List: React.FC<ProductCard1ListProps> = ({
+  productList,
+  totalPage,
+  totalProduct,
+}) => {
+  const [formattedProductData, setFormattedProductData] =
+    useFormattedProductData([]);
 
   useEffect(() => {
     setFormattedProductData(productList);
@@ -28,7 +31,7 @@ const ProductCard1List: React.FC<ProductCard1ListProps> = ({ productList, totalP
       <Grid container spacing={6}>
         {formattedProductData?.map((item, ind) => (
           <Grid item lg={3} sm={4} xs={12} key={item?.id || ind}>
-            <ProductCard1 {...item} />
+            <ProductCard1 hoverEffect {...item} />
           </Grid>
         ))}
       </Grid>
@@ -39,7 +42,11 @@ const ProductCard1List: React.FC<ProductCard1ListProps> = ({ productList, totalP
         alignItems="center"
         mt="32px"
       >
-        <SemiSpan>Showing <ShowingItemNumber initialNumber={12} totalItem={totalProduct} /> of {totalProduct} Products</SemiSpan>
+        <SemiSpan>
+          Showing{" "}
+          <ShowingItemNumber initialNumber={12} totalItem={totalProduct} /> of{" "}
+          {totalProduct} Products
+        </SemiSpan>
 
         <Pagination pageCount={totalPage} />
 
@@ -50,4 +57,3 @@ const ProductCard1List: React.FC<ProductCard1ListProps> = ({ productList, totalP
 };
 
 export default ProductCard1List;
-

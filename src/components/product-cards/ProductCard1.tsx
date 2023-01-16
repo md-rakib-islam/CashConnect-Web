@@ -34,6 +34,7 @@ export interface ProductCard1Props extends CardProps {
   imgUrl?: string;
   short_desc?: string;
   title?: string;
+  flash?: string;
   price?: number;
   off?: number;
   rating?: number;
@@ -54,6 +55,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
   rating,
   reviewCount,
   condition,
+  flash,
   ...props
 }) => {
   const [open, setOpen] = useState(false);
@@ -95,7 +97,6 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 
   useEffect(() => {
     axios.get(`${Product_Discount_By_Id}${id}`).then((res) => {
-      console.log("descountRes", res);
       if (res.data.discounts?.discounted_price) {
         setsellablePrice(res.data.discounts?.discounted_price);
         setorginalPrice(Number(res.data.discounts?.product.unit_price));
@@ -134,6 +135,8 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
       }
     }
   }, [order_Id, cartCanged, id]);
+
+  console.log("checkFlash", flash);
 
   const handleCartAmountChange = (amount, action) => {
     const dateObj: any = new Date();
@@ -259,9 +262,9 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
             eye-alt
           </Icon>
 
-          <Icon className="favorite-icon outlined-icon" variant="small">
+          {/* <Icon className="favorite-icon outlined-icon" variant="small">
             heart
-          </Icon>
+          </Icon> */}
         </FlexBox>
 
         <Link href={`/product/${id}`}>
@@ -298,6 +301,19 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 
             <Rating value={rating || 0} outof={5} color="warn" readonly />
 
+            <SemiSpan
+              style={{
+                visibility: !orginalPrice ? "hidden" : "visible",
+                display: orginalPrice ? "none" : "block",
+              }}
+              color="text.muted"
+              fontWeight="600"
+            >
+              <del>
+                <Currency>{orginalPrice?.toFixed(2)}</Currency>
+              </del>
+            </SemiSpan>
+
             {!stock ? (
               <SemiSpan fontWeight="bold" color="primary.main" mt="2px">
                 Out Of Stock
@@ -308,7 +324,6 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
                 style={{
                   color: "white",
                   visibility: "hidden",
-                  display: orginalPrice ? "none" : "block",
                 }}
                 mt="2px"
               >
@@ -394,7 +409,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
       </div>
 
       <Modal open={open} onClose={toggleDialog}>
-        <Card p="1rem" position="relative">
+        <Card p="1rem" style={{ width: "900px" }} position="relative">
           <ProductIntro
             imgUrl={[imgUrl]}
             short_desc={short_desc}
