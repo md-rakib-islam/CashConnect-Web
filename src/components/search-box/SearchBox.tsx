@@ -155,12 +155,13 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
           >
             {categories?.map((item) => (
               <Link
+                key={item?.id}
                 href={{
                   pathname: "/product/search/product_by_category",
                   query: { categoryId: item?.id },
                 }}
               >
-                <MenuItem key={item?.id}>{item?.name}</MenuItem>
+                <MenuItem>{item?.name}</MenuItem>
               </Link>
             ))}
           </Menu>
@@ -177,15 +178,13 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
           >
             {resultList.map((item) => (
               <Link
+                key={item?.id}
                 href={{
                   pathname: "/product/search/search_by_product_name",
                   query: { name: item?.name },
                 }}
               >
-                <MenuItem
-                  key={item?.id}
-                  onClick={() => handeleSearch(item?.name)}
-                >
+                <MenuItem onClick={() => handeleSearch(item?.name)}>
                   <Span fontSize="14px">{item?.name}</Span>
                 </MenuItem>
               </Link>

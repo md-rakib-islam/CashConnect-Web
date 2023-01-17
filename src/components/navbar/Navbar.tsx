@@ -252,6 +252,7 @@ const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
                   <div className={DropDownStyle.dropdown_content2}>
                     {topCategory.map((n) => (
                       <Link
+                        key={n.id}
                         href={`/product/search/shop_now?condition=new&categoryId=${n.id}`}
                       >
                         <a>{n.name}</a>
@@ -264,6 +265,7 @@ const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
                   <div className={DropDownStyle.dropdown_content2}>
                     {topCategory.map((n) => (
                       <Link
+                        key={n.id}
                         href={`/product/search/shop_now?condition=old&categoryId=${n.id}`}
                       >
                         <a>{n.name}</a>

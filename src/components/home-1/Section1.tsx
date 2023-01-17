@@ -20,6 +20,7 @@ const Section1 = ({ sliderList }) => {
           >
             {sliderList.map((data) => (
               <CarouselCard1
+                key={data.id}
                 title={data.title}
                 details={data.details}
                 link={data.link}
