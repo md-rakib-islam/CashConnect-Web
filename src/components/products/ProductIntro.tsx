@@ -73,7 +73,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
   var routerId = router.query?.id as string;
 
-  console.log("itemmId", id, routerId);
+  console.log("orginalprice", orginalprice);
 
   const [cartQuantity, setCartQuantity] = useState(0);
   const [defaultCartQuantity, setDefaultCartQuantity] = useState(1);
@@ -635,7 +635,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                   color="primary.main"
                   lineHeight="1"
                 >
-                  <Currency>{orginalprice}</Currency>
+                  <Currency>{orginalprice ? orginalprice : price}</Currency>
                 </H2>
               )}
 

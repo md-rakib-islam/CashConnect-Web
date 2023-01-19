@@ -411,6 +411,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
       <Modal open={open} onClose={toggleDialog}>
         <Card p="1rem" style={{ width: "900px" }} position="relative">
           <ProductIntro
+            {...props}
             imgUrl={[imgUrl]}
             short_desc={short_desc}
             title={title}
