@@ -109,7 +109,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   useEffect(() => {
     if (width < 370) setVisibleSlides(4);
     else if (width < 650) setVisibleSlides(4);
-    else if (width < 950) setVisibleSlides(5);
+    else if (width < 950) setVisibleSlides(4);
     else setVisibleSlides(5);
   }, [width]);
 
@@ -552,6 +552,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                   totalSlides={multipleUmg?.length}
                   visibleSlides={visibleSlides}
                   step={visibleSlides}
+                  showArrow={multipleUmg?.length > 5 ? true : false}
                 >
                   {multipleUmg.map((url, ind) => (
                     <Box
@@ -666,13 +667,14 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
             <Box
               style={{ display: color.length === 0 ? "none" : "block" }}
-              margin="auto"
-              maxWidth={280}
+              ml="40px"
+              maxWidth={250}
             >
               <Carousel3
                 totalSlides={multipleUmg?.length}
                 visibleSlides={visibleSlides}
                 step={visibleSlides}
+                showArrow={multipleUmg?.length > 5 ? true : false}
               >
                 {colorImages.map((url, ind) => (
                   <Box

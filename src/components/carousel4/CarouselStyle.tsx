@@ -2,7 +2,7 @@ import { deviceSize } from "@utils/constants";
 import { CarouselProvider, CarouselProviderProps } from "pure-react-carousel";
 import styled from "styled-components";
 
-type CarouselStyle3Props = {
+type StyledCarouselProps = {
   showDots?: boolean;
   showArrowOnHover?: boolean;
   dotColor?: string;
@@ -10,7 +10,7 @@ type CarouselStyle3Props = {
   spacing?: string;
 };
 
-export const CarouselStyle3 = styled(
+export const StyledCarousel = styled(
   ({
     spacing,
     showDots,
@@ -18,7 +18,7 @@ export const CarouselStyle3 = styled(
     dotGroupMarginTop,
     dotColor,
     ...props
-  }: CarouselProviderProps & CarouselStyle3Props) => (
+  }: CarouselProviderProps & StyledCarouselProps) => (
     <CarouselProvider {...props} />
   )
 )`
@@ -26,31 +26,31 @@ export const CarouselStyle3 = styled(
   min-width: 100%;
   min-height: 100%;
 
-  // .custom-slider {
-  //   margin-left: calc(-1 * ${({ spacing }) => spacing || "0px"} / 2);
-  //   margin-right: calc(-1 * ${({ spacing }) => spacing || "0px"} / 2);
-  // }
+  .custom-slider {
+    margin-left: calc(-1 * ${({ spacing }) => spacing || "0px"} / 2);
+    margin-right: calc(-1 * ${({ spacing }) => spacing || "0px"} / 2);
+  }
 
-  // .carousel__inner-slide {
-  //   margin: auto;
-  //   width: calc(100% - ${({ spacing }) => spacing || "0px"});
-  // }
+  .carousel__inner-slide {
+    margin: auto;
+    width: calc(100% - ${({ spacing }) => spacing || "0px"});
+  }
 
   .arrow-button {
     position: absolute;
     top: calc(
-      50% - ${(props) => (props.showDots ? props.dotGroupMarginTop : "0px")}
+      35% - ${(props) => (props.showDots ? props.dotGroupMarginTop : "0px")}
     );
     transform: translateY(-50%);
-    // box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
   }
 
   .right-arrow-class {
-    right: -40px;
+    right: -22px;
   }
 
   .left-arrow-class {
-    left: -50px;
+    left: -22px;
   }
 
   ${(props) =>
@@ -76,10 +76,10 @@ export const CarouselStyle3 = styled(
 
   @media only screen and (max-width: 1330px) {
     .right-arrow-class {
-      right: -19px;
+      right: 0px;
     }
     .left-arrow-class {
-      left: -19px;
+      left: 0px;
     }
   }
 

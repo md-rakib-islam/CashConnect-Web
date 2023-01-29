@@ -12,6 +12,14 @@ const StyledHeader = styled.header`
       display: block;
     }
   }
+  .header-name {
+    cursor: pointer;
+    transition: 0.9s;
+  }
+  :hover {
+    color: #e84262;
+    transition: 0.3s;
+  }
   .icon-holder {
     span {
       font-size: 12px;
@@ -34,10 +42,11 @@ const StyledHeader = styled.header`
   }
 
   @media only screen and (max-width: 900px) {
-    background: rgb(232 66 98);
+    // background: rgb(232 66 98);
+    background: #ffffff;
     height: ${layoutConstant.mobileHeaderHeight};
 
-    .logo,
+    // .logo,
     .icon-holder,
     .category-holder {
       display: none;

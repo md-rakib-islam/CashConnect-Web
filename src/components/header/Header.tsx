@@ -1,4 +1,3 @@
-import Avatar from "@component/avatar/Avatar";
 import IconButton from "@component/buttons/IconButton";
 import Image from "@component/Image";
 import Menu from "@component/Menu";
@@ -238,6 +237,11 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
               </IconButton>
             ) : (
               <>
+                <H5
+                  className="header-name"
+                  ml={"1rem"}
+                  my="0px"
+                >{`${first_name} ${last_name}`}</H5>
                 <Menu
                   direction="left"
                   handler={
@@ -248,7 +252,7 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
                     </IconButton>
                   }
                 >
-                  <MenuItem p="2px">
+                  {/* <MenuItem p="2px">
                     <div
                       style={{
                         fontSize: "20px",
@@ -260,12 +264,9 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
                       onClick={() => goToFrofile()}
                     >
                       <Avatar src={preViewImg} size={40} />
-                      <H5
-                        ml={"1rem"}
-                        my="0px"
-                      >{`${first_name} ${last_name}`}</H5>
+                      
                     </div>
-                  </MenuItem>
+                  </MenuItem> */}
                   <MenuItem p="2px">
                     <div
                       style={{

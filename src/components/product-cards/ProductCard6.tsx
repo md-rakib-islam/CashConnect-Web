@@ -12,21 +12,32 @@ export interface ProductCard6Props {
 
 const ProductCard6: React.FC<ProductCard6Props> = ({ title, imgUrl }) => {
   return (
-    <Card position="relative">
+    <Card
+      width="100px"
+      backgroundColor="none"
+      position="relative"
+      style={{ boxShadow: "none", height: "100px" }}
+    >
       <Chip
         // bg="white"
+        textAlign="center"
         position="absolute"
+        style={{ width: "100%" }}
         color="secondary.main"
         fontWeight="800"
         fontSize="14px"
-        top="8.6rem"
-        left="0.875rem"
+        top="5.6rem"
         zIndex={2}
       >
-        {title}
+        {title.length > 23 ? `${title.slice(0, 23)}..` : title}
       </Chip>
 
-      <HoverBox height="140px" borderRadius={8}>
+      <HoverBox
+        style={{ marginLeft: "auto", marginRight: "auto" }}
+        height="80px"
+        width="80px"
+        borderRadius={8}
+      >
         <LazyImage
           src={imgUrl ? imgUrl : "/assets/images/logos/shopping-bag.svg"}
           layout="fill"

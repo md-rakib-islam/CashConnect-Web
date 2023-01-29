@@ -23,14 +23,14 @@ const Section2: React.FC<Section2Props> = ({ flashDealsList }) => {
   const [flashDealsListLists, setFlashDealsListLists] = useState([]);
   const [page, setPage] = useState(1);
   const [pageEnd, setpageEnd] = useState(false);
-  const [visibleSlides, setVisibleSlides] = useState(6);
+  const [visibleSlides, setVisibleSlides] = useState(5);
   const width = useWindowSize();
 
   useEffect(() => {
     if (width < 370) setVisibleSlides(1);
     else if (width < 650) setVisibleSlides(2);
-    else if (width < 950) setVisibleSlides(6);
-    else setVisibleSlides(6);
+    else if (width < 950) setVisibleSlides(4);
+    else setVisibleSlides(5);
   }, [width]);
 
   useEffect(() => {

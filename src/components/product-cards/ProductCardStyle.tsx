@@ -15,6 +15,7 @@ export const StyledProductCard1 = styled(Card)`
   box-shadow: ${getTheme("shadows.6")};
 
   .image-holder {
+    height: fit-content;
     padding: 0px 15px;
   }
   &:hover {
@@ -35,6 +36,7 @@ export const StyledProductCard1 = styled(Card)`
     position: relative;
     display: inlin-block;
     text-align: center;
+    height: fit-content;
 
     .extra-icons {
       display: none;
@@ -52,8 +54,13 @@ export const StyledProductCard1 = styled(Card)`
 
   .details {
     padding: 0px 15px 10px 15px;
+    background: #f3f5f9;
 
-    .title,
+    .title {
+      // // white-space: nowrap;
+      // overflow: hidden;
+      // text-overflow: ellipsis;
+    }
     .categories {
       white-space: nowrap;
       overflow: hidden;

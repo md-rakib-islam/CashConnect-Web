@@ -23,7 +23,7 @@ import StyledSearchBox from "./SearchBoxStyle";
 export interface SearchBoxProps {}
 
 const SearchBox: React.FC<SearchBoxProps> = () => {
-  const [category] = useState("All Categories");
+  const [category] = useState("Categories");
   // const [categoryId] = useState(0);
   const [resultList, setResultList] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -107,7 +107,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
     <Box
       position="relative"
       flex="1 1 0"
-      maxWidth="670px"
+      maxWidth="470px"
       mx="auto"
       display="flex"
     >

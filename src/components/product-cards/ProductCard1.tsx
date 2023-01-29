@@ -285,34 +285,51 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
           <Box flex="1 1 0" minWidth="0px" mr="0.5rem">
             <Link href={`/product/${id}`}>
               <a>
-                <H3
-                  className="title"
-                  fontSize="14px"
-                  textAlign="left"
-                  fontWeight="600"
-                  color="text.secondary"
-                  mb="5px"
-                  title={title}
-                >
-                  {title}
-                </H3>
+                {title.length >= 35 ? (
+                  <H3
+                    className="title"
+                    fontSize="14px"
+                    textAlign="left"
+                    fontWeight="600"
+                    color="text.secondary"
+                    mb="5px"
+                    title={title}
+                  >
+                    {title.length >= 38 ? `${title.slice(0, 38)}...` : title}{" "}
+                  </H3>
+                ) : (
+                  <>
+                    <H3
+                      className="title"
+                      fontSize="14px"
+                      textAlign="left"
+                      fontWeight="600"
+                      color="text.secondary"
+                      mb="5px"
+                      title={title}
+                    >
+                      {title}
+                    </H3>
+                    <H3
+                      style={{
+                        visibility: "hidden",
+                        display: title.length >= 28 ? "none" : "block",
+                      }}
+                      className="title"
+                      fontSize="14px"
+                      textAlign="left"
+                      fontWeight="600"
+                      color="text.secondary"
+                      title={title}
+                    >
+                      {title}
+                    </H3>
+                  </>
+                )}
               </a>
             </Link>
 
             <Rating value={rating || 0} outof={5} color="warn" readonly />
-
-            <SemiSpan
-              style={{
-                visibility: !orginalPrice ? "hidden" : "visible",
-                display: orginalPrice ? "none" : "block",
-              }}
-              color="text.muted"
-              fontWeight="600"
-            >
-              <del>
-                <Currency>{orginalPrice?.toFixed(2)}</Currency>
-              </del>
-            </SemiSpan>
 
             {!stock ? (
               <SemiSpan fontWeight="bold" color="primary.main" mt="2px">
@@ -331,17 +348,35 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
               </SemiSpan>
             )}
 
-            {!!orginalPrice && (
-              <SemiSpan color="text.muted" fontWeight="600">
-                <del>
-                  <Currency>{orginalPrice?.toFixed(2)}</Currency>
-                </del>
-              </SemiSpan>
-            )}
-            <SemiSpan pr="0.5rem" fontWeight="600" color="primary.main">
-              <Currency>{sellablePrice.toFixed(2)}</Currency>
+            <SemiSpan
+              style={{
+                visibility: !orginalPrice ? "hidden" : "visible",
+                display: orginalPrice ? "none" : "block",
+              }}
+              color="text.muted"
+              fontWeight="600"
+            >
+              <del>
+                <Currency>{orginalPrice?.toFixed(2)}</Currency>
+              </del>
             </SemiSpan>
-
+            <FlexBox>
+              <SemiSpan mr="0.5rem" fontWeight="600" color="primary.main">
+                <Currency>{sellablePrice.toFixed(2)}</Currency>
+              </SemiSpan>
+              {!!orginalPrice && (
+                <SemiSpan
+                  style={{ display: "flex", alignItems: "center" }}
+                  color="text.muted"
+                  fontSize="12px"
+                  fontWeight="600"
+                >
+                  <del>
+                    <Currency>{orginalPrice?.toFixed(2)}</Currency>
+                  </del>
+                </SemiSpan>
+              )}
+            </FlexBox>
             {/* <FlexBox alignItems="center" mt={stock ? "10px" : "0px"}>
            
             </FlexBox> */}

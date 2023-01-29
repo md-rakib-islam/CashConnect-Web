@@ -12,7 +12,7 @@ import React, { Fragment } from "react";
 import { CSSProperties } from "styled-components";
 import IconButton from "../buttons/IconButton";
 import Icon from "../icon/Icon";
-import { StyledCarousel2 } from "./CarouselStyle2";
+import { StyledCarousel } from "./CarouselStyle";
 
 export interface CarouselProps {
   naturalSlideWidth?: number;
@@ -42,7 +42,7 @@ export interface CarouselProps {
   getMoreItem?: () => void;
 }
 
-const Carousel2: React.FC<CarouselProps> = ({
+const Carousel: React.FC<CarouselProps> = ({
   children,
   naturalSlideWidth,
   naturalSlideHeight,
@@ -71,7 +71,7 @@ const Carousel2: React.FC<CarouselProps> = ({
   getMoreItem,
 }) => {
   return (
-    <StyledCarousel2
+    <StyledCarousel
       naturalSlideWidth={naturalSlideWidth}
       naturalSlideHeight={naturalSlideHeight}
       totalSlides={totalSlides}
@@ -89,7 +89,7 @@ const Carousel2: React.FC<CarouselProps> = ({
       currentSlide={currentSlide}
       showArrowOnHover={showArrowOnHover}
     >
-      <Slider>
+      <Slider className="custom-slider">
         {React.Children.map(children, (child, ind) => (
           <Slide index={ind}>{child}</Slide>
         ))}
@@ -109,19 +109,10 @@ const Carousel2: React.FC<CarouselProps> = ({
             as={ButtonBack}
             variant="contained"
             color={arrowButtonColor}
-            style={
-              leftButtonStyle || {
-                width: "30px",
-                height: "30px",
-                display: "flex",
-                alignContent: "center",
-                alignItems: "center",
-                justifyContent: "center",
-              }
-            }
+            style={leftButtonStyle || {}}
           >
             <Icon variant="small" defaultcolor="currentColor">
-              chevron-left
+              arrow-left
             </Icon>
           </IconButton>
           <IconButton
@@ -129,30 +120,21 @@ const Carousel2: React.FC<CarouselProps> = ({
             as={ButtonNext}
             variant="contained"
             color={arrowButtonColor}
-            style={
-              rightButtonStyle || {
-                width: "30px",
-                height: "30px",
-                display: "flex",
-                alignContent: "center",
-                alignItems: "center",
-                justifyContent: "center",
-              }
-            }
+            style={rightButtonStyle || {}}
           >
             <Icon
-              className="dropdown-icon"
               variant="small"
-              onMouseEnter={() => {
+              defaultcolor="currentColor"
+              onClick={() => {
                 getMoreItem && getMoreItem();
               }}
             >
-              chevron-right
+              arrow-right
             </Icon>
           </IconButton>
         </Fragment>
       )}
-    </StyledCarousel2>
+    </StyledCarousel>
   );
 };
 
@@ -174,7 +156,7 @@ const renderDots = ({
           dot: true,
           "dot-active": currentSlide === i,
         })}
-        onMouseEnter={() =>
+        onClick={() =>
           carouselStore.setStoreState({
             currentSlide: i,
             autoPlay: false,
@@ -191,7 +173,7 @@ const renderDots = ({
             dot: true,
             "dot-active": currentSlide === totalSlides - visibleSlides,
           })}
-          onMouseEnter={() =>
+          onClick={() =>
             carouselStore.setStoreState({
               currentSlide: totalSlides - visibleSlides,
               autoPlay: false,
@@ -204,7 +186,7 @@ const renderDots = ({
   return dots;
 };
 
-Carousel2.defaultProps = {
+Carousel.defaultProps = {
   naturalSlideWidth: 100,
   naturalSlideHeight: 125,
   totalSlides: 10,
@@ -212,14 +194,14 @@ Carousel2.defaultProps = {
   isIntrinsicHeight: true,
   hasMasterSpinner: false,
   infinite: false,
-  autoPlay: false,
+  autoPlay: true,
   step: 1,
   interval: 5000,
   showDots: false,
   showArrow: true,
   dotGroupMarginTop: "-2.5rem",
-  spacing: "0.5rem",
+  spacing: "1.5rem",
   arrowButtonColor: "secondary",
 };
 
-export default Carousel2;
+export default Carousel;

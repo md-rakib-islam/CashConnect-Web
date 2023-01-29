@@ -1,5 +1,5 @@
 import Box from "@component/Box";
-import Carousel from "@component/carousel/Carousel";
+import Carousel from "@component/carousel4/Carousel";
 import { BASE_URL, Category_Top_All } from "@data/constants";
 import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
@@ -13,14 +13,14 @@ const Section3 = ({ topCategoryList }) => {
   const [topCategoryLists, settopCategoryLists] = useState(topCategoryList);
   const [page, setPage] = useState(1);
   const [pageEnd, setpageEnd] = useState(false);
-  const [visibleSlides, setVisibleSlides] = useState(6);
+  const [visibleSlides, setVisibleSlides] = useState(8);
   const width = useWindowSize();
 
   useEffect(() => {
     if (width < 370) setVisibleSlides(1);
     else if (width < 650) setVisibleSlides(2);
     else if (width < 950) setVisibleSlides(4);
-    else setVisibleSlides(6);
+    else setVisibleSlides(8);
   }, [width]);
 
   const getMoreItem = () => {
@@ -65,6 +65,8 @@ const Section3 = ({ topCategoryList }) => {
         visibleSlides={visibleSlides}
         step={visibleSlides}
         getMoreItem={getMoreItem}
+        spacing="0.5rem"
+        showArrow={topCategoryLists.length > 8 ? true : false}
       >
         {topCategoryLists.map((item) => (
           <Link
@@ -72,7 +74,13 @@ const Section3 = ({ topCategoryList }) => {
             key={item?.id}
           >
             <a>
-              <Box p="1rem" style={{ height: "200px" }}>
+              <Box
+                p="0 1rem 0 1rem"
+                style={{
+                  height: "150px",
+                  display: "flex",
+                }}
+              >
                 <ProductCard6
                   title={item?.name}
                   subtitle={"3k orders in this week"}

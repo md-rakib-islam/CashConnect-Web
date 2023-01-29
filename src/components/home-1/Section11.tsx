@@ -13,8 +13,8 @@ const Section11 = ({ moreForYouList }) => {
         seeMoreLink="product/search/more_for_you_all"
       />
       <Grid container spacing={6}>
-        {moreForYouList.map((item, ind) => (
-          <Grid item lg={2} md={3} sm={4} xs={12} key={item?.id || ind}>
+        {moreForYouList.slice(0, 20).map((item, ind) => (
+          <Grid item lg={2.4} md={4} sm={6} xs={6} key={item?.id || ind}>
             <ProductCard1 off={0} hoverEffect {...item} />
           </Grid>
         ))}

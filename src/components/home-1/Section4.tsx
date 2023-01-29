@@ -14,19 +14,19 @@ const Section4 = ({ topRatedList, featuredBrandList }) => {
         <Box>
           <Grid container spacing={6}>
             {!_.isEmpty(topRatedList) ? (
-              <Grid item lg={6} xs={12}>
+              <Grid item lg={12} xs={12}>
                 <CategorySectionHeader
                   iconName="ranking-1"
                   title="Top Ratings"
                   seeMoreLink="product/search/top_ratings_all"
                 />
                 {/* <Card p="1rem"> */}
-                <Grid container spacing={4} py="0.25rem">
-                  {topRatedList?.slice(0, 6)?.map((item, key) => (
+                <Grid container spacing={6}>
+                  {topRatedList?.slice(0, 5)?.map((item, key) => (
                     <Grid
-                      style={{ width: "30%" }}
                       item
-                      md={3}
+                      lg={2.4}
+                      md={4}
                       sm={6}
                       xs={6}
                       key={item?.id || key}

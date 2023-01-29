@@ -8,7 +8,7 @@ export const StyledCategoryMenuItem = styled.div`
     align-items: center;
     padding: 0px 1rem;
     height: 40px;
-    width: 285px;
+    width: 240px;
     direction: ltr;
 
     white-space: pre;

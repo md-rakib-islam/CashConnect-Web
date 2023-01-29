@@ -24,6 +24,17 @@ const StyledSticky = styled.div<StyledStickyProps>`
     padding-top: ${(props) =>
       props.fixed ? `${props.componentHeight}px` : "inherit"};
   }
+  @media only screen and (max-width: 678px) {
+    position: ${(props) => (props.fixed ? "fixed" : "relative")};
+    top: ${(props) => props.fixedOn}px;
+    right: 0;
+    left: 0;
+    transition: all 250ms ease-in-out;
+    z-index: 99;
+    & + .section-after-sticky {
+      padding-top: 65px;
+    }
+  }
 `;
 
 export default StyledSticky;

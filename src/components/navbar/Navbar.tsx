@@ -197,8 +197,9 @@ const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
         >
           <Categories open={navListOpen}>
             <Button
-              width="278px"
-              height="40px"
+              className="button-category"
+              width="200px"
+              height="30px"
               bg="body.default"
               variant="text"
             >

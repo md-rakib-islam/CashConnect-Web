@@ -109,7 +109,16 @@ const Carousel3: React.FC<CarouselProps> = ({
             as={ButtonBack}
             variant="contained"
             color={arrowButtonColor}
-            style={leftButtonStyle || {}}
+            style={
+              leftButtonStyle || {
+                width: "30px",
+                height: "30px",
+                display: "flex",
+                alignContent: "center",
+                alignItems: "center",
+                justifyContent: "center",
+              }
+            }
           >
             <Icon className="dropdown-icon" variant="small">
               chevron-left
@@ -120,7 +129,16 @@ const Carousel3: React.FC<CarouselProps> = ({
             as={ButtonNext}
             variant="contained"
             color={arrowButtonColor}
-            style={rightButtonStyle || {}}
+            style={
+              rightButtonStyle || {
+                width: "30px",
+                height: "30px",
+                display: "flex",
+                alignContent: "center",
+                alignItems: "center",
+                justifyContent: "center",
+              }
+            }
           >
             <Icon
               className="dropdown-icon"

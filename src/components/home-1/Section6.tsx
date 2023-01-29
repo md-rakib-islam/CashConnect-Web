@@ -74,7 +74,7 @@ const Section6: React.FC<Section6Props> = ({ data }) => {
           />
           <Grid container spacing={6}>
             {productList?.slice(0, 12)?.map((item, ind) => (
-              <Grid item lg={3} sm={4} xs={12} key={ind}>
+              <Grid item lg={3} md={4} sm={6} xs={6} key={ind}>
                 <ProductCard1 hoverEffect {...item} />
               </Grid>
             ))}
