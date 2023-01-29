@@ -288,23 +288,26 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
                 {title.length >= 35 ? (
                   <H3
                     className="title"
+                    width="160px"
                     fontSize="14px"
                     textAlign="left"
                     fontWeight="600"
-                    color="text.secondary"
+                    color="black"
                     mb="5px"
                     title={title}
                   >
-                    {title.length >= 38 ? `${title.slice(0, 38)}...` : title}{" "}
+                    {title.length >= 33 ? `${title.slice(0, 33)} ...` : title}
+                    {/* {title} */}
                   </H3>
                 ) : (
                   <>
                     <H3
                       className="title"
                       fontSize="14px"
+                      width="160px"
                       textAlign="left"
                       fontWeight="600"
-                      color="text.secondary"
+                      color="black"
                       mb="5px"
                       title={title}
                     >
@@ -313,13 +316,14 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
                     <H3
                       style={{
                         visibility: "hidden",
-                        display: title.length >= 28 ? "none" : "block",
+                        display: title.length >= 20 ? "none" : "block",
                       }}
                       className="title"
                       fontSize="14px"
+                      width="160px"
                       textAlign="left"
                       fontWeight="600"
-                      color="text.secondary"
+                      color="black"
                       title={title}
                     >
                       {title}
@@ -350,8 +354,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 
             <SemiSpan
               style={{
-                visibility: !orginalPrice ? "hidden" : "visible",
-                display: orginalPrice ? "none" : "block",
+                visibility: "hidden",
               }}
               color="text.muted"
               fontWeight="600"
@@ -405,6 +408,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
           >
             <Button
               variant="outlined"
+              className="icon-cart"
               color="primary"
               padding="3px"
               size="none"
@@ -424,6 +428,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
                 </SemiSpan>
                 <Button
                   variant="outlined"
+                  className="icon-cart"
                   color="primary"
                   padding="3px"
                   size="none"

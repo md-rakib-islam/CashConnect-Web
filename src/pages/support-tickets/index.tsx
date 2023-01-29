@@ -93,6 +93,12 @@ const TicketList = () => {
                   pt="0.5rem"
                   m="-6px"
                 >
+                  <Chip p="0.25rem 1rem" bg={"success.light"} m="6px">
+                    <Small color={"success.main"}>
+                      {item?.ticket_department?.name.charAt(0).toUpperCase() +
+                        item?.ticket_department?.name.substr(1) || ""}
+                    </Small>
+                  </Chip>
                   <Chip
                     p="0.25rem 1rem"
                     bg={priorityHigh ? "primary.light" : "success.light"}
@@ -101,7 +107,8 @@ const TicketList = () => {
                     <Small
                       color={priorityHigh ? "primary.main" : "success.main"}
                     >
-                      {item?.ticket_priority?.name || ""}
+                      {item?.ticket_priority?.name.charAt(0).toUpperCase() +
+                        item?.ticket_priority?.name.substr(1) || ""}
                     </Small>
                   </Chip>
                   <Chip
@@ -112,7 +119,8 @@ const TicketList = () => {
                     <Small
                       color={closedStatus ? "primary.main" : "success.main"}
                     >
-                      {item?.ticket_status?.name || ""}
+                      {item?.ticket_status?.name.charAt(0).toUpperCase() +
+                        item?.ticket_status?.name.substr(1) || ""}
                     </Small>
                   </Chip>
                   <SemiSpan className="pre" m="6px">

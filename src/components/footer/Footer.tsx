@@ -31,26 +31,31 @@ const initialIconLists = [
 ];
 
 const Footer: React.FC = () => {
-  const [address, setAddress] = useState("")
-  const [phone, setPhone] = useState("")
-  const [email, setEmail] = useState("")
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
 
-  const [iconList, setIconList] = useState(initialIconLists)
+  const [iconList, setIconList] = useState(initialIconLists);
 
   useEffect(() => {
-    fetch(`${Site_Setting_All}`).then(res => res.json()).then(res => {
-      const data = res?.general_settings[0]
-      setAddress(data?.address)
-      setPhone(data?.phone)
-      setEmail(data?.email)
+    fetch(`${Site_Setting_All}`)
+      .then((res) => res.json())
+      .then((res) => {
+        const data = res?.general_settings[0];
+        setAddress(data?.address);
+        setPhone(data?.phone);
+        setEmail(data?.email);
 
-      let newIconList = []
-      newIconList.push({ iconName: "facebook", url: data?.facebook_url })
-      newIconList.push({ iconName: "twitter", url: data?.twitter_url })
-      newIconList.push({ iconName: "instagram", url: data?.instagram_url })
-      setIconList(newIconList)
-    }).catch((err) => { console.log("error", err) })
-  }, [])
+        let newIconList = [];
+        newIconList.push({ iconName: "facebook", url: data?.facebook_url });
+        newIconList.push({ iconName: "twitter", url: data?.twitter_url });
+        newIconList.push({ iconName: "instagram", url: data?.instagram_url });
+        setIconList(newIconList);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  }, []);
 
   return (
     <footer>
@@ -63,15 +68,17 @@ const Footer: React.FC = () => {
                   <a>
                     <Image
                       mb="1.25rem"
-                      src='/assets/images/logos/footer.png' alt="logo" height="50" width="160px" 
+                      src="/assets/images/logos/footer.png"
+                      alt="logo"
+                      height="50"
+                      width="160px"
                     />
                   </a>
                 </Link>
 
                 <Paragraph mb="1.25rem" color="gray.500">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Auctor libero id et, in gravida. Sit diam duis mauris nulla
-                  cursus. Erat et lectus vel ut sollicitudin elit at amet.
+                  A relaiable home for buy, sell & exchange new or pre owned
+                  authentic products.
                 </Paragraph>
 
                 <AppStore />
@@ -88,26 +95,23 @@ const Footer: React.FC = () => {
                 </Typography>
 
                 <div>
-                   <Link href="/careers" >
+                  <Link href="/careers">
                     <StyledLink> Careers </StyledLink>
-                    </Link>
+                  </Link>
 
-                   <Link href="/branches" >
+                  <Link href="/branches">
                     <StyledLink> Our Branches </StyledLink>
-                    </Link>
-                   {/* <Link href="/story" >
+                  </Link>
+                  {/* <Link href="/story" >
                     <StyledLink> Our Stories </StyledLink>
                     </Link> */}
 
-                   <Link href="/terms" >
+                  <Link href="/terms">
                     <StyledLink> Terms & Conditions </StyledLink>
-                    </Link>
-                   <Link href="/policy" >
+                  </Link>
+                  <Link href="/policy">
                     <StyledLink>Privacy Policy</StyledLink>
-                    </Link>
-
-                  
-                 
+                  </Link>
                 </div>
               </Grid>
 
@@ -122,15 +126,15 @@ const Footer: React.FC = () => {
                 </Typography>
 
                 <div>
-                  <Link href="/help" >
+                  <Link href="/help">
                     <StyledLink> Help Center </StyledLink>
                   </Link>
-                  
-                  <Link href="/track" >
+
+                  <Link href="/track">
                     <StyledLink> Track Your Order </StyledLink>
                   </Link>
-                  
-                  <Link href="/returns" >
+
+                  <Link href="/returns">
                     <StyledLink> Returns & Refunds</StyledLink>
                   </Link>
                 </div>

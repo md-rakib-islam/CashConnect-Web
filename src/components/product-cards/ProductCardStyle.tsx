@@ -12,10 +12,11 @@ export const StyledProductCard1 = styled(Card)`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  // -webkit-justify-content: none
   box-shadow: ${getTheme("shadows.6")};
 
   .image-holder {
-    height: fit-content;
+    height: 200px;
     padding: 0px 15px;
   }
   &:hover {
@@ -26,6 +27,7 @@ export const StyledProductCard1 = styled(Card)`
     }
     .image-holder {
       // padding: 0px;
+      height: 200px;
       .extra-icons {
         display: block;
       }
@@ -36,7 +38,7 @@ export const StyledProductCard1 = styled(Card)`
     position: relative;
     display: inlin-block;
     text-align: center;
-    height: fit-content;
+    height: 200px;
 
     .extra-icons {
       display: none;
@@ -48,6 +50,14 @@ export const StyledProductCard1 = styled(Card)`
     }
 
     @media only screen and (max-width: ${deviceSize.sm}px) {
+      .image-holder {
+        height: 145px;
+      }
+      .icon-cart {
+        width: 25px;
+        height: 25px;
+      }
+  
       display: block;
     }
   }
@@ -56,11 +66,11 @@ export const StyledProductCard1 = styled(Card)`
     padding: 0px 15px 10px 15px;
     background: #f3f5f9;
 
-    .title {
-      // // white-space: nowrap;
-      // overflow: hidden;
-      // text-overflow: ellipsis;
-    }
+    // .title {
+    //   white-space: nowrap;
+    //   overflow: hidden;
+    //   text-overflow: ellipsis;
+    // }
     .categories {
       white-space: nowrap;
       overflow: hidden;
@@ -91,13 +101,17 @@ export const StyledProductCard1 = styled(Card)`
   }
 
   @media only screen and (max-width: 768px) {
+    .image-holder {
+      height: 145px;
+    }
+    .icon-cart {
+      width: 25px;
+      height: 25px;
+    }
     .details {
       .add-cart {
         display: flex;
-      }
-      // .title {
-      //   margin-top: 1rem;
-      // }
+     
     }
   }
 `;

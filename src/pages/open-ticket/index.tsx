@@ -38,6 +38,14 @@ function OpenTicket() {
   const { dispatch } = useAppContext();
   const router = useRouter();
 
+  function capitalizeWords(arr) {
+    return arr.map((word) => {
+      const firstLetter = word.name.charAt(0).toUpperCase();
+      const rest = word.name.slice(1).toLowerCase();
+
+      return { name: firstLetter + rest, id: word.id };
+    });
+  }
   const handleFormSubmit = async (values) => {
     if (isValidCapha) {
       const data = {
@@ -113,8 +121,12 @@ function OpenTicket() {
       axios
         .get(`${Ticket_Department_All}`)
         .then((res) => {
-          console.log("departmets", res);
-          setDepartmets(res?.data?.ticket_departments);
+          console.log(
+            "departmetsLog",
+            capitalizeWords(res?.data?.ticket_departments)
+          );
+
+          setDepartmets(capitalizeWords(res?.data?.ticket_departments));
         })
         .catch((err) => {
           console.log("error", err);
@@ -124,7 +136,7 @@ function OpenTicket() {
         .get(`${Ticket_Priority_All}`)
         .then((res) => {
           console.log("priorities", res);
-          setPriorities(res?.data?.ticket_priorities);
+          setPriorities(capitalizeWords(res?.data?.ticket_priorities));
         })
         .catch((err) => {
           console.log("error", err);
