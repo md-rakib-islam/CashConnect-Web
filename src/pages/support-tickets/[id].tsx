@@ -39,7 +39,7 @@ const PaymentMethodEditor = () => {
   useEffect(() => {
     if (id) {
       axios
-        .get(`${Ticket_Details_All}${id}`)
+        .get(`${Ticket_Details_All}${id}`, authTOKEN)
         .then((res) => {
           console.log("Ticket_Details_AllRes", res);
           setFieldValue("message", "");
