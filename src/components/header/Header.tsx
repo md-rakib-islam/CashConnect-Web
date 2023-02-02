@@ -121,7 +121,8 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
     dispatch({
       type: "CHANGE_ALERT",
       payload: {
-        alertValue: "logout success",
+        alertValue: "logout success...",
+        alerType: "successLogin",
       },
     });
     Router.push("/");

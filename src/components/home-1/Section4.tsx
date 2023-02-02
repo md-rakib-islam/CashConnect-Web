@@ -26,7 +26,7 @@ const Section4 = ({ topRatedList, featuredBrandList }) => {
                     <Grid
                       item
                       lg={2.4}
-                      md={4}
+                      md={2.4}
                       sm={6}
                       xs={6}
                       key={item?.id || key}

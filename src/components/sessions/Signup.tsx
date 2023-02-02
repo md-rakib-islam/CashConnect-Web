@@ -1,9 +1,7 @@
-import Alert from "@component/alert/alert";
 import Grid from "@component/grid/Grid";
-import LoginPopup from "@component/LoginPopup";
 // import { CountryCodeSelect } from "@component/Select";
 import { useAppContext } from "@context/app/AppContext";
-import { Customer_Create, Vendor_Create } from "@data/constants";
+import { Customer_Create } from "@data/constants";
 // import { country_codes } from "@data/country_code";
 import axios from "axios";
 import { useFormik } from "formik";
@@ -35,7 +33,6 @@ const Signup: React.FC<SignupProps> = ({
   // const [customerVariant, setCustomerVariant] = useState("contained");
   // const [vendorVariant, setvendorVariant] = useState("outlined");
   const [user_type, setUser_type] = useState(3);
-  const [openLogin, setOpenLogin] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
@@ -54,16 +51,8 @@ const Signup: React.FC<SignupProps> = ({
 
   const { dispatch } = useAppContext();
 
-  const closeLoginTab = () => {
-    setOpenLogin(false);
-  };
-
   const gotologin = () => {
-    if (type == "SignupPage") {
-      router.push("/login");
-    } else {
-      setOpenLogin(true);
-    }
+    router.push("/login");
   };
 
   const togglePasswordVisibility = () => {
@@ -135,51 +124,52 @@ const Signup: React.FC<SignupProps> = ({
                 alertValue: err.response?.data
                   ? err.response?.data?.primary_phone[0]
                   : err.response.data,
-                alerType: "error",
-              },
-            });
-          });
-      } else if (user_type == 2) {
-        axios
-          .post(`${Vendor_Create}`, data)
-          .then((data) => {
-            console.log("createdVendorRes", data);
-            if (type == "SignupPage") {
-              router.push({
-                pathname: `/otp/${values.primary_phone}`,
-              });
-              setLoading(true);
-
-              dispatch({
-                type: "CHANGE_ALERT",
-                payload: {
-                  alertValue: "sugnup success...",
-                },
-              });
-            } else {
-              closeSignupDialog();
-              dispatch({
-                type: "CHANGE_ALERT",
-                payload: {
-                  alertValue: "sugnup success...",
-                },
-              });
-            }
-          })
-          .catch((err) => {
-            setLoading(false);
-
-            console.log("signup Erro", err.response.data.primary_phone[0]);
-
-            dispatch({
-              type: "CHANGE_ALERT",
-              payload: {
-                alertValue: err.response.data.primary_phone[0],
-                alerType: "error",
+                alerType: "signupError",
               },
             });
           });
       }
+      //  else if (user_type == 2) {
+      //   axios
+      //     .post(`${Vendor_Create}`, data)
+      //     .then((data) => {
+      //       console.log("createdVendorRes", data);
+      //       if (type == "SignupPage") {
+      //         router.push({
+      //           pathname: `/otp/${values.primary_phone}`,
+      //         });
+      //         setLoading(true);
+
+      //         dispatch({
+      //           type: "CHANGE_ALERT",
+      //           payload: {
+      //             alertValue: "sugnup success...",
+      //           },
+      //         });
+      //       } else {
+      //         closeSignupDialog();
+      //         dispatch({
+      //           type: "CHANGE_ALERT",
+      //           payload: {
+      //             alertValue: "sugnup success...",
+      //           },
+      //         });
+      //       }
+      //     })
+      //     .catch((err) => {
+      //       setLoading(false);
+
+      //       console.log("signup Erro", err.response.data.primary_phone[0]);
+
+      //       dispatch({
+      //         type: "CHANGE_ALERT",
+      //         payload: {
+      //           alertValue: err.response.data.primary_phone[0],
+      //           alerType: "signupError",
+      //         },
+      //       });
+      //     });
+      // }
     } else {
       setErrors({
         ...errors,
@@ -221,8 +211,6 @@ const Signup: React.FC<SignupProps> = ({
 
   return (
     <>
-      <LoginPopup open={openLogin} closeLoginDialog={closeLoginTab} />
-
       {loading && (
         <div
           style={{
@@ -250,7 +238,6 @@ const Signup: React.FC<SignupProps> = ({
       )}
 
       <StyledSessionCard mx="auto" my="2rem" boxShadow="large">
-        {type === "SignupPage" && <Alert onSignup />}
         <img
           style={{
             width: "80px",
@@ -507,6 +494,7 @@ const Signup: React.FC<SignupProps> = ({
             mb="1.65rem"
             variant="contained"
             color="primary"
+            style={{ cursor: !values.agreement && "no-drop" }}
             type="submit"
             fullwidth
           >

@@ -170,7 +170,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       fullFeatures: data?.features,
       initialReviewsQuantity: data?.num_reviews,
       rating: data?.rating,
-      condition: data?.condition,
+      condition: data?.condition == "used" ? "pre owned" : data?.condition,
       short_desc: data?.short_desc,
       relatedProduct,
     },

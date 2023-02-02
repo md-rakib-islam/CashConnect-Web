@@ -9,17 +9,17 @@ const StyledSearchBox = styled.div`
   .search-icon {
     position: absolute;
     color: ${getTheme("colors.text.hint")};
-    left: 1rem;
+    right: 1rem;
     z-index: 1;
   }
 
   .search-field {
     flex: 1 1 0;
-    padding-left: 3rem;
-    padding-right: 11.5rem;
+    padding-right: 3rem;
+    // padding-right: 11.5rem;
     height: 35px;
     // border-radius: 300px;
-    border-radius: 5px 0 0 5px;
+    border-radius: 5px;
   }
   .search-button {
     position: absolute;

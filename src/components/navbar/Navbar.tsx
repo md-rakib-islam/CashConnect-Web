@@ -262,7 +262,7 @@ const Navbar: React.FC<NavbarProps> = ({ navListOpen }) => {
                   </div>
                 </div>
                 <div className={DropDownStyle.dropdown2}>
-                  <button className={DropDownStyle.dropbtn2}>Old</button>
+                  <button className={DropDownStyle.dropbtn2}>Pre Owned</button>
                   <div className={DropDownStyle.dropdown_content2}>
                     {topCategory.map((n) => (
                       <Link

@@ -3,7 +3,7 @@ import Card from "@component/Card";
 import MobileNavbar from "@component/layout/MobileNavbar";
 import Sidenav from "@component/sidenav/Sidenav";
 import { Span } from "@component/Typography";
-import { Category_All_With_Child, Product_Filter } from "@data/constants";
+import { Product_Filter } from "@data/constants";
 import { requred } from "@data/data";
 import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
@@ -13,9 +13,7 @@ import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
 import * as yup from "yup";
 import Box from "../Box";
-import FlexBox from "../FlexBox";
 import Icon from "../icon/Icon";
-import Menu from "../Menu";
 import MenuItem from "../MenuItem";
 import TextField from "../text-field/TextField";
 import StyledSearchBox from "./SearchBoxStyle";
@@ -23,10 +21,10 @@ import StyledSearchBox from "./SearchBoxStyle";
 export interface SearchBoxProps {}
 
 const SearchBox: React.FC<SearchBoxProps> = () => {
-  const [category] = useState("Categories");
+  // const [category] = useState("Categories");
   // const [categoryId] = useState(0);
   const [resultList, setResultList] = useState([]);
-  const [categories, setCategories] = useState([]);
+  // const [categories, setCategories] = useState([]);
 
   const router = useRouter();
 
@@ -77,17 +75,17 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
   };
 
   useEffect(() => {
-    axios
-      .get(`${Category_All_With_Child}`)
-      .then((res) => {
-        console.log("Category_All_With_Child", res.data.categories);
-        let Categoriess = res.data.categories;
-        // Categoriess?.unshift({ id: 0, name: "All Categories" })
-        setCategories(Categoriess);
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
+    // axios
+    //   .get(`${Category_All_With_Child}`)
+    //   .then((res) => {
+    //     console.log("Category_All_With_Child", res.data.categories);
+    //     let Categoriess = res.data.categories;
+    //     // Categoriess?.unshift({ id: 0, name: "All Categories" })
+    //     setCategories(Categoriess);
+    //   })
+    //   .catch((err) => {
+    //     console.log("error", err);
+    //   });
 
     window.addEventListener("click", handleDocumentClick);
     return () => {
@@ -113,17 +111,10 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
     >
       <form onSubmit={handleSubmit} style={{ flexGrow: 1 }}>
         <StyledSearchBox>
-          <Icon
-            className="search-icon"
-            size="18px"
-            onClick={() => handleSubmit()}
-          >
-            search
-          </Icon>
           <TextField
             name="search"
             className="search-field"
-            placeholder="I'm looking for..."
+            placeholder="Search for product, brand and more.."
             fullwidth
             autoComplete="off"
             onChange={(e) => {
@@ -141,9 +132,16 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
             value={values.search || ""}
             errorText={touched.search && errors.search}
           />
+          <Icon
+            className="search-icon"
+            size="18px"
+            onClick={() => handleSubmit()}
+          >
+            search
+          </Icon>
 
           <Alert />
-          <Menu
+          {/* <Menu
             className="category-dropdown"
             direction="right"
             handler={
@@ -164,7 +162,7 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
                 <MenuItem>{item?.name}</MenuItem>
               </Link>
             ))}
-          </Menu>
+          </Menu> */}
         </StyledSearchBox>
 
         {!!resultList.length && (

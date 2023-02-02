@@ -1,4 +1,3 @@
-import Alert from "@component/alert/alert";
 import SignupPopup from "@component/SignupPopup";
 import { useAppContext } from "@context/app/AppContext";
 import { Get_Pending_Order_After_Login } from "@data/constants";
@@ -125,6 +124,7 @@ const Login: React.FC<LoginProps> = ({
           type: "CHANGE_ALERT",
           payload: {
             alertValue: "login success...",
+            alerType: "successLogin",
           },
         });
         if (type != "popup") {
@@ -250,6 +250,7 @@ const Login: React.FC<LoginProps> = ({
           type: "CHANGE_ALERT",
           payload: {
             alertValue: "login success...",
+            alerType: "successLogin",
           },
         });
 
@@ -515,7 +516,6 @@ const Login: React.FC<LoginProps> = ({
       )}
       <StyledSessionCard mx="auto" my="2rem" boxShadow="large">
         <form className="content" onSubmit={handleSubmit}>
-          {type === "loginPage" && <Alert onLogin />}
           <img
             style={{
               width: "80px",
