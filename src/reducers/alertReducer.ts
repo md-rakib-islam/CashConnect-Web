@@ -11,7 +11,9 @@ const alertSuccessType = "success";
 const alertWarningType = "warning";
 const alertErrorType = "error";
 const alertSignUpErrorType = "signupError";
+const alertLoginErrorType = "loginError";
 const alertSuccessLoginType = "successLogin";
+const alertSuccessOrderType = "successOrder";
 
 export type AlertValueType = {
   alertValue?: string;
@@ -20,7 +22,9 @@ export type AlertValueType = {
     | typeof alertWarningType
     | typeof alertErrorType
     | typeof alertSignUpErrorType
-    | typeof alertSuccessLoginType;
+    | typeof alertSuccessLoginType
+    | typeof alertSuccessOrderType
+    | typeof alertLoginErrorType;
   alertChanged?: number;
   alertShow?: boolean;
 };
@@ -48,7 +52,6 @@ export const alertReducer: React.Reducer<alertStateType, alertActionType> = (
       return {
         alertValue: alertpayload.alertValue || alertValueState,
         alerType: alertpayload.alerType,
-
         alertChanged: Math.random(),
         alertShow:
           alertpayload.alertShow == undefined

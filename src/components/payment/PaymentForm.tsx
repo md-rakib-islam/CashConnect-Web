@@ -78,23 +78,21 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
   };
 
   useEffect(() => {
-    if (user_id) {
-      axios
-        .get(`${User_By_Id}`, {
-          headers: {
-            "Content-type": "application/json",
-            Authorization: localStorage.getItem("jwt_access_token"),
-          },
-        })
-        .then((res) => {
-          console.log("resUseer", res);
-          setuserName(res?.data?.username);
-        })
-        .catch((err) => {
-          console.log("error", err);
-        });
-    }
-  }, [user_id]);
+    axios
+      .get(`${User_By_Id}`, {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: localStorage.getItem("jwt_access_token"),
+        },
+      })
+      .then((res) => {
+        console.log("resUseer", res);
+        setuserName(res?.data?.username);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  }, []);
 
   useLayoutEffect(() => {
     cardNumberRef.current = values.card_number;
@@ -226,12 +224,13 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
               dispatch({
                 type: "CHANGE_ALERT",
                 payload: {
-                  alertValue: "your order has been success...",
+                  alertValue: "Thank You for Your Order!",
+                  alerType: "successOrder",
                 },
               });
               setLoading(false);
 
-              localStorage.removeItem("OrderId");
+              // localStorage.removeItem("OrderId");
 
               router.push("/orders");
             }

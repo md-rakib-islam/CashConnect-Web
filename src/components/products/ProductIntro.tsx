@@ -49,6 +49,7 @@ export interface ProductIntroProps {
   short_desc: string;
   orginalprice?: number;
   parse: string;
+  eye: boolean;
 }
 
 const ProductIntro: React.FC<ProductIntroProps> = ({
@@ -62,6 +63,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   condition,
   short_desc,
   orginalprice,
+  eye,
 }) => {
   const [selectedThumbnail, setSelectedThumbnail] = useState(0);
   const [selectedImage, setSelectedImage] = useState(0);
@@ -129,15 +131,22 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   }, [id]);
 
   useEffect(() => {
-    axios.get(`${Product_Discount_By_Id}${id}`).then((res) => {
-      console.log("ProductDiscount", res);
-      setDiscount(res.data?.discounts?.discounted_price);
-      //  if (res.data.discounts?.discounted_price) {
-      //    setsellablePrice(res.data.discounts?.discounted_price);
-      //    setorginalPrice(Number(res.data.discounts?.product.unit_price));
-      //    setdiscountedPercent(res.data.discounts?.discount_percent);
-      //  }
-    });
+    axios
+      .get(`${Product_Discount_By_Id}${id}`, {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: localStorage.getItem("jwt_access_token"),
+        },
+      })
+      .then((res) => {
+        console.log("ProductDiscount", res);
+        setDiscount(res.data?.discounts?.discounted_price);
+        //  if (res.data.discounts?.discounted_price) {
+        //    setsellablePrice(res.data.discounts?.discounted_price);
+        //    setorginalPrice(Number(res.data.discounts?.product.unit_price));
+        //    setdiscountedPercent(res.data.discounts?.discount_percent);
+        //  }
+      });
   }, [id]);
   useEffect(() => {
     axios
@@ -496,13 +505,13 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                           : selectedImage
                           ? colorImages[selectedImage]
                           : multipleUmg[selectedThumbnail],
-                        width: 1000,
-                        height: 1000,
+                        width: eye === true ? 500 : 1000,
+                        height: eye === true ? 500 : 1000,
                         style: { backgroundColor: "black" },
                       },
                       enlargedImageContainerDimensions: {
-                        width: "250%",
-                        height: "150%",
+                        width: eye === true ? "170%" : "250%",
+                        height: eye === true ? "100%" : "120%",
                       },
                       enlargedImageContainerStyle: {
                         zIndex: "100",

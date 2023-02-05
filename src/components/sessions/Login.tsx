@@ -184,15 +184,15 @@ const Login: React.FC<LoginProps> = ({
             type: "CHANGE_ALERT",
             payload: {
               alertValue: "Phone number is not verified",
-              alerType: "error",
+              alerType: "loginError",
             },
           });
         } else if (_errors.response.status == 401) {
           dispatch({
             type: "CHANGE_ALERT",
             payload: {
-              alertValue: "Email or Password is wrong",
-              alerType: "error",
+              alertValue: "User ID or Password is wrong",
+              alerType: "loginError",
             },
           });
         } else {
@@ -200,7 +200,7 @@ const Login: React.FC<LoginProps> = ({
             type: "CHANGE_ALERT",
             payload: {
               alertValue: `${_errors.response.data.detail}`,
-              alerType: "error",
+              alerType: "loginError",
             },
           });
         }
@@ -310,7 +310,7 @@ const Login: React.FC<LoginProps> = ({
         //     type: "CHANGE_ALERT",
         //     payload: {
         //       alertValue: "Email or Password is wrong",
-        //       alerType: "error",
+        //       alerType: 'loginError',
         //     },
         //   });
         // }
@@ -319,7 +319,7 @@ const Login: React.FC<LoginProps> = ({
         //     type: "CHANGE_ALERT",
         //     payload: {
         //       alertValue: "",
-        //       alerType: "error",
+        //       alerType: 'loginError',
         //     },
         //   });
         // }
@@ -410,7 +410,7 @@ const Login: React.FC<LoginProps> = ({
   //           type: "CHANGE_ALERT",
   //           payload: {
   //             alertValue: "Phone number is not verified",
-  //             alerType: "error",
+  //             alerType: 'loginError',
   //           },
   //         });
   //       } else if (_errors.response.status == 400) {
@@ -418,7 +418,7 @@ const Login: React.FC<LoginProps> = ({
   //           type: "CHANGE_ALERT",
   //           payload: {
   //             alertValue: "Email or Password is wrong",
-  //             alerType: "error",
+  //             alerType: 'loginError',
   //           },
   //         });
   //       } else if (_errors.response.status == 401) {
@@ -426,7 +426,7 @@ const Login: React.FC<LoginProps> = ({
   //           type: "CHANGE_ALERT",
   //           payload: {
   //             alertValue: "Email or Password is wrong",
-  //             alerType: "error",
+  //             alerType: 'loginError',
   //           },
   //         });
   //       } else {
@@ -434,7 +434,7 @@ const Login: React.FC<LoginProps> = ({
   //           type: "CHANGE_ALERT",
   //           payload: {
   //             alertValue: "Email and Password is wrong",
-  //             alerType: "error",
+  //             alerType: 'loginError',
   //           },
   //         });
   //       }

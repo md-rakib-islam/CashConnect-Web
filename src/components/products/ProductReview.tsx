@@ -1,6 +1,7 @@
 import Avatar from "@component/avatar/Avatar";
 import Hidden from "@component/hidden/Hidden";
 import Icon from "@component/icon/Icon";
+import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import {
   Review_By_Product_Id,
@@ -38,6 +39,7 @@ const ProductReview: React.FC<ProductReviewProps> = ({
   const [previewImage, setPreviewImage] = useState([]);
   const [images, setImages] = useState<TIMG>([[]]);
   const [_reRender, setReRender] = useState(0);
+  const { dispatch } = useAppContext();
 
   const { user_id, authTOKEN, isLogin } = useUserInf();
 
@@ -75,6 +77,13 @@ const ProductReview: React.FC<ProductReviewProps> = ({
           setFieldValue("image", "");
           setPreviewImage([]);
           setReloadreviews(Math.random());
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: "Thank You for your review",
+              alerType: "success",
+            },
+          });
         });
       }
     } else {
@@ -88,7 +97,7 @@ const ProductReview: React.FC<ProductReviewProps> = ({
 
   useEffect(() => {
     axios
-      .get(`${Review_By_Product_Id}${product_id}`)
+      .get(`${Review_By_Product_Id}${product_id}`, authTOKEN)
       .then((res) => {
         console.log("ReviewAllRes", res);
         setCommentList(res?.data);
@@ -133,11 +142,12 @@ const ProductReview: React.FC<ProductReviewProps> = ({
 
   return (
     <Box>
-      {commentList.map((item, ind) => (
-        <ProductComment {...item} key={item?.id || ind} />
-      ))}
+      {commentList.map((item, ind) => {
+        console.log("reviewItem", item);
+        return <ProductComment {...item} key={item?.id || ind} />;
+      })}
 
-      {reviewPermission && (
+      {reviewPermission ? (
         <>
           <H2 fontWeight="600" mt="55px" mb="20">
             Write a Review for this product
@@ -287,6 +297,8 @@ const ProductReview: React.FC<ProductReviewProps> = ({
             </Button>
           </form>
         </>
+      ) : (
+        ""
       )}
     </Box>
   );

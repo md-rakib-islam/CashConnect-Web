@@ -38,15 +38,22 @@ const ProductCard4: React.FC<ProductCard4Props> = ({
   const [stock, setStock] = useState(true);
 
   useEffect(() => {
-    axios.get(`${Product_Discount_By_Id}${id}`).then((res) => {
-      console.log("descountRes", res);
-      if (res.data.discounts?.discounted_price) {
-        setsellablePrice(res.data.discounts?.discounted_price);
-        setorginalPrice(Number(res.data.discounts?.product.unit_price));
+    axios
+      .get(`${Product_Discount_By_Id}${id}`, {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: localStorage.getItem("jwt_access_token"),
+        },
+      })
+      .then((res) => {
+        console.log("descountRes", res);
+        if (res.data.discounts?.discounted_price) {
+          setsellablePrice(res.data.discounts?.discounted_price);
+          setorginalPrice(Number(res.data.discounts?.product.unit_price));
 
-        setdiscountedPercent(res.data.discounts?.discount_percent);
-      }
-    });
+          setdiscountedPercent(res.data.discounts?.discount_percent);
+        }
+      });
   }, [id]);
 
   useEffect(() => {

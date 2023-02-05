@@ -32,7 +32,6 @@ const IndexPage = ({
   flashDealsList,
   topCategoryList,
   topRatedList,
-  featuredBrandList,
   newArrivalList,
   bigDiscountList,
   categoriesList,
@@ -44,10 +43,7 @@ const IndexPage = ({
       <Section1 sliderList={sliderList} />
       <Section3 topCategoryList={topCategoryList} />
       <Section2 flashDealsList={flashDealsList} />
-      <Section4
-        topRatedList={topRatedList}
-        featuredBrandList={featuredBrandList}
-      />
+      <Section4 topRatedList={topRatedList} />
       <Section5 newArrivalList={newArrivalList} />
       <Section13 bigDiscountList={bigDiscountList} />
       <Section7 categoryWithProductBrandList={categoryWithProductBrandList} />
