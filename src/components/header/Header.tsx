@@ -86,28 +86,30 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
       });
   }, []);
   useEffect(() => {
-    axios
-      .get(`${User_By_Id}`, {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: localStorage.getItem("jwt_access_token"),
-        },
-      })
-      .then((res) => {
-        console.log("resUseerForHeader", preViewImg);
-        setfirst_name(res?.data?.first_name);
-        setlast_name(res?.data?.last_name);
-        setpreViewImg(
-          `${res?.data?.image ? BASE_URL : "/no_image.png"}${
-            res?.data?.image ? res?.data?.image : ""
-          }`
-        );
-        console.log("resUseerForHeader", preViewImg);
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
-  }, []);
+    if (isLogin) {
+      axios
+        .get(`${User_By_Id}`, {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: localStorage.getItem("jwt_access_token"),
+          },
+        })
+        .then((res) => {
+          console.log("resUseerForHeader", preViewImg);
+          setfirst_name(res?.data?.first_name);
+          setlast_name(res?.data?.last_name);
+          setpreViewImg(
+            `${res?.data?.image ? BASE_URL : "/no_image.png"}${
+              res?.data?.image ? res?.data?.image : ""
+            }`
+          );
+          console.log("resUseerForHeader", preViewImg);
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
+    }
+  }, [isLogin]);
 
   const handleLogout = () => {
     localStorage.removeItem("UserId");

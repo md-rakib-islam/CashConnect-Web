@@ -32,12 +32,7 @@ const ProductCard2: React.FC<ProductCard2Props> = ({
 
   useEffect(() => {
     axios
-      .get(`${Product_Discount_By_Id}${id}`, {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: localStorage.getItem("jwt_access_token"),
-        },
-      })
+      .get(`${Product_Discount_By_Id}${id}`)
       .then((res) => {
         console.log("descountRes", res);
         if (res.data.discounts?.discounted_price) {
@@ -46,6 +41,9 @@ const ProductCard2: React.FC<ProductCard2Props> = ({
           setorginalPrice(Number(res.data.discounts?.product.unit_price));
           setdiscountedPercent(res.data.discounts?.discount_percent);
         }
+      })
+      .catch((e) => {
+        console.log(e);
       });
   }, [id]);
 

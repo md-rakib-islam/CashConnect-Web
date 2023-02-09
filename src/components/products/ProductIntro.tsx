@@ -132,12 +132,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
   useEffect(() => {
     axios
-      .get(`${Product_Discount_By_Id}${id}`, {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: localStorage.getItem("jwt_access_token"),
-        },
-      })
+      .get(`${Product_Discount_By_Id}${id}`)
       .then((res) => {
         console.log("ProductDiscount", res);
         setDiscount(res.data?.discounts?.discounted_price);
@@ -146,6 +141,9 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
         //    setorginalPrice(Number(res.data.discounts?.product.unit_price));
         //    setdiscountedPercent(res.data.discounts?.discount_percent);
         //  }
+      })
+      .catch((e) => {
+        console.log(e);
       });
   }, [id]);
   useEffect(() => {
@@ -561,6 +559,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                   totalSlides={multipleUmg?.length}
                   visibleSlides={visibleSlides}
                   step={visibleSlides}
+                  autoPlay={multipleUmg.length > 5 ? true : false}
                   showArrow={multipleUmg?.length > 5 ? true : false}
                 >
                   {multipleUmg.map((url, ind) => (
@@ -619,47 +618,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
               <H6>({reviewCount})</H6>
             </FlexBox>
 
-            <Box>
-              {discount ? (
-                <>
-                  <H2
-                    style={{ fontSize: "20px" }}
-                    color="primary.main"
-                    lineHeight="1"
-                  >
-                    <Currency>{Number(price).toFixed(2)}</Currency>
-                  </H2>
-                  <H2
-                    style={{ fontSize: "20px" }}
-                    color="text.muted"
-                    lineHeight="1"
-                  >
-                    <del>
-                      <Currency>{orginalprice}</Currency>
-                    </del>
-                  </H2>
-                </>
-              ) : (
-                <H2
-                  style={{ fontSize: "20px" }}
-                  color="primary.main"
-                  lineHeight="1"
-                >
-                  <Currency>{orginalprice ? orginalprice : price}</Currency>
-                </H2>
-              )}
-
-              {stock ? (
-                <SemiSpan fontWeight="bold" ml="5px" color="inherit">
-                  Stock Available
-                </SemiSpan>
-              ) : (
-                <SemiSpan fontWeight="bold" ml="5px" color="primary.main">
-                  Out Of Stock
-                </SemiSpan>
-              )}
-            </Box>
-
             <FlexBox alignItems="center">
               <SemiSpan
                 style={{ display: color.length === 0 ? "none" : "block" }}
@@ -683,6 +641,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                 totalSlides={multipleUmg?.length}
                 visibleSlides={visibleSlides}
                 step={visibleSlides}
+                autoPlay={multipleUmg.length > 5 ? true : false}
                 showArrow={multipleUmg?.length > 5 ? true : false}
               >
                 {colorImages.map((url, ind) => (
@@ -697,7 +656,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                     cursor="pointer"
                     border="1px solid"
                     key={url}
-                    ml={ind === 0 && "auto"}
+                    // ml={ind === 0 && "auto"}
                     mr={ind === colorImages.length - 1 ? "auto" : "10px"}
                     borderColor={
                       selectedImage === ind ? "primary.main" : "gray.400"
@@ -709,40 +668,91 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                 ))}
               </Carousel3>
             </Box>
-            <FlexBox overflow="auto">
+            <FlexBox mt={"10px"} alignItems="center" overflow="auto">
               <SemiSpan
                 style={{
                   display: sizes.length === 0 ? "none" : "block",
                   marginRight: "10px",
-                  marginTop: "15px",
+                  // marginTop: "15px",
                 }}
               >
                 Size:
               </SemiSpan>
-              {sizes.map((size, ind) => (
-                <Box
-                  size={50}
-                  minWidth={50}
-                  bg="white"
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  cursor="pointer"
-                  border="1px solid"
-                  key={ind}
-                  // ml={ind === 0 && "auto"}
-                  mr={ind === sizes.length - 1 ? "auto" : "10px"}
-                  borderColor={
-                    selectedSize === ind ? "primary.main" : "gray.400"
-                  }
-                  onClick={handleSizeClick(ind)}
-                >
-                  <H6 style={{ display: size.length === 0 ? "none" : "block" }}>
-                    {size.name || ""}
-                  </H6>
-                </Box>
-              ))}
+
+              <FlexBox alignItems="center">
+                {sizes.map((size, ind) => (
+                  <Box
+                    size={40}
+                    minWidth={40}
+                    bg="white"
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    cursor="pointer"
+                    border="1px solid"
+                    key={ind}
+                    // ml={ind === 0 && "auto"}
+                    mr={ind === sizes.length - 1 ? "auto" : "10px"}
+                    // mt={"10px"}
+                    borderColor={
+                      selectedSize === ind ? "primary.main" : "gray.400"
+                    }
+                    onClick={handleSizeClick(ind)}
+                  >
+                    <H6
+                      style={{
+                        display: size.length === 0 ? "none" : "block",
+                      }}
+                    >
+                      {size.name || ""}
+                    </H6>
+                  </Box>
+                ))}
+              </FlexBox>
             </FlexBox>
+            <Box mt={"10px"}>
+              {discount ? (
+                <>
+                  <FlexBox>
+                    <H2
+                      style={{ fontSize: "20px" }}
+                      color="primary.main"
+                      lineHeight="1"
+                    >
+                      <Currency>{Number(price).toFixed(2)}</Currency>
+                    </H2>
+                    <H2
+                      style={{ display: "flex", alignItems: "center" }}
+                      color="text.muted"
+                      fontSize="16px"
+                      lineHeight="1"
+                    >
+                      <del>
+                        <Currency>{orginalprice}</Currency>
+                      </del>
+                    </H2>
+                  </FlexBox>
+                </>
+              ) : (
+                <H2
+                  style={{ fontSize: "20px" }}
+                  color="primary.main"
+                  lineHeight="1"
+                >
+                  <Currency>{orginalprice ? orginalprice : price}</Currency>
+                </H2>
+              )}
+
+              {stock ? (
+                <SemiSpan fontWeight="bold" ml="5px" color="inherit">
+                  Stock Available
+                </SemiSpan>
+              ) : (
+                <SemiSpan fontWeight="bold" ml="5px" color="primary.main">
+                  Out Of Stock
+                </SemiSpan>
+              )}
+            </Box>
             {!cartQuantity && (
               <FlexBox mt="1rem" alignItems="center">
                 <SemiSpan
@@ -754,7 +764,8 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                   Quantity:{" "}
                 </SemiSpan>
                 <Button
-                  p="9px"
+                  p="4px"
+                  style={{ height: "30px" }}
                   variant="outlined"
                   size="small"
                   color="primary"
@@ -769,7 +780,8 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                   {defaultCartQuantity.toString().padStart(2, "0")}
                 </H3>
                 <Button
-                  p="9px"
+                  p="4px"
+                  style={{ height: "30px" }}
                   variant="outlined"
                   size="small"
                   color="primary"
@@ -816,7 +828,8 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                   Quantity:{" "}
                 </SemiSpan>
                 <Button
-                  p="9px"
+                  p="4px"
+                  style={{ height: "30px" }}
                   variant="outlined"
                   size="small"
                   color="primary"
@@ -831,7 +844,8 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                   {cartQuantity.toString().padStart(2, "0")}
                 </H3>
                 <Button
-                  p="9px"
+                  p="4px"
+                  style={{ height: "30px" }}
                   variant="outlined"
                   size="small"
                   color="primary"

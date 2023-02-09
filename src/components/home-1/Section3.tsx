@@ -66,7 +66,8 @@ const Section3 = ({ topCategoryList }) => {
         step={visibleSlides}
         getMoreItem={getMoreItem}
         spacing="0.5rem"
-        showArrow={topCategoryLists.length > 8 ? true : false}
+        autoPlay={topCategoryLists.length > 5 ? true : false}
+        showArrow={topCategoryLists.length > 5 ? true : false}
       >
         {topCategoryLists.map((item) => (
           <Link

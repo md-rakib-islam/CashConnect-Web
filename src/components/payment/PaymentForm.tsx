@@ -78,21 +78,23 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
   };
 
   useEffect(() => {
-    axios
-      .get(`${User_By_Id}`, {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: localStorage.getItem("jwt_access_token"),
-        },
-      })
-      .then((res) => {
-        console.log("resUseer", res);
-        setuserName(res?.data?.username);
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
-  }, []);
+    if (isLogin) {
+      axios
+        .get(`${User_By_Id}`, {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: localStorage.getItem("jwt_access_token"),
+          },
+        })
+        .then((res) => {
+          console.log("resUseer", res);
+          setuserName(res?.data?.username);
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
+    }
+  }, [isLogin]);
 
   useLayoutEffect(() => {
     cardNumberRef.current = values.card_number;

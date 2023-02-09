@@ -9,9 +9,10 @@ import NavbarLayout from "@component/layout/NavbarLayout";
 import ProductCard1List from "@component/products/ProductCard1List";
 import ProductCard9List from "@component/products/ProductCard9List";
 import ProductFilterCard from "@component/products/ProductFilterCard";
+import Link from "next/link";
 // import Select from "@component/Select";
 import Sidenav from "@component/sidenav/Sidenav";
-import { H5, Paragraph } from "@component/Typography";
+import { H5, H6, Paragraph } from "@component/Typography";
 import {
   Category_All_Without_Pg,
   New_product_using,
@@ -32,9 +33,16 @@ import React, { useCallback, useEffect, useState } from "react";
 // import * as yup from "yup";
 import useWindowSize from "../../../hooks/useWindowSize";
 
-const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
+const ProductSearchResult = ({
+  productLists,
+  totalProduct,
+  totalPage,
+  categoryPath,
+}) => {
   const [searchingFor, setSearchingFor] = useState("");
   const [totalProducts, setTotalProducts] = useState(totalProduct);
+  const [categoryPaths, setCategoryPaths] = useState<any>(categoryPath);
+  // const [categoryPathsStyle, setCategoryPathsStyle] = useState(false);
   const [productList, setProductList] = useState(productLists);
   const [categories, setCategories] = useState([]);
 
@@ -52,6 +60,10 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
     },
     []
   );
+  // const categoryStyle = {
+  //   color: categoryPathsStyle ? "#e84262" : "#7D879C",
+  // };
+  console.log("categoryPath", categoryPaths);
 
   // const handleFormSubmit = (e) => {
   //   console.log("shotrbay", e);
@@ -136,7 +148,15 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
   useEffect(() => {
     setProductList(productLists);
     setTotalProducts(totalProduct);
-  }, [productLists, totalProduct]);
+    setCategoryPaths(categoryPath);
+  }, [productLists, totalProduct, categoryPath]);
+
+  const categoriesPath = (f, e) => {
+    console.log("categoriesPathValue", f, e);
+    // if (e.id) {
+    //   // setCategoryPathsStyle(true);
+    // }
+  };
 
   // const { values, setFieldValue } = useFormik({
   //   initialValues: initialValues,
@@ -144,24 +164,54 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
   //   onSubmit: handleFormSubmit,
   // });
   return (
-    <Box pt="20px">
-      <FlexBox
-        p="1.25rem"
-        flexWrap="wrap"
-        justifyContent="space-between"
-        alignItems="center"
-        mb="55px"
-        elevation={5}
-        as={Card}
-      >
-        <div>
-          <H5>Searching for “ {searchingFor} ”</H5>
-          <Paragraph color="text.muted">
-            {totalProducts} results found
-          </Paragraph>
-        </div>
-        <FlexBox alignItems="center" flexWrap="wrap">
-          {/* <Paragraph color="text.muted" mr="1rem">
+    <>
+      <Box>
+        <FlexBox>
+          <Link href={`/`}>
+            <a style={{ fontSize: "12px", marginInline: "10px" }}>
+              <Icon variant="small" color="primary">
+                home
+              </Icon>
+            </a>
+          </Link>
+
+          {categoryPaths?.map((e: any) => (
+            <div key={e.id}>
+              <Link
+                href={`/product/search/product_by_category?categoryId=${e?.id}`}
+              >
+                <a>
+                  <H6
+                    onClick={(f) => categoriesPath(f, e)}
+                    color={"text.muted"}
+                    pl={"5px"}
+                  >
+                    {`/${" " + e.name.trim() + " "}`}
+                  </H6>
+                </a>
+              </Link>
+            </div>
+          ))}
+        </FlexBox>
+      </Box>
+      <Box pt="20px">
+        <FlexBox
+          p="1.25rem"
+          flexWrap="wrap"
+          justifyContent="space-between"
+          alignItems="center"
+          mb="55px"
+          elevation={5}
+          as={Card}
+        >
+          <div>
+            <H5>Searching for “ {searchingFor} ”</H5>
+            <Paragraph color="text.muted">
+              {totalProducts} results found
+            </Paragraph>
+          </div>
+          <FlexBox alignItems="center" flexWrap="wrap">
+            {/* <Paragraph color="text.muted" mr="1rem">
             Short by:
           </Paragraph>
           <Box flex="1 1 0" mr="1.75rem" minWidth="150px">
@@ -295,66 +345,73 @@ const ProductSearchResult = ({ productLists, totalProduct, totalPage }) => {
             />
           </Box> */}
 
-          <Paragraph color="text.muted" mr="0.5rem">
-            View:
-          </Paragraph>
-          <IconButton size="small" onClick={toggleView("grid")}>
-            <Icon
-              variant="small"
-              defaultcolor="auto"
-              color={view === "grid" ? "primary" : "inherit"}
-            >
-              grid
-            </Icon>
-          </IconButton>
-          <IconButton size="small" onClick={toggleView("list")}>
-            <Icon
-              variant="small"
-              defaultcolor="auto"
-              color={view === "list" ? "primary" : "inherit"}
-            >
-              menu
-            </Icon>
-          </IconButton>
+            <Paragraph color="text.muted" mr="0.5rem">
+              View:
+            </Paragraph>
+            <IconButton size="small" onClick={toggleView("grid")}>
+              <Icon
+                variant="small"
+                defaultcolor="auto"
+                color={view === "grid" ? "primary" : "inherit"}
+              >
+                grid
+              </Icon>
+            </IconButton>
+            <IconButton size="small" onClick={toggleView("list")}>
+              <Icon
+                variant="small"
+                defaultcolor="auto"
+                color={view === "list" ? "primary" : "inherit"}
+              >
+                menu
+              </Icon>
+            </IconButton>
 
-          {isTablet && (
-            <Sidenav
-              position="left"
-              scroll={true}
-              handle={
-                <IconButton size="small">
-                  <Icon>options</Icon>
-                </IconButton>
-              }
-            >
-              <ProductFilterCard productList={productList} />
-            </Sidenav>
-          )}
+            {isTablet && (
+              <Sidenav
+                position="left"
+                scroll={true}
+                handle={
+                  <IconButton size="small">
+                    <Icon>options</Icon>
+                  </IconButton>
+                }
+              >
+                <ProductFilterCard
+                  productList={productList}
+                  categoryPath={categoryPaths}
+                />
+              </Sidenav>
+            )}
+          </FlexBox>
         </FlexBox>
-      </FlexBox>
 
-      <Grid container spacing={6}>
-        <Hidden as={Grid} item lg={3} xs={12} down={1024}>
-          <ProductFilterCard productList={productList} />
-        </Hidden>
+        <Grid container spacing={6}>
+          <Hidden as={Grid} item lg={3} xs={12} down={1024}>
+            <ProductFilterCard
+              productList={productList}
+              categoryPath={categoryPaths}
+            />
+          </Hidden>
 
-        <Grid item lg={9} xs={12}>
-          {view === "grid" ? (
-            <ProductCard1List
-              productList={productList}
-              totalPage={totalPage}
-              totalProduct={totalProduct}
-            />
-          ) : (
-            <ProductCard9List
-              productList={productList}
-              totalPage={totalPage}
-              totalProduct={totalProduct}
-            />
-          )}
+          <Grid item lg={9} xs={12}>
+            {view === "grid" ? (
+              <ProductCard1List
+                productList={productList}
+                totalPage={totalPage}
+                totalProduct={totalProduct}
+              />
+            ) : (
+              <ProductCard9List
+                productList={productList}
+                totalPage={totalPage}
+                totalProduct={totalProduct}
+              />
+            )}
+          </Grid>
         </Grid>
-      </Grid>
-    </Box>
+      </Box>
+    </>
   );
 };
 
@@ -390,10 +447,12 @@ export const getServerSideProps: GetServerSideProps = async ({
       var data: any[] = await json.products;
       var totalProduct: number = await json.total_elements;
       var totalPage: number = await json.total_pages;
+      var categoryPath: any[] = await json?.category_minimap;
     } catch (err) {
       var data = [];
       var totalProduct = 0;
       var totalPage = 0;
+      var categoryPath = [];
     }
   } else if (params.type === "search_by_product_name") {
     try {
@@ -409,10 +468,12 @@ export const getServerSideProps: GetServerSideProps = async ({
       var data: any[] = await res.data.products;
       var totalProduct: number = await res.data.total_elements;
       var totalPage: number = await res.data.total_pages;
+      var categoryPath: any[] = await res.data.category_minimap;
     } catch (err) {
       var data = [];
       var totalProduct = 0;
       var totalPage = 0;
+      var categoryPath = [];
     }
   } else if (params.type === "filter") {
     try {
@@ -452,10 +513,12 @@ export const getServerSideProps: GetServerSideProps = async ({
       var data: any[] = await res.data.products;
       var totalProduct: number = await res.data.total_elements;
       var totalPage: number = await res.data.total_pages;
+      var categoryPath: any[] = await res.data.category_minimap;
     } catch (err) {
       var data = [];
       var totalProduct = 0;
       var totalPage = 0;
+      var categoryPath = [];
     }
   } else if (params.type === "flash_deals_all") {
     try {
@@ -736,10 +799,12 @@ export const getServerSideProps: GetServerSideProps = async ({
       var data: any[] = await res.data.products;
       var totalProduct: number = await res.data.total_elements;
       var totalPage: number = await res.data.total_pages;
+      var categoryPath: any[] = await res.data.category_minimap;
     } catch (error) {
       var data = [];
       var totalProduct = 0;
       var totalPage = 0;
+      var categoryPath = [];
     }
   } else if (params.type === "shop_now") {
     console.log("shop_now");
@@ -791,6 +856,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   return {
     props: {
       productLists: data,
+      categoryPath,
       totalProduct,
       totalPage,
     },

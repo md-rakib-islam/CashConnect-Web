@@ -97,18 +97,16 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 
   useEffect(() => {
     axios
-      .get(`${Product_Discount_By_Id}${id}`, {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: localStorage.getItem("jwt_access_token"),
-        },
-      })
+      .get(`${Product_Discount_By_Id}${id}`)
       .then((res) => {
         if (res.data.discounts?.discounted_price) {
           setsellablePrice(res.data.discounts?.discounted_price);
           setorginalPrice(Number(res.data.discounts?.product.unit_price));
           setdiscountedPercent(res.data.discounts?.discount_percent);
         }
+      })
+      .catch((e) => {
+        console.log(e);
       });
   }, [id]);
 
@@ -359,7 +357,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
               </SemiSpan>
             )}
 
-            <SemiSpan
+            {/* <SemiSpan
               style={{
                 visibility: "hidden",
               }}
@@ -369,7 +367,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
               <del>
                 <Currency>{orginalPrice?.toFixed(2)}</Currency>
               </del>
-            </SemiSpan>
+            </SemiSpan> */}
             <FlexBox>
               <SemiSpan mr="0.5rem" fontWeight="600" color="primary.main">
                 <Currency>{sellablePrice.toFixed(2)}</Currency>

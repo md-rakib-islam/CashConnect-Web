@@ -82,6 +82,8 @@ const Section13: React.FC<Section2Props> = ({ bigDiscountList }) => {
           visibleSlides={visibleSlides}
           step={visibleSlides}
           getMoreItem={getMoreItem}
+          autoPlay={bigDiscountLists.length > 5 ? true : false}
+          showArrow={bigDiscountLists.length > 5 ? true : false}
         >
           {bigDiscountLists?.map((item) => (
             <Box py="0.25rem" key={item.id}>

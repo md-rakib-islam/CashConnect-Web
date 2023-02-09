@@ -78,6 +78,8 @@ const Section2: React.FC<Section2Props> = ({ flashDealsList }) => {
           visibleSlides={visibleSlides}
           step={visibleSlides}
           getMoreItem={getMoreItem}
+          autoPlay={flashDealsListLists.length > 5 ? true : false}
+          showArrow={flashDealsListLists.length > 5 ? true : false}
         >
           {flashDealsListLists?.map((item) => (
             <Box py="0.25rem" key={item.id}>

@@ -67,6 +67,8 @@ const Section5 = ({ newArrivalList }) => {
           visibleSlides={visibleSlides}
           step={visibleSlides}
           getMoreItem={getMoreItem}
+          autoPlay={newArrivalLists.length > 5 ? true : false}
+          showArrow={newArrivalLists.length > 5 ? true : false}
         >
           {newArrivalLists?.map((item) => (
             <Box py="0.25rem" key={item.id}>

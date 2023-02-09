@@ -1,5 +1,6 @@
 import Icon from "@component/icon/Icon";
 import { useAppContext } from "@context/app/AppContext";
+import useUserInf from "@customHook/useUserInf";
 import { Customer_Order_Details } from "@data/constants";
 import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
@@ -10,6 +11,7 @@ function Alert() {
   const [orderNumber, setOrderNumber] = useState<any>("");
   const [userEmail, setUserEmail] = useState<any>("");
   const { state, dispatch } = useAppContext();
+  const { isLogin } = useUserInf();
 
   const success = state.alert.alerType === "success" || false;
   const successLogin = state.alert.alerType === "successLogin" || false;
@@ -44,22 +46,24 @@ function Alert() {
   }, [state.alert.alertChanged]);
 
   useEffect(() => {
-    axios
-      .get(`${Customer_Order_Details}${localStorage.getItem("OrderId")}`, {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: localStorage.getItem("jwt_access_token"),
-        },
-      })
-      .then((res) => {
-        console.log("resUseerAlert", res.data[0]);
-        setOrderNumber(res.data[0].order?.order_no);
-        setUserEmail(res.data[0].updated_by?.email);
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
-  }, []);
+    if (isLogin) {
+      axios
+        .get(`${Customer_Order_Details}${localStorage.getItem("OrderId")}`, {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: localStorage.getItem("jwt_access_token"),
+          },
+        })
+        .then((res) => {
+          console.log("resUseerAlert", res.data[0]);
+          setOrderNumber(res.data[0].order?.order_no);
+          setUserEmail(res.data[0].updated_by?.email);
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
+    }
+  }, [isLogin]);
 
   return (
     <>

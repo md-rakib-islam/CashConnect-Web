@@ -38,8 +38,14 @@ const PaymentMethodEditor = () => {
 
   useEffect(() => {
     if (id) {
+      // setReloadMessage(Math.random());
       axios
-        .get(`${Ticket_Details_All}${id}`, authTOKEN)
+        .get(`${Ticket_Details_All}${id}`, {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: localStorage.getItem("jwt_access_token"),
+          },
+        })
         .then((res) => {
           console.log("Ticket_Details_AllRes", res);
           setFieldValue("message", "");
@@ -102,47 +108,81 @@ const PaymentMethodEditor = () => {
         <FlexBox
           mb="15px"
           key={item.id}
-          style={{ direction: item?.customer ? "rtl" : "ltr" }}
+          style={{ justifyContent: item?.customer ? "flex-end" : "flex-start" }}
         >
           <Box>
             <H5 fontWeight="600" mt="0px" mb="0px">
               {item?.customer?.name || item?.admin?.name}
             </H5>
 
-            <FlexBox alignItems="center">
-              <Avatar
-                src={`${
-                  item?.customer_image
-                    ? `${
-                        item?.customer_image !== "/media/"
-                          ? `${BASE_URL}${item?.customer_image}`
-                          : "/no_image.png"
-                      }`
-                    : item?.admin_image
-                    ? `${
-                        item?.admin_image != "/media/"
-                          ? `${BASE_URL}${item?.admin_image}`
-                          : "/no_image.png"
-                      }`
-                    : "/no_image.png"
-                }`}
-                mr={item?.admin?.name && "1rem"}
-                ml={item?.customer?.name && "1rem"}
-              />
-              <Box
-                borderRadius="10px"
-                bg="gray.200"
-                p="1rem"
-                mt="1rem"
-                style={{
-                  whiteSpace: "pre",
-                  textAlign: item?.customer ? "right" : "left",
-                  direction: item?.customer ? "rtl" : "ltr",
-                }}
-              >
-                {item?.message}
-              </Box>
-            </FlexBox>
+            {item?.customer && (
+              <FlexBox alignItems="center">
+                <div>
+                  <Box
+                    borderRadius="10px"
+                    bg="gray.200"
+                    textAlign={"justify"}
+                    p="1rem"
+                    mt="1rem"
+                    style={
+                      {
+                        // whiteSpace: "pre",
+                        // textAlign: item?.customer ? "right" : "left",
+                        // direction: item?.customer ? "rtl" : "ltr",
+                      }
+                    }
+                  >
+                    {item?.message}
+                  </Box>
+                </div>
+                <Avatar
+                  src={`${
+                    item?.customer_image
+                      ? `${
+                          item?.customer_image !== "/media/"
+                            ? `${BASE_URL}${item?.customer_image}`
+                            : "/no_image.png"
+                        }`
+                      : "/no_image.png"
+                  }`}
+                  ml={item?.customer?.name && "1rem"}
+                />
+              </FlexBox>
+            )}
+            {!item?.customer && (
+              <FlexBox alignItems="center">
+                <Avatar
+                  src={`${
+                    item?.admin_image
+                      ? `${
+                          item?.admin_image != "/media/"
+                            ? `${BASE_URL}${item?.admin_image}`
+                            : "/no_image.png"
+                        }`
+                      : "/no_image.png"
+                  }`}
+                  mr={item?.admin?.name && "1rem"}
+                />
+                <div>
+                  <Box
+                    borderRadius="10px"
+                    bg="gray.200"
+                    p="1rem"
+                    mt="1rem"
+                    textAlign={"justify"}
+                    style={
+                      {
+                        // whiteSpace: "pre",
+                        // textAlign: item?.customer ? "right" : "left",
+                        // direction: item?.customer ? "rtl" : "ltr",
+                      }
+                    }
+                  >
+                    {item?.message}
+                  </Box>
+                </div>
+              </FlexBox>
+            )}
             <SemiSpan style={{ direction: "ltr" }}>
               <pre
                 style={{

@@ -741,7 +741,7 @@ function onlineSell() {
             Get the latest information on Cash
           </Typography>
           <Typography textAlign="center" fontSize="25px" fontWeight="700">
-            Crusaders deals, competitions and news
+            Connect deals, competitions and news
           </Typography>
           <Typography
             textAlign="center"

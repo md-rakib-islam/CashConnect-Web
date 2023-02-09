@@ -74,6 +74,7 @@ const ProductDetails = ({
         short_desc={short_desc}
         orginalprice={orginalprice}
         parse={""}
+        eye={false}
       />
 
       <FlexBox

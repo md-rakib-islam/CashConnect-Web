@@ -72,6 +72,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                     prductId: product?.product?.id,
                   },
                 });
+                localStorage.removeItem("OrderId");
               })
               .catch((err) => {
                 console.log("error", err);
