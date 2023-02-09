@@ -128,7 +128,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       .catch(() => {
         console.log("errr");
       });
-  }, [id]);
+  }, [cartCanged]);
 
   useEffect(() => {
     axios
@@ -769,7 +769,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                   variant="outlined"
                   size="small"
                   color="primary"
-                  disabled={!stock || defaultCartQuantity == 1}
+                  disabled={defaultCartQuantity == 1}
                   onClick={() =>
                     setDefaultCartQuantity(defaultCartQuantity - 1)
                   }
@@ -785,7 +785,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                   variant="outlined"
                   size="small"
                   color="primary"
-                  disabled={!stock || defaultCartQuantity == stockQuantity}
+                  disabled={!stock || stockQuantity == defaultCartQuantity}
                   onClick={() =>
                     setDefaultCartQuantity(defaultCartQuantity + 1)
                   }
@@ -833,7 +833,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                   variant="outlined"
                   size="small"
                   color="primary"
-                  disabled={!stock || cartQuantity == 1}
+                  disabled={cartQuantity == 1}
                   onClick={() =>
                     handleCartAmountChange(cartQuantity - 1, "decrease")
                   }
@@ -849,7 +849,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                   variant="outlined"
                   size="small"
                   color="primary"
-                  disabled={!stock || cartQuantity == stockQuantity}
+                  disabled={!stock || stockQuantity == 1}
                   onClick={() =>
                     handleCartAmountChange(cartQuantity + 1, "increase")
                   }

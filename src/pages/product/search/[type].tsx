@@ -41,7 +41,7 @@ const ProductSearchResult = ({
 }) => {
   const [searchingFor, setSearchingFor] = useState("");
   const [totalProducts, setTotalProducts] = useState(totalProduct);
-  const [categoryPaths, setCategoryPaths] = useState<any>(categoryPath);
+  const [categoryPaths, setCategoryPaths] = useState(categoryPath);
   // const [categoryPathsStyle, setCategoryPathsStyle] = useState(false);
   const [productList, setProductList] = useState(productLists);
   const [categories, setCategories] = useState([]);
@@ -148,7 +148,9 @@ const ProductSearchResult = ({
   useEffect(() => {
     setProductList(productLists);
     setTotalProducts(totalProduct);
-    setCategoryPaths(categoryPath);
+    if (router.query.type === "product_by_category") {
+      setCategoryPaths(categoryPath);
+    }
   }, [productLists, totalProduct, categoryPath]);
 
   const categoriesPath = (f, e) => {
@@ -165,35 +167,37 @@ const ProductSearchResult = ({
   // });
   return (
     <>
-      <Box>
-        <FlexBox>
-          <Link href={`/`}>
-            <a style={{ fontSize: "12px", marginInline: "10px" }}>
-              <Icon variant="small" color="primary">
-                home
-              </Icon>
-            </a>
-          </Link>
+      {router.query.type === "product_by_category" && (
+        <Box>
+          <FlexBox>
+            <Link href={`/`}>
+              <a style={{ fontSize: "12px", marginInline: "10px" }}>
+                <Icon variant="small" color="primary">
+                  home
+                </Icon>
+              </a>
+            </Link>
 
-          {categoryPaths?.map((e: any) => (
-            <div key={e.id}>
-              <Link
-                href={`/product/search/product_by_category?categoryId=${e?.id}`}
-              >
-                <a>
-                  <H6
-                    onClick={(f) => categoriesPath(f, e)}
-                    color={"text.muted"}
-                    pl={"5px"}
-                  >
-                    {`/${" " + e.name.trim() + " "}`}
-                  </H6>
-                </a>
-              </Link>
-            </div>
-          ))}
-        </FlexBox>
-      </Box>
+            {categoryPaths?.map((e: any) => (
+              <div key={e.id}>
+                <Link
+                  href={`/product/search/product_by_category?categoryId=${e?.id}`}
+                >
+                  <a>
+                    <H6
+                      onClick={(f) => categoriesPath(f, e)}
+                      color={"text.muted"}
+                      pl={"5px"}
+                    >
+                      {`/${" " + e.name.trim() + " "}`}
+                    </H6>
+                  </a>
+                </Link>
+              </div>
+            ))}
+          </FlexBox>
+        </Box>
+      )}
       <Box pt="20px">
         <FlexBox
           p="1.25rem"
@@ -377,10 +381,7 @@ const ProductSearchResult = ({
                   </IconButton>
                 }
               >
-                <ProductFilterCard
-                  productList={productList}
-                  categoryPath={categoryPaths}
-                />
+                <ProductFilterCard productList={productList} />
               </Sidenav>
             )}
           </FlexBox>
@@ -388,10 +389,7 @@ const ProductSearchResult = ({
 
         <Grid container spacing={6}>
           <Hidden as={Grid} item lg={3} xs={12} down={1024}>
-            <ProductFilterCard
-              productList={productList}
-              categoryPath={categoryPaths}
-            />
+            <ProductFilterCard productList={productList} />
           </Hidden>
 
           <Grid item lg={9} xs={12}>
@@ -447,7 +445,7 @@ export const getServerSideProps: GetServerSideProps = async ({
       var data: any[] = await json.products;
       var totalProduct: number = await json.total_elements;
       var totalPage: number = await json.total_pages;
-      var categoryPath: any[] = await json?.category_minimap;
+      var categoryPath: any[] = (await json?.category_minimap) || null;
     } catch (err) {
       var data = [];
       var totalProduct = 0;
@@ -468,7 +466,7 @@ export const getServerSideProps: GetServerSideProps = async ({
       var data: any[] = await res.data.products;
       var totalProduct: number = await res.data.total_elements;
       var totalPage: number = await res.data.total_pages;
-      var categoryPath: any[] = await res.data.category_minimap;
+      var categoryPath: any[] = (await res.data?.category_minimap) || null;
     } catch (err) {
       var data = [];
       var totalProduct = 0;
@@ -513,7 +511,7 @@ export const getServerSideProps: GetServerSideProps = async ({
       var data: any[] = await res.data.products;
       var totalProduct: number = await res.data.total_elements;
       var totalPage: number = await res.data.total_pages;
-      var categoryPath: any[] = await res.data.category_minimap;
+      var categoryPath: any[] = (await res.data?.category_minimap) || null;
     } catch (err) {
       var data = [];
       var totalProduct = 0;
@@ -530,10 +528,12 @@ export const getServerSideProps: GetServerSideProps = async ({
       var data: any[] = await res.data.products;
       var totalProduct: number = await res.data.total_elements;
       var totalPage: number = await res.data.total_pages;
+      var categoryPath: any[] = (await res.data?.category_minimap) || null;
     } catch (error) {
       var data = [];
       var totalProduct = 0;
       var totalPage = 0;
+      var categoryPath = [];
     }
   } else if (params.type === "flash_deals_all_filter") {
     try {
@@ -572,10 +572,12 @@ export const getServerSideProps: GetServerSideProps = async ({
       var data: any[] = await res.data.products;
       var totalProduct: number = await res.data.total_elements;
       var totalPage: number = await res.data.total_pages;
+      var categoryPath: any[] = (await res.data?.category_minimap) || null;
     } catch (error) {
       var data = [];
       var totalProduct = 0;
       var totalPage = 0;
+      var categoryPath = [];
     }
   } else if (params.type === "top_ratings_all") {
     try {
@@ -585,10 +587,12 @@ export const getServerSideProps: GetServerSideProps = async ({
       var data: any[] = await res.data.products;
       var totalProduct: number = await res.data.total_elements;
       var totalPage: number = await res.data.total_pages;
+      var categoryPath: any[] = (await res.data?.category_minimap) || null;
     } catch (error) {
       var data = [];
       var totalProduct = 0;
       var totalPage = 0;
+      var categoryPath = [];
     }
   } else if (params.type === "top_ratings_all_filter") {
     try {
@@ -625,10 +629,12 @@ export const getServerSideProps: GetServerSideProps = async ({
       var data: any[] = await res.data.products;
       var totalProduct: number = await res.data.total_elements;
       var totalPage: number = await res.data.total_pages;
+      var categoryPath: any[] = (await res.data?.category_minimap) || null;
     } catch (error) {
       var data = [];
       var totalProduct = 0;
       var totalPage = 0;
+      var categoryPath = [];
     }
   } else if (params.type === "new_arrivals_all") {
     try {
@@ -638,10 +644,12 @@ export const getServerSideProps: GetServerSideProps = async ({
       var data: any[] = await res.data.products;
       var totalProduct: number = await res.data.total_elements;
       var totalPage: number = await res.data.total_pages;
+      var categoryPath: any[] = (await res.data?.category_minimap) || null;
     } catch (error) {
       var data = [];
       var totalProduct = 0;
       var totalPage = 0;
+      var categoryPath = [];
     }
   } else if (params.type === "new_arrivals_all_filter") {
     try {
@@ -678,10 +686,12 @@ export const getServerSideProps: GetServerSideProps = async ({
       var data: any[] = await res.data.products;
       var totalProduct: number = await res.data.total_elements;
       var totalPage: number = await res.data.total_pages;
+      var categoryPath: any[] = (await res.data?.category_minimap) || null;
     } catch (error) {
       var data = [];
       var totalProduct = 0;
       var totalPage = 0;
+      var categoryPath = [];
     }
   } else if (params.type === "big_discounts_all") {
     try {
@@ -691,10 +701,12 @@ export const getServerSideProps: GetServerSideProps = async ({
       var data: any[] = await res.data.products;
       var totalProduct: number = await res.data.total_elements;
       var totalPage: number = await res.data.total_pages;
+      var categoryPath: any[] = (await res.data?.category_minimap) || null;
     } catch (error) {
       var data = [];
       var totalProduct = 0;
       var totalPage = 0;
+      var categoryPath = [];
     }
   } else if (params.type === "big_discounts_all_filter") {
     try {
@@ -731,10 +743,12 @@ export const getServerSideProps: GetServerSideProps = async ({
       var data: any[] = await res.data.products;
       var totalProduct: number = await res.data.total_elements;
       var totalPage: number = await res.data.total_pages;
+      var categoryPath: any[] = (await res.data?.category_minimap) || null;
     } catch (error) {
       var data = [];
       var totalProduct = 0;
       var totalPage = 0;
+      var categoryPath = [];
     }
   } else if (params.type === "more_for_you_all") {
     try {
@@ -744,10 +758,12 @@ export const getServerSideProps: GetServerSideProps = async ({
       var data: any[] = await res.data.products;
       var totalProduct: number = await res.data.total_elements;
       var totalPage: number = await res.data.total_pages;
+      var categoryPath: any[] = (await res.data?.category_minimap) || null;
     } catch (error) {
       var data = [];
       var totalProduct = 0;
       var totalPage = 0;
+      var categoryPath = [];
     }
   } else if (params.type === "more_for_you_all_filter") {
     try {
@@ -784,10 +800,12 @@ export const getServerSideProps: GetServerSideProps = async ({
       var data: any[] = await res.data.products;
       var totalProduct: number = await res.data.total_elements;
       var totalPage: number = await res.data.total_pages;
+      var categoryPath: any[] = (await res.data?.category_minimap) || null;
     } catch (error) {
       var data = [];
       var totalProduct = 0;
       var totalPage = 0;
+      var categoryPath = [];
     }
   } else if (params.type === "product_by_brand") {
     try {
@@ -799,7 +817,7 @@ export const getServerSideProps: GetServerSideProps = async ({
       var data: any[] = await res.data.products;
       var totalProduct: number = await res.data.total_elements;
       var totalPage: number = await res.data.total_pages;
-      var categoryPath: any[] = await res.data.category_minimap;
+      var categoryPath: any[] = (await res.data?.category_minimap) || null;
     } catch (error) {
       var data = [];
       var totalProduct = 0;
@@ -831,20 +849,24 @@ export const getServerSideProps: GetServerSideProps = async ({
         var data: any[] = await res.data.products;
         var totalProduct: number = await res.data.total_elements;
         var totalPage: number = await res.data.total_pages;
+        var categoryPath: any[] = (await res.data?.category_minimap) || null;
       } else {
         var data = [];
         var totalProduct = 0;
         var totalPage = 0;
+        var categoryPath = [];
       }
     } catch (error) {
       var data = [];
       var totalProduct = 0;
       var totalPage = 0;
+      var categoryPath = [];
     }
   } else {
     var data = [];
     var totalProduct = 0;
     var totalPage = 0;
+    var categoryPath = [];
   }
 
   if (!data) {
@@ -852,6 +874,11 @@ export const getServerSideProps: GetServerSideProps = async ({
       notFound: true,
     };
   }
+  // if (!categoryPath) {
+  //   return {
+  //     notFound: false,
+  //   };
+  // }
 
   return {
     props: {

@@ -5,6 +5,7 @@ import Divider from "@component/Divider";
 import FlexBox from "@component/FlexBox";
 import Icon from "@component/icon/Icon";
 import Typography, { H5, SemiSpan, Tiny } from "@component/Typography";
+import { useAppContext } from "@context/app/AppContext";
 import { BASE_URL, Check_Stock } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
@@ -17,11 +18,15 @@ interface ItemProps {
 
 const Item: React.FC<ItemProps> = ({ item, handleCartAmountChange }) => {
   const [stock, setStock] = useState(true);
+  const [stockQuantity, setStockQuantity] = useState();
+  const { state } = useAppContext();
+  const cartCanged = state.cart.chartQuantity;
 
   useEffect(() => {
     axios
       .get(`${Check_Stock}${item?.product?.id}`)
       .then((res) => {
+        setStockQuantity(res.data.in_stock);
         if (!res.data.is_in_stock) {
           setStock(false);
         }
@@ -29,7 +34,7 @@ const Item: React.FC<ItemProps> = ({ item, handleCartAmountChange }) => {
       .catch((err) => {
         console.log("error", err);
       });
-  }, []);
+  }, [cartCanged]);
 
   return (
     <Fragment key={item.id}>
@@ -43,7 +48,7 @@ const Item: React.FC<ItemProps> = ({ item, handleCartAmountChange }) => {
             borderColor="primary.light"
             borderRadius="300px"
             onClick={handleCartAmountChange(item, "increase")}
-            disabled={!stock}
+            disabled={!stock || stockQuantity == 1}
           >
             <Icon variant="small">plus</Icon>
           </Button>

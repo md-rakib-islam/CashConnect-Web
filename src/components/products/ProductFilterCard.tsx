@@ -18,7 +18,7 @@ import Rating from "../rating/Rating";
 import TextField from "../text-field/TextField";
 import { H5, H6, Paragraph, SemiSpan } from "../Typography";
 
-const ProductFilterCard = ({ productList, categoryPath }) => {
+const ProductFilterCard = ({ productList }) => {
   const [brandlist, setBrandlist] = useState([]);
   const [brandIds, setBrandIds] = useState({});
   const [ratingIds, setRatingIds] = useState({});
@@ -27,7 +27,6 @@ const ProductFilterCard = ({ productList, categoryPath }) => {
   const [formattedCategoryData, setFormattedCategoryData] =
     useFormattedCategoryData();
 
-  console.log("categoryPath", categoryPath);
   const newItem = productList.map((n) =>
     n.brand ? n.brand : { id: 0, name: "No Brand" }
   );
