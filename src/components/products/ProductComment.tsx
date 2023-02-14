@@ -5,7 +5,7 @@ import Avatar from "../avatar/Avatar";
 import Box from "../Box";
 import FlexBox from "../FlexBox";
 import Rating from "../rating/Rating";
-import { H5, H6, Paragraph, SemiSpan } from "../Typography";
+import { H6, SemiSpan } from "../Typography";
 
 export interface ProductCommentProps {
   name;
@@ -52,22 +52,33 @@ const ProductComment: React.FC<ProductCommentProps> = ({
     console.log("reviewMultiimg", mainImg);
     setPreviewImage(mainImg);
   };
+  const handleMouseLeave = () => {
+    setPreviewImage([]);
+  };
   console.log("review_rating_images", review_rating_images);
   return (
-    <Box mb="32px" maxWidth="600px">
-      <FlexBox alignItems="center" mb="1rem">
-        <Avatar src={user?.image ? `${BASE_URL}${user?.image}` : null} />
-        <Box ml="1rem">
-          <H5 mb="4px">{`${user?.first_name} ${user?.last_name}`}</H5>
+    <Box maxWidth="600px" borderBottom={"1px solid #DAE1E7"}>
+      {/* <FlexBox alignItems="center" mb="1rem"> */}
+      {/* <Avatar src={user?.image ? `${BASE_URL}${user?.image}` : null} /> */}
+      <Box>
+        <FlexBox alignItems="center">
+          <Rating value={rating} color="warn" readonly />
+          <H6 mx="10px">{rating}</H6>
+          <SemiSpan>{getDateDifference(created_at)}</SemiSpan>
+        </FlexBox>
+        <FlexBox alignItems="center">
+          <SemiSpan mb="4px" mr="4px">{`by ${user?.first_name}`}</SemiSpan>
           <FlexBox alignItems="center">
-            <Rating value={rating} color="warn" readonly />
-            <H6 mx="10px">{rating}</H6>
-            <SemiSpan>{getDateDifference(created_at)}</SemiSpan>
+            <img src="https://img.icons8.com/fluency/20/null/verified-account.png" />
+            <SemiSpan style={{ color: "#4caf50" }} ml="4px">
+              Verified Purchase
+            </SemiSpan>
           </FlexBox>
-        </Box>
-      </FlexBox>
+        </FlexBox>
+      </Box>
+      {/* </FlexBox> */}
 
-      <Paragraph color="gray.700">{review}</Paragraph>
+      <H6 color="gray.700">{review}</H6>
       <br />
       {review_rating_images && (
         <FlexBox
@@ -90,7 +101,8 @@ const ProductComment: React.FC<ProductCommentProps> = ({
               borderColor={
                 selectedThumbnail === ind ? "primary.main" : "gray.400"
               }
-              onClick={handleThunmbnailClick(ind)}
+              onMouseEnter={handleThunmbnailClick(ind)}
+              onMouseLeave={handleMouseLeave}
             >
               <Avatar src={`${BASE_URL}${url?.image}`} radius={1} size={94} />
             </Box>

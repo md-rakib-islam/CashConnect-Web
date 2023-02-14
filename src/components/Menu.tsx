@@ -20,7 +20,7 @@ const StyledMenu = styled.div<{ direction: string }>(
     ".menu-item-holder": {
       // paddingTop: "0.5rem",
       paddingBottom: "0.5rem",
-      minWidth: "200px",
+      minWidth: "180px",
       position: "absolute",
       // borderRadius: "6px",
       transition: "all 250ms ease-in-out",

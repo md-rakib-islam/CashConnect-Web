@@ -1,6 +1,9 @@
 import Avatar from "@component/avatar/Avatar";
+import IconButton from "@component/buttons/IconButton";
 import Hidden from "@component/hidden/Hidden";
 import Icon from "@component/icon/Icon";
+import Menu from "@component/Menu";
+import MenuItem from "@component/MenuItem";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import {
@@ -8,6 +11,7 @@ import {
   Review_Create,
   Review_Permission,
 } from "@data/constants";
+import { rating, sortBy } from "@data/data";
 import jsonToFormData from "@helper/jsonToFormData";
 import axios from "axios";
 import { useFormik } from "formik";
@@ -19,7 +23,7 @@ import Button from "../buttons/Button";
 import FlexBox from "../FlexBox";
 import Rating from "../rating/Rating";
 import TextArea from "../textarea/TextArea";
-import { H2, H5 } from "../Typography";
+import Typography, { H2, H5 } from "../Typography";
 import ProductComment from "./ProductComment";
 
 type TIMG = any[];
@@ -94,14 +98,40 @@ const ProductReview: React.FC<ProductReviewProps> = ({
       );
     }
   };
+  const handleReviewsFilter = (e) => {
+    axios
+      .get(`${Review_By_Product_Id}${product_id}?sorting=${e}`, authTOKEN)
+      .then((res) => {
+        console.log("ReviewAllRestttttt", res);
+
+        setCommentList(res?.data?.review_ratings);
+        setReviews(res?.data?.review_ratings?.length);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  };
+  const handleReviewsFilterByStart = (e) => {
+    axios
+      .get(`${Review_By_Product_Id}${product_id}?rating=${e}`, authTOKEN)
+      .then((res) => {
+        console.log("ReviewAllRestttttt", res);
+
+        setCommentList(res?.data?.review_ratings);
+        setReviews(res?.data?.review_ratings?.length);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  };
 
   useEffect(() => {
     axios
       .get(`${Review_By_Product_Id}${product_id}`, authTOKEN)
       .then((res) => {
         console.log("ReviewAllRes", res);
-        setCommentList(res?.data);
-        setReviews(res?.data?.length);
+        setCommentList(res?.data?.review_ratings);
+        setReviews(res?.data?.review_ratings?.length);
       })
       .catch((err) => {
         console.log("error", err);
@@ -141,7 +171,91 @@ const ProductReview: React.FC<ProductReviewProps> = ({
   });
 
   return (
-    <Box>
+    <Box maxWidth="800px">
+      <Box border={"1px solid #DAE1E7"}>
+        <FlexBox ml={"5px"} justifyContent="space-between" alignItems="center">
+          <H5 color="gray.700" mr="6px">
+            Product Reviews
+          </H5>
+
+          <FlexBox>
+            <Menu
+              style={{}}
+              direction="left"
+              handler={
+                <IconButton ml="1rem" p="8px">
+                  <FlexBox>
+                    <Icon
+                      style={{ color: "#e84262", marginRight: "7px" }}
+                      size="25px"
+                    >
+                      sort
+                    </Icon>
+                    Sort
+                  </FlexBox>
+                </IconButton>
+              }
+            >
+              {sortBy.map((e) => (
+                <MenuItem p="2px">
+                  <div
+                    style={{
+                      fontSize: "20px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "flexStart",
+                      cursor: "pointer",
+                      minWidth: "100px",
+                    }}
+                    onClick={() => handleReviewsFilter(e?.id)}
+                  >
+                    <Typography fontWeight="600" fontSize="16px" ml="5px">
+                      {e?.name}
+                    </Typography>
+                  </div>
+                </MenuItem>
+              ))}
+            </Menu>
+            <Menu
+              direction="left"
+              handler={
+                <IconButton ml="1rem" p="8px">
+                  <FlexBox>
+                    <Icon
+                      style={{ color: "#e84262", marginRight: "7px" }}
+                      size="25px"
+                    >
+                      filter
+                    </Icon>
+                    Filter
+                  </FlexBox>
+                </IconButton>
+              }
+            >
+              {rating.map((e) => (
+                <MenuItem p="2px">
+                  <div
+                    style={{
+                      fontSize: "20px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "flexStart",
+                      cursor: "pointer",
+                      minWidth: "100px",
+                    }}
+                    onClick={() => handleReviewsFilterByStart(e?.id)}
+                  >
+                    <Typography fontWeight="600" fontSize="16px" ml="5px">
+                      {e?.name}
+                    </Typography>
+                  </div>
+                </MenuItem>
+              ))}
+            </Menu>
+          </FlexBox>
+        </FlexBox>
+      </Box>
+
       {commentList.map((item, ind) => {
         console.log("reviewItem", item);
         return <ProductComment {...item} key={item?.id || ind} />;
