@@ -230,7 +230,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
             authTOKEN
           )
           .then((item) => {
-            console.log("item", item.data.order_item);
+            console.log("itemOrderById", item.data.order_item);
             setItemId(item.data.order_item.id);
             setCartQuantity(item.data.order_item.quantity);
           })
@@ -263,10 +263,13 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
         (dateObj.getMonth() + 1).toString().padStart(2, 0) +
         "-" +
         dateObj.getDate().toString().padStart(2, 0);
-
+      console.log(
+        "cartQuantity",
+        action == "increase" ? defaultCartQuantity + 1 : ""
+      );
       const orderData = {
         product: id || routerId,
-        quantity: defaultCartQuantity,
+        quantity: 1,
         price: price,
         order_date: currentDate,
         branch: 1,
@@ -278,6 +281,8 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
       //addToCart
       if (action == "addToCart") {
+        console.log("orderData", (orderData.quantity = defaultCartQuantity));
+        orderData.quantity = defaultCartQuantity;
         console.log("orderData", orderData);
         axios
           .post(`${Customer_Order_Create}`, orderData, authTOKEN)
