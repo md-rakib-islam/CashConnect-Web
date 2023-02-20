@@ -137,6 +137,20 @@ const ProductReview: React.FC<ProductReviewProps> = ({
         console.log("error", err);
       });
   }, [reloadreviews, query, product_id]);
+  useEffect(() => {
+    addEventListener(
+      "scroll",
+      () => {
+        console.log("Scrolling...", window.scrollY, window.scrollX);
+      },
+      true
+    );
+
+    // // Remove the event listener
+    // return () => {
+    // 	removeEventListener('scroll', true);
+    // };
+  }, []);
 
   useEffect(() => {
     if (authTOKEN) {

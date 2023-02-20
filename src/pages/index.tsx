@@ -15,6 +15,7 @@ import {
 import getFormattedProductData from "@helper/getFormattedProductData";
 import axios from "axios";
 import { GetServerSideProps } from "next";
+import { useEffect, useState } from "react";
 
 import Section1 from "../components/home-1/Section1";
 import Section10 from "../components/home-1/Section10";
@@ -38,8 +39,75 @@ const IndexPage = ({
   moreForYouList,
   categoryWithProductBrandList,
 }) => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${Product_For_You}`)
+      .then((response) => response.json())
+      .then(() => {
+        // data.menus.find((e) => (e.name === "Home" ? setHomeId(e.id) : null));
+        setLoading(false);
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <main>
+      {loading && (
+        <div
+          style={{
+            // backgroundImage:
+            //   "url('/assets/images/logos/main_logo.png')!important",
+            // backgroundPosition: "center !important",
+            // backgroundRepeat: "no-repeat !important",
+            // backgroundSize: "300px 100px !important",
+            position: "fixed",
+            height: "100%",
+            width: "100%",
+            top: "0px",
+            left: "0px",
+            display: "flex",
+            justifyContent: "center",
+            background: "#ffffff",
+            alignItems: "center",
+            zIndex: 100,
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-around",
+            }}
+          >
+            <div>
+              <img
+                style={{
+                  height: "100px",
+                  width: "300px",
+                  display: "block",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                }}
+                src="/assets/images/logos/main_logo.png"
+              />
+            </div>
+            <div>
+              <img
+                style={{
+                  height: "100px",
+                  width: "100px",
+                  marginTop: "100pz",
+                  display: "block",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                }}
+                src="/assets/images/gif/loading.gif"
+              />
+            </div>
+          </div>
+        </div>
+      )}
       <Section1 sliderList={sliderList} />
       <Section3 topCategoryList={topCategoryList} />
       <Section2 flashDealsList={flashDealsList} />

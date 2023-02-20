@@ -1,6 +1,6 @@
-import SignupPopup from "@component/SignupPopup";
+// import SignupPopup from "@component/SignupPopup";
 import { useAppContext } from "@context/app/AppContext";
-import { Get_Pending_Order_After_Login } from "@data/constants";
+import { BASE_URL, Get_Pending_Order_After_Login } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
@@ -35,7 +35,7 @@ const Login: React.FC<LoginProps> = ({
   const router = useRouter();
   const { dispatch } = useAppContext();
 
-  const [openSignup, setOpenSignup] = useState(false);
+  // const [openSignup, setOpenSignup] = useState(false);
 
   // const { authTOKEN } = useUserInf();
   const [authTOKEN, setAuthTOKEN] = useState({
@@ -65,16 +65,17 @@ const Login: React.FC<LoginProps> = ({
     router.events.on("routeChangeComplete", handleLoadingComplete);
   }, [router.events]);
 
-  const closeSignupTab = () => {
-    setOpenSignup(false);
-  };
+  // const closeSignupTab = () => {
+  //   setOpenSignup(false);
+  // };
 
   const gotosingup = () => {
     if (type == "loginPage") {
       router.push("/signup");
-    } else {
-      setOpenSignup(true);
     }
+    // else {
+    //   setOpenSignup(true);
+    // }
   };
   const gotoreset = () => {
     router.push("/sendOtp");
@@ -470,11 +471,11 @@ const Login: React.FC<LoginProps> = ({
 
     Cookies.set("UserName", `${username}`, {
       expires: 7,
-      path: "http://localhost:4005",
+      path: `${BASE_URL}`,
     });
     Cookies.set("UserPassword", `${password}`, {
       expires: 7,
-      path: "http://localhost:4005",
+      path: `${BASE_URL}`,
     });
   };
   //get Cookies
@@ -488,7 +489,7 @@ const Login: React.FC<LoginProps> = ({
   console.log("values", values);
   return (
     <>
-      <SignupPopup open={openSignup} closeSignupDialog={closeSignupTab} />
+      {/* <SignupPopup open={openSignup} closeSignupDialog={closeSignupTab} /> */}
       {loading && (
         <div
           style={{

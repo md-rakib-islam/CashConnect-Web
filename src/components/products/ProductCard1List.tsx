@@ -30,7 +30,7 @@ const ProductCard1List: React.FC<ProductCard1ListProps> = ({
     <div>
       <Grid container spacing={6}>
         {formattedProductData?.map((item, ind) => (
-          <Grid item lg={3} sm={4} xs={12} key={item?.id || ind}>
+          <Grid item lg={3} md={3} sm={4} xs={6} key={item?.id || ind}>
             <ProductCard1 hoverEffect {...item} />
           </Grid>
         ))}

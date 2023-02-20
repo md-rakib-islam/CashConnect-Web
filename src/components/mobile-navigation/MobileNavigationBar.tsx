@@ -58,11 +58,7 @@ const MobileNavigationBar: React.FC = () => {
     setReRender(Math.random());
   }, [userID]);
 
-  const profileUrl = isLogin
-    ? userID == "3"
-      ? "/profile"
-      : "/vendor/dashboard"
-    : "/login";
+  const profileUrl = isLogin ? "/profile" : "/login";
 
   const list = [
     {
