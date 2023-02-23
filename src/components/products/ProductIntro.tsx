@@ -2,6 +2,8 @@
 import Carousel2 from "@component/carouselImg/Carousel2";
 import Carousel3 from "@component/carouselImg2/Carousel3";
 import Currency from "@component/Currency";
+import Divider from "@component/Divider";
+import Card from "@component/Card";
 import LoginPopup from "@component/LoginPopup";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
@@ -487,9 +489,9 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       <LoginPopup open={openLogin} closeLoginDialog={closeLoginTab} />
       <Box overflow="visible">
         <Grid container justifyContent="center" spacing={16}>
-          <Grid item md={5} xs={12} alignItems="center">
+          <Grid item md={4} xs={12} alignItems="center">
             <Box>
-              <FlexBox justifyContent="center" mb="50px">
+              <FlexBox justifyContent="left" mb="50px">
                 <div style={{ width: "300px", height: "auto" }}>
                   <StyledReactImageMagnify
                     {...{
@@ -564,7 +566,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                   totalSlides={multipleUmg?.length}
                   visibleSlides={visibleSlides}
                   step={visibleSlides}
-                  autoPlay={multipleUmg.length > 5 ? true : false}
+                  autoPlay={false}
                   showArrow={multipleUmg?.length > 5 ? true : false}
                 >
                   {multipleUmg.map((url, ind) => (
@@ -595,7 +597,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
             </Box>
           </Grid>
 
-          <Grid item md={7} xs={12} alignItems="center">
+          <Grid item md={5} xs={12} alignItems="center">
             <H1 style={{ fontSize: "20px" }}>{title}</H1>
 
             <FlexBox alignItems="center">
@@ -646,7 +648,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                 totalSlides={multipleUmg?.length}
                 visibleSlides={visibleSlides}
                 step={visibleSlides}
-                autoPlay={multipleUmg.length > 5 ? true : false}
+                autoPlay={false}
                 showArrow={multipleUmg?.length > 5 ? true : false}
               >
                 {colorImages.map((url, ind) => (
@@ -874,6 +876,90 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                 </a>
               </Link>
             </FlexBox> */}
+          </Grid>
+          <Grid item md={3} xs={12} alignItems="center">
+            <Card bg="#f4f4f4" p="0.7rem">
+              <FlexBox mr="1rem" alignItems="center">
+                <Icon style={{ color: "#e84262" }} variant="medium">
+                  delivery-box
+                </Icon>
+                <FlexBox
+                  ml="8px"
+                  flexDirection="column"
+                  alignItems="flex-start"
+                  mr="1rem"
+                >
+                  <H6> Cash on Delivery </H6>
+                  <SemiSpan>
+                    For order over 10,000Tk Standard: 50/100Tk
+                  </SemiSpan>
+                </FlexBox>
+              </FlexBox>
+              <Divider bg="#e84262" width="200px" mx="auto" my="1rem" />
+
+              <FlexBox mr="1rem" alignItems="center" mb="1rem">
+                <Icon style={{ color: "#e84262" }} variant="large">
+                  credit-card
+                </Icon>
+                <FlexBox
+                  ml="8px"
+                  flexDirection="column"
+                  alignItems="flex-start"
+                  mr="1rem"
+                >
+                  <H6> Secure Payment </H6>
+                  <SemiSpan>100% secure payment </SemiSpan>
+                </FlexBox>
+              </FlexBox>
+              <Divider bg="#e84262" width="200px" mx="auto" my="1rem" />
+
+              <FlexBox mr="1rem" alignItems="center" mb="1rem">
+                <Icon style={{ color: "#e84262" }} variant="large">
+                  support
+                </Icon>
+                <FlexBox
+                  ml="8px"
+                  flexDirection="column"
+                  alignItems="flex-start"
+                  mr="1rem"
+                >
+                  <H6> 9am to 10pm support </H6>
+                  <SemiSpan>Dedicated support </SemiSpan>
+                </FlexBox>
+              </FlexBox>
+            </Card>
+
+            <FlexBox
+              mr="1rem"
+              alignItems="center"
+              justifyContent="center"
+              mt="2rem"
+            >
+              <Button
+                style={{ width: "20px", height: "45px" }}
+                bg="#1b4e9b"
+                ml="5px"
+                borderRadius={0}
+              >
+                <Icon style={{ color: "#ffffff" }}>facebook</Icon>
+              </Button>
+              <Button
+                style={{ width: "20px", height: "45px" }}
+                bg="#00aeef"
+                borderRadius={0}
+                ml="5px"
+              >
+                <Icon style={{ color: "#ffffff" }}>twitter</Icon>
+              </Button>
+              <Button
+                style={{ width: "20px", height: "45px" }}
+                bg="#d93025"
+                borderRadius={0}
+                ml="5px"
+              >
+                <Icon style={{ color: "#ffffff" }}>google</Icon>
+              </Button>
+            </FlexBox>
           </Grid>
         </Grid>
       </Box>

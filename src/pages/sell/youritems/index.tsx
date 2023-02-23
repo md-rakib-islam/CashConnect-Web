@@ -84,6 +84,7 @@ function onlineSell() {
       let Item = {
         item_name: values[`item_name${id}`],
         item_price: values[`item_price${id}`],
+        item_description: values[`item_description${id}`],
         item_quantity: 1,
         images: images[id],
       };
@@ -176,14 +177,20 @@ function onlineSell() {
 
     setFieldValue(`item_name${id}`, "");
     setFieldValue(`item_price${id}`, "");
+    setFieldValue(`item_description${id}`, "");
 
     items.map((_data, idx) => {
       if (idx >= id) {
         setFieldValue(`item_name${idx}`, values[`item_name${idx + 1}`]);
         setFieldValue(`item_price${idx}`, values[`item_price${idx + 1}`]);
+        setFieldValue(
+          `item_description${idx}`,
+          values[`item_description${idx + 1}`]
+        );
         if (items.length - 1 == idx) {
           setFieldValue(`item_name${idx + 1}`, "");
           setFieldValue(`item_price${idx + 1}`, "");
+          setFieldValue(`item_description${idx + 1}`, "");
         }
       }
     });
@@ -208,9 +215,22 @@ function onlineSell() {
   items.map((_itm, id) => {
     itemShema = {
       ...itemShema,
-      [`item_name${id}`]: yup.string().required("required").nullable(requred),
-      [`item_price${id}`]: yup.number().required("required").nullable(requred),
-      [`item_image${id}`]: yup.string().required("required").nullable(requred),
+      [`item_name${id}`]: yup
+        .string()
+        .required("Item name is required")
+        .nullable(requred),
+      [`item_price${id}`]: yup
+        .number()
+        .required("Item price is required")
+        .nullable(requred),
+      [`item_description${id}`]: yup
+        .string()
+        .required("Item description is required")
+        .nullable(requred),
+      [`item_image${id}`]: yup
+        .string()
+        .required("Please add an image")
+        .nullable(requred),
     };
   });
 
@@ -504,9 +524,22 @@ function onlineSell() {
                     />
                   </Box>
 
+                  <Box width="80%" mt="25px">
+                    <TextField
+                      name={`item_description${idx}`}
+                      label="Description"
+                      fullwidth
+                      boxShadow
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={values[`item_description${idx}`] || ""}
+                      errorText={errors[`item_description${idx}`]}
+                    />
+                  </Box>
+
                   {errors[`item_image${idx}`] && (
                     <p style={{ color: "red", marginBottom: "-20px" }}>
-                      image is requred
+                      image is required
                     </p>
                   )}
 
