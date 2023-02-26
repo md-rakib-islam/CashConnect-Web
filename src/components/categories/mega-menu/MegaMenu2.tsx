@@ -34,12 +34,12 @@ const MegaMenu2: React.FC<MegaMenu2Props> = ({ data, index }) => {
   return (
     <StyledMegaMenu1 className="mega-menu" index={index}>
       <Card
-        style={{ height: `${boxHeight}px`, borderRadius: 0 }}
+        style={{ height: `${boxHeight}px`, borderRadius: 0, top: "0" }}
         ml="1rem"
         py="0.5rem"
         boxShadow="regular"
       >
-        {data?.map((item) => {
+        {data?.map((item, int) => {
           console.log("item.title", item);
           return (
             <CategoryMenuItem
@@ -50,7 +50,7 @@ const MegaMenu2: React.FC<MegaMenu2Props> = ({ data, index }) => {
               key={item.title}
             >
               {item.subCategories && (
-                <MegaMenu3 minWidth="560px" data={item} index={0} />
+                <MegaMenu3 minWidth="560px" data={item} index={int} />
               )}
             </CategoryMenuItem>
           );

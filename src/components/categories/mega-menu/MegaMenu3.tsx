@@ -5,7 +5,7 @@ import Grid from "@component/grid/Grid";
 import NavLink from "@component/nav-link/NavLink";
 import { SemiSpan } from "@component/Typography";
 import React from "react";
-import { StyledMegaMenu1 } from "./MegaMenuStyle";
+import { StyledMegaMenu2 } from "./MegaMenuStyle";
 
 interface MegaMenuProps {
   data: any | [];
@@ -15,13 +15,15 @@ interface MegaMenuProps {
 
 const MegaMenu3: React.FC<MegaMenuProps> = ({ data, index }) => {
   console.log("subCategories", data);
-  const boxHeight = Number(localStorage.getItem("categoryLength")) * 40;
+  // const boxHeight = Number(localStorage.getItem("categoryLength")) * 40;
+  // console.log("megamenu3", index);
 
   return data?.subCategories.length ? (
-    <StyledMegaMenu1 className="mega-menu" index={index}>
+    <StyledMegaMenu2 className="mega-menu" index={index}>
       <Card
         style={{
-          height: `${boxHeight}px`,
+          height: `fit-content`,
+
           borderRadius: 0,
           width: "280px",
           marginRight: "20px",
@@ -118,7 +120,7 @@ const MegaMenu3: React.FC<MegaMenuProps> = ({ data, index }) => {
           </a>
         </Link> */}
       </Card>
-    </StyledMegaMenu1>
+    </StyledMegaMenu2>
   ) : null;
 };
 
