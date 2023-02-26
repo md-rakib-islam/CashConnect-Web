@@ -113,11 +113,12 @@ export const Tiny: React.FC<CustomProps> = (props) => (
   <Typography as="span" fontSize="10px" {...props} />
 );
 export const Tiny2: React.FC<CustomProps> = (props) => {
-  const [productQuantity, setProductQuantity] = useState(0);
+  const [productQuantity, setProductQuantity] = useState<any>(0);
   const { state } = useAppContext();
   const cartCanged = state.cart.chartQuantity;
 
   const { order_Id } = useUserInf();
+  console.log("headerQuantity", productQuantity);
 
   useEffect(() => {
     if (order_Id) {
@@ -129,7 +130,11 @@ export const Tiny2: React.FC<CustomProps> = (props) => {
           },
         })
         .then((res) => {
-          setProductQuantity(res?.data?.order?.order_items?.length);
+          setProductQuantity(
+            res?.data?.order?.order_items?.find(
+              (e: { quantity: any }) => e.quantity
+            )
+          );
         })
         .catch((err) => {
           console.log("error", err);
@@ -149,10 +154,10 @@ export const Tiny2: React.FC<CustomProps> = (props) => {
           alignItems="center"
           justifyContent="center"
           ml="-1rem"
-          mt="-9px"
+          mt="-5px"
         >
           <Typography as="span" fontSize="10px" {...props}>
-            {productQuantity}
+            {productQuantity?.quantity}
           </Typography>
         </FlexBox>
       }

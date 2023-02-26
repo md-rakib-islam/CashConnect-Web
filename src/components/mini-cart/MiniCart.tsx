@@ -36,6 +36,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
   const [cartProductList, setCartProductList] = useState([]);
   const [reloadCart, setReloadCart] = useState(0);
   const [openLogin, setOpenLogin] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { user_id, order_Id, isLogin, authTOKEN } = useUserInf();
 
@@ -79,6 +80,8 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                 console.log("error", err);
               });
           } else if (action == "increase") {
+            setLoading(true);
+
             axios
               .put(
                 `${Customer_Increase_Quantity}${order_Id}/${item_id}`,
@@ -94,11 +97,16 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                     prductId: product?.product?.id,
                   },
                 });
+                setLoading(false);
               })
               .catch((err) => {
+                setLoading(false);
+
                 console.log("error", err);
               });
           } else if (action == "decrease") {
+            setLoading(true);
+
             axios
               .put(
                 `${Customer_decrease_Quantity}${order_Id}/${item_id}`,
@@ -114,8 +122,11 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                     prductId: product?.product?.id,
                   },
                 });
+                setLoading(false);
               })
               .catch((err) => {
+                setLoading(false);
+
                 console.log("error", err);
               });
           }
@@ -158,6 +169,31 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
 
   return (
     <>
+      {loading && (
+        <div
+          style={{
+            position: "fixed",
+            height: "100%",
+            width: "100%",
+            top: "0px",
+            left: "0px",
+            display: "flex",
+            justifyContent: "center",
+            backgroundColor: " rgb(0 0 0 / 50%)",
+            alignItems: "center",
+            zIndex: 100,
+          }}
+        >
+          <img
+            style={{
+              height: "100px",
+              width: "100px",
+              marginTop: "100pz",
+            }}
+            src="/assets/images/gif/loading.gif"
+          />
+        </div>
+      )}
       <LoginPopup open={openLogin} closeLoginDialog={closeLoginTab} />
       <StyledMiniCart>
         <div className="cart-list">

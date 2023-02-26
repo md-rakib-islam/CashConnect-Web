@@ -18,7 +18,7 @@ interface ItemProps {
 
 const Item: React.FC<ItemProps> = ({ item, handleCartAmountChange }) => {
   const [stock, setStock] = useState(true);
-  const [stockQuantity, setStockQuantity] = useState();
+  const [stockQuantity, setStockQuantity] = useState(0);
   const { state } = useAppContext();
   const cartCanged = state.cart.chartQuantity;
 
@@ -27,9 +27,7 @@ const Item: React.FC<ItemProps> = ({ item, handleCartAmountChange }) => {
       .get(`${Check_Stock}${item?.product?.id}`)
       .then((res) => {
         setStockQuantity(res.data.in_stock);
-        if (!res.data.is_in_stock) {
-          setStock(false);
-        }
+        setStock(res.data.is_in_stock);
       })
       .catch((err) => {
         console.log("error", err);
@@ -48,7 +46,7 @@ const Item: React.FC<ItemProps> = ({ item, handleCartAmountChange }) => {
             borderColor="primary.light"
             borderRadius="300px"
             onClick={handleCartAmountChange(item, "increase")}
-            disabled={!stock || stockQuantity == 1}
+            disabled={!stock || stockQuantity == 0}
           >
             <Icon variant="small">plus</Icon>
           </Button>

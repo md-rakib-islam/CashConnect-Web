@@ -40,7 +40,7 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
-  const [productQuantity, setProductQuantity] = useState(0);
+  const [productQuantity, setProductQuantity] = useState<any>();
   const { state } = useAppContext();
 
   const cartCanged = state.cart.chartQuantity;
@@ -63,7 +63,11 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
           },
         })
         .then((res) => {
-          setProductQuantity(res?.data?.order?.order_items?.length);
+          setProductQuantity(
+            res?.data?.order?.order_items?.find(
+              (e: { quantity: any }) => e.quantity
+            )
+          );
         })
         .catch((err) => {
           console.log("error", err);
@@ -155,7 +159,7 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
     setReRender(Math.random());
   }, [userID]);
 
-  console.log("productQuantity", productQuantity);
+  console.log("productQuantity", productQuantity?.quantity);
   const cartHandle = (
     <FlexBox ml="20px" alignItems="flex-start">
       <IconButton bg="gray.200" p="12px">

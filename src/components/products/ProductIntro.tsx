@@ -88,13 +88,13 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   const [multipleUmg, setMultipleUmg] = useState([]);
   const [_reRender, setreRender] = useState(0);
   const [discount, setDiscount] = useState();
-
   const [stock, setStock] = useState(true);
-  const [stockQuantity, setStockQuantity] = useState();
+  const [stockQuantity, setStockQuantity] = useState(0);
   const [productCode, setProductCode] = useState("");
   const [color, setColor] = useState([]);
   const [sizes, setSizes] = useState([]);
   const [visibleSlides, setVisibleSlides] = useState(5);
+  const [loading, setLoading] = useState(false);
 
   // const [_reRender, setreRender] = useState(0);
   // const [multipleUmg, setMultipleUmg] = useState([]);
@@ -123,9 +123,8 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       .then((res) => {
         console.log("res.data.is_in_stock", res.data.in_stock);
         setStockQuantity(res.data.in_stock);
-        if (res.data.is_in_stock === false) {
-          setStock(false);
-        }
+
+        setStock(res.data.is_in_stock);
       })
       .catch(() => {
         console.log("errr");
@@ -319,32 +318,37 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
       //increase quantity
       else if (action == "increase") {
-        axios
-          .put(
-            `${Customer_Increase_Quantity}${order_Id}/${itemId}`,
-            orderData,
-            authTOKEN
-          )
-          .then((res) => {
-            console.log("increaseRes", res);
-            setGetItemId(Math.random());
-            dispatch({
-              type: "CHANGE_CART_QUANTITY",
-              payload: {
-                chartQuantity: Math.random(),
-                prductId: id || routerId,
-              },
+        setLoading(true);
+        if (stock) {
+          axios
+            .put(
+              `${Customer_Increase_Quantity}${order_Id}/${itemId}`,
+              orderData,
+              authTOKEN
+            )
+            .then((res) => {
+              console.log("increaseRes", res);
+              setGetItemId(Math.random());
+              dispatch({
+                type: "CHANGE_CART_QUANTITY",
+                payload: {
+                  chartQuantity: Math.random(),
+                  prductId: id || routerId,
+                },
+              });
+              setLoading(false);
+            })
+            .catch(() => {
+              setLoading(false);
+              dispatch({
+                type: "CHANGE_ALERT",
+                payload: {
+                  alerType: "error",
+                  alertValue: "something went wrong",
+                },
+              });
             });
-          })
-          .catch(() => {
-            dispatch({
-              type: "CHANGE_ALERT",
-              payload: {
-                alerType: "error",
-                alertValue: "something went wrong",
-              },
-            });
-          });
+        }
       }
 
       //remove
@@ -378,6 +382,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
       //decrease quantity
       else if (action == "decrease") {
+        setLoading(true);
         axios
           .put(
             `${Customer_decrease_Quantity}${order_Id}/${itemId}`,
@@ -394,8 +399,11 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                 prductId: id || routerId,
               },
             });
+            setLoading(false);
           })
           .catch(() => {
+            setLoading(false);
+
             dispatch({
               type: "CHANGE_ALERT",
               payload: {
@@ -486,6 +494,31 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   console.log("orginalprice", orginalprice);
   return (
     <>
+      {loading && (
+        <div
+          style={{
+            position: "fixed",
+            height: "100%",
+            width: "100%",
+            top: "0px",
+            left: "0px",
+            display: "flex",
+            justifyContent: "center",
+            backgroundColor: " rgb(0 0 0 / 50%)",
+            alignItems: "center",
+            zIndex: 100,
+          }}
+        >
+          <img
+            style={{
+              height: "100px",
+              width: "100px",
+              marginTop: "100pz",
+            }}
+            src="/assets/images/gif/loading.gif"
+          />
+        </div>
+      )}
       <LoginPopup open={openLogin} closeLoginDialog={closeLoginTab} />
       <Box overflow="visible">
         <Grid container justifyContent="center" spacing={16}>
@@ -856,7 +889,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                   variant="outlined"
                   size="small"
                   color="primary"
-                  disabled={!stock || stockQuantity == 1}
+                  disabled={!stock || stockQuantity == 0}
                   onClick={() =>
                     handleCartAmountChange(cartQuantity + 1, "increase")
                   }
