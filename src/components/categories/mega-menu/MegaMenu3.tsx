@@ -15,18 +15,20 @@ interface MegaMenuProps {
 
 const MegaMenu3: React.FC<MegaMenuProps> = ({ data, index }) => {
   console.log("subCategories", data);
-  // const boxHeight = Number(localStorage.getItem("categoryLength")) * 40;
-  // console.log("megamenu3", index);
-
   return data?.subCategories.length ? (
     <StyledMegaMenu2 className="mega-menu" index={index}>
       <Card
+        // style={{
+        //   height: "fit-content",
+        //   width: "240px",
+        //   marginRight: "20px",
+        //   borderRadius: "0",
+        // }}
         style={{
-          height: `fit-content`,
-
-          borderRadius: 0,
-          width: "280px",
+          height: "fit-content",
+          width: "240px",
           marginRight: "20px",
+          borderRadius: "0",
         }}
         ml="1rem"
         boxShadow="regular"
@@ -125,7 +127,7 @@ const MegaMenu3: React.FC<MegaMenuProps> = ({ data, index }) => {
 };
 
 MegaMenu3.defaultProps = {
-  minWidth: "760px",
+  minWidth: "240px",
 };
 
 export default MegaMenu3;

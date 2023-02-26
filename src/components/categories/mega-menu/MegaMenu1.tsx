@@ -7,7 +7,6 @@ import { SemiSpan } from "@component/Typography";
 import React from "react";
 import { StyledMegaMenu1 } from "./MegaMenuStyle";
 
-
 interface SubCategory {
   title: string;
   href: string;
@@ -34,10 +33,14 @@ const MegaMenu1: React.FC<MegaMenuProps> = ({
   minWidth,
   index,
 }) => {
-
   return categories ? (
     <StyledMegaMenu1 className="mega-menu" index={index}>
-      <Card ml="1rem" minWidth={minWidth} boxShadow="regular">
+      <Card
+        // style={{ height: "fit-content" }}
+        ml="1rem"
+        minWidth={minWidth}
+        boxShadow="regular"
+      >
         <FlexBox px="1.25rem" py="0.875rem">
           <Box flex="1 1 0">
             <Grid container spacing={4}>

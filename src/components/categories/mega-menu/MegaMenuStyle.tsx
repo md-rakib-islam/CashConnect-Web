@@ -11,9 +11,10 @@ interface StyledMegaMenu2Props {
 export const StyledMegaMenu1 = styled.div<StyledMegaMenu1Props>`
   display: none;
   position: absolute;
-  left: 265px;
+  left: 210px;
   right: auto;
   z-index: 99;
+  border-radius: none;
 
   // top: ${({ index }) => (index ? `${index * 40 + 5}px` : "0px")};
   top: 0;
@@ -21,13 +22,9 @@ export const StyledMegaMenu1 = styled.div<StyledMegaMenu1Props>`
   .title-link,
   .child-link {
     color: inherit;
-    font-weight: 600;
+    font-weight: 400;
     display: block;
     padding: 0.5rem 0px;
-  }
-
-  .child-link {
-    font-weight: 400;
   }
 
   .mega-menu-content {
@@ -41,22 +38,20 @@ export const StyledMegaMenu1 = styled.div<StyledMegaMenu1Props>`
 export const StyledMegaMenu2 = styled.div<StyledMegaMenu2Props>`
   display: none;
   position: absolute;
-  left: 265px;
+  left: 210px;
   right: auto;
   z-index: 99;
+  border-radius: none;
 
   top: ${({ index }) => (index ? `${index * 40 + 5}px` : "0px")};
   // top: 0;
+
   .title-link,
   .child-link {
     color: inherit;
-    font-weight: 600;
+    font-weight: 400;
     display: block;
     padding: 0.5rem 0px;
-  }
-
-  .child-link {
-    font-weight: 400;
   }
 
   .mega-menu-content {

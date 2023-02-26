@@ -14,9 +14,6 @@ export interface MegaMenu2Props {
   }[];
   index: number;
 }
-export interface WindowLocalStorage {
-  getItem(key: string): string | null;
-}
 export interface MegaMenu {
   data: {
     [categories: string]: any;
@@ -28,13 +25,14 @@ export interface MegaMenu {
   index: number;
 }
 const MegaMenu2: React.FC<MegaMenu2Props> = ({ data, index }) => {
-  console.log("categoriesData", data);
   const boxHeight = Number(localStorage.getItem("categoryLength")) * 40;
-  console.log("boxHeight", boxHeight);
+
+  console.log("categoriesData", data);
   return (
     <StyledMegaMenu1 className="mega-menu" index={index}>
       <Card
-        style={{ height: `${boxHeight}px`, borderRadius: 0, top: "0" }}
+        // style={{ height: "600px", borderRadius: "0", top: "0" }}
+        style={{ height: `${boxHeight}px`, borderRadius: "0" }}
         ml="1rem"
         py="0.5rem"
         boxShadow="regular"
@@ -50,7 +48,7 @@ const MegaMenu2: React.FC<MegaMenu2Props> = ({ data, index }) => {
               key={item.title}
             >
               {item.subCategories && (
-                <MegaMenu3 minWidth="560px" data={item} index={int} />
+                <MegaMenu3 minWidth="240px" data={item} index={int} />
               )}
             </CategoryMenuItem>
           );

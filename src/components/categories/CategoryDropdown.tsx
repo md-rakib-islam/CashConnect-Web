@@ -29,9 +29,9 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
     fetch(`${Category_All_With_Child}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("categoryMainSection", data.categories);
-        localStorage.setItem("categoryLength", data.categories.length);
+        console.log("category", data.categories);
         setFormattedCategoryData(data.categories);
+        localStorage.setItem("categoryLength", data.categories.length);
       })
       .catch((err) => {
         console.log("error", err);
@@ -58,7 +58,6 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
           >
             {formattedCategoryData?.map((item, index) => {
               console.log("catagoryyyyyy", item);
-
               let MegaMenu = megaMenu[item.menuComponent];
 
               return (
