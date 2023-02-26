@@ -64,6 +64,8 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                 authTOKEN
               )
               .then(() => {
+                console.log("resForMiniCart", product);
+
                 setReloadCart(Math.random());
                 setCartProductList([]);
                 dispatch({
@@ -74,7 +76,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                   },
                 });
                 toggleSidenav();
-                localStorage.removeItem("OrderId");
+                // localStorage.removeItem("OrderId");
               })
               .catch((err) => {
                 console.log("error", err);

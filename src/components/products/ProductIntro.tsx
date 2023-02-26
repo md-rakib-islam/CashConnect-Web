@@ -70,14 +70,13 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   const [selectedThumbnail, setSelectedThumbnail] = useState(0);
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState(0);
+
   // const [visibleSlides, setVisibleSlides] = useState(6);
 
   const { state, dispatch } = useAppContext();
   const router = useRouter();
 
   var routerId = router.query?.id as string;
-
-  console.log("orginalprice", orginalprice);
 
   const [cartQuantity, setCartQuantity] = useState(0);
   const [defaultCartQuantity, setDefaultCartQuantity] = useState(1);
@@ -130,6 +129,19 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
         console.log("errr");
       });
   }, [cartCanged]);
+  useEffect(() => {
+    axios
+      .get(`${Check_Stock}${id}`)
+      .then((res) => {
+        console.log("res.data.is_in_stock", res.data.in_stock);
+        setStockQuantity(res.data.in_stock);
+
+        setStock(res.data.is_in_stock);
+      })
+      .catch(() => {
+        console.log("errr");
+      });
+  }, [id]);
 
   useEffect(() => {
     axios

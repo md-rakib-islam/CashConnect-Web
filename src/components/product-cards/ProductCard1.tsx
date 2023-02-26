@@ -85,15 +85,14 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
   useEffect(() => {
     axios
       .get(`${Check_Stock}${id}`)
+
       .then((res) => {
-        if (!res.data.is_in_stock) {
-          setStock(false);
-        }
+        setStock(res.data.is_in_stock);
       })
       .catch((err) => {
         console.log("error", err);
       });
-  }, [id]);
+  }, []);
 
   useEffect(() => {
     axios

@@ -1,4 +1,5 @@
-import useFormattedProductData from "@customHook/useFormattedProductData";
+// import useFormattedProductData from "@customHook/useFormattedProductData";
+import getFormattedProductData from "@helper/getFormattedProductData";
 import React from "react";
 import Box from "../Box";
 import Grid from "../grid/Grid";
@@ -12,7 +13,8 @@ export interface RelatedProductsProps {
 const RelatedProducts: React.FC<RelatedProductsProps> = ({
   relatedProduct,
 }) => {
-  const [relatedProducts] = useFormattedProductData(relatedProduct);
+  console.log("re_product_Data", relatedProduct);
+  const relatedProducts = getFormattedProductData(relatedProduct);
 
   return (
     <Box mb="3.75rem">
