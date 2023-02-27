@@ -25,7 +25,7 @@ export interface MegaMenu {
   index: number;
 }
 const MegaMenu2: React.FC<MegaMenu2Props> = ({ data, index }) => {
-  const boxHeight = Number(localStorage.getItem("categoryLength")) * 40;
+  const boxHeight = Number(localStorage.getItem("categoryLength")) * 30;
 
   console.log("categoriesData", data);
   return (
@@ -34,7 +34,7 @@ const MegaMenu2: React.FC<MegaMenu2Props> = ({ data, index }) => {
         // style={{ height: "600px", borderRadius: "0", top: "0" }}
         style={{ height: `${boxHeight}px`, borderRadius: "0" }}
         ml="1rem"
-        py="0.5rem"
+        // py="0.5rem"
         boxShadow="regular"
       >
         {data?.map((item, int) => {

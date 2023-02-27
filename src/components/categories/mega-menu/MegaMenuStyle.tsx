@@ -22,7 +22,7 @@ export const StyledMegaMenu1 = styled.div<StyledMegaMenu1Props>`
   .title-link,
   .child-link {
     color: inherit;
-    font-weight: 400;
+    font-weight: 520;
     display: block;
     padding: 0.5rem 0px;
   }
@@ -43,13 +43,13 @@ export const StyledMegaMenu2 = styled.div<StyledMegaMenu2Props>`
   z-index: 99;
   border-radius: none;
 
-  top: ${({ index }) => (index ? `${index * 40 + 5}px` : "0px")};
+  top: ${({ index }) => (index ? `${index * 30}px` : "0px")};
   // top: 0;
 
   .title-link,
   .child-link {
     color: inherit;
-    font-weight: 400;
+    font-weight: 520;
     display: block;
     padding: 0.5rem 0px;
   }
@@ -69,8 +69,9 @@ export const StyledMegaMenuItem = styled.div`
     display: flex;
     align-items: center;
     padding: 0px 1rem;
-    height: 40px;
-    min-width: 278px;
+    height: 30px;
+    min-width: 240px;
+
     white-space: pre;
     transition: all 250ms ease-in-out;
     color: ${getTheme("colors.text.primary")};

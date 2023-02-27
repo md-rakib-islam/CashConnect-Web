@@ -137,20 +137,6 @@ const ProductReview: React.FC<ProductReviewProps> = ({
         console.log("error", err);
       });
   }, [reloadreviews, query, product_id]);
-  useEffect(() => {
-    addEventListener(
-      "scroll",
-      () => {
-        console.log("Scrolling...", window.scrollY, window.scrollX);
-      },
-      true
-    );
-
-    // // Remove the event listener
-    // return () => {
-    // 	removeEventListener('scroll', true);
-    // };
-  }, []);
 
   useEffect(() => {
     if (authTOKEN) {
@@ -186,92 +172,100 @@ const ProductReview: React.FC<ProductReviewProps> = ({
 
   return (
     <Box maxWidth="800px">
-      <Box border={"1px solid #DAE1E7"}>
-        <FlexBox ml={"5px"} justifyContent="space-between" alignItems="center">
-          <H5 color="gray.700" mr="6px">
-            Product Reviews
-          </H5>
+      {commentList.length !== 0 ? (
+        <Box border={"1px solid #DAE1E7"}>
+          <FlexBox
+            ml={"5px"}
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <H5 color="gray.700" mr="6px">
+              Product Reviews
+            </H5>
 
-          <FlexBox>
-            <Menu
-              style={{}}
-              direction="left"
-              handler={
-                <IconButton ml="1rem" p="8px">
-                  <FlexBox>
-                    <Icon
-                      style={{ color: "#e84262", marginRight: "7px" }}
-                      size="25px"
+            <FlexBox>
+              <Menu
+                style={{}}
+                direction="left"
+                handler={
+                  <IconButton ml="1rem" p="8px">
+                    <FlexBox>
+                      <Icon
+                        style={{ color: "#e84262", marginRight: "7px" }}
+                        size="25px"
+                      >
+                        sort
+                      </Icon>
+                      Sort
+                    </FlexBox>
+                  </IconButton>
+                }
+              >
+                {sortBy.map((e) => (
+                  <MenuItem p="2px">
+                    <div
+                      style={{
+                        fontSize: "20px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flexStart",
+                        cursor: "pointer",
+                        minWidth: "100px",
+                      }}
+                      onClick={() => handleReviewsFilter(e?.id)}
                     >
-                      sort
-                    </Icon>
-                    Sort
-                  </FlexBox>
-                </IconButton>
-              }
-            >
-              {sortBy.map((e) => (
-                <MenuItem p="2px">
-                  <div
-                    style={{
-                      fontSize: "20px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "flexStart",
-                      cursor: "pointer",
-                      minWidth: "100px",
-                    }}
-                    onClick={() => handleReviewsFilter(e?.id)}
-                  >
-                    <Typography fontWeight="600" fontSize="16px" ml="5px">
-                      {e?.name}
-                    </Typography>
-                  </div>
-                </MenuItem>
-              ))}
-            </Menu>
-            <Menu
-              direction="left"
-              handler={
-                <IconButton ml="1rem" p="8px">
-                  <FlexBox>
-                    <Icon
-                      style={{ color: "#e84262", marginRight: "7px" }}
-                      size="25px"
+                      <Typography fontWeight="600" fontSize="16px" ml="5px">
+                        {e?.name}
+                      </Typography>
+                    </div>
+                  </MenuItem>
+                ))}
+              </Menu>
+              <Menu
+                direction="left"
+                handler={
+                  <IconButton ml="1rem" p="8px">
+                    <FlexBox>
+                      <Icon
+                        style={{ color: "#e84262", marginRight: "7px" }}
+                        size="25px"
+                      >
+                        filter
+                      </Icon>
+                      Filter
+                    </FlexBox>
+                  </IconButton>
+                }
+              >
+                {rating.map((e) => (
+                  <MenuItem p="2px">
+                    <div
+                      style={{
+                        fontSize: "20px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flexStart",
+                        cursor: "pointer",
+                        minWidth: "100px",
+                      }}
+                      onClick={() => handleReviewsFilterByStart(e?.id)}
                     >
-                      filter
-                    </Icon>
-                    Filter
-                  </FlexBox>
-                </IconButton>
-              }
-            >
-              {rating.map((e) => (
-                <MenuItem p="2px">
-                  <div
-                    style={{
-                      fontSize: "20px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "flexStart",
-                      cursor: "pointer",
-                      minWidth: "100px",
-                    }}
-                    onClick={() => handleReviewsFilterByStart(e?.id)}
-                  >
-                    <Typography fontWeight="600" fontSize="16px" ml="5px">
-                      {e?.name}
-                    </Typography>
-                  </div>
-                </MenuItem>
-              ))}
-            </Menu>
+                      <Typography fontWeight="600" fontSize="16px" ml="5px">
+                        {e?.name}
+                      </Typography>
+                    </div>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </FlexBox>
           </FlexBox>
-        </FlexBox>
-      </Box>
+        </Box>
+      ) : (
+        ""
+      )}
 
       {commentList.map((item, ind) => {
-        console.log("reviewItem", item);
+        console.log("reviewItem", commentList);
         return <ProductComment {...item} key={item?.id || ind} />;
       })}
 
@@ -405,7 +399,7 @@ const ProductReview: React.FC<ProductReviewProps> = ({
                 name="review"
                 placeholder="Write a review here..."
                 fullwidth
-                rows={8}
+                rows={4}
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.review || ""}

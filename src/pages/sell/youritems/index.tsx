@@ -8,6 +8,7 @@ import Icon from "@component/icon/Icon";
 import NavbarLayout from "@component/layout/NavbarLayout";
 import Radio from "@component/radio/Radio";
 import TextField from "@component/text-field/TextField";
+import TextArea from "@component/textarea/TextArea";
 import Typography from "@component/Typography";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
@@ -525,11 +526,12 @@ function onlineSell() {
                   </Box>
 
                   <Box width="80%" mt="25px">
-                    <TextField
+                    <TextArea
                       name={`item_description${idx}`}
                       label="Description"
                       fullwidth
-                      boxShadow
+                      rows={4}
+                      aria-multiline
                       onBlur={handleBlur}
                       onChange={handleChange}
                       value={values[`item_description${idx}`] || ""}

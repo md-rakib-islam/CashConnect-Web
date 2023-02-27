@@ -407,7 +407,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
           <FlexBox
             flexDirection="column-reverse"
             alignItems="center"
-            justifyContent={!!cartQuantity ? "space-between" : "flex-start"}
+            justifyContent={!!cartQuantity ? "space-evenly" : "flex-start"}
             width="30px"
           >
             <Button

@@ -750,22 +750,22 @@ const Login: React.FC<LoginProps> = ({
             </Icon>
             <Small fontWeight="600">Continue with Google</Small>
           </FlexBox> */}
-          <FlexBox justifyContent="center" mb="1.25rem">
-            <SemiSpan style={{ cursor: "pointer" }} onClick={gotosingup}>
-              Don’t have account?
-            </SemiSpan>
-            <H6
-              color="primary.main"
-              style={{ cursor: "pointer" }}
-              onClick={gotosingup}
-              ml="0.5rem"
-              borderColor="primary.main"
-              borderBottom="1px solid #e94560"
-            >
-              Sign Up
-            </H6>
-          </FlexBox>
         </form>
+        <FlexBox justifyContent="center" mb="1.25rem">
+          <SemiSpan style={{ cursor: "pointer" }} onClick={gotosingup}>
+            Don’t have account?
+          </SemiSpan>
+          <H6
+            color="primary.main"
+            style={{ cursor: "pointer" }}
+            onClick={gotosingup}
+            ml="0.5rem"
+            borderColor="primary.main"
+            borderBottom="1px solid #e94560"
+          >
+            Sign Up
+          </H6>
+        </FlexBox>
 
         {/* <FlexBox justifyContent="center" bg="gray.200" py="19px">
           <SemiSpan>Forgot your password?</SemiSpan>

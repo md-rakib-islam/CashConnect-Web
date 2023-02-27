@@ -130,11 +130,13 @@ export const Tiny2: React.FC<CustomProps> = (props) => {
           },
         })
         .then((res) => {
-          setProductQuantity(
-            res?.data?.order?.order_items?.find(
-              (e: { quantity: any }) => e.quantity
-            )
-          );
+          console.log("resPendingOrder", res?.data?.order);
+
+          let sum = 0;
+          res?.data?.order?.order_items.map((e) => (sum = sum + e.quantity));
+
+          console.log("sumByKey", sum);
+          setProductQuantity(sum);
         })
         .catch((err) => {
           console.log("error", err);
@@ -157,7 +159,7 @@ export const Tiny2: React.FC<CustomProps> = (props) => {
           mt="-5px"
         >
           <Typography as="span" fontSize="10px" {...props}>
-            {productQuantity?.quantity}
+            {productQuantity}
           </Typography>
         </FlexBox>
       }

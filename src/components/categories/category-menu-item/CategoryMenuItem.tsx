@@ -1,3 +1,4 @@
+import { H6 } from "@component/Typography";
 import _ from "lodash";
 import Link from "next/link";
 import React from "react";
@@ -35,7 +36,7 @@ const CategoryMenuItem: React.FC<CategoryMenuItemProps> = ({
         <Link href={href}>
           <div className="category-dropdown-link">
             {icon && <Icon variant="small" src={icon}></Icon>}
-            <span className="title">{title}</span>
+            <H6 className="title">{title}</H6>
             {caret && <Icon variant="small">chevron-right</Icon>}
           </div>
         </Link>

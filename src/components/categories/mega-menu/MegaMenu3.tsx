@@ -3,7 +3,7 @@ import Card from "@component/Card";
 import FlexBox from "@component/FlexBox";
 import Grid from "@component/grid/Grid";
 import NavLink from "@component/nav-link/NavLink";
-import { SemiSpan } from "@component/Typography";
+import { H6 } from "@component/Typography";
 import React from "react";
 import { StyledMegaMenu2 } from "./MegaMenuStyle";
 
@@ -27,13 +27,14 @@ const MegaMenu3: React.FC<MegaMenuProps> = ({ data, index }) => {
         style={{
           height: "fit-content",
           width: "240px",
-          marginRight: "20px",
+          // marginRight: "30px",
           borderRadius: "0",
         }}
-        ml="1rem"
+        py="0px"
+        ml="2rem"
         boxShadow="regular"
       >
-        <FlexBox px="1.25rem" py="0.875rem">
+        <FlexBox px="1.25rem">
           <Box flex="1 1 0">
             {data?.subCategories?.map((item, ind) => (
               <Grid item md={3} key={ind}>
@@ -46,7 +47,7 @@ const MegaMenu3: React.FC<MegaMenuProps> = ({ data, index }) => {
                     {item.title}
                   </NavLink>
                 ) : (
-                  <SemiSpan className="title-link">{item.title}</SemiSpan>
+                  <H6 className="title-link">{item.title}</H6>
                 )}
                 {/* {item.subCategories?.map((sub, ind) => (
                     <NavLink
