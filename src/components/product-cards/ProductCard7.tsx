@@ -40,10 +40,14 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
   runReloadCart,
   ...props
 }) => {
-  const { dispatch } = useAppContext();
+  const { dispatch, state } = useAppContext();
 
   const [openLogin, setOpenLogin] = useState(false);
   const [stock, setStock] = useState(true);
+  const [stockQuantity, setStockQuantity] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  const cartCanged = state.cart.chartQuantity;
 
   const { user_id, order_Id, isLogin, authTOKEN } = useUserInf();
 
@@ -51,14 +55,13 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
     axios
       .get(`${Check_Stock}${product?.id}`)
       .then((res) => {
-        if (!res.data.is_in_stock) {
-          setStock(false);
-        }
+        setStockQuantity(res.data.in_stock);
+        setStock(res.data.is_in_stock);
       })
       .catch((err) => {
         console.log("error", err);
       });
-  }, [product?.id]);
+  }, [cartCanged]);
 
   const closeLoginTab = () => {
     setOpenLogin(false);
@@ -79,6 +82,8 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
         console.log("orderData", orderData);
 
         if (action == "remove") {
+          setLoading(true);
+
           axios
             .delete(
               `${Customer_Order_Remove_Item}${order_Id}/${item_id}`,
@@ -91,11 +96,14 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
                 type: "CHANGE_CART_QUANTITY",
                 payload: { chartQuantity: Math.random() },
               });
+              setLoading(false);
             })
             .catch((err) => {
               console.log("error", err);
             });
         } else if (action == "increase") {
+          setLoading(true);
+
           console.log("increaseData", orderData);
           axios
             .put(
@@ -106,11 +114,23 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
             .then((res) => {
               console.log("itemIncreaseRes", res);
               runReloadCart();
+              dispatch({
+                type: "CHANGE_CART_QUANTITY",
+                payload: {
+                  chartQuantity: Math.random(),
+                  prductId: product?.id,
+                },
+              });
+              setLoading(false);
             })
             .catch((err) => {
+              setLoading(false);
+
               console.log("error", err);
             });
         } else if (action == "decrease") {
+          setLoading(true);
+
           axios
             .put(
               `${Customer_decrease_Quantity}${order_Id}/${item_id}`,
@@ -120,8 +140,18 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
             .then((res) => {
               console.log("itemDecreaseRes", res);
               runReloadCart();
+              dispatch({
+                type: "CHANGE_CART_QUANTITY",
+                payload: {
+                  chartQuantity: Math.random(),
+                  prductId: product?.id,
+                },
+              });
+              setLoading(false);
             })
             .catch((err) => {
+              setLoading(false);
+
               console.log("error", err);
             });
         }
@@ -135,6 +165,31 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
 
   return (
     <>
+      {loading && (
+        <div
+          style={{
+            position: "fixed",
+            height: "100%",
+            width: "100%",
+            top: "0px",
+            left: "0px",
+            display: "flex",
+            justifyContent: "center",
+            backgroundColor: " rgb(0 0 0 / 50%)",
+            alignItems: "center",
+            zIndex: 100,
+          }}
+        >
+          <img
+            style={{
+              height: "100px",
+              width: "100px",
+              marginTop: "100pz",
+            }}
+            src="/assets/images/gif/loading.gif"
+          />
+        </div>
+      )}
       <LoginPopup open={openLogin} closeLoginDialog={closeLoginTab} />
       <StyledProductCard7 {...props}>
         <Image
@@ -150,7 +205,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
           minWidth="0px"
           width="100%"
         >
-          <Link href={`/product/${id}`}>
+          <Link href={`/product/${product.id}`}>
             <a>
               <Typography
                 className="title"
@@ -228,7 +283,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
                 padding="5px"
                 size="none"
                 borderColor="primary.light"
-                disabled={!stock}
+                disabled={!stock || stockQuantity == 0}
                 onClick={handleCartAmountChange("increase")}
               >
                 <Icon variant="small">plus</Icon>

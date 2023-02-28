@@ -1,6 +1,7 @@
 import Currency from "@component/Currency";
 import LoginPopup from "@component/LoginPopup";
 import TextArea from "@component/textarea/TextArea";
+import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import {
   Customer_Order_Comment,
@@ -30,8 +31,10 @@ type CartItem = {
 
 const Cart = () => {
   const [cartProductList, setCartProductList] = useState<CartItem[]>([]);
-  const [reloadCart, setReloadCart] = useState(0);
+  const [_reloadCart, setReloadCart] = useState(0);
   const [openLogin, setOpenLogin] = useState(false);
+  const { state } = useAppContext();
+  const cartCanged = state.cart.chartQuantity;
 
   const router = useRouter();
 
@@ -85,14 +88,18 @@ const Cart = () => {
         })
         .then((res) => {
           console.log("CorderDetailsRes", res);
-          setCartProductList(res.data.order?.order_items);
+          setCartProductList(
+            res.data.order?.order_items.length !== 0
+              ? res.data.order?.order_items
+              : []
+          );
           setFieldValue("comment", res.data.order?.comment);
         })
         .catch((err) => {
           console.log("error", err);
         });
     }
-  }, [order_Id, reloadCart]);
+  }, [order_Id, cartCanged]);
 
   const runReloadCart = () => {
     setReloadCart(Math.random());
@@ -144,9 +151,9 @@ const Cart = () => {
                 <Typography fontSize="18px" fontWeight="600" lineHeight="1">
                   <Currency>{getTotalPrice().toFixed(2)}</Currency>
                 </Typography>
-                <Typography fontWeight="600" fontSize="14px" lineHeight="1">
+                {/* <Typography fontWeight="600" fontSize="14px" lineHeight="1">
                   00
-                </Typography>
+                </Typography> */}
               </FlexBox>
             </FlexBox>
 

@@ -79,7 +79,7 @@ const Item: React.FC<ItemProps> = ({ item, handleCartAmountChange }) => {
         </Link>
 
         <div className="product-details">
-          <Link href={`/product/${item.id}`}>
+          <Link href={`/product/${item?.product?.id}`}>
             <a>
               <H5 className="title" fontSize="14px">
                 {item.product?.name}

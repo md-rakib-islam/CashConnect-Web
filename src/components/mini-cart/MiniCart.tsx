@@ -58,6 +58,8 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
           };
 
           if (action == "remove") {
+            setLoading(true);
+
             axios
               .delete(
                 `${Customer_Order_Remove_Item}${order_Id}/${item_id}`,
@@ -75,6 +77,8 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                     prductId: product?.product?.id,
                   },
                 });
+                setLoading(false);
+
                 toggleSidenav();
                 // localStorage.removeItem("OrderId");
               })

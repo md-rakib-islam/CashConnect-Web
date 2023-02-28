@@ -31,7 +31,7 @@ type PaymentFormProps = {
 };
 
 const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
-  const [paymentMethod, setPaymentMethod] = useState("card");
+  const [paymentMethod, setPaymentMethod] = useState("cash");
   const [setInRef, setSetInRef] = useState(0);
   const [openLogin, setOpenLogin] = useState(false);
   const [userName, setuserName] = useState("");
