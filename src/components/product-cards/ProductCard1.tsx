@@ -1,5 +1,6 @@
 import Currency from "@component/Currency";
 import LazyImage from "@component/LazyImage";
+import ProductIntroEye from "@component/products/ProductIntroEye";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import {
@@ -23,7 +24,6 @@ import { Chip } from "../Chip";
 import FlexBox from "../FlexBox";
 import Icon from "../icon/Icon";
 import Modal from "../modal/Modal";
-import ProductIntro from "../products/ProductIntro";
 import Rating from "../rating/Rating";
 import { H3, H4, SemiSpan } from "../Typography";
 import { StyledProductCard1 } from "./ProductCardStyle";
@@ -454,7 +454,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 
       <Modal open={open} onClose={toggleDialog}>
         <Card p="1rem" style={{ width: "900px" }} position="relative">
-          <ProductIntro
+          <ProductIntroEye
             {...props}
             imgUrl={[imgUrl]}
             short_desc={short_desc}
