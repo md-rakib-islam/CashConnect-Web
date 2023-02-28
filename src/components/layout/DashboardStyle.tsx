@@ -25,11 +25,19 @@ export const StyledDashboardNav = styled(NavLink)<{ isCurrentPath?: boolean }>`
   .dashboard-nav-icon-holder {
     color: ${getTheme("colors.gray.600")};
   }
+  .dashboard-nav-title {
+    color: ${getTheme("colors.gray.800")};
+
+    font-size: 14px;
+  }
 
   :hover {
     border-left-color: ${getTheme("colors.primary.main")};
 
     .dashboard-nav-icon-holder {
+      color: ${getTheme("colors.primary.main")};
+    }
+    .dashboard-nav-title {
       color: ${getTheme("colors.primary.main")};
     }
   }

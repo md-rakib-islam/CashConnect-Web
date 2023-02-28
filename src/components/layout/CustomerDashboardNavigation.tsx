@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import React, { Fragment } from "react";
 import FlexBox from "../FlexBox";
 import Icon from "../icon/Icon";
-import Typography from "../Typography";
+import { H5 } from "../Typography";
 import {
   DashboardNavigationWrapper,
   StyledDashboardNav,
@@ -38,9 +38,9 @@ const CustomerDashboardNavigation = () => {
     <DashboardNavigationWrapper px="0px" pb="1.5rem" color="gray.900">
       {linkList.map((item) => (
         <Fragment key={item.title}>
-          <Typography p="26px 30px 1rem" color="text.muted" fontSize="12px">
+          <H5 p="26px 30px 1rem" color="text.muted" fontSize="14px">
             {item.title}
-          </Typography>
+          </H5>
           {item.list.map((item) => {
             return !isMobile && item.title === "Log Out" ? null : (
               <StyledDashboardNav
@@ -61,9 +61,9 @@ const CustomerDashboardNavigation = () => {
                       {item.iconName}
                     </Icon>
                   </Box>
-                  <span>{item.title}</span>
+
+                  <H5 className="dashboard-nav-title">{item.title}</H5>
                 </FlexBox>
-                {/* <span>{item.count}</span> */}
               </StyledDashboardNav>
             );
           })}
