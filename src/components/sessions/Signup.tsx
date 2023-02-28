@@ -3,7 +3,7 @@ import Grid from "@component/grid/Grid";
 import { useAppContext } from "@context/app/AppContext";
 import {
   Customer_Create,
-  Get_Pending_Order_After_Login,
+  // Get_Pending_Order_After_Login,
 } from "@data/constants";
 // import { country_codes } from "@data/country_code";
 import axios from "axios";
@@ -20,10 +20,10 @@ import Divider from "../Divider";
 import FlexBox from "../FlexBox";
 import Icon from "../icon/Icon";
 import TextField from "../text-field/TextField";
-import { H3, H5, H6, SemiSpan, Small, Span } from "../Typography";
-import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+import { H3, H5, H6, SemiSpan, Span } from "../Typography";
+// import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import { StyledSessionCard } from "./SessionStyle";
-import AuthService from "services/authService";
+// import AuthService from "services/authService";
 
 interface SignupProps {
   type?: string;
@@ -186,122 +186,122 @@ const Signup: React.FC<SignupProps> = ({
     }
   };
   // facebook
-  const responseFacebook = (response) => {
-    console.log("responseFacebook", response);
-    console.log("name", response.name);
+  // const responseFacebook = (response) => {
+  //   console.log("responseFacebook", response);
+  //   console.log("name", response.name);
 
-    const auth_token = response.accessToken;
-    const token = {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: localStorage.getItem("jwt_access_token"),
-      },
-    };
-    console.log("authTOKENauthTOKEN", token);
-    return AuthService.signInWithFacebook(auth_token).then(
-      (user) => {
-        console.log("userFacebook", user);
+  //   const auth_token = response.accessToken;
+  //   const token = {
+  //     headers: {
+  //       "Content-type": "application/json",
+  //       Authorization: localStorage.getItem("jwt_access_token"),
+  //     },
+  //   };
+  //   console.log("authTOKENauthTOKEN", token);
+  //   return AuthService.signInWithFacebook(auth_token).then(
+  //     (user) => {
+  //       console.log("userFacebook", user);
 
-        axios
-          .get(`${Get_Pending_Order_After_Login}`, {
-            headers: {
-              "Content-type": "application/json",
-              Authorization: localStorage.getItem("jwt_access_token"),
-            },
-          })
-          .then((res) => {
-            console.log("order_Id_res", res);
-            if (res.data.id) {
-              localStorage.setItem("OrderId", res.data.id);
-            } else {
-              localStorage.removeItem("OrderId");
-            }
-          })
-          .catch(() => localStorage.removeItem("OrderId"));
+  //       axios
+  //         .get(`${Get_Pending_Order_After_Login}`, {
+  //           headers: {
+  //             "Content-type": "application/json",
+  //             Authorization: localStorage.getItem("jwt_access_token"),
+  //           },
+  //         })
+  //         .then((res) => {
+  //           console.log("order_Id_res", res);
+  //           if (res.data.id) {
+  //             localStorage.setItem("OrderId", res.data.id);
+  //           } else {
+  //             localStorage.removeItem("OrderId");
+  //           }
+  //         })
+  //         .catch(() => localStorage.removeItem("OrderId"));
 
-        dispatch({
-          type: "CHANGE_ALERT",
-          payload: {
-            alertValue: "login success...",
-            alerType: "successLogin",
-          },
-        });
+  //       dispatch({
+  //         type: "CHANGE_ALERT",
+  //         payload: {
+  //           alertValue: "login success...",
+  //           alerType: "successLogin",
+  //         },
+  //       });
 
-        // if (user.user_type === "customer") {
-        //   if (type != "popup") {
-        //     const backUrl = localStorage.getItem("backAfterLogin");
-        //     if (backUrl) {
-        //       localStorage.removeItem("backAfterLogin");
-        //       router.push(`${backUrl}`);
-        //     } else {
-        //       router.push("/profile");
-        //     }
-        //   } else {
-        //     closeLoginDialog();
-        //     localStorage.removeItem("backAfterLogin");
-        //   }
-        // } else if (user.user_type == "vendor") {
-        //   if (type != "popup") {
-        //     const backUrl = localStorage.getItem("backAfterLogin");
-        //     if (backUrl) {
-        //       localStorage.removeItem("backAfterLogin");
-        //       router.push(`${backUrl}`);
-        //     } else {
-        //       router.push("/vendor/dashboard");
-        //     }
-        //   } else {
-        //     closeLoginDialog();
-        //     localStorage.removeItem("backAfterLogin");
-        //   }
-        // }
-        if (type != "popup") {
-          const backUrl = localStorage.getItem("backAfterLogin");
-          if (backUrl) {
-            localStorage.removeItem("backAfterLogin");
-            router.push(`${backUrl}`);
-          } else {
-            router.push("/profile");
-          }
-        } else {
-          localStorage.removeItem("backAfterLogin");
-        }
-      },
-      (_errors) => {
-        console.log("login failed", _errors.response.status);
+  //       // if (user.user_type === "customer") {
+  //       //   if (type != "popup") {
+  //       //     const backUrl = localStorage.getItem("backAfterLogin");
+  //       //     if (backUrl) {
+  //       //       localStorage.removeItem("backAfterLogin");
+  //       //       router.push(`${backUrl}`);
+  //       //     } else {
+  //       //       router.push("/profile");
+  //       //     }
+  //       //   } else {
+  //       //     closeLoginDialog();
+  //       //     localStorage.removeItem("backAfterLogin");
+  //       //   }
+  //       // } else if (user.user_type == "vendor") {
+  //       //   if (type != "popup") {
+  //       //     const backUrl = localStorage.getItem("backAfterLogin");
+  //       //     if (backUrl) {
+  //       //       localStorage.removeItem("backAfterLogin");
+  //       //       router.push(`${backUrl}`);
+  //       //     } else {
+  //       //       router.push("/vendor/dashboard");
+  //       //     }
+  //       //   } else {
+  //       //     closeLoginDialog();
+  //       //     localStorage.removeItem("backAfterLogin");
+  //       //   }
+  //       // }
+  //       if (type != "popup") {
+  //         const backUrl = localStorage.getItem("backAfterLogin");
+  //         if (backUrl) {
+  //           localStorage.removeItem("backAfterLogin");
+  //           router.push(`${backUrl}`);
+  //         } else {
+  //           router.push("/profile");
+  //         }
+  //       } else {
+  //         localStorage.removeItem("backAfterLogin");
+  //       }
+  //     },
+  //     (_errors) => {
+  //       console.log("login failed", _errors.response.status);
 
-        if (_errors.response.status == 400) {
-          dispatch({
-            type: "CHANGE_ALERT",
-            payload: {
-              alertValue: "Waiting...",
-            },
-          });
-        }
-        // else if (_errors.response.status == 401) {
-        //   dispatch({
-        //     type: "CHANGE_ALERT",
-        //     payload: {
-        //       alertValue: "Email or Password is wrong",
-        //       alerType: 'loginError',
-        //     },
-        //   });
-        // }
-        // else {
-        //   dispatch({
-        //     type: "CHANGE_ALERT",
-        //     payload: {
-        //       alertValue: "",
-        //       alerType: 'loginError',
-        //     },
-        //   });
-        // }
+  //       if (_errors.response.status == 400) {
+  //         dispatch({
+  //           type: "CHANGE_ALERT",
+  //           payload: {
+  //             alertValue: "Waiting...",
+  //           },
+  //         });
+  //       }
+  //       // else if (_errors.response.status == 401) {
+  //       //   dispatch({
+  //       //     type: "CHANGE_ALERT",
+  //       //     payload: {
+  //       //       alertValue: "Email or Password is wrong",
+  //       //       alerType: 'loginError',
+  //       //     },
+  //       //   });
+  //       // }
+  //       // else {
+  //       //   dispatch({
+  //       //     type: "CHANGE_ALERT",
+  //       //     payload: {
+  //       //       alertValue: "",
+  //       //       alerType: 'loginError',
+  //       //     },
+  //       //   });
+  //       // }
 
-        if (type != "popup") {
-          router.push("/login");
-        }
-      }
-    );
-  };
+  //       if (type != "popup") {
+  //         router.push("/login");
+  //       }
+  //     }
+  //   );
+  // };
 
   const {
     setErrors,
@@ -632,7 +632,7 @@ const Signup: React.FC<SignupProps> = ({
             </FlexBox>
           </Box>
 
-          <form style={{ padding: "1rem 3.75rem 0px" }}>
+          {/* <form style={{ padding: "1rem 3.75rem 0px" }}>
             <FacebookLogin
               appId="5515163185212209"
               callback={responseFacebook}
@@ -669,7 +669,7 @@ const Signup: React.FC<SignupProps> = ({
                 </>
               )}
             />
-          </form>
+          </form> */}
 
           {/* <FlexBox
             justifyContent="center"
