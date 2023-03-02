@@ -6,6 +6,8 @@ const StyledHeader = styled.header`
   z-index: 1;
   height: ${layoutConstant.headerHeight};
   background: #ffffff;
+  padding-top: 8px;
+  padding-bottom: 8px;
 
   .logo {
     img {
@@ -39,21 +41,6 @@ const StyledHeader = styled.header`
 
   .user {
     cursor: pointer;
-  }
-
-  @media only screen and (max-width: 900px) {
-    // background: rgb(232 66 98);
-    background: #ffffff;
-    height: ${layoutConstant.mobileHeaderHeight};
-
-    // .logo,
-    .icon-holder,
-    .category-holder {
-      display: none;
-    }
-    .header-right {
-      display: none !important;
-    }
   }
 `;
 

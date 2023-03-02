@@ -1,11 +1,9 @@
 import Alert from "@component/alert/alert";
+// import IconButton from "@component/buttons/IconButton";
 import Card from "@component/Card";
-import MobileNavbar from "@component/layout/MobileNavbar";
-import Sidenav from "@component/sidenav/Sidenav";
 import { Span } from "@component/Typography";
 import { Product_Filter } from "@data/constants";
 import { requred } from "@data/data";
-import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
 import { useFormik } from "formik";
 import Link from "next/link";
@@ -27,9 +25,6 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
   // const [categories, setCategories] = useState([]);
 
   const router = useRouter();
-
-  const width = useWindowSize();
-  const isTablet = width < 1025;
 
   useEffect(() => {
     setFieldValue("search", router.query?.name || "");
@@ -104,16 +99,16 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
   return (
     <Box
       position="relative"
-      flex="1 1 0"
-      maxWidth="470px"
-      mx="auto"
+      // flex="1 1 0"
+      // maxWidth="470px"
+      // mx="auto"
       display="flex"
     >
       <form onSubmit={handleSubmit} style={{ flexGrow: 1 }}>
         <StyledSearchBox>
           <TextField
             name="search"
-            className="search-field"
+            // className="search-field"
             placeholder="Search for product, brand and more.."
             fullwidth
             autoComplete="off"
@@ -129,16 +124,24 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
                 hanldeSearch(e);
               }
             }}
+            endAdornment={
+              // <IconButton
+              //   size="small"
+              //   type="button"
+              //   // p="0.25rem"
+              //   // mr="0.25rem"
+              //   // color={passwordVisibility ? "gray.700" : "gray.600"}
+
+              //   background="none"
+              // >
+              <Icon variant="small" onClick={() => handleSubmit()}>
+                search
+              </Icon>
+              // </IconButton>
+            }
             value={values.search || ""}
             errorText={touched.search && errors.search}
           />
-          <Icon
-            className="search-icon"
-            size="18px"
-            onClick={() => handleSubmit()}
-          >
-            search
-          </Icon>
 
           <Alert />
           {/* <Menu
@@ -190,28 +193,6 @@ const SearchBox: React.FC<SearchBoxProps> = () => {
           </Card>
         )}
       </form>
-
-      {isTablet && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Sidenav
-            position="left"
-            padding={10}
-            handle={
-              <Icon ml="10px" color="secondary">
-                menu
-              </Icon>
-            }
-          >
-            <MobileNavbar />
-          </Sidenav>
-        </div>
-      )}
     </Box>
   );
 };

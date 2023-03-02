@@ -12,7 +12,7 @@
   cursor: pointer;
   background: #e84262;
   bottom: 32px;
-  right: 32px;
+  right: 0;
   border-radius: 100%;
   border: none;
   /* box-shadow: rgb(109 117 141 / 20%) 0px 12px 48px 0px; */
@@ -240,4 +240,24 @@
 .form_container .btn:hover,
 .open_button:hover {
   opacity: 1;
+}
+
+@media only screen and (max-width: 900px) {
+  .open_button {
+    align-items: center;
+    cursor: pointer;
+    background: #e84262;
+    bottom: 62px;
+    right: 0;
+    border-radius: 100%;
+    border: none;
+    /* box-shadow: rgb(109 117 141 / 20%) 0px 12px 48px 0px; */
+    display: flex;
+    fill: rgb(255, 255, 255);
+    height: 56px;
+    justify-content: center;
+    position: fixed;
+    width: 56px;
+    z-index: 9998;
+  }
 }

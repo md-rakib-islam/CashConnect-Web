@@ -36,6 +36,8 @@ import Grid from "../grid/Grid";
 import Icon from "../icon/Icon";
 import Rating from "../rating/Rating";
 import Typography, { H1, H2, H3, H6, SemiSpan } from "../Typography";
+import Menu from "@component/Menu";
+import MenuItem from "@component/MenuItem";
 
 const parse = require("html-react-parser");
 
@@ -923,6 +925,77 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
             </FlexBox> */}
           </Grid>
           <Grid item md={3} xs={12} alignItems="center">
+            <Menu
+              style={{ cursor: "pointer" }}
+              direction="left"
+              handler={
+                <FlexBox mb="10px">
+                  <Icon
+                    style={{ color: "#e84262", marginRight: "7px" }}
+                    size="25px"
+                  >
+                    share
+                  </Icon>
+                  share
+                </FlexBox>
+              }
+            >
+              <MenuItem p="2px">
+                <FlexBox
+                  mr="1rem"
+                  alignItems="center"
+                  justifyContent="center"
+                  mt="2rem"
+                >
+                  <Button
+                    style={{ width: "20px", height: "45px" }}
+                    bg="#1b4e9b"
+                    ml="5px"
+                    borderRadius={0}
+                  >
+                    <Icon style={{ color: "#ffffff" }}>facebook</Icon>
+                  </Button>
+                  <Button
+                    style={{ width: "20px", height: "45px" }}
+                    bg="#00aeef"
+                    borderRadius={0}
+                    ml="5px"
+                  >
+                    <Icon style={{ color: "#ffffff" }}>twitter</Icon>
+                  </Button>
+                  <Button
+                    style={{ width: "20px", height: "45px" }}
+                    bg="#d93025"
+                    borderRadius={0}
+                    ml="5px"
+                  >
+                    <Icon style={{ color: "#ffffff" }}>google</Icon>
+                  </Button>
+                  <Button
+                    style={{ width: "20px", height: "45px" }}
+                    bg="#34572d"
+                    borderRadius={0}
+                    ml="5px"
+                  >
+                    <Icon style={{ color: "#ffffff" }}>copy-link</Icon>
+                  </Button>
+                </FlexBox>
+                {/* <div
+                    style={{
+                      fontSize: "20px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "flexStart",
+                      cursor: "pointer",
+                      minWidth: "100px",
+                    }}
+                  >
+                    <Typography fontWeight="600" fontSize="16px" ml="5px">
+                     
+                    </Typography>
+                  </div> */}
+              </MenuItem>
+            </Menu>
             <Card bg="#f4f4f4" p="0.7rem">
               <FlexBox mr="1rem" alignItems="center">
                 <Icon style={{ color: "#e84262" }} variant="medium">
@@ -973,38 +1046,6 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                 </FlexBox>
               </FlexBox>
             </Card>
-
-            <FlexBox
-              mr="1rem"
-              alignItems="center"
-              justifyContent="center"
-              mt="2rem"
-            >
-              <Button
-                style={{ width: "20px", height: "45px" }}
-                bg="#1b4e9b"
-                ml="5px"
-                borderRadius={0}
-              >
-                <Icon style={{ color: "#ffffff" }}>facebook</Icon>
-              </Button>
-              <Button
-                style={{ width: "20px", height: "45px" }}
-                bg="#00aeef"
-                borderRadius={0}
-                ml="5px"
-              >
-                <Icon style={{ color: "#ffffff" }}>twitter</Icon>
-              </Button>
-              <Button
-                style={{ width: "20px", height: "45px" }}
-                bg="#d93025"
-                borderRadius={0}
-                ml="5px"
-              >
-                <Icon style={{ color: "#ffffff" }}>google</Icon>
-              </Button>
-            </FlexBox>
           </Grid>
         </Grid>
       </Box>

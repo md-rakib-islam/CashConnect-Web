@@ -1,5 +1,7 @@
 import IconButton from "@component/buttons/IconButton";
+import Grid from "@component/grid/Grid";
 import Image from "@component/Image";
+import MobileNavbar from "@component/layout/MobileNavbar";
 import Menu from "@component/Menu";
 import MenuItem from "@component/MenuItem";
 import Navbar from "@component/navbar/Navbar";
@@ -11,6 +13,7 @@ import {
   Site_Setting_All,
   User_By_Id,
 } from "@data/constants";
+import useWindowSize from "@hook/useWindowSize";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -34,21 +37,19 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
   const [open, setOpen] = useState(false);
   const toggleSidenav = () => setOpen(!open);
   const [_reRender, setReRender] = useState(0);
-
   const { dispatch } = useAppContext();
-
   const [loading, setLoading] = useState(false);
-
   const router = useRouter();
   const [productQuantity, setProductQuantity] = useState<any>();
   const { state } = useAppContext();
-
   const cartCanged = state.cart.chartQuantity;
-
   const { isLogin, order_Id } = useUserInf();
   const [preViewImg, setpreViewImg] = useState("");
   const [first_name, setfirst_name] = useState("");
   const [last_name, setlast_name] = useState("");
+  const width = useWindowSize();
+  const isTablet = width <= 900;
+  const isMobile = width <= 700;
   const handleLoadingComplete = () => {
     setLoading(false);
   };
@@ -201,25 +202,27 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
         </div>
       )}
       <StyledHeader className={className}>
-        <Container
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-          height="100%"
-        >
-          <FlexBox className="logo" alignItems="center" mr="1rem">
-            <Link href="/">
-              <a onClick={() => setLoading(true)}>
-                <Image
-                  src="/assets/images/logos/main_logo.png"
-                  alt="logo"
-                  height="45"
-                  width="160px"
-                />
-              </a>
-            </Link>
+        <Container height="100%">
+          {!isMobile && (
+            <Grid container justifyContent="center" spacing={4}>
+              <Grid item lg={4} md={3} sm={3} xs={12} alignItems="center">
+                <FlexBox
+                  className="logo"
+                  justifyContent="space-between"
+                  mr="1rem"
+                >
+                  <Link href="/">
+                    <a onClick={() => setLoading(true)}>
+                      <Image
+                        src="/assets/images/logos/main_logo.png"
+                        alt="logo"
+                        height="45"
+                        width="160px"
+                      />
+                    </a>
+                  </Link>
 
-            {/* {isFixed && (
+                  {/* {isFixed && (
               <div className="category-holder">
                 <Categories>
                   <FlexBox color="text.hint" alignItems="center" ml="1rem">
@@ -229,37 +232,47 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
                 </Categories>
               </div>
             )} */}
-          </FlexBox>
-
-          <FlexBox justifyContent="center" flex="1 1 0">
-            <SearchBox />
-          </FlexBox>
-
-          <FlexBox className="header-right" alignItems="center">
-            {!isLogin ? (
-              <IconButton onClick={login} ml="1rem" bg="gray.200" p="8px">
-                <Icon style={{ color: "#e84262" }} size="28px">
-                  user
-                </Icon>
-              </IconButton>
-            ) : (
-              <>
-                <H5
-                  className="header-name"
-                  ml={"1rem"}
-                  my="0px"
-                >{`${first_name} ${last_name}`}</H5>
-                <Menu
-                  direction="left"
-                  handler={
-                    <IconButton ml="1rem" bg="gray.200" p="8px">
-                      <Icon style={{ color: "#e84262" }} size="25px">
-                        settingsAccount
-                      </Icon>
-                    </IconButton>
-                  }
-                >
-                  {/* <MenuItem p="2px">
+                </FlexBox>
+              </Grid>
+              <Grid item lg={5} md={5} sm={7} xs={12} alignItems="center">
+                <SearchBox />
+              </Grid>
+              <Grid item lg={3} md={4} sm={2} xs={12} alignItems="center">
+                {!isTablet && (
+                  <FlexBox
+                    className="header-right"
+                    alignItems="center"
+                    justifyContent="flex-end"
+                  >
+                    {!isLogin ? (
+                      <IconButton
+                        onClick={login}
+                        ml="1rem"
+                        bg="gray.200"
+                        p="8px"
+                      >
+                        <Icon style={{ color: "#e84262" }} size="28px">
+                          user
+                        </Icon>
+                      </IconButton>
+                    ) : (
+                      <>
+                        <H5
+                          className="header-name"
+                          ml={"1rem"}
+                          my="0px"
+                        >{`${first_name} ${last_name}`}</H5>
+                        <Menu
+                          direction="left"
+                          handler={
+                            <IconButton ml="1rem" bg="gray.200" p="8px">
+                              <Icon style={{ color: "#e84262" }} size="25px">
+                                settingsAccount
+                              </Icon>
+                            </IconButton>
+                          }
+                        >
+                          {/* <MenuItem p="2px">
                     <div
                       style={{
                         fontSize: "20px",
@@ -274,69 +287,165 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
                       
                     </div>
                   </MenuItem> */}
-                  <MenuItem p="2px">
-                    <div
-                      style={{
-                        fontSize: "20px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "flexStart",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => goToFrofile()}
+                          <MenuItem p="2px">
+                            <div
+                              style={{
+                                fontSize: "20px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "flexStart",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => goToFrofile()}
+                            >
+                              <Icon
+                                style={{ color: "#e84262" }}
+                                size="30px"
+                                ml="5px"
+                              >
+                                user
+                              </Icon>
+                              <Typography
+                                fontWeight="600"
+                                fontSize="16px"
+                                ml="5px"
+                              >
+                                Profile
+                              </Typography>
+                            </div>
+                          </MenuItem>
+
+                          <MenuItem p="2px">
+                            <div
+                              style={{
+                                fontSize: "20px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "flexStart",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => handleLogout()}
+                            >
+                              <Icon
+                                style={{ color: "#e84262" }}
+                                size="23px"
+                                ml="8px"
+                              >
+                                logout
+                              </Icon>
+                              <Typography
+                                fontWeight="600"
+                                fontSize="16px"
+                                ml="10px"
+                              >
+                                Logout
+                              </Typography>
+                            </div>
+                          </MenuItem>
+                        </Menu>
+                      </>
+                    )}
+
+                    {!isLogin && (
+                      <Link href="/signup">
+                        <IconButton ml="1rem" bg="gray.200" p="8px">
+                          <Icon style={{ color: "#e84262" }} size="25px">
+                            register
+                          </Icon>
+                        </IconButton>
+                      </Link>
+                    )}
+
+                    <Sidenav
+                      handle={cartHandle}
+                      position="right"
+                      open={open}
+                      width={380}
+                      toggleSidenav={toggleSidenav}
                     >
-                      <Icon style={{ color: "#e84262" }} size="30px" ml="5px">
-                        user
-                      </Icon>
-                      <Typography fontWeight="600" fontSize="16px" ml="5px">
-                        Profile
-                      </Typography>
-                    </div>
-                  </MenuItem>
+                      <MiniCart toggleSidenav={toggleSidenav} />
+                    </Sidenav>
+                  </FlexBox>
+                )}
 
-                  <MenuItem p="2px">
-                    <div
-                      style={{
-                        fontSize: "20px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "flexStart",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => handleLogout()}
+                {isTablet && (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Sidenav
+                      position="left"
+                      padding={10}
+                      handle={<Icon color="secondary">menu</Icon>}
                     >
-                      <Icon style={{ color: "#e84262" }} size="23px" ml="8px">
-                        logout
-                      </Icon>
-                      <Typography fontWeight="600" fontSize="16px" ml="10px">
-                        Logout
-                      </Typography>
-                    </div>
-                  </MenuItem>
-                </Menu>
-              </>
-            )}
-
-            {!isLogin && (
-              <Link href="/signup">
-                <IconButton ml="1rem" bg="gray.200" p="8px">
-                  <Icon style={{ color: "#e84262" }} size="25px">
-                    register
-                  </Icon>
-                </IconButton>
-              </Link>
-            )}
-
-            <Sidenav
-              handle={cartHandle}
-              position="right"
-              open={open}
-              width={380}
-              toggleSidenav={toggleSidenav}
+                      <MobileNavbar />
+                    </Sidenav>
+                  </div>
+                )}
+              </Grid>
+            </Grid>
+          )}
+          {isMobile && (
+            <Grid
+              style={{ background: "#ffffff" }}
+              container
+              justifyContent="center"
+              spacing={4}
             >
-              <MiniCart toggleSidenav={toggleSidenav} />
-            </Sidenav>
-          </FlexBox>
+              <Grid item sm={12} xs={12} alignItems="center">
+                <FlexBox
+                  className="logo"
+                  justifyContent="space-between"
+                  mr="1rem"
+                >
+                  <Link href="/">
+                    <a onClick={() => setLoading(true)}>
+                      <Image
+                        src="/assets/images/logos/main_logo.png"
+                        alt="logo"
+                        height="45"
+                        width="160px"
+                      />
+                    </a>
+                  </Link>
+
+                  {/* {isFixed && (
+              <div className="category-holder">
+                <Categories>
+                  <FlexBox color="text.hint" alignItems="center" ml="1rem">
+                    <Icon>categories</Icon>
+                    <Icon>arrow-down-filled</Icon>
+                  </FlexBox>
+                </Categories>
+              </div>
+            )} */}
+                  {isMobile && (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Sidenav
+                        position="left"
+                        padding={10}
+                        handle={<Icon color="secondary">menu</Icon>}
+                      >
+                        <MobileNavbar />
+                      </Sidenav>
+                    </div>
+                  )}
+                </FlexBox>
+              </Grid>
+              <Grid item sm={12} xs={12} alignItems="center">
+                <SearchBox />
+              </Grid>
+            </Grid>
+          )}
         </Container>
       </StyledHeader>
       <Navbar navListOpen={false} />

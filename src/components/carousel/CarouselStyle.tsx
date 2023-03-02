@@ -150,4 +150,7 @@ export const StyledCarousel = styled(
       transform: translate(-50%, -50%) scaleX(1) !important;
     }
   }
+  @media only screen and (max-width: 700px) {
+    top: 55px;
+  }
 `;
