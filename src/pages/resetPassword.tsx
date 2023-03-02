@@ -1,5 +1,5 @@
 import FlexBox from "@component/FlexBox";
-import DashboardPageHeader from "@component/layout/DashboardPageHeader";
+// import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import React from "react";
 import DashboardLayout from "@component/layout/FooterLayout";
 import ResetPassword from "@component/sessions/ResetPassword";
@@ -7,7 +7,7 @@ import ResetPassword from "@component/sessions/ResetPassword";
 const resetPassword = () => {
   return (
     <FlexBox flexDirection="column" alignItems="center" justifyContent="center">
-      <DashboardPageHeader />
+      {/* <DashboardPageHeader /> */}
       <ResetPassword />
     </FlexBox>
   );

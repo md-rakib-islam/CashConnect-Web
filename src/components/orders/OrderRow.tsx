@@ -8,7 +8,7 @@ import { Chip } from "../Chip";
 import Hidden from "../hidden/Hidden";
 import Icon from "../icon/Icon";
 import TableRow from "../TableRow";
-import Typography, { H5, H6 } from "../Typography";
+import Typography, { H6 } from "../Typography";
 
 export interface OrderRowProps {
   item: {
@@ -63,9 +63,9 @@ const OrderRow: React.FC<OrderRowProps> = ({ item }) => {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <H5 m="6px" textAlign="left">
+        <H6 m="6px" textAlign="left">
           {item.order_no}
-        </H5>
+        </H6>
         <Box m="6px">
           <Chip
             p="0.25rem 1rem"

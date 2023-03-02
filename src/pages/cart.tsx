@@ -1,4 +1,5 @@
 import Currency from "@component/Currency";
+import LazyImage from "@component/LazyImage";
 import LoginPopup from "@component/LoginPopup";
 import TextArea from "@component/textarea/TextArea";
 import { useAppContext } from "@context/app/AppContext";
@@ -19,7 +20,7 @@ import FlexBox from "../components/FlexBox";
 import Grid from "../components/grid/Grid";
 import CheckoutNavLayout from "../components/layout/CheckoutNavLayout";
 import ProductCard7 from "../components/product-cards/ProductCard7";
-import Typography from "../components/Typography";
+import Typography, { Paragraph } from "../components/Typography";
 
 type CartItem = {
   id: any;
@@ -126,75 +127,103 @@ const Cart = () => {
   });
 
   return (
-    <Fragment>
-      <LoginPopup open={openLogin} closeLoginDialog={closeLoginTab} />
-      <Grid container spacing={6}>
-        <Grid item lg={8} md={8} xs={12}>
-          {cartProductList.map((item) => (
-            <ProductCard7
-              key={item.id}
-              mb="1.5rem"
-              runReloadCart={runReloadCart}
-              {...item}
-            />
-          ))}
-        </Grid>
-        <Grid item lg={4} md={4} xs={12}>
-          <Card1>
-            <FlexBox
-              justifyContent="space-between"
-              alignItems="center"
-              mb="1rem"
-            >
-              <Typography color="gray.600">Total:</Typography>
-              <FlexBox alignItems="flex-end">
-                <Typography fontSize="18px" fontWeight="600" lineHeight="1">
-                  <Currency>{getTotalPrice().toFixed(2)}</Currency>
-                </Typography>
-                {/* <Typography fontWeight="600" fontSize="14px" lineHeight="1">
+    <>
+      {cartProductList.length !== 0 ? (
+        <Fragment>
+          <LoginPopup open={openLogin} closeLoginDialog={closeLoginTab} />
+
+          <Grid container spacing={6}>
+            <Grid item lg={8} md={8} xs={12}>
+              {cartProductList.map((item) => (
+                <ProductCard7
+                  key={item.id}
+                  mb="1.5rem"
+                  runReloadCart={runReloadCart}
+                  {...item}
+                />
+              ))}
+            </Grid>
+            <Grid item lg={4} md={4} xs={12}>
+              <Card1>
+                <FlexBox
+                  justifyContent="space-between"
+                  alignItems="center"
+                  mb="1rem"
+                >
+                  <Typography color="gray.600">Total:</Typography>
+                  <FlexBox alignItems="flex-end">
+                    <Typography fontSize="18px" fontWeight="600" lineHeight="1">
+                      <Currency>{getTotalPrice().toFixed(2)}</Currency>
+                    </Typography>
+                    {/* <Typography fontWeight="600" fontSize="14px" lineHeight="1">
                   00
                 </Typography> */}
-              </FlexBox>
-            </FlexBox>
+                  </FlexBox>
+                </FlexBox>
 
-            <Divider mb="1rem" />
+                <Divider mb="1rem" />
 
-            <FlexBox alignItems="center" mb="1rem">
-              <Typography fontWeight="600" mr="10px">
-                Additional Comments
-              </Typography>
-              <Box p="3px 10px" bg="primary.light" borderRadius="3px">
-                <Typography fontSize="12px" color="primary.main">
-                  Note
-                </Typography>
-              </Box>
-            </FlexBox>
+                <FlexBox alignItems="center" mb="1rem">
+                  <Typography fontWeight="600" mr="10px">
+                    Additional Comments
+                  </Typography>
+                  <Box p="3px 10px" bg="primary.light" borderRadius="3px">
+                    <Typography fontSize="12px" color="primary.main">
+                      Note
+                    </Typography>
+                  </Box>
+                </FlexBox>
 
-            <TextArea
-              rows={6}
-              name="comment"
-              onBlur={handleBlur}
-              onChange={handleChange}
-              value={values.comment || ""}
-              errorText={touched.comment && errors.comment}
-              fullwidth
-              mb="1rem"
-            />
+                <TextArea
+                  rows={6}
+                  name="comment"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.comment || ""}
+                  errorText={touched.comment && errors.comment}
+                  fullwidth
+                  mb="1rem"
+                />
 
-            <Divider mb="1rem" />
+                <Divider mb="1rem" />
 
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={addComment}
-              fullwidth
-            >
-              Checkout Now
-            </Button>
-          </Card1>
-        </Grid>
-      </Grid>
-    </Fragment>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={addComment}
+                  fullwidth
+                >
+                  Checkout Now
+                </Button>
+              </Card1>
+            </Grid>
+          </Grid>
+        </Fragment>
+      ) : (
+        <FlexBox
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          height="calc(100% - 100px)"
+          mb="260px"
+          mt="260px"
+        >
+          <LazyImage
+            src="/assets/images/logos/shopping-bag.svg"
+            width="90px"
+            height="100%"
+          />
+          <Paragraph
+            mt="1rem"
+            color="text.muted"
+            textAlign="center"
+            maxWidth="200px"
+          >
+            Your shopping bag is empty. Start shopping
+          </Paragraph>
+        </FlexBox>
+      )}
+    </>
   );
 };
 

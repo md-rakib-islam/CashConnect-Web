@@ -33,7 +33,7 @@ export const StyledCarouselCard1 = styled.div`
     position: relative;
     //   width: 50%;
     img {
-     height: 70vh;
+     height: 100%;
       width: 100%;
     }
   }
@@ -49,7 +49,7 @@ export const StyledCarouselCard1 = styled.div`
     position: relative;
     //   width: 50%;
     img {
-      height: 100%;
+      height: 120%;
       width: 100%;
     }
   }
@@ -76,7 +76,7 @@ export const StyledCarouselCard1 = styled.div`
     //   width: 50%;
     img {
 
-      height: 100%;
+      height: 120%;
       width: 100%;
     }
   }

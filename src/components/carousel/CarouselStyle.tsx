@@ -96,13 +96,14 @@ export const StyledCarousel = styled(
     border-radius: 300px;
     margin: 0.25rem;
     cursor: pointer;
-    border: 1px solid rgb(15 52 96);
+    // border: 1px solid rgb(15 52 96);
+    background: #00000038;
   }
   .dot:after {
     position: absolute;
     content: " ";
-    height: 9px;
-    width: 9px;
+    height: 10px;
+    width: 10px;
     top: 50%;
     left: 50%;
     border-radius: 300px;
@@ -111,5 +112,42 @@ export const StyledCarousel = styled(
   }
   .dot-active:after {
     transform: translate(-50%, -50%) scaleX(1);
+  }
+  @media only screen and (max-width: 900px) {
+    .right-arrow-class {
+      right: 0px;
+    }
+    .left-arrow-class {
+      left: 0px;
+    }
+    .custom-dot {
+      display: flex !important;
+      justify-content: center !important;
+      margin-top: -1rem !important;
+    }
+    .dot {
+      position: relative !important;
+      height: 6px !important;
+      width: 6px !important;
+      border-radius: 300px !important;
+      margin: 0.099rem !important;
+      cursor: pointer !important;
+      // border: 1px solid rgb(15 52 96) !important;
+      background: #00000038 !important;
+    }
+    .dot:after {
+      position: absolute !important;
+      content: " " !important;
+      height: 6px !important;
+      width: 6px !important;
+      top: 50% !important;
+      left: 50% !important;
+      border-radius: 300px !important;
+      transform: translate(-50%, -50%) scaleX(0) !important;
+      background: #e94560 !impotant;
+    }
+    .dot-active:after {
+      transform: translate(-50%, -50%) scaleX(1) !important;
+    }
   }
 `;

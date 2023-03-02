@@ -1,4 +1,4 @@
-import DashboardPageHeader from "@component/layout/DashboardPageHeader";
+// import DashboardPageHeader from "@component/layout/DashboardPageHeader";
 import React from "react";
 import FlexBox from "../components/FlexBox";
 import Signup from "../components/sessions/Signup";
@@ -12,7 +12,7 @@ const SignUpPage = () => {
       alignItems="center"
       justifyContent="center"
     >
-      <DashboardPageHeader />
+      {/* <DashboardPageHeader /> */}
 
       <Signup />
     </FlexBox>

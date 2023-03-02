@@ -58,8 +58,6 @@ const MobileNavigationBar: React.FC = () => {
     setReRender(Math.random());
   }, [userID]);
 
-  const profileUrl = isLogin ? "/profile" : "/login";
-
   const list = [
     {
       title: "Home",
@@ -74,12 +72,12 @@ const MobileNavigationBar: React.FC = () => {
     {
       title: "Cart",
       icon: "bag",
-      href: "/cart",
+      href: isLogin ? "/cart" : "/login",
     },
     {
       title: isLogin ? "Account" : "login",
-      icon: "user-2",
-      href: profileUrl,
+      icon: isLogin ? "user-3" : "user-2",
+      href: isLogin ? "/profile" : "/login",
     },
   ];
 
