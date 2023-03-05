@@ -53,6 +53,13 @@ const App = ({ Component, pageProps }: any) => {
           `,
           }}
         ></script>
+        {/* facebook share content */}
+        <script
+          async
+          defer
+          crossOrigin="anonymous"
+          src="https://connect.facebook.net/en_US/sdk.js"
+        ></script>
       </Head>
       <GlobalStyles />
       <GoogleOAuthProvider clientId="1082909611954-d2cehkmk853q5643g2c1kibreq2a1e5e.apps.googleusercontent.com">

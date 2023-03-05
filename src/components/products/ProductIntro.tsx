@@ -5,6 +5,8 @@ import Currency from "@component/Currency";
 import Divider from "@component/Divider";
 import Card from "@component/Card";
 import LoginPopup from "@component/LoginPopup";
+// import { ShareSocial } from "react-share-social";
+
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
 import {
@@ -36,10 +38,39 @@ import Grid from "../grid/Grid";
 import Icon from "../icon/Icon";
 import Rating from "../rating/Rating";
 import Typography, { H1, H2, H3, H6, SemiSpan } from "../Typography";
-import Menu from "@component/Menu";
-import MenuItem from "@component/MenuItem";
+import Menu2 from "@component/Menu2";
+import {
+  FacebookShareButton,
+  FacebookIcon,
+  TwitterShareButton,
+  // InstapaperShareButton,
+  // InstapaperIcon,
+  TwitterIcon,
+  WhatsappShareButton,
+  WhatsappIcon,
+  FacebookMessengerIcon,
+  FacebookMessengerShareButton,
+  // EmailShareButton,
+  // EmailIcon,
+  // HatenaShareCount,
+  // OKShareCount,
+  // PinterestShareCount,
+  // RedditShareCount,
+  // TumblrShareCount,
+  // VKShareCount,
+} from "react-share";
+
+import MenuItem2 from "@component/MenuItem2";
+import { CircularProgress } from "@mui/material";
 
 const parse = require("html-react-parser");
+
+const SocialMediaItem = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 10px 0 0;
+`;
 
 export interface ProductIntroProps {
   imgUrl?: string[];
@@ -75,6 +106,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
   // const [visibleSlides, setVisibleSlides] = useState(6);
 
+  // const titleFB = "Check out this cool website!";
   const { state, dispatch } = useAppContext();
   const router = useRouter();
 
@@ -504,8 +536,41 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
       }
     }
   };
+  // const shareOnFacebook = () => {
+  //   window.FB.ui(
+  //     {
+  //       method: "share",
+  //       href: "https://your-website-url.com/page-to-share",
+  //     },
+  //     function (response) {
+  //       console.log("responseFBshare", response);
+  //     }
+  //   );
+  // };
 
   console.log("orginalprice", orginalprice);
+  // copy link
+  const [copied, setCopied] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const copyToClipboard = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      navigator.clipboard
+        .writeText(window.location.href)
+        .then(() => {
+          setIsLoading(false);
+          setCopied(true);
+          setTimeout(() => {
+            setCopied(false);
+          }, 3000); // Remove "Copied!" message after 3 seconds
+        })
+        .catch((error) => {
+          console.error("Failed to copy URL: ", error);
+          setIsLoading(false);
+        });
+    }, 3000); // Remove "Copied!" message after 3 seconds
+  };
   return (
     <>
       {loading && (
@@ -925,7 +990,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
             </FlexBox> */}
           </Grid>
           <Grid item md={3} xs={12} alignItems="center">
-            <Menu
+            <Menu2
               style={{ cursor: "pointer" }}
               direction="left"
               handler={
@@ -940,62 +1005,131 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                 </FlexBox>
               }
             >
-              <MenuItem p="2px">
+              <MenuItem2 p="0.2rem">
                 <FlexBox
-                  mr="1rem"
-                  alignItems="center"
+                  alignItems="flex-start"
+                  flexDirection="column"
                   justifyContent="center"
-                  mt="2rem"
                 >
-                  <Button
-                    style={{ width: "20px", height: "45px" }}
-                    bg="#1b4e9b"
-                    ml="5px"
-                    borderRadius={0}
-                  >
-                    <Icon style={{ color: "#ffffff" }}>facebook</Icon>
-                  </Button>
-                  <Button
-                    style={{ width: "20px", height: "45px" }}
-                    bg="#00aeef"
-                    borderRadius={0}
-                    ml="5px"
-                  >
-                    <Icon style={{ color: "#ffffff" }}>twitter</Icon>
-                  </Button>
-                  <Button
-                    style={{ width: "20px", height: "45px" }}
-                    bg="#d93025"
-                    borderRadius={0}
-                    ml="5px"
-                  >
-                    <Icon style={{ color: "#ffffff" }}>google</Icon>
-                  </Button>
-                  <Button
-                    style={{ width: "20px", height: "45px" }}
-                    bg="#34572d"
-                    borderRadius={0}
-                    ml="5px"
-                  >
-                    <Icon style={{ color: "#ffffff" }}>copy-link</Icon>
-                  </Button>
+                  <SocialMediaItem>
+                    <FacebookShareButton
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: "5px",
+                      }}
+                      url={`${BASE_URL}/product/${id}`}
+                    >
+                      <FacebookIcon size={32} round />
+                      <H6>Facebook</H6>
+                    </FacebookShareButton>
+                  </SocialMediaItem>
                 </FlexBox>
-                {/* <div
+              </MenuItem2>
+              <Divider bg="#e6e6e6" width="200px" mx="auto" />
+              <MenuItem2 p="0.2rem">
+                <FlexBox
+                  alignItems="flex-start"
+                  flexDirection="column"
+                  justifyContent="center"
+                >
+                  <SocialMediaItem>
+                    <TwitterShareButton
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: "5px",
+                      }}
+                      url={`${BASE_URL}/product/${id}`}
+                    >
+                      <TwitterIcon size={32} round />
+                      <H6>Twitter</H6>
+                    </TwitterShareButton>
+                  </SocialMediaItem>
+                </FlexBox>
+              </MenuItem2>
+              <Divider bg="#e6e6e6" width="200px" mx="auto" />
+
+              <MenuItem2 p="0.2rem">
+                <FlexBox
+                  alignItems="flex-start"
+                  flexDirection="column"
+                  justifyContent="center"
+                >
+                  <SocialMediaItem>
+                    <WhatsappShareButton
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: "5px",
+                      }}
+                      url={`${BASE_URL}/product/${id}`}
+                    >
+                      <WhatsappIcon size={32} round />
+                      <H6> Whats App</H6>
+                    </WhatsappShareButton>
+                  </SocialMediaItem>
+                </FlexBox>
+              </MenuItem2>
+              <Divider bg="#e6e6e6" width="200px" mx="auto" />
+
+              <MenuItem2 p="0.2rem">
+                <FlexBox
+                  alignItems="flex-start"
+                  flexDirection="column"
+                  justifyContent="center"
+                >
+                  <SocialMediaItem>
+                    <FacebookMessengerShareButton
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: "5px",
+                      }}
+                      url={`${BASE_URL}/product/${id}`}
+                      appId={"5515163185212209"}
+                    >
+                      <FacebookMessengerIcon size={32} round />
+                      <H6>Facebook Messenger</H6>
+                    </FacebookMessengerShareButton>
+                  </SocialMediaItem>
+                </FlexBox>
+              </MenuItem2>
+              <Divider bg="#e6e6e6" width="200px" mx="auto" />
+
+              <MenuItem2 p="0.2rem" ml="7px">
+                <FlexBox
+                  alignItems="flex-start"
+                  flexDirection="column"
+                  justifyContent="center"
+                >
+                  <SocialMediaItem
                     style={{
-                      fontSize: "20px",
                       display: "flex",
                       alignItems: "center",
-                      justifyContent: "flexStart",
-                      cursor: "pointer",
-                      minWidth: "100px",
                     }}
+                    onClick={copyToClipboard}
                   >
-                    <Typography fontWeight="600" fontSize="16px" ml="5px">
-                     
-                    </Typography>
-                  </div> */}
-              </MenuItem>
-            </Menu>
+                    {isLoading ? (
+                      <CircularProgress
+                        style={{ color: "#e84262", marginRight: "10px" }}
+                        size={20}
+                      />
+                    ) : (
+                      <Icon color="secondary" size="32px">
+                        copy-link
+                      </Icon>
+                    )}
+                    {copied ? <H6>Link copied!</H6> : <H6>Copy Link</H6>}
+                  </SocialMediaItem>
+                </FlexBox>
+              </MenuItem2>
+              <Divider bg="#e6e6e6" width="200px" mx="auto" />
+            </Menu2>
             <Card bg="#f4f4f4" p="0.7rem">
               <FlexBox mr="1rem" alignItems="center">
                 <Icon style={{ color: "#e84262" }} variant="medium">
@@ -1045,6 +1179,11 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                   <SemiSpan>Dedicated support </SemiSpan>
                 </FlexBox>
               </FlexBox>
+              {/* <button onClick={shareOnFacebook}>Share on Facebook</button> */}
+              {/* <ShareSocial
+                url="url_to_share.com"
+                socialTypes={["facebook", "twitter", "reddit", "linkedin"]}
+              /> */}
             </Card>
           </Grid>
         </Grid>
