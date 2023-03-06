@@ -163,7 +163,7 @@ const ProductCard9: React.FC<ProductCard9Props> = ({
       quantity: 1,
       price: sellablePrice,
       order_date: currentDate,
-      branch: 4,
+      branch: 1,
       user: user_id,
     };
 

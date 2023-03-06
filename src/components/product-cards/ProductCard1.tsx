@@ -73,7 +73,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
   const [getItemId, setGetItemId] = useState(0);
   const [getChartquantity, setGetChartquantity] = useState(0);
   const [stock, setStock] = useState(true);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [stockQuantity, setStockQuantity] = useState(0);
 
   const cartCanged = state.cart.chartQuantity;
@@ -163,12 +163,20 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
       quantity: 1,
       price: sellablePrice,
       order_date: currentDate,
-      branch: 4,
+      branch: 1,
       user: user_id,
     };
 
     //add to cart
     if (action == "increase" && amount == 1) {
+      // setLoading(true);
+      dispatch({
+        type: "CHANGE_ALERT",
+        payload: {
+          alertLoading: true,
+        },
+      });
+
       if (user_id) {
         console.log("orderData", orderData);
         axios
@@ -182,8 +190,23 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
               type: "CHANGE_CART_QUANTITY",
               payload: { chartQuantity: Math.random() },
             });
+            // setLoading(false);
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alertLoading: false,
+              },
+            });
           })
           .catch((err) => {
+            // setLoading(false);
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alertLoading: false,
+              },
+            });
+
             console.log("error", err);
           });
       } else {
@@ -197,7 +220,13 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 
     //increase
     else if (action == "increase") {
-      setLoading(true);
+      // setLoading(true);
+      dispatch({
+        type: "CHANGE_ALERT",
+        payload: {
+          alertLoading: true,
+        },
+      });
 
       axios
         .put(
@@ -215,10 +244,22 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
               prductId: id,
             },
           });
-          setLoading(false);
+          // setLoading(false);
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertLoading: false,
+            },
+          });
         })
         .catch((err) => {
-          setLoading(false);
+          // setLoading(false);
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertLoading: false,
+            },
+          });
 
           console.log("error", err);
         });
@@ -226,14 +267,26 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 
     //romove
     else if (amount == 0 && action == "decrease") {
-      setLoading(true);
+      // setLoading(true);
+      dispatch({
+        type: "CHANGE_ALERT",
+        payload: {
+          alertLoading: true,
+        },
+      });
 
       axios
         .delete(`${Customer_Order_Remove_Item}${order_Id}/${itemId}`, authTOKEN)
         .then((res) => {
           console.log("removeRes", res);
           setGetChartquantity(Math.random());
-          setLoading(false);
+          // setLoading(false);
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertLoading: false,
+            },
+          });
 
           dispatch({
             type: "CHANGE_CART_QUANTITY",
@@ -241,7 +294,13 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
           });
         })
         .catch((err) => {
-          setLoading(false);
+          // setLoading(false);
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertLoading: false,
+            },
+          });
 
           console.log("error", err);
         });
@@ -249,7 +308,13 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 
     //decrease
     else if (action == "decrease") {
-      setLoading(true);
+      // setLoading(true);
+      dispatch({
+        type: "CHANGE_ALERT",
+        payload: {
+          alertLoading: true,
+        },
+      });
 
       axios
         .put(
@@ -258,7 +323,13 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
           authTOKEN
         )
         .then((res) => {
-          setLoading(false);
+          // setLoading(false);
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertLoading: false,
+            },
+          });
 
           console.log("decreaseRes", res);
           setGetChartquantity(Math.random());
@@ -271,7 +342,13 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
           });
         })
         .catch((err) => {
-          setLoading(false);
+          // setLoading(false);
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertLoading: false,
+            },
+          });
 
           console.log("error", err);
         });
@@ -280,7 +357,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 
   return (
     <StyledProductCard1 {...props}>
-      {loading && (
+      {/* {loading && (
         <div
           style={{
             position: "fixed",
@@ -304,7 +381,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
             src="/assets/images/gif/loading.gif"
           />
         </div>
-      )}
+      )} */}
       <div className="image-holder">
         {!!discountedPercent && (
           <Chip
@@ -473,7 +550,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
           <FlexBox
             flexDirection="column-reverse"
             alignItems="center"
-            justifyContent={!!cartQuantity ? "space-evenly" : "flex-start"}
+            justifyContent={!!cartQuantity ? "flex-start" : "flex-start"}
             width="30px"
           >
             <Button

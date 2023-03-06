@@ -127,7 +127,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   const [color, setColor] = useState([]);
   const [sizes, setSizes] = useState([]);
   const [visibleSlides, setVisibleSlides] = useState(5);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   // const [_reRender, setreRender] = useState(0);
   // const [multipleUmg, setMultipleUmg] = useState([]);
@@ -328,6 +328,14 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
       //addToCart
       if (action == "addToCart") {
+        // setLoading(true);
+        dispatch({
+          type: "CHANGE_ALERT",
+          payload: {
+            alertLoading: true,
+          },
+        });
+
         console.log("orderData", (orderData.quantity = defaultCartQuantity));
         orderData.quantity = defaultCartQuantity;
         console.log("orderData", orderData);
@@ -350,8 +358,22 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                 prductId: id || routerId,
               },
             });
+            // setLoading(false);
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alertLoading: false,
+              },
+            });
           })
           .catch(() => {
+            // setLoading(false);
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alertLoading: false,
+              },
+            });
             dispatch({
               type: "CHANGE_ALERT",
               payload: {
@@ -364,7 +386,19 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
       //increase quantity
       else if (action == "increase") {
-        setLoading(true);
+        dispatch({
+          type: "CHANGE_ALERT",
+          payload: {
+            alertLoading: true,
+          },
+        });
+        // setLoading(true);
+        dispatch({
+          type: "CHANGE_ALERT",
+          payload: {
+            alertLoading: true,
+          },
+        });
         if (stock) {
           axios
             .put(
@@ -382,10 +416,23 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                   prductId: id || routerId,
                 },
               });
-              setLoading(false);
+              // setLoading(false);
+
+              dispatch({
+                type: "CHANGE_ALERT",
+                payload: {
+                  alertLoading: false,
+                },
+              });
             })
             .catch(() => {
-              setLoading(false);
+              // setLoading(false);
+              dispatch({
+                type: "CHANGE_ALERT",
+                payload: {
+                  alertLoading: false,
+                },
+              });
               dispatch({
                 type: "CHANGE_ALERT",
                 payload: {
@@ -428,7 +475,13 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
 
       //decrease quantity
       else if (action == "decrease") {
-        setLoading(true);
+        // setLoading(true);
+        dispatch({
+          type: "CHANGE_ALERT",
+          payload: {
+            alertLoading: true,
+          },
+        });
         axios
           .put(
             `${Customer_decrease_Quantity}${order_Id}/${itemId}`,
@@ -445,10 +498,22 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                 prductId: id || routerId,
               },
             });
-            setLoading(false);
+            // setLoading(false);
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alertLoading: false,
+              },
+            });
           })
           .catch(() => {
-            setLoading(false);
+            // setLoading(false);
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alertLoading: false,
+              },
+            });
 
             dispatch({
               type: "CHANGE_ALERT",
@@ -573,7 +638,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
   };
   return (
     <>
-      {loading && (
+      {/* {loading && (
         <div
           style={{
             position: "fixed",
@@ -597,7 +662,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
             src="/assets/images/gif/loading.gif"
           />
         </div>
-      )}
+      )} */}
       <LoginPopup open={openLogin} closeLoginDialog={closeLoginTab} />
       <Box overflow="visible">
         <Grid container justifyContent="center" spacing={16}>
@@ -1019,7 +1084,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                         alignItems: "center",
                         gap: "5px",
                       }}
-                      url={`${BASE_URL}/product/${id}`}
+                      url={`https://cashconnect.com.bd/product/${id}`}
                     >
                       <FacebookIcon size={32} round />
                       <H6>Facebook</H6>
@@ -1042,7 +1107,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                         alignItems: "center",
                         gap: "5px",
                       }}
-                      url={`${BASE_URL}/product/${id}`}
+                      url={`https://cashconnect.com.bd/product/${id}`}
                     >
                       <TwitterIcon size={32} round />
                       <H6>Twitter</H6>
@@ -1066,7 +1131,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                         alignItems: "center",
                         gap: "5px",
                       }}
-                      url={`${BASE_URL}/product/${id}`}
+                      url={`https://cashconnect.com.bd/product/${id}`}
                     >
                       <WhatsappIcon size={32} round />
                       <H6> Whats App</H6>
@@ -1090,7 +1155,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                         alignItems: "center",
                         gap: "5px",
                       }}
-                      url={`${BASE_URL}/product/${id}`}
+                      url={`https://cashconnect.com.bd/product/${id}`}
                       appId={"5515163185212209"}
                     >
                       <FacebookMessengerIcon size={32} round />

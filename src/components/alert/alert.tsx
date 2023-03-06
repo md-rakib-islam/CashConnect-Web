@@ -8,6 +8,7 @@ import React, { useEffect, useState } from "react";
 
 function Alert() {
   const [showAlert, setShowAlert] = useState(false);
+  const [showLoading, setShowLoading] = useState(false);
   const [orderNumber, setOrderNumber] = useState<any>("");
   const [userEmail, setUserEmail] = useState<any>("");
   const { state, dispatch } = useAppContext();
@@ -44,6 +45,23 @@ function Alert() {
       }
     }
   }, [state.alert.alertChanged]);
+  useEffect(() => {
+    if (state.alert.alertLoading) {
+      setShowLoading(true);
+
+      if (!showLoading) {
+        setTimeout(() => {
+          setShowLoading(false);
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertLoading: false,
+            },
+          });
+        }, 1000);
+      }
+    }
+  }, [state.alert.alertLoading]);
 
   useEffect(() => {
     if (isLogin) {
@@ -333,6 +351,31 @@ function Alert() {
               </Icon>
             </div>
           </div>
+        </div>
+      )}
+      {showLoading && (
+        <div
+          style={{
+            position: "fixed",
+            height: "100%",
+            width: "100%",
+            top: "0px",
+            left: "0px",
+            display: "flex",
+            justifyContent: "center",
+            backgroundColor: " rgb(0 0 0 / 50%)",
+            alignItems: "center",
+            zIndex: 100,
+          }}
+        >
+          <img
+            style={{
+              height: "100px",
+              width: "100px",
+              marginTop: "100pz",
+            }}
+            src="/assets/images/gif/loading.gif"
+          />
         </div>
       )}
     </>

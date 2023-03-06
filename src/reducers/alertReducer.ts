@@ -4,6 +4,7 @@ export const alertInitialState = {
   alertValue: "nothing to say",
   alerType: "",
   alertShow: false,
+  alertLoading: false,
   alertChanged: 0,
 };
 
@@ -27,6 +28,7 @@ export type AlertValueType = {
     | typeof alertLoginErrorType;
   alertChanged?: number;
   alertShow?: boolean;
+  alertLoading?: boolean;
 };
 
 export type alertStateType = AlertValueType;
@@ -46,6 +48,7 @@ export const alertReducer: React.Reducer<alertStateType, alertActionType> = (
       let alertTypeState = state.alerType;
       let alertChangedState = state.alertChanged;
       let alertShowState = state.alertShow;
+      let alertLoadingState = state.alertLoading;
 
       let alertpayload = action.payload;
 
@@ -59,6 +62,7 @@ export const alertReducer: React.Reducer<alertStateType, alertActionType> = (
             : alertpayload.alerType && alertpayload.alertShow
             ? true
             : false,
+        alertLoading: alertpayload.alertLoading == undefined ? false : true,
       };
 
     default: {
@@ -67,6 +71,7 @@ export const alertReducer: React.Reducer<alertStateType, alertActionType> = (
         alerType: alertTypeState,
         alertChanged: alertChangedState,
         alertShow: alertShowState,
+        alertLoading: alertLoadingState,
       };
     }
   }

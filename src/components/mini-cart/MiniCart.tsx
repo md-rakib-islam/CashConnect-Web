@@ -36,7 +36,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
   const [cartProductList, setCartProductList] = useState([]);
   const [reloadCart, setReloadCart] = useState(0);
   const [openLogin, setOpenLogin] = useState(false);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   const { user_id, order_Id, isLogin, authTOKEN } = useUserInf();
 
@@ -58,7 +58,13 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
           };
 
           if (action == "remove") {
-            setLoading(true);
+            // setLoading(true);
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alertLoading: true,
+              },
+            });
 
             axios
               .delete(
@@ -77,16 +83,34 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                     prductId: product?.product?.id,
                   },
                 });
-                setLoading(false);
+                // setLoading(false);
+                dispatch({
+                  type: "CHANGE_ALERT",
+                  payload: {
+                    alertLoading: false,
+                  },
+                });
 
                 toggleSidenav();
                 // localStorage.removeItem("OrderId");
               })
               .catch((err) => {
+                dispatch({
+                  type: "CHANGE_ALERT",
+                  payload: {
+                    alertLoading: false,
+                  },
+                });
                 console.log("error", err);
               });
           } else if (action == "increase") {
-            setLoading(true);
+            // setLoading(true);
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alertLoading: true,
+              },
+            });
 
             axios
               .put(
@@ -103,15 +127,33 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                     prductId: product?.product?.id,
                   },
                 });
-                setLoading(false);
+                // setLoading(false);
+                dispatch({
+                  type: "CHANGE_ALERT",
+                  payload: {
+                    alertLoading: false,
+                  },
+                });
               })
               .catch((err) => {
-                setLoading(false);
+                // setLoading(false);
+                dispatch({
+                  type: "CHANGE_ALERT",
+                  payload: {
+                    alertLoading: false,
+                  },
+                });
 
                 console.log("error", err);
               });
           } else if (action == "decrease") {
-            setLoading(true);
+            // setLoading(true);
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alertLoading: true,
+              },
+            });
 
             axios
               .put(
@@ -128,10 +170,22 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                     prductId: product?.product?.id,
                   },
                 });
-                setLoading(false);
+                // setLoading(false);
+                dispatch({
+                  type: "CHANGE_ALERT",
+                  payload: {
+                    alertLoading: false,
+                  },
+                });
               })
               .catch((err) => {
-                setLoading(false);
+                // setLoading(false);
+                dispatch({
+                  type: "CHANGE_ALERT",
+                  payload: {
+                    alertLoading: false,
+                  },
+                });
 
                 console.log("error", err);
               });
@@ -175,7 +229,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
 
   return (
     <>
-      {loading && (
+      {/* {loading && (
         <div
           style={{
             position: "fixed",
@@ -199,7 +253,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
             src="/assets/images/gif/loading.gif"
           />
         </div>
-      )}
+      )} */}
       <LoginPopup open={openLogin} closeLoginDialog={closeLoginTab} />
       <StyledMiniCart>
         <div className="cart-list">

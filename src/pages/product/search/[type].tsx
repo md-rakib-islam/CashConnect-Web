@@ -361,7 +361,7 @@ const ProductSearchResult = ({
                 grid
               </Icon>
             </IconButton>
-            <IconButton size="small" onClick={toggleView("list")}>
+            {/* <IconButton size="small" onClick={toggleView("list")}>
               <Icon
                 variant="small"
                 defaultcolor="auto"
@@ -369,7 +369,7 @@ const ProductSearchResult = ({
               >
                 menu
               </Icon>
-            </IconButton>
+            </IconButton> */}
 
             {isTablet && (
               <Sidenav
