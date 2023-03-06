@@ -72,7 +72,7 @@ const Section2: React.FC<Section2Props> = ({ flashDealsList }) => {
       title="Flash Deals"
       seeMoreLink="product/search/flash_deals_all"
     >
-      <Box mt="-0.25rem" mb="-0.25rem">
+      <Box mb="-0.25rem">
         <Carousel
           totalSlides={flashDealsListLists?.length}
           visibleSlides={visibleSlides}

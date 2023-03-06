@@ -73,6 +73,8 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
   const [getItemId, setGetItemId] = useState(0);
   const [getChartquantity, setGetChartquantity] = useState(0);
   const [stock, setStock] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [stockQuantity, setStockQuantity] = useState(0);
 
   const cartCanged = state.cart.chartQuantity;
 
@@ -82,17 +84,22 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
     setOpen((open) => !open);
   }, []);
 
+  console.log("product spacific ID", id);
+
   useEffect(() => {
     axios
       .get(`${Check_Stock}${id}`)
 
       .then((res) => {
+        console.log("Morsalin", res.data);
+        setStockQuantity(res.data.in_stock);
+
         setStock(res.data.is_in_stock);
       })
       .catch((err) => {
         console.log("error", err);
       });
-  }, []);
+  }, [cartCanged, id]);
 
   useEffect(() => {
     axios
@@ -190,6 +197,8 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 
     //increase
     else if (action == "increase") {
+      setLoading(true);
+
       axios
         .put(
           `${Customer_Increase_Quantity}${order_Id}/${itemId}`,
@@ -199,31 +208,49 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
         .then((res) => {
           console.log("increaseRes", res);
           setGetChartquantity(Math.random());
+          dispatch({
+            type: "CHANGE_CART_QUANTITY",
+            payload: {
+              chartQuantity: Math.random(),
+              prductId: id,
+            },
+          });
+          setLoading(false);
         })
         .catch((err) => {
+          setLoading(false);
+
           console.log("error", err);
         });
     }
 
     //romove
     else if (amount == 0 && action == "decrease") {
+      setLoading(true);
+
       axios
         .delete(`${Customer_Order_Remove_Item}${order_Id}/${itemId}`, authTOKEN)
         .then((res) => {
           console.log("removeRes", res);
           setGetChartquantity(Math.random());
+          setLoading(false);
+
           dispatch({
             type: "CHANGE_CART_QUANTITY",
             payload: { chartQuantity: Math.random() },
           });
         })
         .catch((err) => {
+          setLoading(false);
+
           console.log("error", err);
         });
     }
 
     //decrease
     else if (action == "decrease") {
+      setLoading(true);
+
       axios
         .put(
           `${Customer_decrease_Quantity}${order_Id}/${itemId}`,
@@ -231,14 +258,53 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
           authTOKEN
         )
         .then((res) => {
+          setLoading(false);
+
           console.log("decreaseRes", res);
           setGetChartquantity(Math.random());
+          dispatch({
+            type: "CHANGE_CART_QUANTITY",
+            payload: {
+              chartQuantity: Math.random(),
+              prductId: id,
+            },
+          });
+        })
+        .catch((err) => {
+          setLoading(false);
+
+          console.log("error", err);
         });
     }
   };
 
   return (
     <StyledProductCard1 {...props}>
+      {loading && (
+        <div
+          style={{
+            position: "fixed",
+            height: "100%",
+            width: "100%",
+            top: "0px",
+            left: "0px",
+            display: "flex",
+            justifyContent: "center",
+            backgroundColor: " rgb(0 0 0 / 50%)",
+            alignItems: "center",
+            zIndex: 100,
+          }}
+        >
+          <img
+            style={{
+              height: "100px",
+              width: "100px",
+              marginTop: "100pz",
+            }}
+            src="/assets/images/gif/loading.gif"
+          />
+        </div>
+      )}
       <div className="image-holder">
         {!!discountedPercent && (
           <Chip
@@ -417,7 +483,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
               padding="3px"
               size="none"
               borderColor="primary.light"
-              disabled={!stock}
+              disabled={!stock || stockQuantity == 0}
               onClick={() =>
                 handleCartAmountChange(cartQuantity + 1, "increase")
               }
