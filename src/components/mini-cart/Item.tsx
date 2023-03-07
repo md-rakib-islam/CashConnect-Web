@@ -103,7 +103,7 @@ const Item: React.FC<ItemProps> = ({ item, handleCartAmountChange }) => {
 
           {stock || (
             <SemiSpan fontWeight="bold" color="primary.main" mt="0px">
-              Out Of Stock
+              Out of Stock
             </SemiSpan>
           )}
         </div>

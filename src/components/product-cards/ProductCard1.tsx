@@ -484,7 +484,7 @@ const ProductCard1: React.FC<ProductCard1Props> = ({
 
             {!stock ? (
               <SemiSpan fontWeight="bold" color="primary.main" mt="2px">
-                Out Of Stock
+                Out of Stock
               </SemiSpan>
             ) : (
               <SemiSpan

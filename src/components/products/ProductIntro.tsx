@@ -933,7 +933,7 @@ const ProductIntro: React.FC<ProductIntroProps> = ({
                 </SemiSpan>
               ) : (
                 <SemiSpan fontWeight="bold" ml="5px" color="primary.main">
-                  Out Of Stock
+                  Out of Stock
                 </SemiSpan>
               )}
             </Box>

@@ -244,7 +244,7 @@ const ProductCard7: React.FC<ProductCard7Props & SpaceProps> = ({
 
           {stock || (
             <SemiSpan fontWeight="bold" color="primary.main" ml="1px">
-              Out Of Stock
+              Out of Stock
             </SemiSpan>
           )}
 
