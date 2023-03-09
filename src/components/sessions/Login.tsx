@@ -86,7 +86,7 @@ const Login: React.FC<LoginProps> = ({
   }, []);
 
   const handleFormSubmit = async (values) => {
-    setLoading(true);
+    // setLoading(true);
 
     const { username, password } = values;
     console.log(values);
@@ -118,7 +118,8 @@ const Login: React.FC<LoginProps> = ({
             }
           })
           .catch(() => {
-            setLoading(false), localStorage.removeItem("OrderId");
+            // setLoading(false),
+            localStorage.removeItem("OrderId");
           });
 
         dispatch({
@@ -134,7 +135,7 @@ const Login: React.FC<LoginProps> = ({
             localStorage.removeItem("backAfterLogin");
             router.push(`${backUrl}`);
           } else {
-            router.push("/profile");
+            router.push("/");
           }
         } else if (type == "popup") {
           const backUrl = localStorage.getItem("backAfterLogin");

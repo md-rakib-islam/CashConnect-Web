@@ -16,6 +16,7 @@ function Alert() {
 
   const success = state.alert.alerType === "success" || false;
   const successLogin = state.alert.alerType === "successLogin" || false;
+  const successLogout = state.alert.alerType === "successLogout" || false;
   const successOrder = state.alert.alerType === "successOrder" || false;
   const warning = state.alert.alerType === "warning" || false;
   const error = state.alert.alerType === "error" || false;
@@ -95,11 +96,12 @@ function Alert() {
             textAlign: "center",
             zIndex: showAlert ? 100 : -1,
             opacity: showAlert ? 1 : 0,
-            display: showAlert
-              ? "block"
-              : state.alert.alerType === undefined
-              ? "none"
-              : "none",
+            display:
+              state.alert.alerType === undefined
+                ? "none"
+                : state.alert.alerType === "successLogout"
+                ? "none"
+                : "block",
             transitionProperty: "all",
             transitionDuration: "1s",
             transitionTimingFunction: "cubic-bezier(0.27, 0.24, 0, 1.03)",
@@ -182,7 +184,7 @@ function Alert() {
             position: "absolute",
             top: "78px",
             left: 0,
-            width: isMobile ? "110%" : "100%",
+            width: "100%",
             textAlign: "center",
             zIndex: showAlert ? 100 : -1,
             opacity: showAlert ? 1 : 0,
@@ -217,6 +219,76 @@ function Alert() {
             <img
               style={{ height: "80px", width: "80px" }}
               src="/assets/images/successLogin.gif"
+            />
+
+            <div>
+              <span
+                style={{
+                  paddingRight: "5px",
+                  paddingLeft: "7px",
+                  fontSize: "22px",
+                }}
+              >
+                {AlertValue}
+              </span>
+              <Icon
+                size="15px"
+                mt="1px"
+                style={{
+                  cursor: "pointer",
+                  top: "6px",
+                  right: "92px",
+                  position: "absolute",
+                }}
+                onClick={() => setShowAlert(false)}
+              >
+                cancel
+              </Icon>
+            </div>
+          </div>
+        </div>
+      )}
+      {successLogout && (
+        <div
+          style={{
+            position: "absolute",
+            top: "78px",
+            left: 0,
+            width: "100%",
+            textAlign: "center",
+            zIndex: showAlert ? 100 : -1,
+            opacity: showAlert ? 1 : 0,
+            display: showAlert
+              ? "block"
+              : state.alert.alerType === undefined
+              ? "none"
+              : "none",
+            transitionProperty: "all",
+            transitionDuration: "1s",
+            transitionTimingFunction: "cubic-bezier(0.27, 0.24, 0, 1.03)",
+            transitionDelay: "0s",
+          }}
+        >
+          <div
+            style={{
+              marginLeft: "auto",
+              marginRight: "auto",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              background: "#ffffff",
+              color: "black",
+              padding: "2px 8px",
+              borderRadius: "5px",
+              width: "67%",
+              height: "150px",
+              fontWeight: 600,
+              boxShadow: "2px 2px 5px #ababab",
+            }}
+          >
+            <img
+              style={{ height: "80px", width: "80px" }}
+              src="/assets/images/successLogout.gif"
             />
 
             <div>

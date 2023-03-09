@@ -1,4 +1,5 @@
 import Box from "@component/Box";
+import { useAppContext } from "@context/app/AppContext";
 import useWindowSize from "@hook/useWindowSize";
 import { useRouter } from "next/router";
 import React, { Fragment } from "react";
@@ -12,6 +13,7 @@ import {
 
 const CustomerDashboardNavigation = () => {
   const { pathname } = useRouter();
+  const { dispatch } = useAppContext();
 
   const Router = useRouter();
 
@@ -31,6 +33,13 @@ const CustomerDashboardNavigation = () => {
     //     alertValue: "logout success",
     //   }
     // })
+    dispatch({
+      type: "CHANGE_ALERT",
+      payload: {
+        alertValue: "logout success...",
+        alerType: "successLogout",
+      },
+    });
     Router.push("/");
   };
 
@@ -96,7 +105,7 @@ const linkList = [
         count: 1,
       },
       {
-        href: "/new-sell",
+        href: "/sell/youritems",
         title: "New Sell",
         iconName: "upload",
       },

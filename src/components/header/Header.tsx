@@ -129,7 +129,7 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
       type: "CHANGE_ALERT",
       payload: {
         alertValue: "logout success...",
-        alerType: "successLogin",
+        alerType: "successLogout",
       },
     });
     Router.push("/");
@@ -261,6 +261,7 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
                           className="header-name"
                           ml={"1rem"}
                           my="0px"
+                          onClick={() => goToFrofile()}
                         >{`${first_name} ${last_name}`}</H5>
                         <Menu
                           direction="left"

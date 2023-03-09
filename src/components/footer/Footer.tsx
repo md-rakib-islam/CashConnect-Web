@@ -24,18 +24,19 @@ const StyledLink = styled.a`
   }
 `;
 
-const initialIconLists = [
-  { iconName: "facebook", url: "https://facebook.com/bonik" },
-  { iconName: "twitter", url: "https://twitter.com/bonik" },
-  { iconName: "instagram", url: "https://www.instagram.com/bonik/" },
-];
+// const initialIconLists = [
+//   { iconName: "facebook", url: "https://facebook.com" },
+//   { iconName: "twitter", url: "https://twitter.com/bonik" },
+//   { iconName: "instagram", url: "https://www.instagram.com/bonik/" },
+// ];
 
 const Footer: React.FC = () => {
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
 
-  const [iconList, setIconList] = useState(initialIconLists);
+  const [iconList, setIconList] = useState([]);
+  console.log("iconList", iconList);
 
   useEffect(() => {
     fetch(`${Site_Setting_All}`)

@@ -14,6 +14,7 @@ const alertErrorType = "error";
 const alertSignUpErrorType = "signupError";
 const alertLoginErrorType = "loginError";
 const alertSuccessLoginType = "successLogin";
+const alertSuccessLogoutype = "successLogout";
 const alertSuccessOrderType = "successOrder";
 
 export type AlertValueType = {
@@ -24,6 +25,7 @@ export type AlertValueType = {
     | typeof alertErrorType
     | typeof alertSignUpErrorType
     | typeof alertSuccessLoginType
+    | typeof alertSuccessLogoutype
     | typeof alertSuccessOrderType
     | typeof alertLoginErrorType;
   alertChanged?: number;
