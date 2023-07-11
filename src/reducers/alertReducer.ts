@@ -1,25 +1,39 @@
-
 const CHANGE_ALERT = "CHANGE_ALERT";
 
 export const alertInitialState = {
   alertValue: "nothing to say",
-  alerType: "success",
+  alerType: "",
   alertShow: false,
-  alertChanged: 0
+  alertLoading: false,
+  alertChanged: 0,
 };
 
-const alertSuccessType = "success"
-const alertWarningType = "warning"
-const alertErrorType = "error"
+const alertSuccessType = "success";
+const alertWarningType = "warning";
+const alertErrorType = "error";
+const alertSignUpErrorType = "signupError";
+const alertLoginErrorType = "loginError";
+const alertSuccessLoginType = "successLogin";
+const alertSuccessLogoutype = "successLogout";
+const alertSuccessOrderType = "successOrder";
 
 export type AlertValueType = {
-    alertValue?: string;
-    alerType?: typeof alertSuccessType | typeof alertWarningType | typeof alertErrorType;
-    alertChanged?: number;
-    alertShow?: boolean;
+  alertValue?: string;
+  alerType?:
+    | typeof alertSuccessType
+    | typeof alertWarningType
+    | typeof alertErrorType
+    | typeof alertSignUpErrorType
+    | typeof alertSuccessLoginType
+    | typeof alertSuccessLogoutype
+    | typeof alertSuccessOrderType
+    | typeof alertLoginErrorType;
+  alertChanged?: number;
+  alertShow?: boolean;
+  alertLoading?: boolean;
 };
 
-export type alertStateType = AlertValueType
+export type alertStateType = AlertValueType;
 
 export type alertActionType = {
   type: typeof CHANGE_ALERT;
@@ -36,14 +50,21 @@ export const alertReducer: React.Reducer<alertStateType, alertActionType> = (
       let alertTypeState = state.alerType;
       let alertChangedState = state.alertChanged;
       let alertShowState = state.alertShow;
+      let alertLoadingState = state.alertLoading;
 
       let alertpayload = action.payload;
 
       return {
         alertValue: alertpayload.alertValue || alertValueState,
-        alerType: alertpayload.alerType || "success",
+        alerType: alertpayload.alerType,
         alertChanged: Math.random(),
-        alertShow: alertpayload.alertShow == undefined? true : alertpayload.alertShow,
+        alertShow:
+          alertpayload.alertShow == undefined
+            ? true
+            : alertpayload.alerType && alertpayload.alertShow
+            ? true
+            : false,
+        alertLoading: alertpayload.alertLoading == undefined ? false : true,
       };
 
     default: {
@@ -52,6 +73,7 @@ export const alertReducer: React.Reducer<alertStateType, alertActionType> = (
         alerType: alertTypeState,
         alertChanged: alertChangedState,
         alertShow: alertShowState,
+        alertLoading: alertLoadingState,
       };
     }
   }

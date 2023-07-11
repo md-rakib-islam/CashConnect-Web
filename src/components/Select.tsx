@@ -15,7 +15,7 @@ type SelectOption = {
 
 interface SelectProps
   extends InputHTMLAttributes<HTMLInputElement>,
-  SpaceProps {
+    SpaceProps {
   options: SelectOption[];
   value?: any;
   defaultValue?: any;
@@ -23,7 +23,7 @@ interface SelectProps
   errorText?: any;
   getOptionLabelBy?: string;
   getOptionValueBy?: string;
-  width?: string
+  width?: string;
   components?: any;
 }
 
@@ -78,9 +78,9 @@ const Select: React.FC<SelectProps> = ({
         value={
           typeof value != "object"
             ? {
-              id: value,
-              name: options.find((option: any) => option?.id == value)?.name,
-            }
+                id: value,
+                name: options.find((option: any) => option?.id == value)?.name,
+              }
             : value
         }
         styles={customStyles}
@@ -105,7 +105,11 @@ const Select: React.FC<SelectProps> = ({
 };
 
 const customStyles = {
-  input: (styles) => ({ ...styles, height: 30, boxShadow: "0px 0px 10px #ababab" }),
+  input: (styles) => ({
+    ...styles,
+    // height: 30,
+    // boxShadow: "0px 0px 10px #ababab",
+  }),
   option: (provided, state) => ({
     ...provided,
     color: "inherit",
@@ -114,10 +118,8 @@ const customStyles = {
   }),
 };
 
-
-
 export const CountryCodeSelect = styled(Select)`
-    min-width: 70px
+  min-width: 70px;
 `;
 
 export default Select;

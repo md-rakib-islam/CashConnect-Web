@@ -5,46 +5,53 @@ import { useRouter } from "next/router";
 import React, { Fragment } from "react";
 import FlexBox from "../FlexBox";
 import Icon from "../icon/Icon";
-import Typography from "../Typography";
+import { H5 } from "../Typography";
 import {
   DashboardNavigationWrapper,
-  StyledDashboardNav
+  StyledDashboardNav,
 } from "./DashboardStyle";
 
 const CustomerDashboardNavigation = () => {
   const { pathname } = useRouter();
+  const { dispatch } = useAppContext();
 
-  const { dispatch } = useAppContext()
+  const Router = useRouter();
 
   const width = useWindowSize();
   const isMobile = width < 769;
 
   const handleLogout = () => {
+    localStorage.removeItem("UserId");
+    localStorage.removeItem("jwt_access_token");
+    sessionStorage.removeItem("fbssls_5515163185212209");
+    localStorage.removeItem("OrderId");
+    localStorage.removeItem("userType");
 
-    localStorage.removeItem("UserId")
-    localStorage.removeItem("jwt_access_token")
-    localStorage.removeItem("OrderId")
-    localStorage.removeItem("userType")
-
+    // dispatch({
+    //   type: "CHANGE_ALERT",
+    //   payload: {
+    //     alertValue: "logout success",
+    //   }
+    // })
     dispatch({
       type: "CHANGE_ALERT",
       payload: {
-        alertValue: "logout success",
-      }
-    })
-  }
+        alertValue: "logout success...",
+        alerType: "successLogout",
+      },
+    });
+    Router.push("/");
+  };
 
   return (
     <DashboardNavigationWrapper px="0px" pb="1.5rem" color="gray.900">
       {linkList.map((item) => (
         <Fragment key={item.title}>
-          <Typography p="26px 30px 1rem" color="text.muted" fontSize="12px">
+          <H5 p="26px 30px 1rem" color="text.muted" fontSize="14px">
             {item.title}
-          </Typography>
+          </H5>
           {item.list.map((item) => {
-
-            return (!isMobile && item.title === "Log Out") ? null : (
-
+            return !isMobile && item.title === "Log Out" ? null : (
               <StyledDashboardNav
                 isCurrentPath={pathname.includes(item.href)}
                 href={item.href}
@@ -53,7 +60,7 @@ const CustomerDashboardNavigation = () => {
                 mb="1.25rem"
                 onClick={() => {
                   if (item.title === "Log Out") {
-                    handleLogout()
+                    handleLogout();
                   }
                 }}
               >
@@ -63,13 +70,12 @@ const CustomerDashboardNavigation = () => {
                       {item.iconName}
                     </Icon>
                   </Box>
-                  <span>{item.title}</span>
+
+                  <H5 className="dashboard-nav-title">{item.title}</H5>
                 </FlexBox>
-                {/* <span>{item.count}</span> */}
               </StyledDashboardNav>
-            )
-          }
-          )}
+            );
+          })}
         </Fragment>
       ))}
     </DashboardNavigationWrapper>
@@ -99,7 +105,7 @@ const linkList = [
         count: 1,
       },
       {
-        href: "/new-sell",
+        href: "/sell/youritems",
         title: "New Sell",
         iconName: "upload",
       },

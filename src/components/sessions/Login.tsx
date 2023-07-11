@@ -1,14 +1,13 @@
-import Alert from "@component/alert/alert";
-import SignupPopup from "@component/SignupPopup";
+// import SignupPopup from "@component/SignupPopup";
 import { useAppContext } from "@context/app/AppContext";
-import useUserInf from "@customHook/useUserInf";
-import { Get_Pending_Order_After_Login } from "@data/constants";
+import { BASE_URL, Get_Pending_Order_After_Login } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import * as yup from "yup";
 import jwtService from "../../services/jwtService";
+// import authService from "../../services/authService";
 import Box from "../Box";
 import Button from "../buttons/Button";
 import IconButton from "../buttons/IconButton";
@@ -18,105 +17,196 @@ import Icon from "../icon/Icon";
 import TextField from "../text-field/TextField";
 import { H3, H5, H6, SemiSpan, Span } from "../Typography";
 import { StyledSessionCard } from "./SessionStyle";
+// import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+// import { useGoogleLogin } from "@react-oauth/google";
+import CheckBox from "@component/CheckBox";
+import Cookies from "js-cookie";
 
 interface LoginProps {
-  type?: string,
-  closeLoginDialog?: any,
+  type?: string;
+  closeLoginDialog?: any;
 }
 
-const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) => {
+const Login: React.FC<LoginProps> = ({
+  type = "loginPage",
+  closeLoginDialog,
+}) => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const router = useRouter();
   const { dispatch } = useAppContext();
 
-  const [openSignup, setOpenSignup] = useState(false)
+  // const [openSignup, setOpenSignup] = useState(false);
 
-  const { authTOKEN } = useUserInf()
+  // const { authTOKEN } = useUserInf();
+  const [authTOKEN, setAuthTOKEN] = useState({
+    headers: {
+      "Content-type": "application/json",
+      Authorization: "",
+    },
+  });
 
-  const closeSignupTab = () => {
-    setOpenSignup(false)
-  }
+  const [loading, setLoading] = useState(false);
+  const [nameCookie, setNameCookie] = useState();
+  const [passwordCookie, setPasswordCookie] = useState();
+
+  const handleLoadingComplete = () => {
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    setAuthTOKEN({
+      headers: {
+        "Content-type": "application/json",
+        Authorization: localStorage.getItem("jwt_access_token"),
+      },
+    });
+  }, []);
+  useEffect(() => {
+    router.events.on("routeChangeComplete", handleLoadingComplete);
+  }, [router.events]);
+
+  // const closeSignupTab = () => {
+  //   setOpenSignup(false);
+  // };
 
   const gotosingup = () => {
     if (type == "loginPage") {
-      router.push("/signup")
+      router.push("/signup");
     }
-    else {
-      setOpenSignup(true)
-    }
-  }
+    // else {
+    //   setOpenSignup(true);
+    // }
+  };
+  const gotoreset = () => {
+    router.push("/sendOtp");
+  };
 
   const togglePasswordVisibility = useCallback(() => {
     setPasswordVisibility((visible) => !visible);
   }, []);
 
   const handleFormSubmit = async (values) => {
+    // setLoading(true);
+
+    const { username, password } = values;
     console.log(values);
 
-    const { email, password } = values;
-
-    return jwtService.signInWithEmailAndPassword(email, password).then(
+    return jwtService.signInWithEmailAndPassword(username, password).then(
       (user) => {
-        console.log("user", user);
+        const token = {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: localStorage.getItem("jwt_access_token"),
+          },
+        };
+        console.log("authTOKENauthTOKEN", token, user);
 
-        axios.get(`${Get_Pending_Order_After_Login}`, authTOKEN).then(res => {
-          console.log("order_Id_res", res)
-          if (res.data.id) {
-            localStorage.setItem("OrderId", res.data.id)
-          }
-          else {
-            localStorage.removeItem("OrderId")
-          }
-        }).catch(() => localStorage.removeItem("OrderId"))
+        axios
+          .get(`${Get_Pending_Order_After_Login}`, {
+            headers: {
+              "Content-type": "application/json",
+              Authorization: localStorage.getItem("jwt_access_token"),
+            },
+          })
+
+          .then((res) => {
+            console.log("order_Id_res_pending", res, authTOKEN);
+            if (res.data.id) {
+              localStorage.setItem("OrderId", res.data.id);
+            } else {
+              localStorage.removeItem("OrderId");
+            }
+          })
+          .catch(() => {
+            // setLoading(false),
+            localStorage.removeItem("OrderId");
+          });
 
         dispatch({
           type: "CHANGE_ALERT",
           payload: {
             alertValue: "login success...",
-          }
+            alerType: "successLogin",
+          },
         });
-
-        if (user.user_type === "customer") {
-
-          if (type != "popup") {
-            const backUrl = localStorage.getItem("backAfterLogin");
-            if (backUrl) {
-              localStorage.removeItem("backAfterLogin");
-              router.push(`${backUrl}`);
-            } else {
-              router.push("/profile");
-            }
+        if (type != "popup") {
+          const backUrl = localStorage.getItem("backAfterLogin");
+          if (backUrl) {
+            localStorage.removeItem("backAfterLogin");
+            router.push(`${backUrl}`);
           } else {
-            closeLoginDialog()
-            localStorage.removeItem("backAfterLogin")
+            router.push("/");
           }
-
-        }
-        else if (user.user_type == "vendor") {
-
-          if (type != "popup") {
-            const backUrl = localStorage.getItem("backAfterLogin");
-            if (backUrl) {
-              localStorage.removeItem("backAfterLogin");
-              router.push(`${backUrl}`);
-            } else {
-              router.push("/vendor/dashboard");
-            }
-          } else {
-            closeLoginDialog()
-            localStorage.removeItem("backAfterLogin")
+        } else if (type == "popup") {
+          const backUrl = localStorage.getItem("backAfterLogin");
+          if (backUrl) {
+            localStorage.removeItem("backAfterLogin");
+            router.push(`${backUrl}`);
+            closeLoginDialog();
+            localStorage.removeItem("backAfterLogin");
           }
+        } else {
+          closeLoginDialog();
+          localStorage.removeItem("backAfterLogin");
         }
+
+        // if (user.user_type === "customer") {
+        //   if (type != "popup") {
+        //     const backUrl = localStorage.getItem("backAfterLogin");
+        //     if (backUrl) {
+        //       localStorage.removeItem("backAfterLogin");
+        //       router.push(`${backUrl}`);
+        //     } else {
+        //       router.push("/profile");
+        //     }
+        //   } else {
+        //     closeLoginDialog();
+        //     localStorage.removeItem("backAfterLogin");
+        //   }
+        // } else if (user.user_type == "vendor") {
+        //   if (type != "popup") {
+        //     const backUrl = localStorage.getItem("backAfterLogin");
+        //     if (backUrl) {
+        //       localStorage.removeItem("backAfterLogin");
+        //       router.push(`${backUrl}`);
+        //     } else {
+        //       router.push("/vendor/dashboard");
+        //     }
+        //   } else {
+        //     closeLoginDialog();
+        //     localStorage.removeItem("backAfterLogin");
+        //   }
+        // }
       },
       (_errors) => {
-        console.log("login failed");
-        dispatch({
-          type: "CHANGE_ALERT",
-          payload: {
-            alertValue: "something went wrong",
-            alerType: "error",
-          }
-        });
+        console.log("login failed", _errors.response.status);
+
+        if (_errors.response.status == 403) {
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: "Phone number is not verified",
+              alerType: "loginError",
+            },
+          });
+        } else if (_errors.response.status == 401) {
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: "User ID or Password is wrong",
+              alerType: "loginError",
+            },
+          });
+        } else {
+          dispatch({
+            type: "CHANGE_ALERT",
+            payload: {
+              alertValue: `${_errors.response.data.detail}`,
+              alerType: "loginError",
+            },
+          });
+        }
+
         if (type != "popup") {
           router.push("/login");
         }
@@ -124,44 +214,344 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
     );
   };
 
+  // facebook
+  // const responseFacebook = (response) => {
+  //   console.log("responseFacebook", response);
+  //   console.log("name", response.name);
 
-  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
-    useFormik({
-      onSubmit: handleFormSubmit,
-      initialValues,
-      validationSchema: formSchema,
+  //   const auth_token = response.accessToken;
+  //   const token = {
+  //     headers: {
+  //       "Content-type": "application/json",
+  //       Authorization: localStorage.getItem("jwt_access_token"),
+  //     },
+  //   };
+  //   console.log("authTOKENauthTOKEN", token);
+  //   return authService.signInWithFacebook(auth_token).then(
+  //     (user) => {
+  //       console.log("userFacebook", user);
+
+  //       axios
+  //         .get(`${Get_Pending_Order_After_Login}`, {
+  //           headers: {
+  //             "Content-type": "application/json",
+  //             Authorization: localStorage.getItem("jwt_access_token"),
+  //           },
+  //         })
+  //         .then((res) => {
+  //           console.log("order_Id_res", res);
+  //           if (res.data.id) {
+  //             localStorage.setItem("OrderId", res.data.id);
+  //           } else {
+  //             localStorage.removeItem("OrderId");
+  //           }
+  //         })
+  //         .catch(() => localStorage.removeItem("OrderId"));
+
+  //       dispatch({
+  //         type: "CHANGE_ALERT",
+  //         payload: {
+  //           alertValue: "login success...",
+  //           alerType: "successLogin",
+  //         },
+  //       });
+
+  //       // if (user.user_type === "customer") {
+  //       //   if (type != "popup") {
+  //       //     const backUrl = localStorage.getItem("backAfterLogin");
+  //       //     if (backUrl) {
+  //       //       localStorage.removeItem("backAfterLogin");
+  //       //       router.push(`${backUrl}`);
+  //       //     } else {
+  //       //       router.push("/profile");
+  //       //     }
+  //       //   } else {
+  //       //     closeLoginDialog();
+  //       //     localStorage.removeItem("backAfterLogin");
+  //       //   }
+  //       // } else if (user.user_type == "vendor") {
+  //       //   if (type != "popup") {
+  //       //     const backUrl = localStorage.getItem("backAfterLogin");
+  //       //     if (backUrl) {
+  //       //       localStorage.removeItem("backAfterLogin");
+  //       //       router.push(`${backUrl}`);
+  //       //     } else {
+  //       //       router.push("/vendor/dashboard");
+  //       //     }
+  //       //   } else {
+  //       //     closeLoginDialog();
+  //       //     localStorage.removeItem("backAfterLogin");
+  //       //   }
+  //       // }
+  //       if (type != "popup") {
+  //         const backUrl = localStorage.getItem("backAfterLogin");
+  //         if (backUrl) {
+  //           localStorage.removeItem("backAfterLogin");
+  //           router.push(`${backUrl}`);
+  //         } else {
+  //           router.push("/profile");
+  //         }
+  //       } else {
+  //         closeLoginDialog();
+  //         localStorage.removeItem("backAfterLogin");
+  //       }
+  //     },
+  //     (_errors) => {
+  //       console.log("login failed", _errors.response.status);
+
+  //       if (_errors.response.status == 400) {
+  //         dispatch({
+  //           type: "CHANGE_ALERT",
+  //           payload: {
+  //             alertValue: "Waiting...",
+  //           },
+  //         });
+  //       }
+  //       // else if (_errors.response.status == 401) {
+  //       //   dispatch({
+  //       //     type: "CHANGE_ALERT",
+  //       //     payload: {
+  //       //       alertValue: "Email or Password is wrong",
+  //       //       alerType: 'loginError',
+  //       //     },
+  //       //   });
+  //       // }
+  //       // else {
+  //       //   dispatch({
+  //       //     type: "CHANGE_ALERT",
+  //       //     payload: {
+  //       //       alertValue: "",
+  //       //       alerType: 'loginError',
+  //       //     },
+  //       //   });
+  //       // }
+
+  //       if (type != "popup") {
+  //         router.push("/login");
+  //       }
+  //     }
+  //   );
+  // };
+  // google
+  // const login = useGoogleLogin({
+  //   onSuccess: (tokenResponse) => responseGoogle(tokenResponse),
+  // });
+  // const responseGoogle = (response) => {
+  //   console.log("responseGoogle", response);
+  //   console.log("name", response.name);
+  //   const auth_token = response.access_token;
+
+  //   return authService.signInWithGoogle(auth_token).then(
+  //     (user) => {
+  //       console.log("userGoogle", user);
+
+  //       axios
+  //         .get(`${Get_Pending_Order_After_Login}`, authTOKEN)
+  //         .then((res) => {
+  //           console.log("order_Id_res", res);
+  //           if (res.data.id) {
+  //             localStorage.setItem("OrderId", res.data.id);
+  //           } else {
+  //             localStorage.removeItem("OrderId");
+  //           }
+  //         })
+  //         .catch(() => localStorage.removeItem("OrderId"));
+
+  //       dispatch({
+  //         type: "CHANGE_ALERT",
+  //         payload: {
+  //           alertValue: "login success...",
+  //         },
+  //       });
+
+  //       // if (user.user_type === "customer") {
+  //       //   if (type != "popup") {
+  //       //     const backUrl = localStorage.getItem("backAfterLogin");
+  //       //     if (backUrl) {
+  //       //       localStorage.removeItem("backAfterLogin");
+  //       //       router.push(`${backUrl}`);
+  //       //     } else {
+  //       //       router.push("/profile");
+  //       //     }
+  //       //   } else {
+  //       //     closeLoginDialog();
+  //       //     localStorage.removeItem("backAfterLogin");
+  //       //   }
+  //       // } else if (user.user_type == "vendor") {
+  //       //   if (type != "popup") {
+  //       //     const backUrl = localStorage.getItem("backAfterLogin");
+  //       //     if (backUrl) {
+  //       //       localStorage.removeItem("backAfterLogin");
+  //       //       router.push(`${backUrl}`);
+  //       //     } else {
+  //       //       router.push("/vendor/dashboard");
+  //       //     }
+  //       //   } else {
+  //       //     closeLoginDialog();
+  //       //     localStorage.removeItem("backAfterLogin");
+  //       //   }
+  //       // }
+  //       if (type != "popup") {
+  //         const backUrl = localStorage.getItem("backAfterLogin");
+  //         if (backUrl) {
+  //           localStorage.removeItem("backAfterLogin");
+  //           router.push(`${backUrl}`);
+  //         } else {
+  //           router.push("/profile");
+  //         }
+  //       } else {
+  //         closeLoginDialog();
+  //         localStorage.removeItem("backAfterLogin");
+  //       }
+  //     },
+  //     (_errors) => {
+  //       console.log("login failed", _errors.response.status);
+
+  //       if (_errors.response.status == 403) {
+  //         dispatch({
+  //           type: "CHANGE_ALERT",
+  //           payload: {
+  //             alertValue: "Phone number is not verified",
+  //             alerType: 'loginError',
+  //           },
+  //         });
+  //       } else if (_errors.response.status == 400) {
+  //         dispatch({
+  //           type: "CHANGE_ALERT",
+  //           payload: {
+  //             alertValue: "Email or Password is wrong",
+  //             alerType: 'loginError',
+  //           },
+  //         });
+  //       } else if (_errors.response.status == 401) {
+  //         dispatch({
+  //           type: "CHANGE_ALERT",
+  //           payload: {
+  //             alertValue: "Email or Password is wrong",
+  //             alerType: 'loginError',
+  //           },
+  //         });
+  //       } else {
+  //         dispatch({
+  //           type: "CHANGE_ALERT",
+  //           payload: {
+  //             alertValue: "Email and Password is wrong",
+  //             alerType: 'loginError',
+  //           },
+  //         });
+  //       }
+
+  //       if (type != "popup") {
+  //         router.push("/login");
+  //       }
+  //     }
+  //   );
+  // };
+
+  console.log("cookiesData", nameCookie, passwordCookie);
+
+  const {
+    values,
+    errors,
+    touched,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+    setFieldValue,
+  } = useFormik({
+    onSubmit: handleFormSubmit,
+
+    initialValues,
+    validationSchema: formSchema,
+  });
+
+  // set Cookeis for remember me
+  const setCookies = () => {
+    var username = values.username;
+    var password = values.password;
+
+    Cookies.set("UserName", `${username}`, {
+      expires: 7,
+      path: `${BASE_URL}`,
     });
-
+    Cookies.set("UserPassword", `${password}`, {
+      expires: 7,
+      path: `${BASE_URL}`,
+    });
+  };
+  //get Cookies
+  useEffect(() => {
+    setNameCookie(Cookies.get("UserName"));
+    setPasswordCookie(Cookies.get("UserPassword"));
+    setFieldValue("username", nameCookie);
+    setFieldValue("password", passwordCookie);
+    setFieldValue("remember", !passwordCookie ? false : true);
+  }, [nameCookie, passwordCookie]);
+  console.log("values", values);
   return (
     <>
-      <SignupPopup open={openSignup} closeSignupDialog={closeSignupTab} />
+      {/* <SignupPopup open={openSignup} closeSignupDialog={closeSignupTab} /> */}
+      {loading && (
+        <div
+          style={{
+            position: "fixed",
+            height: "100%",
+            width: "100%",
+            top: "0px",
+            left: "0px",
+            display: "flex",
+            justifyContent: "center",
+            backgroundColor: " rgb(0 0 0 / 50%)",
+            alignItems: "center",
+            zIndex: 100,
+          }}
+        >
+          <img
+            style={{
+              height: "100px",
+              width: "100px",
+              marginTop: "100pz",
+            }}
+            src="/assets/images/gif/loading.gif"
+          />
+        </div>
+      )}
       <StyledSessionCard mx="auto" my="2rem" boxShadow="large">
         <form className="content" onSubmit={handleSubmit}>
-          {type === "loginPage" && (<Alert onLogin />)}
+          <img
+            style={{
+              width: "80px",
+              display: "block",
+              marginRight: "auto",
+              marginLeft: "auto",
+            }}
+            src="assets/images/logos/footer.png"
+            alt="logo"
+          />
           <H3 textAlign="center" mb="0.5rem">
-            Welcome To Ecommerce
+            Welcome To CashConnect
           </H3>
           <H5
             fontWeight="600"
-            fontSize="12px"
+            fontSize="0.875rem"
             color="gray.800"
             textAlign="center"
             mb="2.25rem"
           >
-            Log in with email & password
+            Please Login To Your Account
           </H5>
 
           <TextField
             mb="0.75rem"
-            name="email"
-            placeholder="exmple@mail.com"
-            label="Email or Phone Number"
-            type="email"
+            name="username"
+            placeholder="Email or Phone Number"
+            label="User ID"
+            type="username"
             fullwidth
             onBlur={handleBlur}
             onChange={handleChange}
-            value={values.email || ""}
-            errorText={touched.email && errors.email}
+            value={values.username || ""}
+            errorText={touched.username && errors.username}
           />
           <TextField
             mb="1rem"
@@ -190,9 +580,43 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
             value={values.password || ""}
             errorText={touched.password && errors.password}
           />
+          <FlexBox
+            style={{
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+            }}
+          >
+            <CheckBox
+              mb="1.75rem"
+              name="remember"
+              color="secondary"
+              checked={values.remember}
+              onClick={setCookies}
+              onChange={handleChange}
+              label={
+                <FlexBox>
+                  <SemiSpan>Remember me</SemiSpan>
+                </FlexBox>
+              }
+            />
+            <H6
+              fullwidth
+              ml="0px"
+              style={{
+                cursor: "pointer",
+                fontSize: "0.875rem",
+                borderColor: "gray.900",
+                borderBottom: "1px solid",
+              }}
+              onClick={gotoreset}
+            >
+              Forgot password?
+            </H6>
+          </FlexBox>
 
           <Button
             mb="1.65rem"
+            mt="1rem"
             variant="contained"
             color="primary"
             type="submit"
@@ -204,51 +628,71 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
           <Box mb="1rem">
             <Divider width="200px" mx="auto" />
             <FlexBox justifyContent="center" mt="-14px">
-              <Span color="text.muted" bg="body.paper" px="1rem">
+              <Span
+                fontSize="0.875rem"
+                color="text.muted"
+                bg="body.paper"
+                px="1rem"
+              >
                 on
               </Span>
             </FlexBox>
           </Box>
-
-          {/* <FlexBox
-            justifyContent="center"
-            alignItems="center"
-            bg="#3B5998"
-            borderRadius={5}
-            height="40px"
-            color="white"
-            cursor="pointer"
-            mb="0.75rem"
-          >
-            <Icon variant="small" defaultcolor="auto" mr="0.5rem">
-              facebook-filled-white
-            </Icon>
-            <Small fontWeight="600">Continue with Facebook</Small>
-          </FlexBox>
-
-          <FlexBox
-            justifyContent="center"
-            alignItems="center"
-            bg="#4285F4"
-            borderRadius={5}
-            height="40px"
-            color="white"
-            cursor="pointer"
-            mb="1.25rem"
-          >
-            <Icon variant="small" defaultcolor="auto" mr="0.5rem">
-              google-1
-            </Icon>
-            <Small fontWeight="600">Continue with Google</Small>
-          </FlexBox> */}
-
-          <FlexBox justifyContent="center" mb="1.25rem">
-            <SemiSpan>Don’t have account?</SemiSpan>
-            <H6 color="primary.main" style={{ cursor: "pointer" }} onClick={gotosingup} ml="0.5rem" borderColor="primary.main" borderBottom="1px solid #e94560">
-              Sign Up
-            </H6>
-          </FlexBox>
         </form>
+        {/* <form style={{ padding: "1rem 3.75rem 0px" }}>
+          <FacebookLogin
+            appId="5515163185212209"
+            callback={responseFacebook}
+            render={(renderProps) => (
+              <>
+                <FlexBox
+                  justifyContent="center"
+                  alignItems="center"
+                  bg="#3B5998"
+                  borderRadius={5}
+                  height="40px"
+                  color="white"
+                  cursor="pointer"
+                  mb="0.75rem"
+                  onClick={renderProps.onClick}
+                >
+                  <Icon variant="small" defaultcolor="auto" mr="0.5rem">
+                    facebook-filled-white
+                  </Icon>
+                  <Small
+                    onClick={responseFacebook}
+                    style={{
+                      width: "45%",
+                      backgroundColor: "#3B5998",
+                      border: "none",
+                      color: "whitesmoke",
+                      textAlign: "left",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Continue with Facebook
+                  </Small>
+                </FlexBox>
+              </>
+            )}
+          />
+         
+        </form> */}
+        <FlexBox justifyContent="center" mb="1.25rem">
+          <SemiSpan style={{ cursor: "pointer" }} onClick={gotosingup}>
+            Don’t have account?
+          </SemiSpan>
+          <H6
+            color="primary.main"
+            style={{ cursor: "pointer" }}
+            onClick={gotosingup}
+            ml="0.5rem"
+            borderColor="primary.main"
+            borderBottom="1px solid #e94560"
+          >
+            Sign Up
+          </H6>
+        </FlexBox>
 
         {/* <FlexBox justifyContent="center" bg="gray.200" py="19px">
           <SemiSpan>Forgot your password?</SemiSpan>
@@ -266,12 +710,14 @@ const Login: React.FC<LoginProps> = ({ type = "loginPage", closeLoginDialog }) =
 };
 
 const initialValues = {
-  email: "",
+  username: "",
   password: "",
+  remember: true,
 };
 
 const formSchema = yup.object().shape({
-  email: yup.string().email("invalid email").required("${path} is required"),
+  username: yup.string().required("${path} is required"),
+
   password: yup.string().required("${path} is required"),
 });
 

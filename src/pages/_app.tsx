@@ -6,6 +6,7 @@ import { ThemeProvider } from "styled-components";
 import { AppProvider } from "../contexts/app/AppContext";
 import { GlobalStyles } from "../utils/globalStyles";
 import { theme } from "../utils/theme";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 //Binding events.
 Router.events.on("routeChangeStart", () => NProgress.start());
@@ -22,16 +23,15 @@ const App = ({ Component, pageProps }: any) => {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
-        <meta
-          property="og:url"
-          content="https://bonik-react.vercel.app/landing"
-        />
+        <meta property="og:url" content="https://cashconnect.com.bd/landing" />
         {/* thumbnail And title for social media */}
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="React Next JS Ecommerce Template" />
+        <meta property="og:title" content="Cash Connect BD" />
         <meta
           property="og:description"
-          content="Minimal, clean and Fast Next js ecommerce template. Build Super store, Grocery delivery app, Multivendor store and niche market"
+          content="A relaiable home for buy, sell & exchange new or pre owned authentic products.
+
+"
         />
         <meta
           property="og:image"
@@ -53,13 +53,22 @@ const App = ({ Component, pageProps }: any) => {
           `,
           }}
         ></script>
+        {/* facebook share content */}
+        <script
+          async
+          defer
+          crossOrigin="anonymous"
+          src="https://connect.facebook.net/en_US/sdk.js"
+        ></script>
       </Head>
       <GlobalStyles />
-      <AppProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </AppProvider>
+      <GoogleOAuthProvider clientId="1082909611954-d2cehkmk853q5643g2c1kibreq2a1e5e.apps.googleusercontent.com">
+        <AppProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </AppProvider>
+      </GoogleOAuthProvider>
     </ThemeProvider>
   );
 };

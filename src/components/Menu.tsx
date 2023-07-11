@@ -15,12 +15,15 @@ interface MenuProps {
 const StyledMenu = styled.div<{ direction: string }>(
   systemCss({
     position: "relative",
+    transition: "all 250ms ease-in-out",
+
     ".menu-item-holder": {
-      paddingTop: "0.5rem",
+      // paddingTop: "0.5rem",
       paddingBottom: "0.5rem",
-      minWidth: "200px",
+      minWidth: "180px",
       position: "absolute",
-      borderRadius: "6px",
+      // borderRadius: "6px",
+      transition: "all 250ms ease-in-out",
       top: "calc(100% + 0.5rem)",
       backgroundColor: themeGet("body.paper", "#ffffff"),
       boxShadow: themeGet("shadows.3", "0 6px 12px rgba(0, 0, 0, 0.16)"),

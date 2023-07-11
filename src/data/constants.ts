@@ -2,10 +2,16 @@
 //http://api.cashconnectbd.com
 
 //base url
-export const BASE_URL = "http://192.168.0.13:8001";
+export const BASE_URL = "http://192.168.0.151:8001";
+export const WS_URL = "192.168.0.151:8001";
+// export const BASE_URL = "https://api.cashconnect.com.bd";
+// export const BASE_URL = "http://134.119.184.218:8000";
 
 //branch api
 export const Branch_All = `${BASE_URL}/branch/api/v1/branch/all/`;
+// customer info
+export const User_Order_Details = `${BASE_URL}/user/api/v1/get_balance_orderstatus_count_by_userid/`;
+export const User_Sell_Details = `${BASE_URL}/purchase_request/api/v1/purchase_request/get_all_purchase_request_counts_of_a_vendor/`;
 
 //brand api
 export const Brand_By_Id = `${BASE_URL}/brand/api/v1/brand/`;
@@ -32,10 +38,11 @@ export const Category_With_Product_Brand = `${BASE_URL}/category/api/v1/homepage
 export const Category_Wth_Name_Img = `${BASE_URL}/category/api/v1/homepage_categories_with_id_name_image/all/`;
 
 //city api
-export const City_All = `${BASE_URL}/city/api/v1/city/all/`;
+export const City_All = `${BASE_URL}/city/api/v1/city/without_pagination/all/`;
+export const City_All_BY_COUNTRY_ID = `${BASE_URL}/city/api/v1/city/get_city_by_country_id/`;
 
 //country api
-export const Country_All = `${BASE_URL}/country/api/v1/country/all/`;
+export const Country_All = `${BASE_URL}/country/api/v1/country/without_pagination/all/`;
 
 //customer api
 export const Customer_type_All = `${BASE_URL}/customer_type/api/v1/customer_type/all/`;
@@ -63,11 +70,15 @@ export const Customer_Order_Item_By_Product_Id = `${BASE_URL}/customerorder/api/
 
 export const Customer_Order_Comment = `${BASE_URL}/customerorder/api/v1/customerorder/add_comment/`;
 
-export const Customer_Order_Shipping_Address = `${BASE_URL}/customerorder/api/v1/customerorder/add_shipping_address/`;
+export const Customer_Order_Shipping_Address = `${BASE_URL}/shippingaddress/api/v1/shippingaddress/create/`;
+
+export const Customer_Order_Blling_Address = `${BASE_URL}/billingaddress/api/v1/billingaddress/create/`;
 
 export const Customer_Order_Payment = `${BASE_URL}/customerorder/api/v1/customerorder/add_payment_method_and_payment_method_detail/`;
 
 export const Customer_Order_Confirm = `${BASE_URL}/customerorder/api/v1/customerorder/confirm_from_frontend/`;
+
+export const Customer_Order_Invoice = `${BASE_URL}/customerorder/api/v1/customerorder/get_invoice_by_order_id/`;
 
 export const Customer_Order_Pending_Details = `${BASE_URL}/customerorder/api/v1/customerorder/get_a_customer_order_pending_detail/`;
 
@@ -75,8 +86,12 @@ export const Customer_order_Details_For_Status = `${BASE_URL}/customerorder/api/
 
 export const Get_Pending_Order_After_Login = `${BASE_URL}/customerorder/api/v1/customerorder/get_a_pending_order_of_an_authenticated_customer/`;
 
+export const Get_Tracking_Order = `${BASE_URL}/customerorder/api/v1/customerorder/get_a_customer_order_by_order_no/`;
+
 //login api
 export const LOGIN_URL = `${BASE_URL}/user/api/v1/user/login/`;
+export const FACEBOOK_LOGIN_URL = `${BASE_URL}/social/auth/facebook/login/`;
+export const GOOGLE_LOGIN_URL = `${BASE_URL}/social/atuh/google/login/`;
 
 //order api
 export const order_Status_All = `${BASE_URL}/orderstatus/api/v1/orderstatus/all/`;
@@ -88,7 +103,7 @@ export const product_by_categoryId = `${BASE_URL}/product/api/v1/product_using_c
 
 export const Product_by_id = `${BASE_URL}/product/api/v1/product_with_discount/`;
 
-export const Product_Flash_Deals = `${BASE_URL}/product/api/v1/product_with_top_selling/all/`;
+export const Product_Flash_Deals = `${BASE_URL}/product/api/v1/product_with_flashdeal_status_true/all/`;
 
 export const Product_Arrival = `${BASE_URL}/product/api/v1/product_with_arrival_status_true/all/`;
 
@@ -108,13 +123,15 @@ export const Multiple_Image_By_Id = `${BASE_URL}/productimage/api/v1/productimag
 
 export const Product_Color_By_Product_Id = `${BASE_URL}/productcolor/api/v1/productcolor/get_by_product_id/`;
 
-export const Product_Size_By_Product_Id = `${BASE_URL}/productsize/api/v1/productsize/get_by_product_id/`;
+export const Product_Size_By_Product_Id = `${BASE_URL}/productsize/api/v1/productsize/get_all_by_product_id/`;
 
 export const Product_High_To_Low = `${BASE_URL}/product/api/v1/product/filter_by_category_with_price_high_to_low/`;
 
 export const Product_Low_To_High = `${BASE_URL}/product/api/v1/product/filter_by_category_with_price_low_to_high/`;
 
 export const Product_Discount_By_Id = `${BASE_URL}/discount/api/v1/discount/get_a_discount_by_product_id/`;
+
+export const Product_Detail_By_Id = `${BASE_URL}/product/api/v1/product/`;
 
 //purchase api
 export const Purshase_Create = `${BASE_URL}/purchase_request/api/v1/purchase_request/create_vendor_purchase_request/`;
@@ -183,7 +200,7 @@ export const Ticket_Details_Create = `${BASE_URL}/ticket_detail/api/v1/ticket_de
 export const Ticket_Details_All = `${BASE_URL}/ticket_detail/api/v1/ticket_detail/get_all_by_ticket_id/`;
 
 //user api
-export const User_By_Id = `${BASE_URL}/user/api/v1/user/`;
+export const User_By_Id = `${BASE_URL}/user/api/v1/user/me`;
 
 export const Check_Email = `${BASE_URL}/user/api/v1/user/check_email_when_create/`;
 export const Check_Email_When_Update = `${BASE_URL}/user/api/v1/user/check_email_when_update/`;
@@ -198,7 +215,8 @@ export const Check_User_Name = `${BASE_URL}/user/api/v1/user/check_username_when
 export const Check_User_Name_When_Update = `${BASE_URL}/user/api/v1/user/check_username_when_update/`;
 
 //thana api
-export const Thana_All = `${BASE_URL}/thana/api/v1/thana/all/`;
+export const Thana_All = `${BASE_URL}/thana/api/v1/thana/without_pagination/all/`;
+export const Thana_All_BY_CITY_ID = `${BASE_URL}/thana/api/v1/thana/get_thana_by_city_id/`;
 
 //vendor api
 export const Vendor_Create = `${BASE_URL}/vendor/api/v1/vendor/create/`;
@@ -206,3 +224,20 @@ export const Vendor_Create = `${BASE_URL}/vendor/api/v1/vendor/create/`;
 export const Vendor_Update = `${BASE_URL}/vendor/api/v1/vendor/update/`;
 
 export const Vendor_By_Id = `${BASE_URL}/vendor/api/v1/vendor/`;
+
+export const New_product_using = `${BASE_URL}/product/api/v1/new_product_using_category_nested/`;
+export const Used_product_using = `${BASE_URL}/product/api/v1/used_product_using_category_nested/`;
+export const Get_all_parent_category_without_pagination = `${BASE_URL}/category/api/v1/category/get_all_parent_category_without_pagination/`;
+
+// OTP
+export const Get_phone_varification_code_by_customer = `${BASE_URL}/customer/api/v1/customer/verify_primary_phone/`;
+export const Get_phone_varification_code_by_vendor = `${BASE_URL}/vendor/api/v1/vendor/verify_primary_phone/`;
+export const Get_phone_varification_code_for_resend_otp = `${BASE_URL}/user/api/v1/user/get_phone_otp/`;
+
+// resetPasswordOtp
+export const Get_phone_varification_code_for_reset_password = `${BASE_URL}/user/api/v1/user/get_phone_otp/`;
+// resetPassword
+export const Reset_password_with_otp_code = `${BASE_URL}/user/api/v1/user/reset_password/`;
+
+// Message
+export const Create_message = `${BASE_URL}/message/api/v1/message/create/`;

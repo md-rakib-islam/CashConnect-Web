@@ -9,6 +9,7 @@ const MenuItem = styled.div<ColorProps & SpaceProps>`
   color: ${themeGet("colors.text.secondary")};
   display: flex;
   align-items: center;
+  transition: all 250ms ease-in-out;
 
   &:hover {
     color: ${themeGet("colors.primary.main")};

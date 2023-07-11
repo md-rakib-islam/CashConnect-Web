@@ -2,40 +2,63 @@ import Box from "@component/Box";
 import FlexBox from "@component/FlexBox";
 import NavbarLayout from "@component/layout/NavbarLayout";
 import ProductDescription from "@component/products/ProductDescription";
+import ProductFeatures from "@component/products/ProductFeatures";
 import ProductIntro from "@component/products/ProductIntro";
 import ProductReview from "@component/products/ProductReview";
 import RelatedProducts from "@component/products/RelatedProducts";
 import { H5 } from "@component/Typography";
-import { BASE_URL, product_by_categoryId, Product_by_id } from "@data/constants";
+import {
+  BASE_URL,
+  product_by_categoryId,
+  Product_by_id,
+} from "@data/constants";
 import axios from "axios";
 import _ from "lodash";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
-const ProductDetails = ({ id, title, price, imgUrl, brand, rating, initialReviewsQuantity, fullDes, relatedProduct, condition, orginalrice }) => {
-
-  const [_reviewsQuantity, setreviewsQuantity] = useState(initialReviewsQuantity)
+const ProductDetails = ({
+  id,
+  title,
+  price,
+  imgUrl,
+  brand,
+  rating,
+  initialReviewsQuantity,
+  fullDes,
+  fullFeatures,
+  relatedProduct,
+  condition,
+  short_desc,
+  orginalprice,
+}) => {
+  const [_reviewsQuantity, setreviewsQuantity] = useState(
+    initialReviewsQuantity
+  );
 
   const setNumOfReviews = (quantity = 0) => {
-    setreviewsQuantity(quantity)
-  }
+    setreviewsQuantity(quantity);
+  };
 
-  const [selectedOption, setSelectedOption] = useState("description");
+  const [selectedOption, setSelectedOption] = useState("");
 
-  const router = useRouter()
-  const review = router.query?.review
+  const router = useRouter();
+  const review = router.query?.review;
+  const features = router.query?.features;
 
   useEffect(() => {
     if (review) {
-      setSelectedOption("review")
+      setSelectedOption("review");
     }
-  }, [review])
+    if (features) {
+      setSelectedOption("features");
+    }
+  }, [review, features]);
 
-  const handleOptionClick = (opt) => () => {
-    setSelectedOption(opt);
+  const handleOptionClick = (e) => () => {
+    setSelectedOption(e);
   };
-
 
   return (
     <div>
@@ -48,15 +71,29 @@ const ProductDetails = ({ id, title, price, imgUrl, brand, rating, initialReview
         rating={rating}
         reviewCount={initialReviewsQuantity}
         condition={condition}
-        orginalrice={orginalrice}
+        short_desc={short_desc}
+        orginalprice={orginalprice}
+        parse={""}
+        eye={false}
       />
 
       <FlexBox
         borderBottom="1px solid"
         borderColor="gray.400"
-        mt="80px"
-        mb="26px"
+        mt="30px"
+        mb="2rem"
       >
+        <H5
+          className="cursor-pointer"
+          mr="25px"
+          p="4px 10px"
+          color={selectedOption === "features" ? "primary.main" : "text.muted"}
+          borderBottom={selectedOption === "features" && "2px solid"}
+          borderColor="primary.main"
+          onClick={handleOptionClick("features")}
+        >
+          Specification
+        </H5>
         <H5
           className="cursor-pointer"
           mr="25px"
@@ -78,13 +115,20 @@ const ProductDetails = ({ id, title, price, imgUrl, brand, rating, initialReview
           borderBottom={selectedOption === "review" && "2px solid"}
           borderColor="primary.main"
         >
-          Review {initialReviewsQuantity}
+          Review {initialReviewsQuantity ? initialReviewsQuantity : ""}
         </H5>
       </FlexBox>
 
-      <Box mb="50px">
-        {selectedOption === "description" && <ProductDescription fullDes={fullDes} />}
-        {selectedOption === "review" && <ProductReview product_id={id} setReviews={setNumOfReviews} />}
+      <Box mb="2rem">
+        {selectedOption === "description" && (
+          <ProductDescription fullDes={fullDes} parse={""} />
+        )}
+        {selectedOption === "features" && (
+          <ProductFeatures fullFeatures={fullFeatures} parse={""} />
+        )}
+        {selectedOption === "review" && (
+          <ProductReview product_id={id} setReviews={setNumOfReviews} />
+        )}
       </Box>
 
       <RelatedProducts relatedProduct={relatedProduct} />
@@ -97,38 +141,39 @@ ProductDetails.layout = NavbarLayout;
 export default ProductDetails;
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-
   try {
-    const res = await axios.get(`${Product_by_id}${params.id}`)
-    var data: any = await res.data
-  }
-  catch (err) {
-    var data: any = {}
+    const res = await axios.get(`${Product_by_id}${params.id}`);
+    var data: any = await res.data;
+  } catch (err) {
+    var data: any = {};
   }
 
   try {
-    const relatedProductRes = await fetch(`${product_by_categoryId}${data.category}?size=12`)
-    var relatedProductjson = await relatedProductRes.json()
-    var relatedProduct: any[] = await relatedProductjson.products
-  }
-  catch (err) {
-    var relatedProduct = []
+    const relatedProductRes = await fetch(
+      `${product_by_categoryId}${data.category.id}?size=12`
+    );
+    var relatedProductjson = await relatedProductRes.json();
+    var relatedProduct: any[] = await relatedProductjson.products;
+  } catch (err) {
+    var relatedProduct = [];
   }
 
-  console.log("product_Data", data)
+  console.log("product_Data", data);
   return {
     props: {
       id: params.id,
       title: data.name,
       price: data?.product_discount?.discounted_price || data?.unit_price,
-      orginalrice: data?.product_discount?.discounted_price ? data?.unit_price : null,
+      orginalprice: data?.unit_price || null,
       imgUrl: `${BASE_URL}${data?.thumbnail}`,
       brand: _.isObject(data?.brand) ? data?.brand?.name : data?.brand || "",
       fullDes: data?.full_desc,
+      fullFeatures: data?.features,
       initialReviewsQuantity: data?.num_reviews,
       rating: data?.rating,
-      condition: data?.condition,
-      relatedProduct
+      condition: data?.condition == "used" ? "pre owned" : data?.condition,
+      short_desc: data?.short_desc,
+      relatedProduct,
     },
-  }
-}
+  };
+};

@@ -1,17 +1,43 @@
+import useUserInf from "@customHook/useUserInf";
+import { Customer_Order_Pending_Details } from "@data/constants";
+import axios from "axios";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Box from "../Box";
 import Container from "../Container";
 import Grid from "../grid/Grid";
-import Navbar from "../navbar/Navbar";
 import Stepper from "../stepper/Stepper";
 import AppLayout from "./AppLayout";
 
 const CheckoutNavLayout: React.FC = ({ children }) => {
   const [selectedStep, setSelectedStep] = useState(0);
+  const [cartProductList, setCartProductList] = useState([]);
+
+  const { order_Id } = useUserInf();
 
   const router = useRouter();
   const { pathname } = router;
+  useEffect(() => {
+    if (order_Id) {
+      axios
+        .get(`${Customer_Order_Pending_Details}${order_Id}`, {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: localStorage.getItem("jwt_access_token"),
+          },
+        })
+        .then((res) => {
+          setCartProductList(
+            res.data.order?.order_items.length !== 0
+              ? res.data.order?.order_items
+              : []
+          );
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
+    }
+  }, [order_Id]);
 
   const handleStepChange = (_step, ind) => {
     switch (ind) {
@@ -49,19 +75,23 @@ const CheckoutNavLayout: React.FC = ({ children }) => {
   }, [pathname]);
 
   return (
-    <AppLayout navbar={<Navbar />}>
+    <AppLayout>
       <Container my="2rem">
-        <Box mb="14px">
-          <Grid container spacing={6}>
-            <Grid item lg={8} md={8} xs={12}>
-              <Stepper
-                stepperList={stepperList}
-                selectedStep={selectedStep}
-                onChange={handleStepChange}
-              />
+        {cartProductList.length !== 0 ? (
+          <Box mb="14px">
+            <Grid container spacing={6}>
+              <Grid item lg={8} md={8} xs={12}>
+                <Stepper
+                  stepperList={stepperList}
+                  selectedStep={selectedStep}
+                  onChange={handleStepChange}
+                />
+              </Grid>
             </Grid>
-          </Grid>
-        </Box>
+          </Box>
+        ) : (
+          ""
+        )}
         {children}
       </Container>
     </AppLayout>

@@ -11,7 +11,6 @@ import Grid from "../grid/Grid";
 import Hidden from "../hidden/Hidden";
 import StyledProductCategory from "./ProductCategoryStyle";
 
-
 export interface Section6Props {
   data?: any;
 }
@@ -19,8 +18,7 @@ export interface Section6Props {
 const Section6: React.FC<Section6Props> = ({ data }) => {
   const [selected, setSelected] = useState("");
 
-  const [productList] = useFormattedProductData(data.products)
-
+  const [productList] = useFormattedProductData(data.products);
 
   const handleCategoryClick = ({ target: { id: brand } }) => {
     if (selected.match(brand)) {
@@ -28,9 +26,8 @@ const Section6: React.FC<Section6Props> = ({ data }) => {
     } else setSelected(brand);
   };
 
-
   return (
-    <Container mb="80px">
+    <Container mb="2rem">
       <FlexBox>
         <Hidden down={768} mr="1.75rem">
           <Box shadow={6} borderRadius={10} padding="1.25rem" bg="white">
@@ -39,8 +36,8 @@ const Section6: React.FC<Section6Props> = ({ data }) => {
                 key={brand?.id}
                 id={brand?.id}
                 mb="0.75rem"
-                bg={selected.match(brand?.name) ? "white" : "gray.100"}
-                shadow={selected.match(brand?.name) ? 4 : null}
+                bg={selected.match(brand?.name) ? "white" : "gray.200"}
+                shadow={selected.match(brand?.name) ? 2 : null}
                 onClick={handleCategoryClick}
               >
                 <LazyImage
@@ -58,8 +55,8 @@ const Section6: React.FC<Section6Props> = ({ data }) => {
 
             <StyledProductCategory
               id="all"
-              mt="4rem"
-              bg={selected.match("all") ? "white" : "gray.100"}
+              mt="3rem"
+              bg={selected.match("all") ? "white" : "gray.300"}
               shadow={selected.match("all") ? 4 : null}
               onClick={handleCategoryClick}
             >
@@ -71,10 +68,13 @@ const Section6: React.FC<Section6Props> = ({ data }) => {
         </Hidden>
 
         <Box flex="1 1 0" minWidth="0px">
-          <CategorySectionHeader title={data?.category?.name} categoryId={data?.category?.id} />
+          <CategorySectionHeader
+            title={data?.category?.name}
+            categoryId={data?.category?.id}
+          />
           <Grid container spacing={6}>
             {productList?.slice(0, 12)?.map((item, ind) => (
-              <Grid item lg={3} sm={4} xs={12} key={ind}>
+              <Grid item lg={3} md={4} sm={6} xs={6} key={ind}>
                 <ProductCard1 hoverEffect {...item} />
               </Grid>
             ))}

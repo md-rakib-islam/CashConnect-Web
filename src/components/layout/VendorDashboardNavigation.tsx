@@ -1,5 +1,4 @@
 import Box from "@component/Box";
-import { useAppContext } from "@context/app/AppContext";
 import useWindowSize from "@hook/useWindowSize";
 import { useRouter } from "next/router";
 import React from "react";
@@ -7,39 +6,36 @@ import FlexBox from "../FlexBox";
 import Icon from "../icon/Icon";
 import {
   DashboardNavigationWrapper,
-  StyledDashboardNav
+  StyledDashboardNav,
 } from "./DashboardStyle";
-
-
 
 const VendorDashboardNavigation = () => {
   const { pathname } = useRouter();
 
-  const { dispatch } = useAppContext()
-
   const width = useWindowSize();
   const isMobile = width < 769;
+  const Router = useRouter();
 
   const handleLogout = () => {
+    localStorage.removeItem("UserId");
+    localStorage.removeItem("jwt_access_token");
+    sessionStorage.removeItem("fbssls_5515163185212209");
+    localStorage.removeItem("OrderId");
+    localStorage.removeItem("userType");
 
-    localStorage.removeItem("UserId")
-    localStorage.removeItem("jwt_access_token")
-    localStorage.removeItem("OrderId")
-    localStorage.removeItem("userType")
-
-    dispatch({
-      type: "CHANGE_ALERT",
-      payload: {
-        alertValue: "logout success",
-      }
-    })
-  }
+    // dispatch({
+    //   type: "CHANGE_ALERT",
+    //   payload: {
+    //     alertValue: "logout success",
+    //   }
+    // })
+    Router.push("/");
+  };
 
   return (
     <DashboardNavigationWrapper px="0px" py="1.5rem" color="gray.900">
       {linkList.map((item) => {
-
-        return (!isMobile && item.title === "Log Out") ? null : (
+        return !isMobile && item.title === "Log Out" ? null : (
           <StyledDashboardNav
             isCurrentPath={pathname.includes(item.href)}
             href={item.href}
@@ -48,7 +44,7 @@ const VendorDashboardNavigation = () => {
             mb="1.25rem"
             onClick={() => {
               if (item.title === "Log Out") {
-                handleLogout()
+                handleLogout();
               }
             }}
           >
@@ -62,9 +58,8 @@ const VendorDashboardNavigation = () => {
             </FlexBox>
             {/* <span>{item.count}</span> */}
           </StyledDashboardNav>
-        )
-      }
-      )}
+        );
+      })}
     </DashboardNavigationWrapper>
   );
 };
@@ -108,7 +103,6 @@ const linkList = [
     title: "Log Out",
     iconName: "logout",
   },
-
 ];
 
 export default VendorDashboardNavigation;

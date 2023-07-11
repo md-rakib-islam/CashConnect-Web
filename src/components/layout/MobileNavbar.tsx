@@ -7,40 +7,43 @@ import React, { Fragment, useEffect, useState } from "react";
 import Typography, { Paragraph } from "../Typography";
 
 const MobileNavbar = () => {
+  const [loading, setLoading] = useState(false);
 
-  const [loading, setLoading] = useState(false)
-
-  const router = useRouter()
+  const router = useRouter();
 
   const handleLoadingComplete = () => {
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   useEffect(() => {
-    router.events.on('routeChangeComplete', handleLoadingComplete)
-  }, [router.events])
+    router.events.on("routeChangeComplete", handleLoadingComplete);
+  }, [router.events]);
 
   return (
     <>
       {loading && (
-        <div style={{
-          position: 'fixed',
-          height: '100%',
-          width: '100%',
-          top: '0px',
-          left: '0px',
-          display: 'flex',
-          justifyContent: "center",
-          backgroundColor: " rgb(0 0 0 / 50%)",
-          alignItems: "center",
-          zIndex: 100,
-        }}>
-          <img style={{
-            height: "50px",
-            width: "50px",
-            marginTop: "100pz"
+        <div
+          style={{
+            position: "fixed",
+            height: "100%",
+            width: "100%",
+            top: "0px",
+            left: "0px",
+            display: "flex",
+            justifyContent: "center",
+            backgroundColor: " rgb(0 0 0 / 50%)",
+            alignItems: "center",
+            zIndex: 100,
           }}
-            src="/assets/images/gif/loading.gif" />
+        >
+          <img
+            style={{
+              height: "50px",
+              width: "50px",
+              marginTop: "100pz",
+            }}
+            src="/assets/images/gif/loading.gif"
+          />
         </div>
       )}
 
@@ -78,7 +81,7 @@ const MobileNavbar = () => {
                 py="6px"
                 onClick={() => {
                   if (item?.title === "Home") {
-                    setLoading(true)
+                    setLoading(true);
                   }
                 }}
               >
@@ -86,14 +89,11 @@ const MobileNavbar = () => {
               </Paragraph>
             </NavLink>
           )}
-
         </Fragment>
-      ))
-      }
+      ))}
     </>
-  )
+  );
 };
-
 
 const linkLists = [
   {
@@ -106,7 +106,20 @@ const linkLists = [
   },
   {
     title: "Shop Now",
-    href: "/",
+    list: [
+      {
+        href: "/",
+        title: "Shop By Store",
+      },
+      {
+        href: "/",
+        title: "New",
+      },
+      {
+        href: "/",
+        title: "Pre Owned",
+      },
+    ],
   },
   {
     title: "Sell",
@@ -118,7 +131,7 @@ const linkLists = [
       {
         href: "/",
         title: "Sell In Branch",
-      }
+      },
     ],
   },
   {
@@ -126,10 +139,9 @@ const linkLists = [
     href: "/",
   },
   {
-    title: "Contact Us",
-    href: "/",
+    title: "Customer Care",
+    href: "/help",
   },
 ];
-
 
 export default MobileNavbar;

@@ -1,0 +1,115 @@
+.link {
+  margin-right: 30px;
+  text-decoration: none;
+}
+.home {
+  color: #ffffff !important;
+  font-weight: 800;
+}
+.link:hover a {
+  color: rgba(15, 52, 96, 1) !important;
+  font-weight: 800;
+}
+
+.dropbtn {
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 14px;
+  margin-right: 32px;
+  cursor: pointer;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+/* .dropdown a{
+  color: #ffffff !important;
+    font-weight: 800;
+} */
+.dropbtn:hover {
+  color: rgba(15, 52, 96, 1) !important;
+  font-weight: 800;
+}
+
+.dropdown:hover .dropbtn {
+  color: rgba(15, 52, 96, 1) !important;
+  font-weight: 800;
+}
+
+.dropdown_content {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 100%;
+  z-index: 5;
+}
+
+.dropdown_content .dropdown {
+  color: #2b3445;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-radius: 10px !important;
+}
+
+.dropdown_content .dropdown:hover {
+  background-color: #f6f9fc;
+}
+
+.dropdown:hover .dropdown_content {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.dropbtn2 {
+  background-color: #ffffff;
+  color: #2b3445;
+  padding: 16px;
+  font-size: 14px;
+  border: none;
+  margin-top: 20px;
+  white-space: nowrap;
+  border-radius: 5px;
+}
+
+.dropdown2 {
+  position: relative;
+  display: inline-block;
+  border-radius: 10px;
+}
+
+.dropdown_content2 {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #f1f1f1;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown_content2 a {
+  color: #2b3445;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  white-space: nowrap;
+  border-radius: 10px;
+}
+
+.dropdown_content2 a:hover {
+  color: #e94560;
+  background-color: #f6f9fc;
+}
+
+.dropdown2:hover .dropdown_content2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.dropdown2:hover .dropbtn2 {
+  color: #e94560;
+  background-color: #f6f9fc;
+}

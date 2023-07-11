@@ -1,167 +1,228 @@
 import IconButton from "@component/buttons/IconButton";
+import Grid from "@component/grid/Grid";
 import Image from "@component/Image";
+import MobileNavbar from "@component/layout/MobileNavbar";
 import Menu from "@component/Menu";
 import MenuItem from "@component/MenuItem";
-import Signup from "@component/sessions/Signup";
+import Navbar from "@component/navbar/Navbar";
 import { useAppContext } from "@context/app/AppContext";
 import useUserInf from "@customHook/useUserInf";
-import { BASE_URL, Site_Setting_All } from "@data/constants";
+import {
+  BASE_URL,
+  Customer_Order_Pending_Details,
+  Site_Setting_All,
+  User_By_Id,
+} from "@data/constants";
+import useWindowSize from "@hook/useWindowSize";
+import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Box from "../Box";
-import Categories from "../categories/Categories";
 import Container from "../Container";
 import FlexBox from "../FlexBox";
 import Icon from "../icon/Icon";
 import MiniCart from "../mini-cart/MiniCart";
 import SearchBox from "../search-box/SearchBox";
-import Login from "../sessions/Login";
 import Sidenav from "../sidenav/Sidenav";
-import Typography, { Tiny2 } from "../Typography";
+import Typography, { H5, Tiny2 } from "../Typography";
 import StyledHeader from "./HeaderStyle";
-import UserLoginDialog from "./UserLoginDialog";
-import UserRegisterDialog from "./UserRegisterDialog";
-
 
 type HeaderProps = {
-  isFixed?: boolean;
+  // isFixed?: boolean;
   className?: string;
 };
 
-const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
+const Header: React.FC<HeaderProps> = ({ className }) => {
   const [open, setOpen] = useState(false);
   const toggleSidenav = () => setOpen(!open);
-  const [logo, setLogo] = useState("")
-  const [_reRender, setReRender] = useState(0)
-
-  const { dispatch } = useAppContext()
-
-  const [loading, setLoading] = useState(false)
-
-  const router = useRouter()
-
-  const { isLogin } = useUserInf()
-
+  const [_reRender, setReRender] = useState(0);
+  const { dispatch } = useAppContext();
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const [productQuantity, setProductQuantity] = useState<any>();
+  const { state } = useAppContext();
+  const cartCanged = state.cart.chartQuantity;
+  const { isLogin, order_Id } = useUserInf();
+  const [preViewImg, setpreViewImg] = useState("");
+  const [first_name, setfirst_name] = useState("");
+  const [last_name, setlast_name] = useState("");
+  const width = useWindowSize();
+  const isTablet = width <= 900;
+  const isMobile = width <= 700;
   const handleLoadingComplete = () => {
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   useEffect(() => {
-    router.events.on('routeChangeComplete', handleLoadingComplete)
-  }, [router.events])
+    if (order_Id) {
+      axios
+        .get(`${Customer_Order_Pending_Details}${order_Id}`, {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: localStorage.getItem("jwt_access_token"),
+          },
+        })
+        .then((res) => {
+          setProductQuantity(
+            res?.data?.order?.order_items?.find(
+              (e: { quantity: any }) => e.quantity
+            )
+          );
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
+    }
+  }, [cartCanged, order_Id]);
 
   useEffect(() => {
-    fetch(`${Site_Setting_All}`).then(res => res.json()).then(res => {
-      console.log("SiteSettingRes", res.general_settings[0])
-      setLogo(res.general_settings[0].logo)
-    }).catch((err) => { console.log("error", err) })
-  }, [])
+    router.events.on("routeChangeComplete", handleLoadingComplete);
+  }, [router.events]);
 
+  useEffect(() => {
+    fetch(`${Site_Setting_All}`)
+      .then((res) => res.json())
+      .then((res) => {
+        console.log("SiteSettingRes", res.general_settings[0]);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  }, []);
+  useEffect(() => {
+    if (isLogin) {
+      axios
+        .get(`${User_By_Id}`, {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: localStorage.getItem("jwt_access_token"),
+          },
+        })
+        .then((res) => {
+          console.log("resUseerForHeader", preViewImg);
+          setfirst_name(res?.data?.first_name);
+          setlast_name(res?.data?.last_name);
+          setpreViewImg(
+            `${res?.data?.image ? BASE_URL : "/no_image.png"}${
+              res?.data?.image ? res?.data?.image : ""
+            }`
+          );
+          console.log("resUseerForHeader", preViewImg);
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
+    }
+  }, [isLogin]);
 
   const handleLogout = () => {
+    localStorage.removeItem("UserId");
+    localStorage.removeItem("jwt_access_token");
+    sessionStorage.removeItem("fbssls_5515163185212209");
+    localStorage.removeItem("OrderId");
+    localStorage.removeItem("userType");
 
-    localStorage.removeItem("UserId")
-    localStorage.removeItem("jwt_access_token")
-    localStorage.removeItem("OrderId")
-    localStorage.removeItem("userType")
-
-    window.dispatchEvent(new CustomEvent('storage', { detail: '' }))
+    window.dispatchEvent(new CustomEvent("storage", { detail: "" }));
 
     dispatch({
       type: "CHANGE_ALERT",
       payload: {
-        alertValue: "logout success",
-      }
-    })
-  }
+        alertValue: "logout success...",
+        alerType: "successLogout",
+      },
+    });
+    Router.push("/");
+  };
 
-  const Router = useRouter()
+  const Router = useRouter();
 
   const goToFrofile = () => {
-    const user_type: string = localStorage.getItem("userType")
+    const user_type: string = localStorage.getItem("userType");
     if (user_type == "vendor") {
-      Router.push("/vendor/dashboard")
+      Router.push("/vendor/dashboard");
+    } else {
+      Router.push("/profile");
     }
-    else {
-      Router.push("/profile")
-    }
-  }
+  };
+  const login = () => {
+    router.replace({
+      pathname: "/login",
+    });
+  };
 
   try {
-    var userID: string = localStorage.getItem("UserId")
-  }
-  catch (err) {
-    var userID = ""
+    var userID: string = localStorage.getItem("UserId");
+  } catch (err) {
+    var userID = "";
   }
   useEffect(() => {
-    setReRender(Math.random())
-  }, [userID])
+    setReRender(Math.random());
+  }, [userID]);
 
+  console.log("productQuantity", productQuantity?.quantity);
   const cartHandle = (
     <FlexBox ml="20px" alignItems="flex-start">
       <IconButton bg="gray.200" p="12px">
-        <Icon size="20px">bag</Icon>
+        <Icon style={{ color: "#e84262" }} size="20px">
+          bag
+        </Icon>
       </IconButton>
+      {/* this Tiny2 component is a customized version of Tiny */}
 
-      {
-        <FlexBox
-          borderRadius="300px"
-          bg="error.main"
-          px="5px"
-          py="2px"
-          alignItems="center"
-          justifyContent="center"
-          ml="-1rem"
-          mt="-9px"
-        >
-          {/* this Tiny2 component is a customized version of Tiny */}
-          <Tiny2 color="white" fontWeight="600"></Tiny2>
-        </FlexBox>
-      }
+      <Tiny2 color="white" fontWeight="600"></Tiny2>
     </FlexBox>
   );
-
 
   return (
     <>
       {loading && (
-        <div style={{
-          position: 'fixed',
-          height: '100%',
-          width: '100%',
-          top: '0px',
-          left: '0px',
-          display: 'flex',
-          justifyContent: "center",
-          backgroundColor: " rgb(0 0 0 / 50%)",
-          alignItems: "center",
-          zIndex: 100,
-        }}>
-          <img style={{
-            height: "50px",
-            width: "50px",
-            marginTop: "100pz"
+        <div
+          style={{
+            position: "fixed",
+            height: "100%",
+            width: "100%",
+            top: "0px",
+            left: "0px",
+            display: "flex",
+            justifyContent: "center",
+            backgroundColor: " rgb(0 0 0 / 50%)",
+            alignItems: "center",
+            zIndex: 100,
           }}
-            src="/assets/images/gif/loading.gif" />
+        >
+          <img
+            style={{
+              height: "100px",
+              width: "100px",
+              marginTop: "100pz",
+            }}
+            src="/assets/images/gif/loading.gif"
+          />
         </div>
       )}
       <StyledHeader className={className}>
-        <Container
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-          height="100%"
-        >
-          <FlexBox className="logo" alignItems="center" mr="1rem">
-            <Link href="/">
-              <a onClick={() => setLoading(true)}>
-                <Image src={`${BASE_URL}${logo}`} alt="logo" height="60" width="auto" borderRadius={50} />
-              </a>
-            </Link>
+        <Container height="100%">
+          {!isMobile && (
+            <Grid container justifyContent="center" spacing={4}>
+              <Grid item lg={4} md={3} sm={3} xs={12} alignItems="center">
+                <FlexBox
+                  className="logo"
+                  justifyContent="space-between"
+                  mr="1rem"
+                >
+                  <Link href="/">
+                    <a onClick={() => setLoading(true)}>
+                      <Image
+                        src="/assets/images/logos/main_logo.png"
+                        alt="logo"
+                        height="45"
+                        width="160px"
+                      />
+                    </a>
+                  </Link>
 
-            {isFixed && (
+                  {/* {isFixed && (
               <div className="category-holder">
                 <Categories>
                   <FlexBox color="text.hint" alignItems="center" ml="1rem">
@@ -170,101 +231,229 @@ const Header: React.FC<HeaderProps> = ({ isFixed, className }) => {
                   </FlexBox>
                 </Categories>
               </div>
-            )}
-          </FlexBox>
-
-          <FlexBox justifyContent="center" flex="1 1 0">
-            <SearchBox />
-          </FlexBox>
-
-          <FlexBox className="header-right" alignItems="center">
-            {!isLogin ? (<UserLoginDialog
-              handle={
-                <IconButton ml="1rem" bg="gray.200" p="8px">
-                  <Icon size="28px">user</Icon>
-                </IconButton>
-              }
-            >
-              <Box>
-                <Login />
-              </Box>
-            </UserLoginDialog>
-            ) : (
-              <>
-
-                <Menu
-                  direction="left"
-                  handler={
-                    <IconButton ml="1rem" bg="gray.200" p="8px">
-                      <Icon size="25px">settingsAccount</Icon>
-                    </IconButton>
-                  }
-                >
-                  <MenuItem p="2px">
-                    <div style={{
-                      fontSize: "20px", display: "flex",
-                      alignItems: "center",
-                      justifyContent: "flexStart",
-                      cursor: "pointer",
-                    }}
+            )} */}
+                </FlexBox>
+              </Grid>
+              <Grid item lg={5} md={5} sm={7} xs={12} alignItems="center">
+                <SearchBox />
+              </Grid>
+              <Grid item lg={3} md={4} sm={2} xs={12} alignItems="center">
+                {!isTablet && (
+                  <FlexBox
+                    className="header-right"
+                    alignItems="center"
+                    justifyContent="flex-end"
+                  >
+                    {!isLogin ? (
+                      <IconButton
+                        onClick={login}
+                        ml="1rem"
+                        bg="gray.200"
+                        p="8px"
+                      >
+                        <Icon style={{ color: "#e84262" }} size="28px">
+                          user
+                        </Icon>
+                      </IconButton>
+                    ) : (
+                      <>
+                        <H5
+                          className="header-name"
+                          ml={"1rem"}
+                          my="0px"
+                          onClick={() => goToFrofile()}
+                        >{`${first_name} ${last_name}`}</H5>
+                        <Menu
+                          direction="left"
+                          handler={
+                            <IconButton ml="1rem" bg="gray.200" p="8px">
+                              <Icon style={{ color: "#e84262" }} size="25px">
+                                settingsAccount
+                              </Icon>
+                            </IconButton>
+                          }
+                        >
+                          {/* <MenuItem p="2px">
+                    <div
+                      style={{
+                        fontSize: "20px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flexStart",
+                        cursor: "pointer",
+                      }}
                       onClick={() => goToFrofile()}
                     >
-                      <Icon size="30px" ml="5px">user</Icon>
-                      <Typography fontWeight="600" fontSize="16px" ml="5px">Profile</Typography>
+                      <Avatar src={preViewImg} size={40} />
+                      
                     </div>
-                  </MenuItem>
+                  </MenuItem> */}
+                          <MenuItem p="2px">
+                            <div
+                              style={{
+                                fontSize: "20px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "flexStart",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => goToFrofile()}
+                            >
+                              <Icon
+                                style={{ color: "#e84262" }}
+                                size="30px"
+                                ml="5px"
+                              >
+                                user
+                              </Icon>
+                              <Typography
+                                fontWeight="600"
+                                fontSize="16px"
+                                ml="5px"
+                              >
+                                Profile
+                              </Typography>
+                            </div>
+                          </MenuItem>
 
-                  <MenuItem p="2px">
-                    <div style={{
-                      fontSize: "20px", display: "flex",
-                      alignItems: "center",
-                      justifyContent: "flexStart",
-                      cursor: "pointer",
-                    }}
-                      onClick={() => handleLogout()}
+                          <MenuItem p="2px">
+                            <div
+                              style={{
+                                fontSize: "20px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "flexStart",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => handleLogout()}
+                            >
+                              <Icon
+                                style={{ color: "#e84262" }}
+                                size="23px"
+                                ml="8px"
+                              >
+                                logout
+                              </Icon>
+                              <Typography
+                                fontWeight="600"
+                                fontSize="16px"
+                                ml="10px"
+                              >
+                                Logout
+                              </Typography>
+                            </div>
+                          </MenuItem>
+                        </Menu>
+                      </>
+                    )}
+
+                    {!isLogin && (
+                      <Link href="/signup">
+                        <IconButton ml="1rem" bg="gray.200" p="8px">
+                          <Icon style={{ color: "#e84262" }} size="25px">
+                            register
+                          </Icon>
+                        </IconButton>
+                      </Link>
+                    )}
+
+                    <Sidenav
+                      handle={cartHandle}
+                      position="right"
+                      open={open}
+                      width={380}
+                      toggleSidenav={toggleSidenav}
                     >
-                      <Icon size="23px" ml="8px">logout</Icon>
-                      <Typography fontWeight="600" fontSize="16px" ml="10px">Logout</Typography>
+                      <MiniCart toggleSidenav={toggleSidenav} />
+                    </Sidenav>
+                  </FlexBox>
+                )}
+
+                {isTablet && (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Sidenav
+                      position="left"
+                      padding={10}
+                      handle={<Icon color="secondary">menu</Icon>}
+                    >
+                      <MobileNavbar />
+                    </Sidenav>
+                  </div>
+                )}
+              </Grid>
+            </Grid>
+          )}
+          {isMobile && (
+            <Grid
+              style={{ background: "#ffffff" }}
+              container
+              justifyContent="center"
+              spacing={4}
+            >
+              <Grid item sm={12} xs={12} alignItems="center">
+                <FlexBox
+                  className="logo"
+                  justifyContent="space-between"
+                  mr="1rem"
+                >
+                  <Link href="/">
+                    <a onClick={() => setLoading(true)}>
+                      <Image
+                        src="/assets/images/logos/main_logo.png"
+                        alt="logo"
+                        height="45"
+                        width="160px"
+                      />
+                    </a>
+                  </Link>
+
+                  {/* {isFixed && (
+              <div className="category-holder">
+                <Categories>
+                  <FlexBox color="text.hint" alignItems="center" ml="1rem">
+                    <Icon>categories</Icon>
+                    <Icon>arrow-down-filled</Icon>
+                  </FlexBox>
+                </Categories>
+              </div>
+            )} */}
+                  {isMobile && (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Sidenav
+                        position="left"
+                        padding={10}
+                        handle={<Icon color="secondary">menu</Icon>}
+                      >
+                        <MobileNavbar />
+                      </Sidenav>
                     </div>
-                  </MenuItem>
-
-                </Menu>
-
-
-              </>
-            )
-            }
-
-            <UserRegisterDialog
-              handle={
-                <IconButton ml="1rem" bg="gray.200" p="8px">
-                  <Icon size="25px">register</Icon>
-                </IconButton>
-              }
-            >
-              <Box>
-                <Signup />
-              </Box>
-            </UserRegisterDialog>
-
-            <Sidenav
-              handle={cartHandle}
-              position="right"
-              open={open}
-              width={380}
-              toggleSidenav={toggleSidenav}
-            >
-
-              <MiniCart toggleSidenav={toggleSidenav} />
-            </Sidenav>
-          </FlexBox>
+                  )}
+                </FlexBox>
+              </Grid>
+              <Grid item sm={12} xs={12} alignItems="center">
+                <SearchBox />
+              </Grid>
+            </Grid>
+          )}
         </Container>
-      </StyledHeader >
+      </StyledHeader>
+      <Navbar navListOpen={false} />
     </>
   );
 };
 
 export default Header;
 
-export const CustomMenu = styled(Menu)`
-`;
+export const CustomMenu = styled(Menu)``;

@@ -6,13 +6,15 @@ import Grid from "../grid/Grid";
 import ProductCard1 from "../product-cards/ProductCard1";
 
 const Section11 = ({ moreForYouList }) => {
-
   const moreForYouLists = (
-    <Container mb="70px">
-      <CategorySectionHeader title="More For You" seeMoreLink="product/search/more_for_you_all" />
+    <Container mb="2rem">
+      <CategorySectionHeader
+        title="Just For You"
+        seeMoreLink="product/search/more_for_you_all"
+      />
       <Grid container spacing={6}>
-        {moreForYouList.map((item, ind) => (
-          <Grid item lg={2} md={3} sm={4} xs={12} key={item?.id || ind}>
+        {moreForYouList.slice(0, 20).map((item, ind) => (
+          <Grid item lg={2.4} md={4} sm={6} xs={6} key={item?.id || ind}>
             <ProductCard1 off={0} hoverEffect {...item} />
           </Grid>
         ))}
@@ -20,9 +22,9 @@ const Section11 = ({ moreForYouList }) => {
     </Container>
   );
 
-  const returnableData = _.isEmpty(moreForYouList) ? null : moreForYouLists
+  const returnableData = _.isEmpty(moreForYouList) ? null : moreForYouLists;
 
-  return returnableData
+  return returnableData;
 };
 
 export default Section11;

@@ -1,3 +1,4 @@
+import { H6 } from "@component/Typography";
 import _ from "lodash";
 import Link from "next/link";
 import React from "react";
@@ -10,7 +11,7 @@ interface CategoryMenuItemProps {
   title: string;
   caret?: boolean;
   menuData?: any;
-  setIncreaseWidthMethod?: (action: any) => void
+  setIncreaseWidthMethod?: (action: any) => void;
 }
 
 const CategoryMenuItem: React.FC<CategoryMenuItemProps> = ({
@@ -19,21 +20,28 @@ const CategoryMenuItem: React.FC<CategoryMenuItemProps> = ({
   title,
   menuData,
   children,
+  caret,
   setIncreaseWidthMethod,
 }) => {
-
   return (
-    <div onMouseOver={() => {!_.isEmpty(menuData?.categories) && setIncreaseWidthMethod(true)}} onMouseOut={() => {!_.isEmpty(menuData?.categories) && setIncreaseWidthMethod(false)}}>
-    <StyledCategoryMenuItem>
-      <Link href={href}>
-        <div className="category-dropdown-link">
-          {icon && <Icon variant="small" src={icon}></Icon>}
-          <span className="title">{title}</span>
-          {!_.isEmpty(menuData?.categories) && <Icon variant="small">chevron-right</Icon>}
-        </div>
-      </Link>
-      {children}
-    </StyledCategoryMenuItem>
+    <div
+      onMouseOver={() => {
+        !_.isEmpty(menuData?.categories) && setIncreaseWidthMethod(true);
+      }}
+      onMouseOut={() => {
+        !_.isEmpty(menuData?.categories) && setIncreaseWidthMethod(false);
+      }}
+    >
+      <StyledCategoryMenuItem>
+        <Link href={href}>
+          <div className="category-dropdown-link">
+            {icon && <Icon variant="small" src={icon}></Icon>}
+            <H6 className="title">{title}</H6>
+            {caret && <Icon variant="small">chevron-right</Icon>}
+          </div>
+        </Link>
+        {children}
+      </StyledCategoryMenuItem>
     </div>
   );
 };

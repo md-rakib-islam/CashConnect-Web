@@ -12,7 +12,7 @@ const StyledTopbar = styled.div`
       display: none;
       img {
         display: block;
-        height: 36px;
+        height: 25px;
       }
     }
     span {
@@ -22,9 +22,20 @@ const StyledTopbar = styled.div`
       .logo {
         display: block;
       }
-      *:not(.logo) {
+      span {
+      margin-left: 0px;
+      }
+      .phone{
+        margin-left: 100px;
+
+      }
+      .email{
         display: none;
       }
+      
+    }
+  
+     
     }
   }
 

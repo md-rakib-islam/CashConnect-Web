@@ -1,17 +1,14 @@
 const navbarNavigations = [
-  {
-    title: "Home",
-    url: "/",
-    child: [],
-  },
-  {
-    title: "About Us",
-    url: "",
-  },
-  {
-    title: "Shop Now",
-    url: "/",
-  },
+  // {
+  //   title: "Home",
+  //   url: "/",
+
+  // },
+  // {
+  //   title: "About Us",
+  //   url: "",
+  // },
+
   {
     title: "Sell",
     child: [
@@ -30,10 +27,9 @@ const navbarNavigations = [
     url: "/",
   },
   {
-    title: "Contact Us",
-    url: "/",
+    title: "Customer Care",
+    url: "/help",
   },
-  
 ];
 
 export default navbarNavigations;

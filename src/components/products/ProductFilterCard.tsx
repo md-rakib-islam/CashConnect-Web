@@ -1,5 +1,7 @@
+import Box from "@component/Box";
+import Select from "@component/Select";
 import useFormattedCategoryData from "@customHook/useFormattedCategoryData";
-import { Brands_By_Category, Brand_All, Category_All_With_Child } from "@data/constants";
+import { Brands_By_Category, Category_All_With_Child } from "@data/constants";
 import axios from "axios";
 import { useFormik } from "formik";
 import _ from "lodash";
@@ -16,36 +18,72 @@ import Rating from "../rating/Rating";
 import TextField from "../text-field/TextField";
 import { H5, H6, Paragraph, SemiSpan } from "../Typography";
 
+const ProductFilterCard = ({ productList }) => {
+  const [brandlist, setBrandlist] = useState([]);
+  const [brandIds, setBrandIds] = useState({});
+  const [ratingIds, setRatingIds] = useState({});
+  const [categoryId, setCategoryId] = useState<any>("");
 
-const ProductFilterCard = () => {
-  const [brandlist, setBrandlist] = useState([])
-  const [brandIds, setBrandIds] = useState({})
-  const [ratingIds, setRatingIds] = useState({})
-  const [categoryId, setCategoryId] = useState<any>("")
+  const [formattedCategoryData, setFormattedCategoryData] =
+    useFormattedCategoryData();
 
-  const [formattedCategoryData, setFormattedCategoryData] = useFormattedCategoryData();
+  const newItem = productList.map((n) =>
+    n.brand ? n.brand : { id: 0, name: "No Brand" }
+  );
+  const uniqueBrands: any = [];
+  console.log("uniqueItems", uniqueBrands);
 
-  const router = useRouter()
+  useEffect(() => {
+    localStorage.setItem("uniqueBrands", JSON.stringify(uniqueBrands));
+  }, [uniqueBrands]);
 
-  const handleFormSubmit = () => { }
+  function removeDuplicates(arr) {
+    var unique = [];
 
+    arr.forEach((element) => {
+      if (!unique.includes(element?.id)) {
+        unique.push(element?.id);
+        uniqueBrands.push(element);
+      }
+    });
+    return unique;
+  }
+
+  removeDuplicates(newItem);
+
+  const router = useRouter();
+
+  const handleFormSubmit = () => {};
+
+  console.log("router", router.query.type);
   const filterProduct = (type, e, id?: string | number) => {
-    const value = e.target.value
+    // if (router.query.type !== "search_by_product_name") {
+    const value = e.target?.value;
+    console.log("filterValue", value, e, type);
 
-    const min_price = type === "min_price" ? value ? value : "" : values.min_price
-    const max_price = type === "max_price" ? value ? value : "" : values.max_price
+    const ascending = type === "shortBy" && e == "Low" ? "yes" : "no";
+    const min_price =
+      type === "min_price" ? (value ? value : "") : values.min_price;
+    const max_price =
+      type === "max_price" ? (value ? value : "") : values.max_price;
 
     if (type === "brand") {
-      setBrandIds({ ...brandIds, [`brand${id}`]: brandIds[`brand${id}`] ? 0 : id })
-      var brandIDs = { ...brandIds, [`brand${id}`]: brandIds[`brand${id}`] ? 0 : id }
-      var brand = []
+      setBrandIds({
+        ...brandIds,
+        [`brand${id}`]: brandIds[`brand${id}`] ? 0 : id,
+      });
+      var brandIDs = {
+        ...brandIds,
+        [`brand${id}`]: brandIds[`brand${id}`] ? 0 : id,
+      };
+      var brand = [];
       for (let x in brandIDs) {
         if (brandIDs[x]) {
           brand.push(brandIDs[x]);
         }
       }
     } else {
-      var brand = []
+      var brand = [];
       for (let x in brandIds) {
         if (brandIds[x]) {
           brand.push(brandIds[x]);
@@ -54,16 +92,22 @@ const ProductFilterCard = () => {
     }
 
     if (type === "rating") {
-      setRatingIds({ ...ratingIds, [`rating${id}`]: ratingIds[`rating${id}`] ? 0 : id })
-      var ratingIDs = { ...ratingIds, [`rating${id}`]: ratingIds[`rating${id}`] ? 0 : id }
-      var rating = []
+      setRatingIds({
+        ...ratingIds,
+        [`rating${id}`]: ratingIds[`rating${id}`] ? 0 : id,
+      });
+      var ratingIDs = {
+        ...ratingIds,
+        [`rating${id}`]: ratingIds[`rating${id}`] ? 0 : id,
+      };
+      var rating = [];
       for (let x in ratingIDs) {
         if (ratingIDs[x]) {
           rating.push(ratingIDs[x]);
         }
       }
     } else {
-      var rating = []
+      var rating = [];
       for (let x in ratingIds) {
         if (ratingIds[x]) {
           rating.push(ratingIds[x]);
@@ -72,113 +116,404 @@ const ProductFilterCard = () => {
     }
 
     if (type === "category") {
-      setCategoryId(id)
+      setCategoryId(id);
+    }
+    console.log("brandProductSearch", router.query);
+
+    if (router.query.type == "top_ratings_all") {
+      router.push({
+        pathname: "/product/search/top_ratings_all_filter",
+        query: {
+          // categoryId: type === "category" ? id : categoryId,
+          // name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
+    if (router.query.type == "new_arrivals_all") {
+      router.push({
+        pathname: "/product/search/new_arrivals_all_filter",
+        query: {
+          // categoryId: type === "category" ? id : categoryId,
+          // name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
+    if (router.query.type == "big_discounts_all") {
+      router.push({
+        pathname: "/product/search/big_discounts_all_filter",
+        query: {
+          // categoryId: type === "category" ? id : categoryId,
+          // name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
+    if (router.query.type == "more_for_you_all") {
+      router.push({
+        pathname: "/product/search/more_for_you_all_filter",
+        query: {
+          // categoryId: type === "category" ? id : categoryId,
+          // name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
+    if (router.query.type == "flash_deals_all") {
+      router.push({
+        pathname: "/product/search/flash_deals_all_filter",
+        query: {
+          // categoryId: type === "category" ? id : categoryId,
+          // name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
     }
 
-    router.push({
-      pathname: '/product/search/filter',
-      query: { categoryId: type === "category" ? id : categoryId, min_price, max_price, brand: JSON.stringify(brand), rating: JSON.stringify(rating) },
-    })
+    if (router.query.type == "flash_deals_all_filter") {
+      router.push({
+        pathname: "/product/search/flash_deals_all_filter",
+        query: {
+          // categoryId: type === "category" ? id : categoryId,
+          // name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
+    if (router.query.type == "new_arrivals_all_filter") {
+      router.push({
+        pathname: "/product/search/new_arrivals_all_filter",
+        query: {
+          // categoryId: type === "category" ? id : categoryId,
+          // name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
+    if (router.query.type == "big_discounts_all_filter") {
+      router.push({
+        pathname: "/product/search/big_discounts_all_filter",
+        query: {
+          // categoryId: type === "category" ? id : categoryId,
+          // name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
+    if (router.query.type == "more_for_you_all_filter") {
+      router.push({
+        pathname: "/product/search/more_for_you_all_filter",
+        query: {
+          // categoryId: type === "category" ? id : categoryId,
+          // name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
+    if (router.query.type == "top_ratings_all_filter") {
+      router.push({
+        pathname: "/product/search/top_ratings_all_filter",
+        query: {
+          // categoryId: type === "category" ? id : categoryId,
+          // name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
 
-  }
+    if (router.query.type == "product_by_category") {
+      router.push({
+        pathname: "/product/search/filter",
+        query: {
+          categoryId: type === "category" ? id : categoryId,
+          name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
+    if (router.query.type == "search_for") {
+      router.push({
+        pathname: "/product/search/filter",
+        query: {
+          categoryId: type === "category" ? id : categoryId,
+          name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
+    if (router.query.type == "filter") {
+      router.push({
+        pathname: "/product/search/filter",
+        query: {
+          categoryId: type === "category" ? id : categoryId,
+          name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
+
+    if (router.query.type == "search_by_product_name") {
+      router.push({
+        pathname: "/product/search/filter",
+        query: {
+          categoryId: type === "category" ? id : categoryId,
+          name: router.query.name,
+          ascending: ascending,
+          min_price,
+          max_price,
+          brand: JSON.stringify(brand),
+          rating: JSON.stringify(rating),
+        },
+      });
+    }
+    // else {
+    //   router.push({
+    //     pathname: "/product/search/filter",
+    //     query: {
+    //       categoryId: type === "category" ? id : categoryId,
+    //       name: router.query.name,
+    //       ascending: router.query.ascending,
+    //       min_price,
+    //       max_price,
+    //       brand: JSON.stringify(brand),
+    //       rating: JSON.stringify(rating),
+    //     },
+    //   });
+    // }
+
+    // } else {
+    //   const value = e.target.value;
+
+    //   const min_price =
+    //     type === "min_price" ? (value ? value : "") : values.min_price;
+    //   const max_price =
+    //     type === "max_price" ? (value ? value : "") : values.max_price;
+
+    //   if (type === "brand") {
+    //     setBrandIds({
+    //       ...brandIds,
+    //       [`brand${id}`]: brandIds[`brand${id}`] ? 0 : id,
+    //     });
+    //     var brandIDs = {
+    //       ...brandIds,
+    //       [`brand${id}`]: brandIds[`brand${id}`] ? 0 : id,
+    //     };
+    //     var brand = [];
+    //     for (let x in brandIDs) {
+    //       if (brandIDs[x]) {
+    //         brand.push(brandIDs[x]);
+    //       }
+    //     }
+    //   } else {
+    //     var brand = [];
+    //     for (let x in brandIds) {
+    //       if (brandIds[x]) {
+    //         brand.push(brandIds[x]);
+    //       }
+    //     }
+    //   }
+
+    //   if (type === "rating") {
+    //     setRatingIds({
+    //       ...ratingIds,
+    //       [`rating${id}`]: ratingIds[`rating${id}`] ? 0 : id,
+    //     });
+    //     var ratingIDs = {
+    //       ...ratingIds,
+    //       [`rating${id}`]: ratingIds[`rating${id}`] ? 0 : id,
+    //     };
+    //     var rating = [];
+    //     for (let x in ratingIDs) {
+    //       if (ratingIDs[x]) {
+    //         rating.push(ratingIDs[x]);
+    //       }
+    //     }
+    //   } else {
+    //     var rating = [];
+    //     for (let x in ratingIds) {
+    //       if (ratingIds[x]) {
+    //         rating.push(ratingIds[x]);
+    //       }
+    //     }
+    //   }
+
+    //   if (type === "category") {
+    //     setCategoryId(id);
+    //   }
+    //   console.log("brandProductSearch", router.query);
+    //   router.push({
+    //     pathname: "/product/search/search_by_product_name",
+    //     query: {
+    //       // categoryId: type === "category" ? id : categoryId,
+    //       name: router.query.name,
+    //       min_price,
+    //       max_price,
+    //       brand: JSON.stringify(brand),
+    //       // rating: JSON.stringify(rating),
+    //     },
+    //   });
+    // }
+  };
+
+  console.log("brandProductSearch", router.query);
 
   useEffect(() => {
-    axios.get(`${Category_All_With_Child}`).then(res => {
-      setFormattedCategoryData(res.data.categories)
-    }).catch((err) => { console.log("error", err) })
-  }, [])
+    axios
+      .get(`${Category_All_With_Child}`)
+      .then((res) => {
+        setFormattedCategoryData(res.data.categories);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  }, []);
 
   useEffect(() => {
     if (router.query.categoryId) {
-      setCategoryId(router.query.categoryId)
+      setCategoryId(router.query.categoryId);
 
-      axios.get(`${Brands_By_Category}${router.query.categoryId}`).then(res => {
-        console.log("brandBasedCategory", res.data.brands)
-        setBrandlist(res.data.brands)
-      }).catch((err) => { console.log("error", err) })
+      axios
+        .get(`${Brands_By_Category}${router.query.categoryId}`)
+        .then((res) => {
+          console.log("brandBasedCategory", res.data.brands);
+          setBrandlist(res.data.brands);
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
+    } else {
+      const updatedBrand: any = localStorage.getItem("uniqueBrands");
+      console.log("updatedBrand");
+      setBrandlist(JSON.parse(updatedBrand));
     }
-    else {
-      axios.get(`${Brand_All}`).then(res => {
-        console.log("brandAll", res.data.brands)
-        setBrandlist(res.data.brands)
-      }).catch((err) => { console.log("error", err) })
-    }
-  }, [router.query])
+  }, [router.query, productList]);
 
-  console.log("categoryId", categoryId)
-  const {
-    values,
-    errors,
-    touched,
-    handleChange,
-  } = useFormik({
+  console.log("categoryId", categoryId);
+  const { values, errors, touched, handleChange, setFieldValue } = useFormik({
     initialValues: initialValues,
     validationSchema: checkoutSchema,
     onSubmit: handleFormSubmit,
   });
 
-  console.log("categoryId", categoryId)
+  console.log("categoryId", categoryId);
 
   return (
     <Card p="18px 27px" elevation={5}>
       <H6 mb="10px">Categories</H6>
 
-      {!_.isEmpty(formattedCategoryData) ? (
-        formattedCategoryData.map((item) => {
-          return !_.isEmpty(item.menuData.categories) ? (
-            <Accordion key={item.id} expanded>
-              <AccordionHeader
-                px="0px"
-                py="6px"
-                color="text.muted"
-              // justifyContent="flex-start"
-              >
-                <SemiSpan className="cursor-pointer" mr="9px"
-                  // onClick={(e) => filterProduct("category", e, item.id)}
-                  bg={`${categoryId == item.id && "#d4d4d4"}`}
-                  onClick={(e) => filterProduct("category", e, item.id)}
+      {!_.isEmpty(formattedCategoryData)
+        ? formattedCategoryData.map((item) => {
+            return !_.isEmpty(item.menuData.categories) ? (
+              <Accordion key={item.id} expanded>
+                <AccordionHeader
+                  px="0px"
+                  py="6px"
+                  color="text.muted"
+                  // justifyContent="flex-start"
                 >
-                  {item.title}
-                </SemiSpan>
-              </AccordionHeader>
-              {item?.menuData?.categories?.map((category) => {
-
-                return !_.isEmpty(category.subCategories) ? (
-                  <Accordion key={category.id} pl="22px" expanded>
-                    <AccordionHeader
-                      px="0px"
-                      py="6px"
-                      color="text.muted"
-                    // justifyContent="flex-start"
-                    >
-                      <SemiSpan className="cursor-pointer" mr="9px"
-                        // onClick={(e) => filterProduct("category", e, category.id)}
-                        bg={`${categoryId == category.id && "#d4d4d4"}`}
-                        onClick={(e) => filterProduct("category", e, category.id)}
-                      >
-
-                        {category.title}
-                      </SemiSpan>
-                    </AccordionHeader>
-                    {category.subCategories.map((subCaterory) => (
-                      <Paragraph
-                        className="cursor-pointer"
-                        fontSize="14px"
-                        color="text.muted"
-                        pl="22px"
+                  <SemiSpan
+                    className="cursor-pointer"
+                    mr="9px"
+                    // onClick={(e) => filterProduct("category", e, item.id)}
+                    bg={`${categoryId == item.id && "#d4d4d4"}`}
+                    onClick={(e) => filterProduct("category", e, item.id)}
+                  >
+                    {item.title}
+                  </SemiSpan>
+                </AccordionHeader>
+                {item?.menuData?.categories?.map((category) => {
+                  return !_.isEmpty(category.subCategories) ? (
+                    <Accordion key={category.id} pl="22px" expanded>
+                      <AccordionHeader
+                        px="0px"
                         py="6px"
-                        borderRadius={5}
-                        bg={`${categoryId == subCaterory.id && "#d4d4d4"}`}
-                        key={subCaterory.id}
-                        onClick={(e) => filterProduct("category", e, subCaterory.id)}
+                        color="text.muted"
+                        // justifyContent="flex-start"
                       >
-                        {subCaterory.title}
-                      </Paragraph>
-                    )
-                    )}
-                  </Accordion>
-                )
-                  : (
+                        <SemiSpan
+                          className="cursor-pointer"
+                          mr="9px"
+                          // onClick={(e) => filterProduct("category", e, category.id)}
+                          bg={`${categoryId == category.id && "#d4d4d4"}`}
+                          onClick={(e) =>
+                            filterProduct("category", e, category.id)
+                          }
+                        >
+                          {category.title}
+                        </SemiSpan>
+                      </AccordionHeader>
+                      {category.subCategories.map((subCaterory) => (
+                        <Paragraph
+                          className="cursor-pointer"
+                          fontSize="14px"
+                          color="text.muted"
+                          pl="22px"
+                          py="6px"
+                          borderRadius={5}
+                          bg={`${categoryId == subCaterory.id && "#d4d4d4"}`}
+                          key={subCaterory.id}
+                          onClick={(e) =>
+                            filterProduct("category", e, subCaterory.id)
+                          }
+                        >
+                          {subCaterory.title}
+                        </Paragraph>
+                      ))}
+                    </Accordion>
+                  ) : (
                     <Paragraph
                       className="cursor-pointer"
                       fontSize="14px"
@@ -192,30 +527,47 @@ const ProductFilterCard = () => {
                     >
                       {category.title}
                     </Paragraph>
-                  )
-              })}
-            </Accordion>
-          ) : (
-            <Paragraph
-              className="cursor-pointer"
-              fontSize="14px"
-              color="text.muted"
-              py="6px"
-              key={item.id}
-              borderRadius={5}
-              bg={`${categoryId == item.id && "#d4d4d4"}`}
-              onClick={(e) => filterProduct("category", e, item.id)}
-            >
-              {item.title}
-            </Paragraph>
-          )
-        }
-        )
-      ) : ""
-      }
-
+                  );
+                })}
+              </Accordion>
+            ) : (
+              <Paragraph
+                className="cursor-pointer"
+                fontSize="14px"
+                color="text.muted"
+                py="6px"
+                key={item.id}
+                borderRadius={5}
+                bg={`${categoryId == item.id && "#d4d4d4"}`}
+                onClick={(e) => filterProduct("category", e, item.id)}
+              >
+                {item.title}
+              </Paragraph>
+            );
+          })
+        : ""}
 
       <Divider mt="18px" mb="24px" />
+
+      <H6 mb="16px"> Short by</H6>
+
+      <Box flex="1 1 0" mr="1.75rem" minWidth="150px">
+        <Select
+          placeholder="Short by"
+          // defaultValue={sortOptions[0]}
+          options={sortOptions}
+          getOptionLabelBy="label"
+          getOptionValueBy="value"
+          value={values?.shortBy || ""}
+          onChange={(shortBy: any) => {
+            setFieldValue("shortBy", shortBy);
+
+            filterProduct("shortBy", shortBy.value);
+            console.log("shortBy", shortBy);
+          }}
+        />
+      </Box>
+      <Divider my="24px" />
 
       <H6 mb="16px">Price Range</H6>
       <FlexBox justifyContent="space-between" alignItems="center">
@@ -244,7 +596,7 @@ const ProductFilterCard = () => {
           placeholder="250"
           type="number"
           onChange={(e) => {
-            handleChange(e)
+            handleChange(e);
           }}
           onKeyDown={(e: any) => {
             if (e.key === "Enter") {
@@ -261,21 +613,19 @@ const ProductFilterCard = () => {
       <Divider my="24px" />
 
       <H6 mb="16px">Brands</H6>
-      {
-        brandlist.map((brand) => (
-          <CheckBox
-            key={brand.id}
-            name={`brand${brand.id}`}
-            checked={brandIds[`brand${brand.id}`]}
-            color="secondary"
-            label={<SemiSpan color="inherit">{brand.name}</SemiSpan>}
-            my="10px"
-            onChange={(e) => {
-              filterProduct("brand", e, brand.id);
-            }}
-          />
-        ))
-      }
+      {brandlist?.map((brand) => (
+        <CheckBox
+          key={brand.id}
+          name={`brand${brand.id}`}
+          checked={brandIds[`brand${brand.id}`]}
+          color="secondary"
+          label={<SemiSpan color="inherit">{brand.name}</SemiSpan>}
+          my="10px"
+          onChange={(e) => {
+            filterProduct("brand", e, brand.id);
+          }}
+        />
+      ))}
 
       <Divider my="24px" />
 
@@ -296,20 +646,18 @@ const ProductFilterCard = () => {
       <Divider my="24px" />
 
       <H6 mb="16px">Ratings</H6>
-      {
-        [5, 4, 3, 2, 1].map((rating) => (
-          <CheckBox
-            key={rating}
-            checked={ratingIds[`rating${rating}`]}
-            color="secondary"
-            label={<Rating value={rating} outof={5} color="warn" />}
-            my="10px"
-            onChange={(e) => {
-              filterProduct("rating", e, rating);
-            }}
-          />
-        ))
-      }
+      {[5, 4, 3, 2, 1].map((rating) => (
+        <CheckBox
+          key={rating}
+          checked={ratingIds[`rating${rating}`]}
+          color="secondary"
+          label={<Rating value={rating} outof={5} color="warn" />}
+          my="10px"
+          onChange={(e) => {
+            filterProduct("rating", e, rating);
+          }}
+        />
+      ))}
 
       <Divider my="24px" />
 
@@ -319,10 +667,9 @@ const ProductFilterCard = () => {
           <Avatar bg={item} size={25} mr="10px" style={{ cursor: "pointer" }} />
         ))}
       </FlexBox> */}
-    </Card >
+    </Card>
   );
 };
-
 
 // const brandList = ["Maccs", "Karts", "Baars", "Bukks", "Luasis"];
 // const otherOptions = ["On Sale", "In Stock", "Featured"];
@@ -334,11 +681,15 @@ const ProductFilterCard = () => {
 //   "#70F6FF",
 //   "#6B7AFF",
 // ];
-
+const sortOptions = [
+  { label: "Price Low to High", value: "Low" },
+  { label: "Price High to Low", value: "High" },
+];
 const initialValues = {
   min_price: "",
   max_price: "",
-}
+  shortBy: "",
+};
 
 const checkoutSchema: any = yup.object().shape({});
 

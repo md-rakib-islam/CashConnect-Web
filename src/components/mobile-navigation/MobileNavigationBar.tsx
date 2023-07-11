@@ -12,44 +12,51 @@ import StyledMobileNavigationBar from "./MobileNavigationBar.style";
 
 const MobileNavigationBar: React.FC = () => {
   const width = useWindowSize();
-  const [_reRender, setReRender] = useState(0)
+  const [_reRender, setReRender] = useState(0);
   const [productQuantity, setProductQuantity] = useState(0);
   const { state } = useAppContext();
   const cartCanged = state.cart.chartQuantity;
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
-  const router = useRouter()
+  const router = useRouter();
 
-  const { order_Id, isLogin } = useUserInf()
+  const { order_Id, isLogin } = useUserInf();
 
   const handleLoadingComplete = () => {
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   useEffect(() => {
-    router.events.on('routeChangeComplete', handleLoadingComplete)
-  }, [router.events])
+    router.events.on("routeChangeComplete", handleLoadingComplete);
+  }, [router.events]);
 
   useEffect(() => {
     if (order_Id) {
-      axios.get(`${Customer_Order_Pending_Details}${order_Id}`).then((res) => {
-        setProductQuantity(res?.data?.order?.order_items?.length);
-      }).catch((err) => { console.log("error", err) });
+      axios
+        .get(`${Customer_Order_Pending_Details}${order_Id}`, {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: localStorage.getItem("jwt_access_token"),
+          },
+        })
+        .then((res) => {
+          setProductQuantity(res?.data?.order?.order_items?.length);
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
     }
   }, [cartCanged, order_Id]);
 
   try {
-    var userID: string = localStorage.getItem("UserId")
-  }
-  catch (err) {
-    var userID = ""
+    var userID: string = localStorage.getItem("UserId");
+  } catch (err) {
+    var userID = "";
   }
   useEffect(() => {
-    setReRender(Math.random())
-  }, [userID])
-
-  const profileUrl = isLogin ? (userID == "3") ? "/profile" : "/vendor/dashboard" : "/login"
+    setReRender(Math.random());
+  }, [userID]);
 
   const list = [
     {
@@ -65,12 +72,12 @@ const MobileNavigationBar: React.FC = () => {
     {
       title: "Cart",
       icon: "bag",
-      href: "/cart",
+      href: isLogin ? "/cart" : "/login",
     },
     {
       title: isLogin ? "Account" : "login",
-      icon: "user-2",
-      href: profileUrl,
+      icon: isLogin ? "user-3" : "user-2",
+      href: isLogin ? "/profile" : "/login",
     },
   ];
 
@@ -78,32 +85,39 @@ const MobileNavigationBar: React.FC = () => {
     width <= 900 && (
       <>
         {loading && (
-          <div style={{
-            position: 'fixed',
-            height: '100%',
-            width: '100%',
-            top: '0px',
-            left: '0px',
-            display: 'flex',
-            justifyContent: "center",
-            backgroundColor: " rgb(0 0 0 / 50%)",
-            alignItems: "center",
-            zIndex: 100,
-          }}>
-            <img style={{
-              height: "50px",
-              width: "50px",
-              marginTop: "100pz"
+          <div
+            style={{
+              position: "fixed",
+              height: "100%",
+              width: "100%",
+              top: "0px",
+              left: "0px",
+              display: "flex",
+              justifyContent: "center",
+              backgroundColor: " rgb(0 0 0 / 50%)",
+              alignItems: "center",
+              zIndex: 100,
             }}
-              src="/assets/images/gif/loading.gif" />
+          >
+            <img
+              style={{
+                height: "50px",
+                width: "50px",
+                marginTop: "100pz",
+              }}
+              src="/assets/images/gif/loading.gif"
+            />
           </div>
         )}
         <StyledMobileNavigationBar>
           {list.map((item) => (
-            <NavLink className="link" href={item.href} key={item.title}
+            <NavLink
+              className="link"
+              href={item.href}
+              key={item.title}
               onClick={() => {
                 if (item?.title === "Home") {
-                  setLoading(true)
+                  setLoading(true);
                 }
               }}
             >
@@ -132,6 +146,5 @@ const MobileNavigationBar: React.FC = () => {
     )
   );
 };
-
 
 export default MobileNavigationBar;

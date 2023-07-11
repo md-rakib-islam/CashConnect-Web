@@ -16,16 +16,17 @@ import {
   space,
   SpaceProps,
   typography,
-  TypographyProps
+  TypographyProps,
 } from "styled-system";
+import FlexBox from "./FlexBox";
 
 interface CustomProps
   extends TypographyProps,
-  SpaceProps,
-  ColorProps,
-  FlexProps,
-  LayoutProps,
-  BorderProps {
+    SpaceProps,
+    ColorProps,
+    FlexProps,
+    LayoutProps,
+    BorderProps {
   ref?: any;
   as?: any;
   title?: string;
@@ -112,25 +113,57 @@ export const Tiny: React.FC<CustomProps> = (props) => (
   <Typography as="span" fontSize="10px" {...props} />
 );
 export const Tiny2: React.FC<CustomProps> = (props) => {
-  const [productQuantity, setProductQuantity] = useState(0);
+  const [productQuantity, setProductQuantity] = useState<any>(0);
   const { state } = useAppContext();
   const cartCanged = state.cart.chartQuantity;
 
-  const { order_Id } = useUserInf()
+  const { order_Id } = useUserInf();
+  console.log("headerQuantity", productQuantity);
 
   useEffect(() => {
     if (order_Id) {
-      axios.get(`${Customer_Order_Pending_Details}${order_Id}`)
+      axios
+        .get(`${Customer_Order_Pending_Details}${order_Id}`, {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: localStorage.getItem("jwt_access_token"),
+          },
+        })
         .then((res) => {
-          setProductQuantity(res?.data?.order?.order_items?.length);
-        }).catch((err) => { console.log("error", err) });
+          console.log("resPendingOrder", res?.data?.order);
+
+          let sum = 0;
+          res?.data?.order?.order_items.map((e) => (sum = sum + e.quantity));
+
+          console.log("sumByKey", sum);
+          setProductQuantity(sum);
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
     }
   }, [cartCanged, order_Id]);
 
   return (
-    <Typography as="span" fontSize="10px" {...props}>
-      {productQuantity || 0}
-    </Typography>
+    <>
+      {
+        <FlexBox
+          style={{ display: productQuantity == 0 ? "none" : "flex" }}
+          borderRadius="300px"
+          bg="error.main"
+          px="5px"
+          py="2px"
+          alignItems="center"
+          justifyContent="center"
+          ml="-1rem"
+          mt="-5px"
+        >
+          <Typography as="span" fontSize="10px" {...props}>
+            {productQuantity}
+          </Typography>
+        </FlexBox>
+      }
+    </>
   );
 };
 

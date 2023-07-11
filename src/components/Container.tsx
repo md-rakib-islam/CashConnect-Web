@@ -13,10 +13,20 @@ import {
 } from "styled-system";
 import { layoutConstant } from "utils/constants";
 
+interface SubCategory {
+  slider?: boolean;
+}
 const Container = styled.div<
-  LayoutProps & ColorProps & PositionProps & SpaceProps & FlexboxProps
+  LayoutProps &
+    ColorProps &
+    PositionProps &
+    SpaceProps &
+    FlexboxProps &
+    SubCategory
 >`
-  max-width: ${layoutConstant.containerWidth};
+  max-width: ${(props) =>
+    props.slider ? "100%" : layoutConstant.containerWidth};
+
   margin-left: auto;
   margin-right: auto;
 

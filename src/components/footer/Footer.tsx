@@ -1,6 +1,6 @@
 import AppStore from "@component/AppStore";
 import Image from "@component/Image";
-import { BASE_URL, Site_Setting_All } from "@data/constants";
+import { Site_Setting_All } from "@data/constants";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
@@ -24,35 +24,39 @@ const StyledLink = styled.a`
   }
 `;
 
-const initialIconLists = [
-  { iconName: "facebook", url: "https://facebook.com/bonik" },
-  { iconName: "twitter", url: "https://twitter.com/bonik" },
-  { iconName: "instagram", url: "https://www.instagram.com/bonik/" },
-];
+// const initialIconLists = [
+//   { iconName: "facebook", url: "https://facebook.com" },
+//   { iconName: "twitter", url: "https://twitter.com/bonik" },
+//   { iconName: "instagram", url: "https://www.instagram.com/bonik/" },
+// ];
 
 const Footer: React.FC = () => {
-  const [logo, setLogo] = useState("")
-  const [address, setAddress] = useState("")
-  const [phone, setPhone] = useState("")
-  const [email, setEmail] = useState("")
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
 
-  const [iconList, setIconList] = useState(initialIconLists)
+  const [iconList, setIconList] = useState([]);
+  console.log("iconList", iconList);
 
   useEffect(() => {
-    fetch(`${Site_Setting_All}`).then(res => res.json()).then(res => {
-      const data = res?.general_settings[0]
-      setLogo(data?.logo)
-      setAddress(data?.address)
-      setPhone(data?.phone)
-      setEmail(data?.email)
+    fetch(`${Site_Setting_All}`)
+      .then((res) => res.json())
+      .then((res) => {
+        const data = res?.general_settings[0];
+        setAddress(data?.address);
+        setPhone(data?.phone);
+        setEmail(data?.email);
 
-      let newIconList = []
-      newIconList.push({ iconName: "facebook", url: data?.facebook_url })
-      newIconList.push({ iconName: "twitter", url: data?.twitter_url })
-      newIconList.push({ iconName: "instagram", url: data?.instagram_url })
-      setIconList(newIconList)
-    }).catch((err) => { console.log("error", err) })
-  }, [])
+        let newIconList = [];
+        newIconList.push({ iconName: "facebook", url: data?.facebook_url });
+        newIconList.push({ iconName: "twitter", url: data?.twitter_url });
+        newIconList.push({ iconName: "instagram", url: data?.instagram_url });
+        setIconList(newIconList);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  }, []);
 
   return (
     <footer>
@@ -65,15 +69,17 @@ const Footer: React.FC = () => {
                   <a>
                     <Image
                       mb="1.25rem"
-                      src={`${BASE_URL}${logo}`} alt="logo" height="50" width="auto" borderRadius={50}
+                      src="/assets/images/logos/footer.png"
+                      alt="logo"
+                      height="50"
+                      width="160px"
                     />
                   </a>
                 </Link>
 
                 <Paragraph mb="1.25rem" color="gray.500">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Auctor libero id et, in gravida. Sit diam duis mauris nulla
-                  cursus. Erat et lectus vel ut sollicitudin elit at amet.
+                  A relaiable home for buy, sell & exchange new or pre owned
+                  authentic products.
                 </Paragraph>
 
                 <AppStore />
@@ -90,11 +96,23 @@ const Footer: React.FC = () => {
                 </Typography>
 
                 <div>
-                  {aboutLinks.map((item, ind) => (
-                    <Link href="/" key={ind}>
-                      <StyledLink>{item}</StyledLink>
-                    </Link>
-                  ))}
+                  <Link href="/careers">
+                    <StyledLink> Careers </StyledLink>
+                  </Link>
+
+                  <Link href="/branches">
+                    <StyledLink> Our Branches </StyledLink>
+                  </Link>
+                  {/* <Link href="/story" >
+                    <StyledLink> Our Stories </StyledLink>
+                    </Link> */}
+
+                  <Link href="/terms">
+                    <StyledLink> Terms & Conditions </StyledLink>
+                  </Link>
+                  <Link href="/policy">
+                    <StyledLink>Privacy Policy</StyledLink>
+                  </Link>
                 </div>
               </Grid>
 
@@ -109,11 +127,17 @@ const Footer: React.FC = () => {
                 </Typography>
 
                 <div>
-                  {customerCareLinks.map((item, ind) => (
-                    <Link href="/" key={ind}>
-                      <StyledLink>{item}</StyledLink>
-                    </Link>
-                  ))}
+                  <Link href="/help">
+                    <StyledLink> Help Center </StyledLink>
+                  </Link>
+
+                  <Link href="/track">
+                    <StyledLink> Track Your Order </StyledLink>
+                  </Link>
+
+                  <Link href="/returns">
+                    <StyledLink> Returns & Refunds</StyledLink>
+                  </Link>
                 </div>
               </Grid>
 
@@ -167,20 +191,20 @@ const Footer: React.FC = () => {
   );
 };
 
-const aboutLinks = [
-  "Careers",
-  "Our Stores",
-  "Our Cares",
-  "Terms & Conditions",
-  "Privacy Policy",
-];
+// const aboutLinks = [
+//   "Careers",
+//   "Our Stores",
+//   "Our Cares",
+//   "Terms & Conditions",
+//   "Privacy Policy",
+// ];
 
-const customerCareLinks = [
-  "Help Center",
-  "How to Buy",
-  "Track Your Order",
-  "Corporate & Bulk Purchasing",
-  "Returns & Refunds",
-];
+// const customerCareLinks = [
+//   "Help Center",
+//   "How to Buy",
+//   "Track Your Order",
+//   "Corporate & Bulk Purchasing",
+//   "Returns & Refunds",
+// ];
 
 export default Footer;

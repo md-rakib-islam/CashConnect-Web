@@ -15,12 +15,11 @@ const MobileCategoryImageBox: React.FC<MobileCategoryImageBoxProps> = ({
   imgUrl,
   icon,
 }) => {
- 
   return (
     <FlexBox flexDirection="column" alignItems="center" justifyContent="center">
       {imgUrl ? (
         <LazyImage
-          src={imgUrl}
+          src={imgUrl ? imgUrl : "/assets/images/logos/shopping-bag.svg"}
           borderRadius="5px"
           width="100%"
           height="100%"

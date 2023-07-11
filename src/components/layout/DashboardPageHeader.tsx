@@ -1,4 +1,3 @@
-
 import React from "react";
 import useWindowSize from "../../hooks/useWindowSize";
 import Box from "../Box";
@@ -24,13 +23,13 @@ const DashboardPageHeader: React.FC<DashboardPageHeaderProps> = ({
   const isTablet = width < 1025;
 
   try {
-    var user_type: string = localStorage.getItem("userType")
+    var user_type: string = localStorage.getItem("userType");
   } catch (error) {
-    var user_type: string = "customer"
+    var user_type: string = "customer";
   }
 
   return (
-    <Box mb="1.5rem" mt="-1rem">
+    <Box mb="1.5rem">
       <FlexBox justifyContent="space-between" alignItems="center" mt="1rem">
         <FlexBox alignItems="center">
           <Icon color="primary">{iconName}</Icon>
@@ -41,7 +40,11 @@ const DashboardPageHeader: React.FC<DashboardPageHeaderProps> = ({
 
         {isTablet && (
           <Sidenav position="left" handle={<Icon mx="1rem">menu</Icon>}>
-            {user_type == "customer" ? (<CustomerDashboardNavigation />) : (<VendorDashboardNavigation />)}
+            {user_type == "customer" ? (
+              <CustomerDashboardNavigation />
+            ) : (
+              <VendorDashboardNavigation />
+            )}
           </Sidenav>
         )}
 

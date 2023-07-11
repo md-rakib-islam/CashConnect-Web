@@ -12,7 +12,7 @@ import React, {
   useEffect,
   useLayoutEffect,
   useRef,
-  useState
+  useState,
 } from "react";
 import * as yup from "yup";
 import useWindowSize from "../../hooks/useWindowSize";
@@ -31,18 +31,19 @@ type PaymentFormProps = {
 };
 
 const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
-  const [paymentMethod, setPaymentMethod] = useState("card");
+  const [paymentMethod, setPaymentMethod] = useState("cash");
   const [setInRef, setSetInRef] = useState(0);
-  const [openLogin, setOpenLogin] = useState(false)
-  const [userName, setuserName] = useState("")
+  const [openLogin, setOpenLogin] = useState(false);
+  const [userName, setuserName] = useState("");
   const { dispatch } = useAppContext();
+  const [loading, setLoading] = useState(false);
 
   const width = useWindowSize();
   const isMobile = width < 769;
 
-  const router = useRouter()
+  const router = useRouter();
 
-  const { user_id, authTOKEN, order_Id, isLogin } = useUserInf()
+  const { user_id, authTOKEN, order_Id, isLogin } = useUserInf();
 
   const cardNumberRef = useRef();
   const cardHolderRef = useRef();
@@ -65,19 +66,35 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
     rocket: null,
     nagad: null,
   };
+  const handleLoadingComplete = () => {
+    setLoading(false);
+  };
+  useEffect(() => {
+    router.events.on("routeChangeComplete", handleLoadingComplete);
+  }, [router.events]);
 
   const closeLoginTab = () => {
-    setOpenLogin(false)
-  }
+    setOpenLogin(false);
+  };
 
   useEffect(() => {
-    if (user_id) {
-      axios.get(`${User_By_Id}${user_id}`).then(res => {
-        console.log("resUseer", res)
-        setuserName(res?.data?.username)
-      }).catch((err) => { console.log("error", err) })
+    if (isLogin) {
+      axios
+        .get(`${User_By_Id}`, {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: localStorage.getItem("jwt_access_token"),
+          },
+        })
+        .then((res) => {
+          console.log("resUseer", res);
+          setuserName(res?.data?.username);
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
     }
-  }, [user_id])
+  }, [isLogin]);
 
   useLayoutEffect(() => {
     cardNumberRef.current = values.card_number;
@@ -133,9 +150,9 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
 
   const handleFormSubmit = async (values) => {
     console.log(values);
+    setLoading(true);
 
     if (isLogin) {
-
       if (order_Id) {
         const pay_amount = Subtotal;
 
@@ -196,7 +213,6 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
           .post(`${Customer_Order_Confirm}${order_Id}`, confirmData, authTOKEN)
           .then((res) => {
             if (res?.data?.is_confirmed) {
-              const user_type = localStorage.getItem("userType")
               console.log("confirmOrderRes", res);
               confirmedOrderRes.current = true;
               for (let key in useKeys) {
@@ -210,34 +226,37 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
               dispatch({
                 type: "CHANGE_ALERT",
                 payload: {
-                  alertValue: "your order has been success...",
-                }
+                  alertValue: "Thank You for Your Order!",
+                  alerType: "successOrder",
+                },
               });
+              setLoading(false);
 
-              localStorage.removeItem("OrderId")
+              // localStorage.removeItem("OrderId");
 
-
-              if (user_type == "customer") {
-                router.push("/orders")
-              }
-              else if (user_type == "vendor") {
-                router.push("/vendor/orders")
-
-              }
+              router.push("/orders");
             }
+          })
+          .catch((err) => {
+            setLoading(false);
 
-          }).catch((err) => { console.log("error", err) });
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alertValue: `${err.response.data.detail}`,
+                alerType: "error",
+              },
+            });
+          });
       }
-    }
-    else {
-      setOpenLogin(true)
+    } else {
+      setOpenLogin(true);
     }
   };
 
   const handlePaymentMethodChange = ({ target: { name } }) => {
     setPaymentMethod(name);
   };
-
 
   if (paymentMethod === "card") {
     var checkoutSchema: any = yup.object().shape({
@@ -262,8 +281,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
     var checkoutSchema: any = yup.object().shape({
       nagad: yup.string().required("required").nullable(requred),
     });
-  }
-  else {
+  } else {
     var checkoutSchema: any = yup.object().shape({});
   }
 
@@ -284,6 +302,31 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ Subtotal }) => {
   return (
     <Fragment>
       <LoginPopup open={openLogin} closeLoginDialog={closeLoginTab} />
+      {loading && (
+        <div
+          style={{
+            position: "fixed",
+            height: "100%",
+            width: "100%",
+            top: "0px",
+            left: "0px",
+            display: "flex",
+            justifyContent: "center",
+            backgroundColor: " rgb(0 0 0 / 50%)",
+            alignItems: "center",
+            zIndex: 100,
+          }}
+        >
+          <img
+            style={{
+              height: "100px",
+              width: "100px",
+              marginTop: "100pz",
+            }}
+            src="/assets/images/gif/loading.gif"
+          />
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <Card1 mb="2rem">
           <Radio

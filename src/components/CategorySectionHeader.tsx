@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import FlexBox from "./FlexBox";
 import Icon from "./icon/Icon";
 import { H2, SemiSpan } from "./Typography";
@@ -16,9 +16,27 @@ const CategorySectionHeader: React.FC<CategorySectionHeaderProps> = ({
   title,
   seeMoreLink,
   iconName,
-  categoryId
+  categoryId,
 }) => {
-  const router = useRouter()
+  const router = useRouter();
+  const [isHover, setIsHover] = useState(false);
+
+  const boxStyle = {
+    cursor: "pointer",
+    backgroundColor: isHover ? "#e84262" : "#ffffff",
+    borderRadius: isHover ? "5px" : "5px",
+    transition: isHover ? "background 1s" : "background 2s",
+  };
+  const textStyle = {
+    color: isHover ? "#ffffff" : "#7D879C",
+    transition: isHover ? "color 1s" : "color 3s",
+  };
+  const handleMouseEnter = () => {
+    setIsHover(true);
+  };
+  const handleMouseLeave = () => {
+    setIsHover(false);
+  };
 
   return (
     <FlexBox justifyContent="space-between" alignItems="center" mb="1.5rem">
@@ -35,29 +53,49 @@ const CategorySectionHeader: React.FC<CategorySectionHeaderProps> = ({
 
       {seeMoreLink && (
         <Link href={seeMoreLink}>
-          <a>
-            <FlexBox alignItems="center" ml="0.5rem" color="text.muted">
-              <SemiSpan mr="0.5rem">View all</SemiSpan>
-              <Icon size="12px" defaultcolor="currentColor">
+          <a
+            style={boxStyle}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            <FlexBox
+              p={"5px"}
+              style={textStyle}
+              alignItems="center"
+              ml="0.5rem"
+            >
+              <SemiSpan style={textStyle} mr="0.5rem">
+                View all
+              </SemiSpan>
+              <Icon size="12px" style={textStyle}>
                 right-arrow
               </Icon>
             </FlexBox>
           </a>
         </Link>
       )}
-      {categoryId && (<a style={{ cursor: "pointer" }} onClick={() => {
-        router.push({
-          pathname: '/product/search/search_for',
-          query: { categoryId: categoryId },
-        })
-      }}>
-        <FlexBox alignItems="center" ml="0.5rem" color="text.muted">
-          <SemiSpan mr="0.5rem">View all</SemiSpan>
-          <Icon size="12px" defaultcolor="currentColor">
-            right-arrow
-          </Icon>
-        </FlexBox>
-      </a>)}
+      {categoryId && (
+        <a
+          style={boxStyle}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onClick={() => {
+            router.push({
+              pathname: "/product/search/search_for",
+              query: { categoryId: categoryId },
+            });
+          }}
+        >
+          <FlexBox p={"5px"} alignItems="center" ml="0.5rem" style={textStyle}>
+            <SemiSpan style={textStyle} mr="0.5rem">
+              View all
+            </SemiSpan>
+            <Icon size="12px" style={textStyle}>
+              right-arrow
+            </Icon>
+          </FlexBox>
+        </a>
+      )}
     </FlexBox>
   );
 };

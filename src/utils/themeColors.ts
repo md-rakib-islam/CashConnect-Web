@@ -21,7 +21,7 @@ const textColor = {
 
 const bodyColor = {
   text: textColor.primary,
-  default: gray[100],
+  default: gray["white"],
   paper: gray["white"],
 };
 

@@ -1,10 +1,13 @@
 import LoginPopup from "@component/LoginPopup";
 import useUserInf from "@customHook/useUserInf";
 import {
-  City_All,
+  City_All_BY_COUNTRY_ID,
   Country_All,
-  Customer_Order_Shipping_Address, Shipping_Adress_By_Order_Id,
-  Thana_All
+  Customer_By_Id,
+  Customer_Order_Blling_Address,
+  Customer_Order_Invoice,
+  Customer_Order_Shipping_Address,
+  Thana_All_BY_CITY_ID,
 } from "@data/constants";
 import { requred } from "@data/data";
 import axios from "axios";
@@ -22,54 +25,85 @@ import TextField from "../text-field/TextField";
 import Typography from "../Typography";
 
 const CheckoutForm = () => {
-  const [sameAsProfile, setSameAsProfile] = useState(false);
+  const [sameAsBillingAddress, setSameAsBillingAddress] = useState(false);
   const router = useRouter();
 
   // const [_shippingId, setShippingId] = useState(0);
   const [thanas, setThanas] = useState([]);
+  const [thanasShipping, setThanasShipping] = useState([]);
   const [cities, setCities] = useState([]);
+  const [citiesShipping, setCitiesShipping] = useState([]);
   const [countries, setCountries] = useState([]);
-  const [openLogin, setOpenLogin] = useState(false)
-
-  const { user_id, authTOKEN, order_Id, isLogin } = useUserInf()
+  const [openLogin, setOpenLogin] = useState(false);
+  const { user_id, authTOKEN, order_Id, isLogin } = useUserInf();
 
   const closeLoginTab = () => {
-    setOpenLogin(false)
-  }
+    setOpenLogin(false);
+  };
 
   const handleFormSubmit = async (values) => {
     if (isLogin) {
-      if (!sameAsProfile) {
-        console.log(values);
+      if (!sameAsBillingAddress) {
+        console.log("values", values);
 
+        const billingData = {
+          user: user_id,
+          order: order_Id,
+          name: values.name,
+          email: values.email,
+          phone: values.phone,
+          street_address: values.street_address,
+          zip_code: values.zip_code,
+          thana:
+            typeof values.thana != "object" ? values?.thana : values?.thana?.id,
+          city:
+            typeof values.city != "object" ? values?.city : values?.city?.id,
+          country:
+            typeof values.country != "object"
+              ? values?.country
+              : values?.country?.id,
+        };
         const shippingData = {
-          ...values,
-          user_id,
-          thana_id:
-            typeof values.thana_id != "object"
-              ? values?.thana_id
-              : values?.thana_id?.id,
-          city_id:
-            typeof values.city_id != "object"
-              ? values?.city_id
-              : values?.city_id?.id,
-          country_id:
-            typeof values.country_id != "object"
-              ? values?.country_id
-              : values?.country_id?.id,
+          user: user_id,
+          order: order_Id,
+          name: values.name_shipping,
+          email: values.email_shipping,
+          phone: values.phone_shipping,
+          street_address: values.street_address_shipping,
+          zip_code: values.zip_code_shipping,
+          thana:
+            typeof values.thana_shipping != "object"
+              ? values?.thana_shipping
+              : values?.thana_shipping?.id,
+          city:
+            typeof values.city_shipping != "object"
+              ? values?.city_shipping
+              : values?.city_shipping?.id,
+          country:
+            typeof values.country_shipping != "object"
+              ? values?.country_shipping
+              : values?.country_shipping?.id,
         };
         console.log("shippingData", shippingData);
+        console.log("billingData", billingData);
         axios
-          .post(
-            `${Customer_Order_Shipping_Address}${order_Id}`,
-            shippingData,
-            authTOKEN
-          )
+          .post(`${Customer_Order_Blling_Address}`, billingData, authTOKEN)
           .then((res) => {
             console.log("shipingRes", res);
             router.push("/payment");
           })
-          .catch((err) => { console.log("error", err) })
+          .catch((err) => {
+            console.log("error", err);
+          });
+        axios
+          .post(`${Customer_Order_Shipping_Address}`, shippingData, authTOKEN)
+          .then((res) => {
+            console.log("shipingRes", res);
+            router.push("/payment");
+          })
+          .catch((err) => {
+            console.log("error", err);
+          });
       }
       // else if (shippingId) {
       //   const authTOKEN = {
@@ -84,83 +118,196 @@ const CheckoutForm = () => {
       //       console.log("shppingDeleteRes", res);
       //       router.push("/payment");
       //     }).catch((err) => {console.log("error", err)})
-      // } 
+      // }
       else {
+        const billingData = {
+          same_as_billing: true,
+          user: user_id,
+          order: order_Id,
+          name: values.name,
+          email: values.email,
+          phone: values.phone,
+          street_address: values.street_address,
+          zip_code: values.zip_code,
+          thana:
+            typeof values.thana != "object" ? values?.thana : values?.thana?.id,
+          city:
+            typeof values.city != "object" ? values?.city : values?.city?.id,
+          country:
+            typeof values.country != "object"
+              ? values?.country
+              : values?.country?.id,
+        };
         axios
-          .post(
-            `${Customer_Order_Shipping_Address}${order_Id}`,
-            { user_id, same_as_profile: true },
-            authTOKEN
-          ).then(res => {
-            console.log("shippingRes", res)
+          .post(`${Customer_Order_Blling_Address}`, billingData, authTOKEN)
+          .then((res) => {
+            console.log("shippingRes", res);
             router.push("/payment");
-          })
+          });
       }
     } else {
-      setOpenLogin(true)
+      router.push("/login");
     }
-
   };
 
   const handleCheckboxChange =
     (setFieldValue) =>
-      ({ target: { checked } }) => {
-        setSameAsProfile(checked);
-        setFieldValue("same_as_profile_address", checked);
-      };
+    ({ target: { checked } }) => {
+      setSameAsBillingAddress(checked);
+      setFieldValue("same_as_billing_address", checked);
+    };
 
   useEffect(() => {
-    if (order_Id) {
-      axios.get(`${Shipping_Adress_By_Order_Id}${order_Id}`).then((res) => {
-        console.log("shippingDetailsRes", res);
-        const { data } = res;
-        // setShippingId(data.id);
-        for (let key in data) {
-          if (key == "country") {
-            setFieldValue(`country_id`, data[key]);
-          } else if (key == "city") {
-            setFieldValue(`city_id`, data[key]);
-          } else if (key == "thana") {
-            setFieldValue(`thana_id`, data[key]);
-          } else {
-            setFieldValue(`${key}`, data[key]);
-          }
-        }
-      }).catch((err) => { console.log("error", err) })
+    if (user_id) {
+      axios
+        .get(`${Customer_By_Id}${user_id}`, authTOKEN)
+        .then((user) => {
+          const { data } = user;
+          console.log("userData", data);
+          setFieldValue("name", `${data.first_name} ${data.last_name}`);
+          setFieldValue("email", `${data.email}`);
+          setFieldValue("phone", `${data.primary_phone}`);
+          setFieldValue(
+            "name_shipping",
+            `${data.first_name} ${data.last_name}`
+          );
+          setFieldValue("email_shipping", `${data.email}`);
+          setFieldValue("phone_shipping", `${data.primary_phone}`);
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
     }
+  }, [user_id, authTOKEN]);
 
-    fetch(`${City_All}`)
+  const handleCity = (country) => {
+    fetch(`${City_All_BY_COUNTRY_ID}${country.id ? country.id : country}`)
       .then((res) => res.json())
       .then((data) => {
-        setCities(data.cities);
-      }).catch((err) => { console.log("error", err) });
-
-    fetch(`${Thana_All}`)
+        console.log("cityData", data);
+        setCities(data);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  };
+  const handleCityShipping = (country) => {
+    fetch(`${City_All_BY_COUNTRY_ID}${country.id ? country.id : country}`)
       .then((res) => res.json())
       .then((data) => {
-        setThanas(data.thanas);
-      }).catch((err) => { console.log("error", err) });
+        console.log("cityData", data);
+        setCitiesShipping(data);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  };
+  const handleThana = (city) => {
+    fetch(`${Thana_All_BY_CITY_ID}${city.id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setThanas(data);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  };
+  const handleThanaShipping = (city) => {
+    fetch(`${Thana_All_BY_CITY_ID}${city.id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setThanasShipping(data);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  };
+  useEffect(() => {
+    if (order_Id) {
+      axios
+        .get(`${Customer_Order_Invoice}${order_Id}`, authTOKEN)
+        .then((res) => {
+          console.log("shippingDetailsRes", res);
+
+          setFieldValue(`street_address`, res?.data?.billing?.street_address);
+          setFieldValue(`zip_code`, res?.data?.billing?.zip_code);
+
+          setFieldValue(
+            `street_address_shipping`,
+            res?.data?.shipping?.street_address
+          );
+          setFieldValue(`zip_code_shipping`, res?.data?.shipping?.zip_code);
+
+          // // setShippingId(data.id);
+          // for (let key in data) {
+          //   if (key == "country") {
+          //     setFieldValue(`country`, data[key]);
+          //   } else if (key == "city") {
+          //     setFieldValue(`city`, data[key]);
+          //   } else if (key == "thana") {
+          //     setFieldValue(`thana`, data[key]);
+          //   } else {
+          //     setFieldValue(`${key}`, data[key]);
+          //   }
+          // }
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
+    }
 
     fetch(`${Country_All}`)
       .then((res) => res.json())
       .then((data) => {
         setCountries(data.countries);
-      }).catch((err) => { console.log("error", err) });
-  }, []);
 
-  if (sameAsProfile) {
-    var checkoutSchema: any = yup.object().shape({});
-  } else {
+        const getPspIssPlace = data.countries.find(
+          (data) => data.name === "Bangladesh" || data.name === "bangladesh"
+        )?.id;
+
+        setFieldValue("country", getPspIssPlace);
+        setFieldValue("country_shipping", getPspIssPlace);
+        data.countries.find((data) =>
+          data.name === "Bangladesh" ? handleCity(data.id) : ""
+        );
+        data.countries.find((data) =>
+          data.name === "Bangladesh" ? handleCityShipping(data.id) : ""
+        );
+      })
+
+      .catch((err) => {
+        console.log("error", err);
+      });
+  }, [order_Id]);
+
+  if (sameAsBillingAddress) {
     var checkoutSchema: any = yup.object().shape({
-      company: yup.string().required("company is required").nullable(requred),
       name: yup.string().required("name is required").nullable(requred),
       email: yup.string().required("email is required").nullable(requred),
       phone: yup.string().required("phone is required").nullable(requred),
       zip_code: yup.string().required("zip_code is required").nullable(requred),
-      country_id: yup.string().required("country is required").nullable(requred),
-      city_id: yup.string().required("city is required").nullable(requred),
-      thana_id: yup.string().required("thana is required").nullable(requred),
-      street_address: yup.string().required("address is required").nullable(requred),
+      country: yup.string().required("country is required").nullable(requred),
+      city: yup.string().required("city is required").nullable(requred),
+      thana: yup.string().required("thana is required").nullable(requred),
+      street_address: yup
+        .string()
+        .required("address is required")
+        .nullable(requred),
+    });
+  } else {
+    var checkoutSchema: any = yup.object().shape({
+      // company: yup.string().required("company is required").nullable(requred),
+      name: yup.string().required("name is required").nullable(requred),
+      email: yup.string().required("email is required").nullable(requred),
+      phone: yup.string().required("phone is required").nullable(requred),
+      zip_code: yup.string().required("zip_code is required").nullable(requred),
+      country: yup.string().required("country is required").nullable(requred),
+      city: yup.string().required("city is required").nullable(requred),
+      thana: yup.string().required("thana is required").nullable(requred),
+      street_address: yup
+        .string()
+        .required("address is required")
+        .nullable(requred),
     });
   }
 
@@ -183,85 +330,72 @@ const CheckoutForm = () => {
       <LoginPopup open={openLogin} closeLoginDialog={closeLoginTab} />
       <form onSubmit={handleSubmit}>
         <Card1 mb="2rem">
-          <Typography fontWeight="600" mb="1rem">
-            Shipping Address
-          </Typography>
+          <div>
+            <Typography fontWeight="600" mb="1rem">
+              Billing Address
+            </Typography>
+          </div>
 
-          <CheckBox
-            label="Same as profile address"
-            color="secondary"
-            mb={sameAsProfile ? "" : "1rem"}
-            onChange={handleCheckboxChange(setFieldValue)}
-          />
-
-          {!sameAsProfile && (
-            <Grid container spacing={7}>
-              <Grid item sm={6} xs={12}>
-                <TextField
-                  name="name"
-                  label="Full Name"
-                  fullwidth
-                  mb="1rem"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.name || ""}
-                  errorText={touched.name && errors.name}
-                />
-                <TextField
-                  name="phone"
-                  label="Phone Number"
-                  fullwidth
-                  mb="1rem"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.phone || ""}
-                  errorText={touched.phone && errors.phone}
-                />
-                <Select
-                  mb="1rem"
-                  label="Country"
-                  placeholder="Select Country"
-                  options={countries}
-                  value={values.country_id || ""}
-                  onChange={(country_id: any) => {
-                    setFieldValue("country_id", country_id?.id);
-                  }}
-                  errorText={touched.country_id && errors.country_id}
-                />
-                <TextField
-                  name="zip_code"
-                  label="Zip Code"
-                  type="number"
-                  fullwidth
-                  mb="1rem"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.zip_code || ""}
-                  errorText={touched.zip_code && errors.zip_code}
-                />
-                <TextField
-                  name="street_address"
-                  label="Address"
-                  fullwidth
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.street_address || ""}
-                  errorText={touched.street_address && errors.street_address}
-                />
-              </Grid>
-              <Grid item sm={6} xs={12}>
-                <TextField
-                  name="email"
-                  label="Email Address"
-                  type="email"
-                  fullwidth
-                  mb="1rem"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.email || ""}
-                  errorText={touched.email && errors.email}
-                />
-                <TextField
+          <Grid container spacing={7}>
+            <Grid item sm={6} xs={12}>
+              <TextField
+                name="name"
+                label="Full Name"
+                fullwidth
+                mb="1rem"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.name || ""}
+                errorText={touched.name && errors.name}
+              />
+              <TextField
+                name="phone"
+                label="Phone Number"
+                fullwidth
+                mb="1rem"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.phone || ""}
+                errorText={touched.phone && errors.phone}
+              />
+              <Select
+                mb="1rem"
+                label="City"
+                placeholder="Select City"
+                options={cities}
+                value={values.city || ""}
+                onChange={(city: any) => {
+                  setFieldValue("city", city?.id);
+                  setFieldValue("thana", "");
+                  handleThana(city);
+                }}
+                errorText={touched.city && errors.city}
+              />
+              <TextField
+                name="zip_code"
+                label="Zip Code"
+                type="number"
+                fullwidth
+                mb="1rem"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.zip_code || ""}
+                errorText={touched.zip_code && errors.zip_code}
+              />
+            </Grid>
+            <Grid item sm={6} xs={12}>
+              <TextField
+                name="email"
+                label="Email Address"
+                type="email"
+                fullwidth
+                mb="1rem"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.email || ""}
+                errorText={touched.email && errors.email}
+              />
+              {/* <TextField
                   name="company"
                   label="Company"
                   fullwidth
@@ -270,38 +404,186 @@ const CheckoutForm = () => {
                   onChange={handleChange}
                   value={values.company || ""}
                   errorText={touched.company && errors.company}
+                /> */}
+              <Select
+                mb="1rem"
+                label="Country"
+                placeholder="Select Country"
+                options={countries}
+                value={values.country || ""}
+                onChange={(country: any) => {
+                  setFieldValue("country", country?.id);
+                  setFieldValue("city", "");
+                  setFieldValue("thana", "");
+                  handleCity(country);
+                }}
+                errorText={touched.country && errors.country}
+              />
+
+              <Select
+                mb="1rem"
+                label="Thana"
+                placeholder="Select Thana"
+                options={thanas}
+                value={values.thana || ""}
+                onChange={(thana: any) => {
+                  setFieldValue("thana", thana?.id);
+                }}
+                errorText={touched.thana && errors.thana}
+              />
+              <TextField
+                name="street_address"
+                label="Address"
+                fullwidth
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.street_address || ""}
+                errorText={touched.street_address && errors.street_address}
+              />
+            </Grid>
+          </Grid>
+
+          <div>
+            <CheckBox
+              label="Shipping address same as billing address"
+              color="primary"
+              m={sameAsBillingAddress ? "0.5rem" : "0.5rem"}
+              onChange={handleCheckboxChange(setFieldValue)}
+            />
+          </div>
+        </Card1>
+        {!sameAsBillingAddress && (
+          <Card1 mb="2rem">
+            <div>
+              <Typography fontWeight="600" mb="1rem">
+                Shipping Address
+              </Typography>
+            </div>
+            <Grid container spacing={7}>
+              <Grid item sm={6} xs={12}>
+                <TextField
+                  name="name_shipping"
+                  label="Full Name"
+                  fullwidth
+                  mb="1rem"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.name_shipping || ""}
+                  errorText={touched.name_shipping && errors.name_shipping}
+                />
+                <TextField
+                  name="phone_shipping"
+                  label="Phone Number"
+                  fullwidth
+                  mb="1rem"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.phone_shipping || ""}
+                  errorText={touched.phone_shipping && errors.phone_shipping}
                 />
                 <Select
                   mb="1rem"
                   label="City"
                   placeholder="Select City"
-                  options={cities}
-                  value={values.city_id || ""}
-                  onChange={(city_id: any) => {
-                    setFieldValue("city_id", city_id?.id);
+                  options={citiesShipping}
+                  value={values.city_shipping || ""}
+                  onChange={(city: any) => {
+                    setFieldValue("city_shipping", city?.id);
+                    setFieldValue("thana_shipping", "");
+                    handleThanaShipping(city);
                   }}
-                  errorText={touched.city_id && errors.city_id}
+                  errorText={touched.city_shipping && errors.city_shipping}
                 />
+                <TextField
+                  name="zip_code_shipping"
+                  label="Zip Code"
+                  type="number"
+                  fullwidth
+                  mb="1rem"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.zip_code_shipping || ""}
+                  errorText={
+                    touched.zip_code_shipping && errors.zip_code_shipping
+                  }
+                />
+              </Grid>
+              <Grid item sm={6} xs={12}>
+                <TextField
+                  name="email_shipping"
+                  label="Email Address"
+                  type="email"
+                  fullwidth
+                  mb="1rem"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.email_shipping || ""}
+                  errorText={touched.email_shipping && errors.email_shipping}
+                />
+                {/* <TextField
+                  name="company"
+                  label="Company"
+                  fullwidth
+                  mb="1rem"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.company || ""}
+                  errorText={touched.company && errors.company}
+                /> */}
+                <Select
+                  mb="1rem"
+                  label="Country"
+                  placeholder="Select Country"
+                  options={countries}
+                  value={values.country_shipping || ""}
+                  onChange={(country: any) => {
+                    setFieldValue("country_shipping", country?.id);
+                    setFieldValue("city_shipping", "");
+                    setFieldValue("thana_shipping", "");
+                    handleCityShipping(country);
+                  }}
+                  errorText={
+                    touched.country_shipping && errors.country_shipping
+                  }
+                />
+
                 <Select
                   mb="1rem"
                   label="Thana"
                   placeholder="Select Thana"
-                  options={thanas}
-                  value={values.thana_id || ""}
-                  onChange={(thana_id: any) => {
-                    setFieldValue("thana_id", thana_id?.id);
+                  options={thanasShipping}
+                  value={values.thana_shipping || ""}
+                  onChange={(thana: any) => {
+                    setFieldValue("thana_shipping", thana?.id);
                   }}
-                  errorText={touched.thana_id && errors.thana_id}
+                  errorText={touched.thana_shipping && errors.thana_shipping}
+                />
+                <TextField
+                  name="street_address_shipping"
+                  label="Address"
+                  fullwidth
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.street_address_shipping || ""}
+                  errorText={
+                    touched.street_address_shipping &&
+                    errors.street_address_shipping
+                  }
                 />
               </Grid>
             </Grid>
-          )}
-        </Card1>
+          </Card1>
+        )}
 
         <Grid container spacing={7}>
           <Grid item sm={6} xs={12}>
             <Link href="/cart">
-              <Button variant="outlined" color="primary" type="button" fullwidth>
+              <Button
+                variant="outlined"
+                color="primary"
+                type="button"
+                fullwidth
+              >
                 Back to Cart
               </Button>
             </Link>
@@ -321,11 +603,11 @@ const initialValues = {
   name: "",
   email: "",
   phone: "",
-  company: "",
+  // company: "",
   zip_code: "",
-  country_id: "",
-  city_id: "",
-  thana_id: "",
+  country: "",
+  city: "",
+  thana: "",
   street_address: "",
 };
 

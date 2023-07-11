@@ -9,32 +9,37 @@ const StyledSearchBox = styled.div`
   .search-icon {
     position: absolute;
     color: ${getTheme("colors.text.hint")};
-    left: 1rem;
+    right: 1rem;
     z-index: 1;
   }
 
   .search-field {
     flex: 1 1 0;
-    padding-left: 3rem;
-    padding-right: 11.5rem;
-    height: 44px;
-    border-radius: 300px;
+    padding-right: 3rem;
+    // padding-right: 11.5rem;
+    height: 35px;
+    // border-radius: 300px;
+    border-radius: 5px;
   }
   .search-button {
     position: absolute;
     height: 100%;
     right: 0px;
-    border-radius: 0 300px 300px 0;
+    // border-radius: 0 300px 300px 0;
     padding-left: 55px;
     padding-right: 55px;
   }
   .category-dropdown {
     position: absolute;
     right: 0px;
-    color: ${getTheme("colors.text.hint")};
+    border-radius: 0 5px 5px 0;
+
+    background: rgb(232 66 98);
+    // color: ${getTheme("colors.text.hint")};
+    color: #fff;
   }
   .dropdown-handler {
-    height: 40px;
+    height: 35px;
     cursor: pointer;
     min-width: 90px;
     padding-left: 1.25rem;
@@ -55,8 +60,9 @@ const StyledSearchBox = styled.div`
       left: 1rem;
     }
     .search-field {
-      height: 40px;
-      border-radius: 300px;
+      height: 39px;
+
+      border-radius: 5px;
       padding-left: 2.75rem;
       padding-right: 3.5rem;
     }

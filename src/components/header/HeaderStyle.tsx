@@ -5,12 +5,22 @@ const StyledHeader = styled.header`
   position: relative;
   z-index: 1;
   height: ${layoutConstant.headerHeight};
-  background: rgb(247 111 133);
+  background: #ffffff;
+  padding-top: 8px;
+  padding-bottom: 8px;
 
   .logo {
     img {
       display: block;
     }
+  }
+  .header-name {
+    cursor: pointer;
+    transition: 0.9s;
+  }
+  :hover {
+    color: #e84262;
+    transition: 0.3s;
   }
   .icon-holder {
     span {
@@ -31,19 +41,6 @@ const StyledHeader = styled.header`
 
   .user {
     cursor: pointer;
-  }
-
-  @media only screen and (max-width: 900px) {
-    height: ${layoutConstant.mobileHeaderHeight};
-
-    .logo,
-    .icon-holder,
-    .category-holder {
-      display: none;
-    }
-    .header-right {
-      display: none !important;
-    }
   }
 `;
 

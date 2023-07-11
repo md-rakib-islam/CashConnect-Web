@@ -3,16 +3,21 @@ import { getTheme } from "../../utils/utils";
 
 const StyledNavbar = styled.div`
   position: relative;
-  height: 60px;
-  background: ${getTheme("colors.body.paper")};
+  height: 45px;
+  background: rgb(232 66 98);
   box-shadow: ${getTheme("shadows.regular")};
-
+  .button-category {
+    height: 35px;
+  }
   .nav-link {
     font-size: 14px;
     margin-right: 32px;
+    font-weight: 800;
+    color: #ffffff;
     cursor: pointer;
     :hover {
-      color: ${getTheme("colors.primary.main")};
+      font-weight: 800;
+      color: rgba(15, 52, 96, 1) !important;
     }
   }
   .nav-link:last-child {

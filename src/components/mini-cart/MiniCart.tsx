@@ -1,4 +1,3 @@
-
 import Currency from "@component/Currency";
 import FlexBox from "@component/FlexBox";
 import LazyImage from "@component/LazyImage";
@@ -9,7 +8,7 @@ import {
   Customer_decrease_Quantity,
   Customer_Increase_Quantity,
   Customer_Order_Pending_Details,
-  Customer_Order_Remove_Item
+  Customer_Order_Remove_Item,
 } from "@data/constants";
 import axios from "axios";
 import Link from "next/link";
@@ -36,19 +35,19 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
   const { dispatch } = useAppContext();
   const [cartProductList, setCartProductList] = useState([]);
   const [reloadCart, setReloadCart] = useState(0);
-  const [openLogin, setOpenLogin] = useState(false)
+  const [openLogin, setOpenLogin] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
-  const { user_id, order_Id, isLogin, authTOKEN } = useUserInf()
+  const { user_id, order_Id, isLogin, authTOKEN } = useUserInf();
 
   const closeLoginTab = () => {
-    setOpenLogin(false)
-  }
+    setOpenLogin(false);
+  };
 
   const handleCartAmountChange = useCallback(
     (product, action) => () => {
       if (isLogin) {
         if (order_Id) {
-
           const item_id = product?.id;
           const orderData = {
             product_id: product?.product?.id,
@@ -59,8 +58,66 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
           };
 
           if (action == "remove") {
+            // setLoading(true);
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alertLoading: true,
+              },
+            });
+
             axios
-              .delete(`${Customer_Order_Remove_Item}${order_Id}/${item_id}`, authTOKEN)
+              .delete(
+                `${Customer_Order_Remove_Item}${order_Id}/${item_id}`,
+                authTOKEN
+              )
+              .then(() => {
+                console.log("resForMiniCart", product);
+
+                setReloadCart(Math.random());
+                setCartProductList([]);
+                dispatch({
+                  type: "CHANGE_CART_QUANTITY",
+                  payload: {
+                    chartQuantity: Math.random(),
+                    prductId: product?.product?.id,
+                  },
+                });
+                // setLoading(false);
+                dispatch({
+                  type: "CHANGE_ALERT",
+                  payload: {
+                    alertLoading: false,
+                  },
+                });
+
+                toggleSidenav();
+                // localStorage.removeItem("OrderId");
+              })
+              .catch((err) => {
+                dispatch({
+                  type: "CHANGE_ALERT",
+                  payload: {
+                    alertLoading: false,
+                  },
+                });
+                console.log("error", err);
+              });
+          } else if (action == "increase") {
+            // setLoading(true);
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alertLoading: true,
+              },
+            });
+
+            axios
+              .put(
+                `${Customer_Increase_Quantity}${order_Id}/${item_id}`,
+                orderData,
+                authTOKEN
+              )
               .then(() => {
                 setReloadCart(Math.random());
                 dispatch({
@@ -70,35 +127,72 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                     prductId: product?.product?.id,
                   },
                 });
-              }).catch((err) => { console.log("error", err) });
-
-          } else if (action == "increase") {
-            axios
-              .put(`${Customer_Increase_Quantity}${order_Id}/${item_id}`, orderData, authTOKEN)
-              .then(() => {
-                setReloadCart(Math.random());
+                // setLoading(false);
                 dispatch({
-                  type: "CHANGE_CART_QUANTITY",
-                  payload: { chartQuantity: Math.random(), prductId: product?.product?.id, },
+                  type: "CHANGE_ALERT",
+                  payload: {
+                    alertLoading: false,
+                  },
                 });
-              }).catch((err) => { console.log("error", err) });
+              })
+              .catch((err) => {
+                // setLoading(false);
+                dispatch({
+                  type: "CHANGE_ALERT",
+                  payload: {
+                    alertLoading: false,
+                  },
+                });
 
+                console.log("error", err);
+              });
           } else if (action == "decrease") {
+            // setLoading(true);
+            dispatch({
+              type: "CHANGE_ALERT",
+              payload: {
+                alertLoading: true,
+              },
+            });
+
             axios
-              .put(`${Customer_decrease_Quantity}${order_Id}/${item_id}`, orderData, authTOKEN)
+              .put(
+                `${Customer_decrease_Quantity}${order_Id}/${item_id}`,
+                orderData,
+                authTOKEN
+              )
               .then(() => {
                 setReloadCart(Math.random());
                 dispatch({
                   type: "CHANGE_CART_QUANTITY",
-                  payload: { chartQuantity: Math.random(), prductId: product?.product?.id, },
+                  payload: {
+                    chartQuantity: Math.random(),
+                    prductId: product?.product?.id,
+                  },
                 });
-              }).catch((err) => { console.log("error", err) });
-          }
+                // setLoading(false);
+                dispatch({
+                  type: "CHANGE_ALERT",
+                  payload: {
+                    alertLoading: false,
+                  },
+                });
+              })
+              .catch((err) => {
+                // setLoading(false);
+                dispatch({
+                  type: "CHANGE_ALERT",
+                  payload: {
+                    alertLoading: false,
+                  },
+                });
 
+                console.log("error", err);
+              });
+          }
         }
-      }
-      else {
-        setOpenLogin(true)
+      } else {
+        setOpenLogin(true);
       }
     },
     [user_id, order_Id, isLogin, authTOKEN]
@@ -107,8 +201,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
   const getTotalPrice = () => {
     return (
       cartProductList.reduce(
-        (accumulator, item) =>
-          accumulator + item.price * item.quantity,
+        (accumulator, item) => accumulator + item.price * item.quantity,
         0
       ) || 0
     );
@@ -116,20 +209,58 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
 
   useEffect(() => {
     if (order_Id) {
-      axios.get(`${Customer_Order_Pending_Details}${order_Id}`).then((res) => {
-        setCartProductList(res.data.order.order_items);
-        console.log("miniCartLisdt", res.data.order.order_items);
-      }).catch((err) => { console.log("error", err) });
+      axios
+        .get(`${Customer_Order_Pending_Details}${order_Id}`, {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: localStorage.getItem("jwt_access_token"),
+          },
+        })
+        .then((res) => {
+          setCartProductList(res.data.order.order_items);
+          console.log("miniCartLisdt", res.data.order.order_items);
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
     }
   }, [reloadCart, order_Id]);
+  console.log("cartProductList.length", cartProductList.length);
 
   return (
     <>
+      {/* {loading && (
+        <div
+          style={{
+            position: "fixed",
+            height: "100%",
+            width: "100%",
+            top: "0px",
+            left: "0px",
+            display: "flex",
+            justifyContent: "center",
+            backgroundColor: " rgb(0 0 0 / 50%)",
+            alignItems: "center",
+            zIndex: 100,
+          }}
+        >
+          <img
+            style={{
+              height: "100px",
+              width: "100px",
+              marginTop: "100pz",
+            }}
+            src="/assets/images/gif/loading.gif"
+          />
+        </div>
+      )} */}
       <LoginPopup open={openLogin} closeLoginDialog={closeLoginTab} />
       <StyledMiniCart>
         <div className="cart-list">
           <FlexBox alignItems="center" m="0px 20px" height="74px">
-            <Icon size="1.75rem">bag</Icon>
+            <Icon style={{ color: "#e84262" }} size="1.75rem">
+              bag
+            </Icon>
             <Typography fontWeight={600} fontSize="16px" ml="0.5rem">
               {cartProductList.length} item
             </Typography>
@@ -159,7 +290,9 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
               </Paragraph>
             </FlexBox>
           )}
-          {cartProductList.map((item: CartItem) => <Item item={item} handleCartAmountChange={handleCartAmountChange} />)}
+          {cartProductList.map((item: CartItem) => (
+            <Item item={item} handleCartAmountChange={handleCartAmountChange} />
+          ))}
         </div>
 
         {!!cartProductList.length && (
@@ -172,7 +305,8 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
                 onClick={toggleSidenav}
               >
                 <Typography fontWeight={600} display="flex" textAlign="center">
-                  Checkout Now (<Currency>{getTotalPrice().toFixed(2)}</Currency>)
+                  Checkout Now (
+                  <Currency>{getTotalPrice().toFixed(2)}</Currency>)
                 </Typography>
               </Button>
             </Link>
@@ -194,7 +328,7 @@ const MiniCart: React.FC<MiniCartProps> = ({ toggleSidenav }) => {
 };
 
 MiniCart.defaultProps = {
-  toggleSidenav: () => { },
+  toggleSidenav: () => {},
 };
 
 export default MiniCart;

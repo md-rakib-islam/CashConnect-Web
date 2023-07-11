@@ -1,131 +1,93 @@
 import Box from "@component/Box";
-import Card from "@component/Card";
-import Carousel from "@component/carousel/Carousel";
-import Currency from "@component/Currency";
-import FlexBox from "@component/FlexBox";
-import HoverBox from "@component/HoverBox";
-import LazyImage from "@component/LazyImage";
-import { H4 } from "@component/Typography";
-import useFormattedProductData from "@customHook/useFormattedProductData";
+// import useFormattedProductData from "@customHook/useFormattedProductData";
 import { Product_Discount } from "@data/constants";
-import useWindowSize from "@hook/useWindowSize";
+import getFormattedProductData from "@helper/getFormattedProductData";
 import axios from "axios";
 import _ from "lodash";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import useWindowSize from "../../hooks/useWindowSize";
+import Carousel from "../carousel/Carousel";
 import CategorySectionCreator from "../CategorySectionCreator";
-import { Chip } from "../Chip";
+import ProductCard1 from "../product-cards/ProductCard1";
 
-const Section13 = ({ bigDiscountList }) => {
-  const [bigDiscountLists, setbigDiscountLists] = useFormattedProductData(bigDiscountList, "bigdiscount")
-  const [page, setPage] = useState(1)
-  const [pageEnd, setpageEnd] = useState(false)
-  const [visibleSlides, setVisibleSlides] = useState(6);
+interface Section2Props {
+  bigDiscountList: any[];
+}
+
+const Section13: React.FC<Section2Props> = ({ bigDiscountList }) => {
+  //old
+  // const [bigDiscountLists, setBigDiscountLists] = useFormattedProductData(
+  //   []
+  // );
+  //new
+  const [bigDiscountLists, setBigDiscountLists] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pageEnd, setpageEnd] = useState(false);
+  const [visibleSlides, setVisibleSlides] = useState(5);
   const width = useWindowSize();
 
   useEffect(() => {
     if (width < 370) setVisibleSlides(1);
-    else if (width < 650) setVisibleSlides(4);
-    else if (width < 950) setVisibleSlides(6);
-    else setVisibleSlides(6);
+    else if (width < 650) setVisibleSlides(2);
+    else if (width < 950) setVisibleSlides(4);
+    else setVisibleSlides(5);
   }, [width]);
+
+  useEffect(() => {
+    setBigDiscountLists(bigDiscountList);
+  }, [bigDiscountList]);
 
   const getMoreItem = () => {
     if (!pageEnd) {
-      console.log("hitGetMoreItem")
-      axios.get(`${Product_Discount}?page=${page + 1}&size=${6}`).then(res => {
+      console.log("bigDiscountList", bigDiscountList);
+      axios
+        .get(`${Product_Discount}?page=${page + 1}&size=${6}`)
+        .then((res) => {
+          console.log("res.data.productsbigDiscount", res.data.products);
+          const newItem = getFormattedProductData(
+            res.data.products,
+            "bigdiscount"
+          );
+          if (res.data.total_pages > 1) {
+            const bigDiscountListState = bigDiscountList;
+            setBigDiscountLists(bigDiscountListState.concat(newItem));
 
-        if (res.data.total_pages > 1) {
-          setbigDiscountLists(bigDiscountLists.concat(res.data.products), "bigdiscount")
-          console.log(bigDiscountLists)
-          setPage(page + 1)
-        }
-        if (res.data.total_pages == (page + 1)) {
-          setpageEnd(true)
-        }
-      }
-      )
+            setPage(page + 1);
+          }
+          if (res.data.total_pages == page + 1) {
+            setpageEnd(true);
+          }
+        });
+    } else {
+      console.log("NoMreItem");
     }
-    else {
-      console.log("NoMreItem")
-    }
-  }
+  };
 
   useEffect(() => {
-    getMoreItem()
-  }, [])
+    getMoreItem();
+  }, []);
 
-  const big_discount_list = (
+  console.log("bigDiscountLists", bigDiscountLists);
+
+  const product_list = (
     <CategorySectionCreator
       iconName="gift"
       title="Big Discounts"
-      // seeMoreLink="product/search/big_discounts_all"
+      // seeMoreLink="product/search/flash_deals_all"
       seeMoreLink=""
     >
-      <Box my="-0.25rem">
-        <Carousel totalSlides={bigDiscountLists?.length} visibleSlides={visibleSlides} step={visibleSlides} getMoreItem={getMoreItem}>
+      <Box mt="-0.25rem" mb="-0.25rem">
+        <Carousel
+          totalSlides={bigDiscountLists?.length}
+          visibleSlides={visibleSlides}
+          step={visibleSlides}
+          getMoreItem={getMoreItem}
+          autoPlay={bigDiscountLists.length > 5 ? true : false}
+          showArrow={bigDiscountLists.length > 5 ? true : false}
+        >
           {bigDiscountLists?.map((item) => (
-            <Box py="0.25rem" key={item.id} style={{ height: "100%" }}>
-              <Card p="1rem" style={{ height: "100%" }}>
-                <Link href={`/product/${item.id}`}>
-                  <a style={{ position: "relative" }}>
-                    {!!item?.off && (
-                      <Chip
-                        position="absolute"
-                        bg="primary.main"
-                        color="primary.text"
-                        fontSize="10px"
-                        fontWeight="600"
-                        p="5px 10px"
-                        top="10px"
-                        left="10px"
-                        zIndex={1}
-                      >
-                        {/* {item?.off}% off */}
-                        <pre style={{ margin: "0px" }}>{`${item?.off}% off`}</pre>
-                      </Chip>
-                    )}
-                    <HoverBox borderRadius={8} mb="0.5rem">
-                      <LazyImage
-                        src={item.imgUrl}
-                        loader={() => item.imgUrl}
-                        width="100%"
-                        height="auto"
-                        layout="responsive"
-                        alt={item.title}
-                      />
-                    </HoverBox>
-                    <H4 fontWeight="600" fontSize="14px" mb="0.25rem">
-                      {item.title}
-                    </H4>
-
-                    <FlexBox>
-                      <H4
-                        fontWeight="600"
-                        fontSize="14px"
-                        color="primary.main"
-                        mr="0.5rem"
-                      >
-                        <Currency>{Math.ceil(item.price).toLocaleString()}</Currency>
-                      </H4>
-
-                      <H4 fontWeight="600" fontSize="14px" color="text.muted">
-                        <del><Currency>{Math.ceil(item.orginalPrice).toLocaleString()}</Currency></del>
-                      </H4>
-                    </FlexBox>
-
-
-                    <H4
-                      display="flex"
-                      className="title"
-                      fontSize="14px"
-                      fontWeight="600"
-                      color={(item?.condition === "new" || item?.condition === "New" || item?.condition === "NEW") ? "primary.main" : "secondary.main"}
-                    >{item?.condition || ""}
-                    </H4>
-                  </a>
-                </Link>
-              </Card>
+            <Box py="0.25rem" key={item.id}>
+              <ProductCard1 hoverEffect {...item} />
             </Box>
           ))}
         </Carousel>
@@ -133,9 +95,9 @@ const Section13 = ({ bigDiscountList }) => {
     </CategorySectionCreator>
   );
 
-  const returnableData = _.isEmpty(bigDiscountLists) ? null : big_discount_list
+  const returnableData = _.isEmpty(bigDiscountList) ? null : product_list;
 
-  return returnableData
+  return returnableData;
 };
 
 export default Section13;

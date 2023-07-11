@@ -1,0 +1,263 @@
+/* body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+} */
+
+/* Button used to open the chat form - fixed at the bottom of the page */
+.open_button {
+  align-items: center;
+  cursor: pointer;
+  background: #e84262;
+  bottom: 32px;
+  right: 0;
+  border-radius: 100%;
+  border: none;
+  /* box-shadow: rgb(109 117 141 / 20%) 0px 12px 48px 0px; */
+  display: flex;
+  fill: rgb(255, 255, 255);
+  height: 56px;
+  justify-content: center;
+  position: fixed;
+  width: 56px;
+  z-index: 9998;
+}
+
+/* The popup chat - hidden by default */
+.chat_popup {
+  display: none;
+  position: fixed;
+  bottom: 50px;
+  right: 15px;
+  bottom: 0;
+  /* border: 3px solid #f1f1f1; */
+  z-index: 9;
+}
+
+.top_chat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  fill: rgb(255, 255, 255);
+}
+.top_chat img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 50%;
+  background-color: rgb(255, 255, 255);
+  padding: 5px;
+  margin-bottom: 5px;
+}
+.top_chat a {
+  cursor: pointer;
+}
+
+/* Add styles to the form container */
+.form_container {
+  background-color: #e84262;
+  width: 370px;
+  padding: 10px;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+}
+
+/* Full-width .textArea */
+.textArea {
+  width: 100%;
+  height: 45px;
+  min-height: 45px;
+  display: block !important;
+  resize: none !important;
+  margin: 15px 0px !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  line-height: 20px !important;
+  color: rgb(255, 255, 255) !important;
+  background-color: transparent !important;
+  background-clip: padding-box !important;
+  border-width: 0px 0px 2px !important;
+  border-top-style: initial !important;
+  border-right-style: initial !important;
+  border-left-style: initial !important;
+  border-top-color: initial !important;
+  border-right-color: initial !important;
+  border-left-color: initial !important;
+  border-image: initial !important;
+  border-bottom-style: solid !important;
+  border-bottom-color: rgb(255, 255, 255) !important;
+  border-radius: 0px !important;
+  outline: none !important;
+  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s !important;
+}
+.textArea::placeholder {
+  color: rgb(255, 255, 255);
+}
+.textArea::-webkit-scrollbar {
+  width: 10px;
+}
+/* Track */
+.textArea::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+/* Handle */
+.textArea::-webkit-scrollbar-thumb {
+  background: #e84262;
+  border-radius: 10px;
+}
+/* When the .textArea gets focus, do something */
+/* .textArea:focus {
+  background-color: #ddd;
+  outline: none;
+} */
+
+/* Set a style for the submit/send button */
+.btn {
+  background-color: transparent !important;
+  text-align: center;
+  padding: 8px 10px 10px 12px;
+  border-radius: 50%;
+  border: 0px;
+  box-shadow: none;
+  cursor: pointer;
+  fill: rgb(255, 255, 255);
+  opacity: 1;
+  outline: none;
+}
+
+/* Add a red background color to the cancel button */
+.form_container .cancel {
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  position: fixed;
+  bottom: 12px;
+  right: 28px;
+  height: 80px;
+  width: 80px;
+}
+.formFeild {
+  background-color: whitesmoke;
+}
+
+.close {
+  text-align: right;
+}
+.close img {
+  cursor: pointer;
+}
+
+.buttonClass {
+  display: flex;
+}
+.sender {
+  padding: 10px;
+  text-align: left;
+  background-color: #ececec;
+  border-radius: 20px;
+  word-break: break-word;
+
+  /*  */
+}
+
+.receiver {
+  padding: 10px;
+  background-color: #ffd4db;
+  margin-right: 25%;
+  border-radius: 20px;
+  max-width: 80%;
+  word-break: break-word;
+}
+.messageElemSender {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: 25%;
+}
+.messageElemReceiver {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+.messageElemReceiver img {
+  margin-right: 5px;
+  margin-left: 5px;
+}
+.messageElemReceiver p {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.messageElemSender img {
+  margin-right: 5px;
+  margin-left: 5px;
+}
+.messageElemSender p {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.messages {
+  height: "300px";
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+}
+.messages html {
+  scroll-behavior: smooth;
+}
+.messages img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.messages::-webkit-scrollbar {
+  scroll-behavior: smooth;
+  width: 10px;
+}
+/* Track */
+.messages::-webkit-scrollbar-track {
+  scroll-behavior: smooth;
+
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+/* Handle */
+.messages::-webkit-scrollbar-thumb {
+  scroll-behavior: smooth;
+
+  background: #e84262;
+  border-radius: 10px;
+}
+/* Add some hover effects to buttons */
+.form_container .btn:hover,
+.open_button:hover {
+  opacity: 1;
+}
+
+@media only screen and (max-width: 900px) {
+  .open_button {
+    align-items: center;
+    cursor: pointer;
+    background: #e84262;
+    bottom: 62px;
+    right: 0;
+    border-radius: 100%;
+    border: none;
+    /* box-shadow: rgb(109 117 141 / 20%) 0px 12px 48px 0px; */
+    display: flex;
+    fill: rgb(255, 255, 255);
+    height: 56px;
+    justify-content: center;
+    position: fixed;
+    width: 56px;
+    z-index: 9998;
+  }
+}

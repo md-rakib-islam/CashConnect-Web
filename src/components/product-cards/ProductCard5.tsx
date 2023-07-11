@@ -14,7 +14,7 @@ const ProductCard5: React.FC<ProductCard5Props> = ({ imgUrl, title }) => {
     <Box>
       <HoverBox borderRadius={5} mb="0.5rem">
         <LazyImage
-          src={imgUrl}
+          src={imgUrl ? imgUrl : "/assets/images/logos/shopping-bag.svg"}
           loader={() => imgUrl}
           width={260}
           height={175}

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import useFormattedCategoryData from "../../customHook/useFormattedCategoryData";
 import CategoryMenuItem from "./category-menu-item/CategoryMenuItem";
 import { StyledCategoryDropdown } from "./CategoryDropdownStyle";
-import MegaMenu1 from "./mega-menu/MegaMenu1";
+import MegaMenu2 from "./mega-menu/MegaMenu2";
 
 export interface CategoryDropdownProps {
   open: boolean;
@@ -17,12 +17,13 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
   position,
 }) => {
   const megaMenu = {
-    MegaMenu1,
+    MegaMenu1: MegaMenu2,
   };
 
-  const [increaseWidth, setIncreaseWidth] = useState(false)
+  const [increaseWidth, setIncreaseWidth] = useState(false);
 
-  const [formattedCategoryData, setFormattedCategoryData] = useFormattedCategoryData();
+  const [formattedCategoryData, setFormattedCategoryData] =
+    useFormattedCategoryData();
 
   useEffect(() => {
     fetch(`${Category_All_With_Child}`)
@@ -30,41 +31,55 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
       .then((data) => {
         console.log("category", data.categories);
         setFormattedCategoryData(data.categories);
-      }).catch((err) => { console.log("error", err) });
+        localStorage.setItem("categoryLength", data.categories.length);
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
   }, []);
 
   const setIncreaseWidthMethod = (action) => {
-    setIncreaseWidth(action)
-  }
+    setIncreaseWidth(action);
+  };
 
   // console.log("formatedCategory", navigationData);
   return (
     <>
-      {!_.isEmpty(formattedCategoryData) && (<StyledCategoryDropdown open={open} position={position} increaseWidth={increaseWidth}>
-        <div style={{ direction: "ltr" }}
-        // onMouseOver={() => setIncreaseWidth(true)}
-        // onMouseOut={() => setIncreaseWidth(false)}
+      {!_.isEmpty(formattedCategoryData) && (
+        <StyledCategoryDropdown
+          open={open}
+          position={position}
+          increaseWidth={increaseWidth}
         >
-          {formattedCategoryData?.map((item, index) => {
-            let MegaMenu = megaMenu[item.menuComponent];
+          <div
+            style={{ direction: "ltr" }}
+            // onMouseOver={() => setIncreaseWidth(true)}
+            // onMouseOut={() => setIncreaseWidth(false)}
+          >
+            {formattedCategoryData?.map((item, index) => {
+              console.log("catagoryyyyyy", item);
+              let MegaMenu = megaMenu[item.menuComponent];
 
-            return (
-              <CategoryMenuItem
-                title={item.title}
-                href={item.href}
-                icon={item.icon}
-                menuData={item.menuData}
-                key={item?.id || item.title}
-                // setIncreaseWidth={setIncreaseWidthMethod}
-                setIncreaseWidthMethod={setIncreaseWidthMethod}
-              >
-                {!_.isEmpty(item.menuData?.categories) ? (<MegaMenu data={item.menuData} index={index} />) : null}
-              </CategoryMenuItem>
-            );
-          })}
-        </div>
-      </StyledCategoryDropdown>)
-      }
+              return (
+                <CategoryMenuItem
+                  title={item.title}
+                  href={item.href}
+                  icon={item.icon}
+                  menuData={item.menuData}
+                  key={item?.id || item.title}
+                  caret={!!item.menuData?.categories?.length}
+                  // setIncreaseWidth={setIncreaseWidthMethod}
+                  setIncreaseWidthMethod={setIncreaseWidthMethod}
+                >
+                  {!_.isEmpty(item.menuData?.categories) ? (
+                    <MegaMenu data={item.menuData?.categories} index={index} />
+                  ) : null}
+                </CategoryMenuItem>
+              );
+            })}
+          </div>
+        </StyledCategoryDropdown>
+      )}
     </>
   );
 };

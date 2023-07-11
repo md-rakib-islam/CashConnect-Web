@@ -19,32 +19,37 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
-
 const TicketList = () => {
+  const [tickets, setTickets] = useState([]);
+  const [totalPage, setTotalPage] = useState(0);
+  const [totalTicket, setTotalTicket] = useState(0);
 
-  const [tickets, setTickets] = useState([])
-  const [totalPage, setTotalPage] = useState(0)
-  const [totalTicket, setTotalTicket] = useState(0)
+  const { user_id } = useUserInf();
+  const router = useRouter();
 
-  const { user_id } = useUserInf()
-  const router = useRouter()
-
-  const { page, size } = router.query
+  const { page, size } = router.query;
 
   useEffect(() => {
     if (user_id) {
-      axios.get(`${Ticket_By_User_Id}${user_id}?page=${page || 1}&size=${size || 10}`).then(res => {
-        console.log("ticketssRes", res)
-        setTickets(res?.data?.tickets || [])
-        setTotalPage(res?.data?.total_pages || 0)
-        setTotalTicket(res?.data?.total_elements || 0)
-      }).catch(() => { })
+      axios
+        .get(
+          `${Ticket_By_User_Id}${user_id}?page=${page || 1}&size=${size || 10}`
+        )
+        .then((res) => {
+          console.log("ticketssRes", res);
+          setTickets(res?.data?.tickets || []);
+          setTotalPage(res?.data?.total_pages || 0);
+          setTotalTicket(res?.data?.total_elements || 0);
+        })
+        .catch(() => {});
     }
-  }, [user_id, page, size])
+  }, [user_id, page, size]);
 
   return (
     <div>
-      <DashboardPageHeader title="Support Ticket" iconName="support"
+      <DashboardPageHeader
+        title="Support Ticket"
+        iconName="support"
         button={
           <Link href="/open-ticket">
             <a>
@@ -53,15 +58,26 @@ const TicketList = () => {
               </Button>
             </a>
           </Link>
-        } />
+        }
+      />
 
       {tickets?.map((item) => {
-
-        const closedStatus = item?.ticket_status?.name == "Closed" || item?.ticket_status?.name == "closed" || item?.ticket_status?.name == "Cancelled" || item?.ticket_status?.name == "cancelled"
-        const priorityHigh = item?.ticket_priority?.name == "High" || item?.ticket_priority?.name == "high" || item?.ticket_priority?.name == "Urgent" || item?.ticket_priority?.name == "urgent"
+        const closedStatus =
+          item?.ticket_status?.name == "Closed" ||
+          item?.ticket_status?.name == "closed" ||
+          item?.ticket_status?.name == "Cancelled" ||
+          item?.ticket_status?.name == "cancelled";
+        const priorityHigh =
+          item?.ticket_priority?.name == "High" ||
+          item?.ticket_priority?.name == "high" ||
+          item?.ticket_priority?.name == "Urgent" ||
+          item?.ticket_priority?.name == "urgent";
 
         return (
-          <Link href={`${closedStatus ? "" : `/support-tickets/${item?.id}`}`} key={item?.id}>
+          <Link
+            href={`${closedStatus ? "" : `/support-tickets/${item?.id}`}`}
+            key={item?.id}
+          >
             <TableRow
               as="a"
               href={`${closedStatus ? "" : `/support-tickets/${item?.id}`}`}
@@ -71,12 +87,41 @@ const TicketList = () => {
             >
               <div>
                 <span>{item?.subject}</span>
-                <FlexBox alignItems="center" flexWrap="wrap" pt="0.5rem" m="-6px">
-                  <Chip p="0.25rem 1rem" bg={priorityHigh ? "primary.light" : "success.light"} m="6px">
-                    <Small color={priorityHigh ? "primary.main" : "success.main"}>{item?.ticket_priority?.name || ""}</Small>
+                <FlexBox
+                  alignItems="center"
+                  flexWrap="wrap"
+                  pt="0.5rem"
+                  m="-6px"
+                >
+                  <Chip p="0.25rem 1rem" bg={"success.light"} m="6px">
+                    <Small color={"success.main"}>
+                      {item?.ticket_department?.name.charAt(0).toUpperCase() +
+                        item?.ticket_department?.name.substr(1) || ""}
+                    </Small>
                   </Chip>
-                  <Chip p="0.25rem 1rem" bg={closedStatus ? "primary.light" : "success.light"} m="6px">
-                    <Small color={closedStatus ? "primary.main" : "success.main"}>{item?.ticket_status?.name || ""}</Small>
+                  <Chip
+                    p="0.25rem 1rem"
+                    bg={priorityHigh ? "primary.light" : "success.light"}
+                    m="6px"
+                  >
+                    <Small
+                      color={priorityHigh ? "primary.main" : "success.main"}
+                    >
+                      {item?.ticket_priority?.name.charAt(0).toUpperCase() +
+                        item?.ticket_priority?.name.substr(1) || ""}
+                    </Small>
+                  </Chip>
+                  <Chip
+                    p="0.25rem 1rem"
+                    bg={closedStatus ? "primary.light" : "success.light"}
+                    m="6px"
+                  >
+                    <Small
+                      color={closedStatus ? "primary.main" : "success.main"}
+                    >
+                      {item?.ticket_status?.name.charAt(0).toUpperCase() +
+                        item?.ticket_status?.name.substr(1) || ""}
+                    </Small>
                   </Chip>
                   <SemiSpan className="pre" m="6px">
                     {format(new Date(item?.created_at), "MMM dd, yyyy")}
@@ -87,7 +132,10 @@ const TicketList = () => {
 
               <Hidden flex="0 0 0 !important" down={769}>
                 <Typography textAlign="center" color="text.muted">
-                  <IconButton size="small" style={{ cursor: closedStatus && "no-drop" }}>
+                  <IconButton
+                    size="small"
+                    style={{ cursor: closedStatus && "no-drop" }}
+                  >
                     <Icon variant="small" defaultcolor="currentColor">
                       arrow-right
                     </Icon>
@@ -96,9 +144,8 @@ const TicketList = () => {
               </Hidden>
             </TableRow>
           </Link>
-        )
-      }
-      )}
+        );
+      })}
 
       <FlexBox
         flexWrap="wrap"
@@ -106,11 +153,18 @@ const TicketList = () => {
         alignItems="center"
         mt="32px"
       >
-        <SemiSpan>Showing <ShowingItemNumber initialNumber={10} totalItem={totalTicket} /> of {totalTicket} Tickets</SemiSpan>
+        <SemiSpan>
+          Showing{" "}
+          <ShowingItemNumber initialNumber={10} totalItem={totalTicket} /> of{" "}
+          {totalTicket} Tickets
+        </SemiSpan>
 
         <Pagination pageCount={totalPage} />
 
-        <PaginationRow product_per_page_option={product_per_page_options} name="Ticket" />
+        <PaginationRow
+          product_per_page_option={product_per_page_options}
+          name="Ticket"
+        />
       </FlexBox>
     </div>
   );
@@ -120,7 +174,7 @@ const product_per_page_options = [
   { id: 10, name: 10 },
   { id: 30, name: 30 },
   { id: 50, name: 50 },
-]
+];
 
 TicketList.layout = DashboardLayout;
 

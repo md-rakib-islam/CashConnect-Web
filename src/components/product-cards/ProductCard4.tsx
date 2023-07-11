@@ -1,9 +1,12 @@
 import Box from "@component/Box";
+import { Chip } from "@component/Chip";
 import Currency from "@component/Currency";
 import HoverBox from "@component/HoverBox";
 import LazyImage from "@component/LazyImage";
-import { H4, Small } from "@component/Typography";
-import React from "react";
+import { H3, SemiSpan, Small } from "@component/Typography";
+import { Check_Stock, Product_Discount_By_Id } from "@data/constants";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { CSSProperties } from "styled-components";
 import FlexBox from "../FlexBox";
 import Rating from "../rating/Rating";
@@ -13,25 +16,76 @@ export interface ProductCard4Props {
   style?: CSSProperties;
   imgUrl: string;
   rating: number;
+  id: number;
   title: string;
   price: number | string;
   reviewCount: number;
-  condition: string
+  condition: string;
 }
 
 const ProductCard4: React.FC<ProductCard4Props> = ({
+  id,
   imgUrl,
   rating,
   title,
   price,
   reviewCount,
-  condition
+  condition,
 }) => {
+  const [sellablePrice, setsellablePrice] = useState(Number(price));
+  const [orginalPrice, setorginalPrice] = useState(0);
+  const [discountedPercent, setdiscountedPercent] = useState(0);
+  const [stock, setStock] = useState(true);
+
+  useEffect(() => {
+    axios
+      .get(`${Product_Discount_By_Id}${id}`)
+      .then((res) => {
+        console.log("descountRes", res);
+        if (res.data.discounts?.discounted_price) {
+          setsellablePrice(res.data.discounts?.discounted_price);
+          setorginalPrice(Number(res.data.discounts?.product.unit_price));
+
+          setdiscountedPercent(res.data.discounts?.discount_percent);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, [id]);
+
+  useEffect(() => {
+    axios
+      .get(`${Check_Stock}${id}`)
+      .then((res) => {
+        if (!res.data.is_in_stock) {
+          setStock(false);
+        }
+      })
+      .catch((err) => {
+        console.log("error", err);
+      });
+  }, [id]);
   return (
     <Box>
       <HoverBox mb="1rem" mx="auto" borderRadius={8}>
+        {!!discountedPercent && (
+          <Chip
+            position="absolute"
+            bg="primary.main"
+            color="primary.text"
+            fontSize="10px"
+            fontWeight="600"
+            p="5px 10px"
+            top="0"
+            left="0"
+            zIndex={2}
+          >
+            {discountedPercent}% off
+          </Chip>
+        )}
         <LazyImage
-          src={imgUrl}
+          src={imgUrl ? imgUrl : "/assets/images/logos/shopping-bag.svg"}
           loader={() => imgUrl}
           width="100%"
           height="auto"
@@ -48,7 +102,8 @@ const ProductCard4: React.FC<ProductCard4Props> = ({
         </Small>
       </FlexBox>
 
-      <H4
+      <H3
+        className="title"
         fontWeight="600"
         fontSize="14px"
         mb="0.25rem"
@@ -56,23 +111,40 @@ const ProductCard4: React.FC<ProductCard4Props> = ({
         ellipsis
       >
         {title}
-      </H4>
-      <H4
+      </H3>
+      {stock || (
+        <SemiSpan fontWeight="bold" color="primary.main" mt="2px">
+          Out of Stock
+        </SemiSpan>
+      )}
+      {!!orginalPrice && (
+        <SemiSpan color="text.muted" fontWeight="600">
+          <del>
+            <Currency>{orginalPrice?.toFixed(2)}</Currency>
+          </del>
+        </SemiSpan>
+      )}
+      <H3
         fontWeight="600"
         fontSize="14px"
         textAlign="center"
         color="primary.main"
       >
-        <Currency>{Number(price).toFixed(2)}</Currency>
-      </H4>
-      <H4
+        <Currency>{sellablePrice.toFixed(2)}</Currency>
+      </H3>
+      <H3
         display="flex"
         className="title"
         fontSize="13px"
         fontWeight="600"
-        color={(condition === "new" || condition === "New" || condition === "NEW") ? "primary.main" : "secondary.main"}
-      >{condition || ""}
-      </H4>
+        color={
+          condition === "new" || condition === "New" || condition === "NEW"
+            ? "primary.main"
+            : "secondary.main"
+        }
+      >
+        {condition || ""}
+      </H3>
     </Box>
   );
 };
